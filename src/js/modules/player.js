@@ -20,7 +20,7 @@ export class Player extends App.LJS.EngineObject {
 		this.facingLeft = true;
 		this.stateTimer = new App.LJS.Timer();
 		this.idleLookTimer = new App.LJS.Timer(
-			App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX),
+			App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX)
 		);
 		this.isLookingAround = false;
 		this.angle = 0;
@@ -113,11 +113,11 @@ export class Player extends App.LJS.EngineObject {
 	 * Updates the player's state and position each frame.
 	 */
 	update() {
-		if (App.mode === 'text' || !App.isRunning) {
+		if (App.mode !== 'game') {
 			return;
 		}
 
-		const moveDir = App.mode !== 'game' || App.menuOpen ? 0 : Input.axis.x;
+		const moveDir = !App.isInteractable || App.menuOpen ? 0 : Input.axis.x;
 
 		if (this.state === 'walk') {
 			this.velocity.x = moveDir * this.moveSpeed;
@@ -155,14 +155,14 @@ export class Player extends App.LJS.EngineObject {
 			if (this.isLookingAround && this.stateTimer.get() > 3 / Player.ANIM_SPEED_IDLE) {
 				this.isLookingAround = false;
 				this.idleLookTimer.set(
-					App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX),
+					App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX)
 				);
 			}
 		} else if (this.state === 'front_interact_stopping') {
 			this.velocity.x *= 0.8;
 			const startFrame = this.savedStopFrame || 12;
 			const localFrame = Math.floor(
-				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP,
+				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP
 			);
 			if (startFrame + localFrame > 16) {
 				this.setState('front_interact');
@@ -178,7 +178,7 @@ export class Player extends App.LJS.EngineObject {
 	 * Renders the player using the current animation frame and orientation.
 	 */
 	render() {
-		if (App.mode === 'text' || !App.isRunning) {
+		if (App.mode !== 'game') {
 			return;
 		}
 
@@ -204,7 +204,7 @@ export class Player extends App.LJS.EngineObject {
 		} else if (this.state === 'front_interact_stopping') {
 			const startFrame = this.savedStopFrame || 12;
 			const localFrame = Math.floor(
-				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP,
+				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP
 			);
 			tileIndex = Math.min(startFrame + localFrame, 16);
 		} else if (this.state === 'front_interact') {
@@ -217,7 +217,7 @@ export class Player extends App.LJS.EngineObject {
 			tileIndex,
 			Player.SPRITE_RESOLUTION,
 			0,
-			Player.SPRITE_PADDING,
+			Player.SPRITE_PADDING
 		);
 
 		App.LJS.drawTile(this.pos, this.size, playerTile, this.color, 0, !this.facingLeft);
@@ -239,7 +239,7 @@ export class Player extends App.LJS.EngineObject {
 		this.stateTimer.set();
 		this.isLookingAround = false;
 		this.idleLookTimer.set(
-			App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX),
+			App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX)
 		);
 	}
 

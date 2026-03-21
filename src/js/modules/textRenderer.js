@@ -115,6 +115,9 @@ export class TextRenderer {
 			const link = clone.querySelector('a');
 
 			link.textContent = label;
+			if (child.type === 'category') {
+				link.classList.add('category');
+			}
 			link.setAttribute('tabindex', idx === 0 ? '0' : '-1');
 			link.href = `/${this.app.mode}/${childPath}`;
 			link.addEventListener('click', (e) => {

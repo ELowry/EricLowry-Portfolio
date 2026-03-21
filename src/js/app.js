@@ -17,6 +17,8 @@ class AppController {
 	constructor() {
 		/** @type {Object} LJS - The LittleJS engine namespace, set after dynamic import. */
 		this.isPaused = false;
+		/** @type {boolean} Whether the game engine should block inputs and interactions. */
+		this.isLocked = false;
 
 		// Content Cache
 		/** @type {Map<string, string>} Caches fetched markdown content as HTML, keyed by `${langCode}:${filename}`. */
@@ -78,6 +80,14 @@ class AppController {
 	}
 
 	/**
+	 * `true` if the application is in `game` mode and not locked.
+	 * @returns {boolean} Whether the game engine should block inputs and interactions.
+	 */
+	get isInteractable() {
+		return this.isRunning && !this.isLocked && !this.menuOpen;
+	}
+
+	/**
 	 * Returns the current position vector of the player from the GameBridge.
 	 * @returns {Object|null} A vector object with `{x, y}` properties.
 	 */
@@ -125,7 +135,7 @@ class AppController {
 						e.stopImmediatePropagation();
 					}
 				},
-				true,
+				true
 			);
 
 			if (typeof marked !== 'undefined') {
@@ -152,11 +162,11 @@ class AppController {
 			await Promise.all([langPromise, contentPromise]);
 
 			// Initialize Router which will trigger the first onStateChange
-			Router.init(this.onStateChange.bind(this));
+			await Router.init(this.onStateChange.bind(this));
 
 			// Accessibility media queries listener
 			const accessibilityQuery = window.matchMedia(
-				'(forced-colors: active), (prefers-contrast: more)',
+				'(forced-colors: active), (prefers-contrast: more)'
 			);
 			accessibilityQuery.addEventListener('change', () => this.#syncGameFont());
 
@@ -333,7 +343,7 @@ class AppController {
 	 * Core routing callback that handles mode transitions and content loading when the URL changes.
 	 * @param {Object} state - The new state object containing `{ mode, path }`.
 	 */
-	onStateChange(state) {
+	async onStateChange(state) {
 		const { mode, path } = state;
 
 		// Delegate mode switching to UI Manager
@@ -378,6 +388,7 @@ class AppController {
 						label: 'Exit Area',
 						path: parentPath,
 						below: true,
+						type: 'category',
 					});
 				}
 
@@ -390,6 +401,7 @@ class AppController {
 						label: obj.label,
 						path: obj.path,
 						below: obj.below,
+						type: obj.type,
 					};
 				});
 
@@ -416,7 +428,7 @@ class AppController {
 			}
 
 			if (node && node.type === 'content' && node.file) {
-				this.loadContentInModal(node.file);
+				await this.loadContentInModal(node.file);
 			} else {
 				if (this.uiManager.elements.gameModal.open) {
 					this.uiManager.elements.gameModal.close();
@@ -427,14 +439,14 @@ class AppController {
 				this.uiManager.elements.loadingOverlay
 				&& !this.uiManager.elements.loadingOverlay.classList.contains('hidden')
 			) {
-				this.uiManager.hideLoading(false).catch(() => {});
+				await this.uiManager.hideLoading(false).catch(() => {});
 			}
 		} else {
 			this.textRenderer.render(Router.currentPath, node);
 
 			// If we are at a specific content node, show it
 			if (node && node.type === 'content' && node.file) {
-				this.loadContentIntoText(node.file);
+				await this.loadContentIntoText(node.file);
 			} else if (node && node.type === 'category') {
 				// Check if the category has a main file
 				let mainChild = null;
@@ -445,7 +457,7 @@ class AppController {
 				}
 
 				if (mainChild && mainChild.file) {
-					this.loadContentIntoText(mainChild.file);
+					await this.loadContentIntoText(mainChild.file);
 				} else {
 					this.uiManager.elements.textContent.innerHTML = '';
 				}
@@ -472,8 +484,26 @@ class AppController {
 	 */
 	setPause(state) {
 		this.isPaused = state;
-		this.uiManager.elements.gameMenuButton?.classList.toggle('hidden', state);
-		this.uiManager.elements.touchControls?.classList.toggle('hidden', state);
+		this.#syncPauseUI();
+	}
+
+	/**
+	 * Locks or unlocks game interactions (animations still run).
+	 * @param {boolean} state - `true` to lock, `false` to unlock.
+	 */
+	setLock(state) {
+		this.isLocked = state;
+		this.#syncPauseUI();
+	}
+
+	/**
+	 * Synchronizes the visibility of interaction elements based on pause/lock state.
+	 * @private
+	 */
+	#syncPauseUI() {
+		const hidden = this.isPaused || this.isLocked;
+		this.uiManager.elements.gameMenuButton?.classList.toggle('hidden', hidden);
+		this.uiManager.elements.touchControls?.classList.toggle('hidden', hidden);
 	}
 
 	/**
@@ -481,6 +511,8 @@ class AppController {
 	 * @param {string} mode - The target mode, either `game` or `text`.
 	 */
 	setMode(mode) {
+		this.setPause(false);
+		this.setLock(false);
 		Router.go(mode, Router.currentPath);
 	}
 
@@ -520,7 +552,7 @@ class AppController {
 
 		const needsLoading = !this.contentCache.has(cacheKey);
 		if (needsLoading) {
-			this.uiManager.showLoading();
+			this.uiManager.showLoading(false, true);
 		}
 
 		const html = await this.#fetchContent(filename);
@@ -644,6 +676,7 @@ class AppController {
 		}
 
 		this.setPause(false);
+		this.setLock(false);
 
 		this.Input.clearEvents();
 		Interaction.setBlock(200);

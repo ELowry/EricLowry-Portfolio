@@ -1,7 +1,7 @@
 {
 	"portfolio": {
 		"title": "Portfolio",
-		"rootTitle": "Welcome"
+		"rootTitle": "Home"
 	},
 	"languages": {
 		"en_US": "English",
@@ -93,7 +93,10 @@
 			"sides": "Touch the left or right side to move in that direction.",
 			"center": "Touch the center area to interact with objects.",
 			"dont_show": "Don't show this again",
-			"btn_close": "Got it!"
+			"btn_close": "Got it!",
+			"left": "Left",
+			"right": "Right",
+			"interact": "Interact"
 		},
 		"contact": {
 			"email_placeholder": "[reveal email]",

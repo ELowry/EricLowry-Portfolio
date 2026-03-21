@@ -6,6 +6,15 @@ import { Events } from './events.js';
  * It translates raw hardware signals into game-specific actions (axis, interact, menu).
  */
 class InputController {
+	/** @type {HTMLTemplateElement|null} */
+	#tapDirectionTemplate = null;
+	/** @type {HTMLTemplateElement|null} */
+	#tapRippleTemplate = null;
+	/** @type {Map<number, number>} Active direction pulse interval handles keyed by pointer ID */
+	#directionIntervals = new Map();
+	/** @type {{x: number, y: number}|null} Screen position of the last interact touch */
+	#lastInteractPos = null;
+
 	constructor() {
 		/** @type {Object} State of virtual buttons (mostly for touch) */
 		this.virtualState = {
@@ -160,6 +169,9 @@ class InputController {
 			return;
 		}
 
+		this.#tapDirectionTemplate = document.getElementById('tmpl-touch-half-circle');
+		this.#tapRippleTemplate = document.getElementById('tmpl-touch-tap-ripple');
+
 		const handlePointer = (e) => {
 			if (e.pointerType !== 'touch') {
 				return;
@@ -175,6 +187,8 @@ class InputController {
 							zoneId: element.id,
 							startX: e.clientX,
 							startY: e.clientY,
+							lastX: e.clientX,
+							lastY: e.clientY,
 							startTime: performance.now(),
 							dist: 0,
 							isActive: false,
@@ -189,6 +203,15 @@ class InputController {
 						const dx = e.clientX - data.startX;
 						const dy = e.clientY - data.startY;
 						data.dist = Math.sqrt(dx * dx + dy * dy);
+						data.lastX = e.clientX;
+						data.lastY = e.clientY;
+
+						const currentElement = document.elementFromPoint(e.clientX, e.clientY);
+						if (!currentElement || currentElement.id !== data.zoneId) {
+							this.#removeTapDirection(e.pointerId);
+							this.activePointers.delete(e.pointerId);
+							break;
+						}
 
 						// Block browser scrolling once the game action is verified
 						if (data.isActive) {
@@ -198,6 +221,7 @@ class InputController {
 					break;
 				}
 				default: {
+					this.#removeTapDirection(e.pointerId);
 					this.activePointers.delete(e.pointerId);
 					break;
 				}
@@ -262,18 +286,21 @@ class InputController {
 			if (data.isActive) {
 				if (data.zoneId === 'touch-left') {
 					this.virtualState.left = true;
+					this.#updateTapDirection(id, data);
 				}
 				if (data.zoneId === 'touch-right') {
 					this.virtualState.right = true;
+					this.#updateTapDirection(id, data);
 				}
 
 				if (data.zoneId === 'touch-center' && !data.triggered) {
 					this.virtualState.interact = true;
 					data.triggered = true;
+					this.#lastInteractPos = { x: data.lastX, y: data.lastY };
 				}
 			} else {
-				// Validate touch: stationary taps trigger after InputController.TAP_STATIONARY_MS.
-				// Movement adds a penalty (up to InputController.MAX_MOVEMENT_PENALTY_MS) to discourage accidental swipes.
+				// Validate touch: stationary taps trigger after `InputController.TAP_STATIONARY_MS`.
+				// Movement adds a penalty (up to `InputController.MAX_MOVEMENT_PENALTY_MS`) to discourage accidental swipes.
 				const movementPenalty = data.dist * InputController.MOVEMENT_PENALTY_MULT;
 				const requiredTime =
 					InputController.TAP_STATIONARY_MS
@@ -294,8 +321,79 @@ class InputController {
 		}
 
 		for (const id of pointersToCleanup) {
+			this.#removeTapDirection(id);
 			this.activePointers.delete(id);
 		}
+	}
+
+	/**
+	 * Starts spawning periodic outward-pulsing ring elements for a continuous touch zone.
+	 * @param {number} pointerId - The pointer ID to associate with.
+	 * @param {Object} data - The pointer tracking data with lastX, lastY, and zoneId.
+	 * @private
+	 */
+	#updateTapDirection(pointerId, data) {
+		if (!this.#tapDirectionTemplate) {
+			return;
+		}
+
+		if (!this.#directionIntervals.has(pointerId)) {
+			this.#spawnDirectionRing(data);
+			const intervalId = setInterval(() => {
+				const current = this.activePointers.get(pointerId);
+				if (current) {
+					this.#spawnDirectionRing(current);
+				}
+			}, 400);
+			this.#directionIntervals.set(pointerId, intervalId);
+		}
+	}
+
+	/**
+	 * Spawns a single outward-pulsing half-circle ring at the pointer's current position.
+	 * @param {Object} data - The pointer tracking data with lastX, lastY, and zoneId.
+	 * @private
+	 */
+	#spawnDirectionRing(data) {
+		const element = this.#tapDirectionTemplate.content.firstElementChild.cloneNode(true);
+		if (data.zoneId === 'touch-right') {
+			element.classList.add('facing-right');
+		}
+		element.style.left = `${data.lastX}px`;
+		element.style.top = `${data.lastY}px`;
+		document.body.appendChild(element);
+		element.addEventListener('animationend', () => element.remove(), { once: true });
+	}
+
+	/**
+	 * Stops the direction pulse interval and cleans up for a given pointer.
+	 * @param {number} pointerId - The pointer ID whose feedback should be removed.
+	 * @private
+	 */
+	#removeTapDirection(pointerId) {
+		const intervalId = this.#directionIntervals.get(pointerId);
+		if (intervalId !== undefined) {
+			clearInterval(intervalId);
+			this.#directionIntervals.delete(pointerId);
+		}
+	}
+
+	/**
+	 * Spawns a one-shot tap ripple at the last interact touch position.
+	 * Should be called externally when a touch-based interaction actually succeeds.
+	 */
+	spawnTapRipple() {
+		if (!this.#tapRippleTemplate || !this.#lastInteractPos) {
+			return;
+		}
+
+		const element = this.#tapRippleTemplate.content.firstElementChild.cloneNode(true);
+		element.style.left = `${this.#lastInteractPos.x}px`;
+		element.style.top = `${this.#lastInteractPos.y}px`;
+		document.body.appendChild(element);
+
+		element.addEventListener('animationend', () => element.remove(), { once: true });
+		this.#lastInteractPos = null;
 	}
 
 	/**
@@ -303,10 +401,8 @@ class InputController {
 	 */
 	clearEvents() {
 		this.virtualState.interact = false;
-		for (const data of this.activePointers.values()) {
-			data.triggered = false;
-		}
 	}
 }
 
 export const Input = new InputController();
+

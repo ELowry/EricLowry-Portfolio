@@ -1,4 +1,6 @@
 import { App } from '../app.js';
+import { Router } from './router.js';
+import { Content } from './content.js';
 
 /**
  * Intercepts markdown links pointing to local content files and rewrites them to match the application routing system.
@@ -36,7 +38,18 @@ export class LocalLinkParser {
 					const match = href.match(LocalLinkParser.CONTENT_LINK_REGEX);
 
 					if (match) {
-						const contentPath = match[1];
+						const file = match[1] + '.md';
+						const paths = Content.findPathsByFile(file);
+
+						let contentPath = match[1];
+
+						// If there are multiple paths (shared content), try to stay in current branch context, or default to the first one found.
+						if (paths.length > 0) {
+							const currentPath = Router.currentPath;
+							const contextMatch = paths.find((p) => p.startsWith(currentPath));
+							contentPath = contextMatch || paths[0];
+						}
+
 						const titleAttr = title ? ` title="${title}"` : '';
 
 						return `<a href="/${App.mode}/${contentPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}');">${text}</a>`;

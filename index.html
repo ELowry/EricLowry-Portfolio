@@ -18,9 +18,9 @@
 
 		<div id="game-layer">
 			<div id="touch-controls">
-				<div id="touch-left"></div>
-				<div id="touch-center"></div>
-				<div id="touch-right"></div>
+				<div id="touch-left"><span class="lang" data-lang="ui.touch_instructions.left" inert>Left</span></div>
+				<div id="touch-center"><span class="lang" data-lang="ui.touch_instructions.interact" inert>Interact</span></div>
+				<div id="touch-right"><span class="lang" data-lang="ui.touch_instructions.right" inert>Right</span></div>
 			</div>
 
 			<button
@@ -333,6 +333,14 @@
 				<span data-prompt="interact">[E]</span>
 			</div>
 		</div>
+
+		<template id="tmpl-touch-half-circle">
+			<div class="touch-feedback touch-half-circle" aria-hidden="true"></div>
+		</template>
+
+		<template id="tmpl-touch-tap-ripple">
+			<div class="touch-feedback touch-tap-ripple" aria-hidden="true"></div>
+		</template>
 
 		<template id="tmpl-breadcrumb-item">
 			<li>

@@ -67,7 +67,7 @@ function gameUpdate() {
 
 	Input.update();
 
-	if (!App.isRunning) {
+	if (App.mode !== 'game') {
 		return;
 	}
 
@@ -87,7 +87,7 @@ function gameUpdatePost() {
 	}
 
 	App.LJS.setPaused(App.mode !== 'game');
-	App.LJS.setInputPreventDefault(App.isRunning);
+	App.LJS.setInputPreventDefault(App.mode === 'game');
 
 	if (App.isRunning) {
 		Camera.follow(player);
@@ -110,10 +110,10 @@ function gameRender() {
 	App.LJS.drawRect(
 		App.LJS.vec2(100, 0),
 		App.LJS.vec2(1000, 200),
-		new App.LJS.Color(0.2, 0.2, 0.3),
+		new App.LJS.Color(0.2, 0.2, 0.3)
 	);
 
-	if (!App.isRunning) {
+	if (App.mode !== 'game') {
 		return;
 	}
 
@@ -125,7 +125,7 @@ function gameRender() {
  * Called each frame by LittleJS engine after `gameRender`.
  */
 function gameRenderPost() {
-	if (App.mode === 'text' || !App.isRunning) {
+	if (App.mode === 'text' || App.isPaused) {
 		return;
 	}
 	// These are not the renders you are looking for.
@@ -143,7 +143,7 @@ function initLittleJS() {
 		gameRenderPost,
 		// Assets that can be referenced by ID within LittleJS.
 		['/assets/sprites/eric.png'],
-		App.uiManager.elements.gameLayer,
+		App.uiManager.elements.gameLayer
 	);
 }
 

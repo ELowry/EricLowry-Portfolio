@@ -67,21 +67,105 @@ export const ContentTree = category(
 	'Portfolio',
 	() => import('../../maps/root.config.js'),
 	[
+		// Hidden
+		// content('privacy', 'Privacy Policy', 'info/privacy.md', true),
+
+		// ROOT
 		content('index', 'Welcome', 'index.md'),
+		content('cv', 'Curriculum Vitae', 'cv.md'),
+		content('about', 'Personal Philosophy', 'about.md'),
 
-		content('privacy', 'Privacy Policy', 'info/privacy.md', true),
+		// ARCHITECTURE
+		category(
+			'architecture',
+			'Architecture Studies',
+			() => import('../../maps/architecture.config.js'),
+			[
+				content('architecture', 'ENSA-V & ENSP-V', 'architecture/architecture.md'),
+				category(
+					'3Dgallery',
+					'3D Works Gallery',
+					() => import('../../maps/architecture/3Dgallery.config.js'),
+					[
+						content(
+							'3Dgallery',
+							'About my 3D work',
+							'architecture/3Dgallery/3Dgallery.md'
+						),
+					]
+				),
+				category(
+					'projects',
+					'Selection of Architecture Projects',
+					() => import('../../maps/architecture/projects.config.js'),
+					[
+						content('projects', 'Overview', 'architecture/projects/projects.md'),
+						content('Unstant', 'Unstant', 'gaming/Unstant.md'),
+					]
+				),
+			]
+		),
 
-		category('about', 'About Me', () => import('../../maps/about.config.js'), [
-			content('cv', 'Curriculum Vitae', 'about/cv.md'),
-			content('about', 'About Overview', 'about/about.md'),
-			content('bio', 'Biography', 'about/bio.md'),
-			content('history', 'Work History', 'about/history.md'),
+		// COACHING & BUSINESS
+		category(
+			'coaching-business',
+			'Coaching & Business',
+			() => import('../../maps/coaching-business.config.js'),
+			[
+				content('coaching-business', 'Overview', 'coaching-business/coaching-business.md'),
+				content('medium', 'Medium Editing', 'coaching-business/medium.md'),
+				content('podcast', 'Podcast Editing', 'coaching-business/podcast.md'),
+			]
+		),
+
+		// GAMING
+		category('gaming', 'Video Games', () => import('../../maps/gaming.config.js'), [
+			content('gaming', 'Overview', 'gaming/gaming.md'),
+			content('InputLayers', 'InputLayers', 'gaming/InputLayers.md'),
+			content('Unstant', 'Unstant', 'gaming/Unstant.md'),
+			category(
+				'CinQ',
+				'CinQ – corporate team training video game',
+				() => import('../../maps/gaming/CinQ.config.js'),
+				[
+					content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md'),
+					content('gallery', 'CinQ Footage', 'gaming/CinQ/gallery.md'),
+					content('website', 'CinQ Website', 'gaming/CinQ/website.md'),
+				]
+			),
 		]),
 
-		category('projects', 'Projects', () => import('../../maps/projects.config.js'), [
-			content('projects', 'Projects Overview', 'projects/projects.md'),
-			content('cool-game', 'Cool Game', 'projects/game.md'),
+		// OpenSource
+		category('osd', 'Open Source Development', () => import('../../maps/osd.config.js'), [
+			content('osd', 'Open Source Projects', 'osd/osd.md'),
+			content('InputLayers', 'InputLayers', 'gaming/InputLayers.md'),
+			content('winget-updater', 'WinGet Updater', 'osd/winget-updater.md'),
+			content(
+				'marked-responsive-images',
+				'Marked Responsive Images',
+				'osd/marked-responsive-images.md'
+			),
+			content('StadiaIcons', 'StadiaIcons', 'osd/StadiaIcons.md'),
 		]),
+
+		// Websites
+		category(
+			'websites',
+			'Web Development & Design',
+			() => import('../../maps/websites.config.js'),
+			[
+				content('websites', 'Web Development & Design', 'websites/websites.md'),
+				content(
+					'CinQ',
+					'CinQ – corporate team training video game',
+					'gaming/CinQ/website.md'
+				),
+				content('thenextmind', 'The Next Mind', 'websites/thenextmind.md'),
+				content('luzech', 'Luzech', 'websites/luzech.md'),
+				content('koalakrash', 'Koala Krash', 'websites/koalakrash.md'),
+				content('archive', 'Archive of Defunct Websites', 'websites/archive.md'),
+			]
+		),
 	]
 );
 
@@ -94,7 +178,12 @@ class ContentController {
 		this.tree = ContentTree;
 		/** @type {boolean} True if the content tree has been fully processed. */
 		this.isReady = false;
+		/** @type {Map<string, string[]>} Internal mapping of markdown files to their tree paths. */
+		this.#fileToPaths = new Map();
 	}
+
+	/** @type {Map<string, string[]>} */
+	#fileToPaths;
 
 	/**
 	 * Walks the tree and loads all map configurations.
@@ -103,13 +192,27 @@ class ContentController {
 		const promises = [];
 		const nodesToHydrate = [];
 
-		const traverse = (node) => {
+		const traverse = (node, pathSegments = []) => {
+			const currentId = node.id === 'root' ? '' : node.id;
+			const newPathSegments = currentId ? [...pathSegments, currentId] : pathSegments;
+			const currentPath = newPathSegments.join('/');
+
+			if (node.file) {
+				if (!this.#fileToPaths.has(node.file)) {
+					this.#fileToPaths.set(node.file, []);
+				}
+				this.#fileToPaths.get(node.file).push(currentPath);
+			}
+
 			if (node.mapLoader) {
 				const mapToLoad = node.mapLoader();
 				promises.push(mapToLoad);
 				nodesToHydrate.push(node);
 			}
-			node.children?.forEach(traverse);
+
+			node.children?.forEach((child) => {
+				traverse(child, newPathSegments);
+			});
 		};
 
 		traverse(this.tree);
@@ -148,7 +251,8 @@ class ContentController {
 				return null;
 			}
 
-			const found = current.children.find((c) => c.id === part);
+			const partLower = part.toLowerCase();
+			const found = current.children.find((c) => c.id.toLowerCase() === partLower);
 			if (!found) {
 				return null;
 			}
@@ -157,6 +261,21 @@ class ContentController {
 		}
 
 		return current;
+	}
+
+	/**
+	 * Returns all tree paths associated with a specific markdown file.
+	 * @param {string} file - The markdown file path (e.g., `gaming/Unstant.md`)
+	 * @returns {string[]} Array of tree paths (e.g., `['gaming/Unstant', 'architecture/projects/Unstant']`)
+	 */
+	findPathsByFile(file) {
+		if (!file) {
+			return [];
+		}
+
+		// Normalize file path to remove leading/trailing slashes if any
+		const cleanFile = file.replace(/^\/|\/$/g, '');
+		return this.#fileToPaths.get(cleanFile) || [];
 	}
 
 	/**
@@ -230,12 +349,12 @@ class ContentController {
 				radius: posData.radius || 1.5,
 				label,
 				below: posData.below === true,
+				path: currentPath ? `${currentPath}/${child.id}` : child.id,
+				type: child.type,
 			};
 
 			if (child.type === 'content' && child.file) {
 				obj.file = child.file;
-			} else if (child.type === 'category') {
-				obj.path = currentPath ? `${currentPath}/${child.id}` : child.id;
 			}
 
 			objects.push(obj);

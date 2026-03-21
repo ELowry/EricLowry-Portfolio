@@ -244,7 +244,7 @@ export class UIManager {
 				const openTextMenu = document.getElementById('text-options-submenu');
 				if (openTextMenu && !openTextMenu.hidden) {
 					const textTrigger = document.querySelector(
-						'[aria-controls="text-options-submenu"]',
+						'[aria-controls="text-options-submenu"]'
 					);
 					if (
 						!openTextMenu.contains(e.target)
@@ -471,7 +471,7 @@ export class UIManager {
 					child,
 					childIndex,
 					heading.children.length,
-					newState,
+					newState
 				);
 			});
 			listItem.appendChild(subList);
@@ -522,21 +522,23 @@ export class UIManager {
 	 * @param {boolean} [fadeIn=false] - If `true`, performs a CSS transition.
 	 */
 	showLoading(opaque = false, fadeIn = false) {
-		this.loadingStartTime = performance.now();
+		const isHidden = this.elements.loadingOverlay.classList.contains('hidden');
 
-		if (fadeIn) {
-			this.elements.loadingOverlay.classList.remove('hidden');
+		this.loadingStartTime = performance.now();
+		this.elements.loadingOverlay.classList.toggle('opaque', opaque);
+
+		if (fadeIn && isHidden) {
 			this.elements.loadingOverlay.classList.add('fade-out');
-			this.elements.loadingOverlay.classList.toggle('opaque', opaque);
+			this.elements.loadingOverlay.classList.remove('hidden');
+			// Trigger reflow
 			void this.elements.loadingOverlay.offsetWidth;
 			this.elements.loadingOverlay.classList.remove('fade-out');
 		} else {
 			this.elements.loadingOverlay.classList.remove('hidden', 'fade-out');
-			this.elements.loadingOverlay.classList.toggle('opaque', opaque);
 		}
 
 		document.body.setAttribute('aria-busy', 'true');
-		this.app.setPause(true);
+		this.app.setLock(true);
 	}
 
 	/**
@@ -557,6 +559,7 @@ export class UIManager {
 		this.elements.loadingOverlay.classList.remove('fade-out', 'opaque');
 		document.body.setAttribute('aria-busy', 'false');
 
+		this.app.setLock(false);
 		this.app.tutorialManager?.tryShowTouchTutorial();
 	}
 
@@ -633,7 +636,7 @@ export class UIManager {
 			this.elements.gameWelcome.addEventListener('cancel', (e) => e.preventDefault());
 			this.elements.gameWelcome._cancelListenerAdded = true;
 		}
-		this.app.setPause(true);
+		this.app.setLock(true);
 
 		Navigation.setContext(this.elements.gameWelcome, {
 			scroll: true,
@@ -750,7 +753,7 @@ export class UIManager {
 		InputPrompts.refresh(this.elements.gameModalContent);
 
 		if (!this.elements.gameModal.open) {
-			this.app.setPause(true);
+			this.app.setLock(true);
 			Navigation.setContext(this.elements.gameModalContent, { scroll: true, axis: null });
 			this.elements.gameModal.showModal();
 		}

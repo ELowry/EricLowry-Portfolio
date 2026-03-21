@@ -63,10 +63,11 @@ class InteractionController {
 	 * @private
 	 */
 	#triggerInteraction(obj) {
-		if (obj.path !== undefined) {
+		if (obj.type === 'category') {
 			// Special handling for the 'exit' node: ensure player enters the parent map at the coordinate matching where the child map expects the entry to be.
-			if (obj.id === 'parent_exit') {
-				const parentNode = Content.findNodeByPath(obj.path);
+			if (obj.id === 'parent_exit' || obj.path === '') {
+				const parentPath = obj.path || '';
+				const parentNode = Content.findNodeByPath(parentPath);
 				const childId = App.currentMapId;
 				const posData = parentNode?.mapData?.positions?.[childId];
 				if (posData && typeof posData.x === 'number') {
@@ -75,6 +76,7 @@ class InteractionController {
 					App.pendingEntryX = obj.pos.x;
 				}
 			}
+
 			if (!obj.below) {
 				GameBridge.requestBehindInteract(500).then(async () => {
 					App.uiManager.showLoading(true, true);
@@ -88,6 +90,8 @@ class InteractionController {
 					App.navigate(obj.path);
 				});
 			}
+		} else if (obj.path) {
+			App.navigate(obj.path);
 		} else if (obj.file) {
 			App.loadContentInModal(obj.file);
 		} else if (obj.action) {
@@ -122,12 +126,14 @@ class InteractionController {
 			return;
 		}
 
-		if (App.mode === 'text') {
+		if (App.mode === 'text' || !App.isInteractable) {
+			this.highlightedObject = null;
 			return;
 		}
 
 		this.highlightedObject = this.#findClosestObject(playerPos);
 		if (this.highlightedObject && Input.interact) {
+			Input.spawnTapRipple();
 			this.#triggerInteraction(this.highlightedObject);
 		}
 	}

@@ -40,10 +40,11 @@ class RouterController {
 	/**
 	 * Initializes the router and reads the initial URL.
 	 * @param {Function} onStateChangeCallback - Called when state changes
+	 * @returns {Promise<void>}
 	 */
-	init(onStateChangeCallback) {
+	async init(onStateChangeCallback) {
 		this.onStateChange = onStateChangeCallback;
-		this.readURL();
+		await this.readURL();
 	}
 
 	/**
@@ -66,8 +67,9 @@ class RouterController {
 	/**
 	 * Reads the current URL path and applies the state.
 	 * Handles formats like: `/game/about/bio` or `/text/projects`
+	 * @returns {Promise<void>}
 	 */
-	readURL() {
+	async readURL() {
 		const pathName = this.sanitizePath(window.location.pathname);
 
 		let mode = 'game';
@@ -85,7 +87,7 @@ class RouterController {
 			}
 		}
 
-		this.applyState({ mode, path }, true);
+		await this.applyState({ mode, path }, true);
 	}
 
 	/**
@@ -93,8 +95,9 @@ class RouterController {
 	 * Pushes a new history entry and updates the URL.
 	 * @param {string} mode - `game` or `text`
 	 * @param {string} path - Content path (e.g., `about/bio`)
+	 * @returns {Promise<void>}
 	 */
-	go(mode, path) {
+	async go(mode, path) {
 		const validMode = ['game', 'text'].includes(mode) ? mode : 'game';
 		const cleanPath = this.sanitizePath(path);
 		const newState = { mode: validMode, path: cleanPath };
@@ -111,19 +114,20 @@ class RouterController {
 		}
 
 		window.history.pushState(newState, '', newUrl);
-		this.applyState(newState);
+		await this.applyState(newState);
 	}
 
 	/**
 	 * Applies state to the application and triggers callback.
 	 * @param {Object} state - State object with mode and path
 	 * @param {boolean} updateApp - Whether to trigger the onStateChange callback
+	 * @returns {Promise<void>}
 	 */
-	applyState(state, updateApp = true) {
+	async applyState(state, updateApp = true) {
 		this.state = state;
 
 		if (updateApp && this.onStateChange) {
-			this.onStateChange(this.state);
+			await this.onStateChange(this.state);
 		}
 	}
 }
