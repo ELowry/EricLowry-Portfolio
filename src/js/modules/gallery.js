@@ -33,9 +33,8 @@ export class Gallery {
 	}
 
 	/**
-	 * Returns the custom renderer object for marked.js.
 	 * @param {Object} options - Configuration options for the gallery.
-	 * @returns {Object}
+	 * @returns {Object} the custom renderer object for marked.js.
 	 * @private
 	 */
 	static #getMarkedRenderer(options) {
@@ -155,7 +154,7 @@ export class GalleryDisplay {
 	}
 
 	/**
-	 * Handle global keydown events for keyboard accessibility.
+	 * Handle global keydown events for keyboard accessibility.  
 	 * Enter/Space to open.
 	 * @param {KeyboardEvent} event
 	 * @private

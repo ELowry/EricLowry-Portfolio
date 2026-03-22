@@ -62,7 +62,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Converts characters randomly to hex or decimal HTML entities.
+	 * Converts characters randomly to hex or decimal HTML entities.  
 	 * Ensures non-Latin1 characters are converted to safely pass through base64 encoding.
 	 * @param {string} text
 	 * @returns {string}
@@ -88,8 +88,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Returns the array of custom extensions for marked.js.
-	 * @returns {Array<Object>}
+	 * @returns {Array<Object>} The array of custom extensions for marked.js.
 	 * @private
 	 */
 	static #getMarkedExtensions() {
@@ -98,7 +97,7 @@ export class Obfuscator {
 				name: Obfuscator.EXTENSION_NAME,
 				level: 'inline',
 				/**
-				 * Hints to the marked.js parser where the next token starts.
+				 * Hints to the marked.js parser where the next token starts.  
 				 * Required for inline extensions to function correctly mid-string.
 				 * @param {string} src
 				 * @returns {number|undefined}
@@ -143,8 +142,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Returns the custom renderer object for marked.js.
-	 * @returns {Object}
+	 * @returns {Object} The custom renderer object for marked.js.
 	 * @private
 	 */
 	static #getMarkedRenderer() {
@@ -274,7 +272,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Obfuscates text unless it appears to be valid Base64, in which case it attempts to decode it.
+	 * Obfuscates text unless it appears to be valid Base64, in which case it attempts to decode it.  
 	 * Useful for handling user input that may already be obfuscated or encoded.
 	 * @param {string} text
 	 * @return {Object} An object containing both the obfuscated and deobfuscated versions of the text.
@@ -302,7 +300,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Generates the marked.js extension configuration object.
+	 * Generates the marked.js extension configuration object.  
 	 * Used to parse zero-width space delimited text and securely encode it.
 	 * @returns {Object}
 	 */

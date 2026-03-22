@@ -1,6 +1,5 @@
 /**
- * GameBridge - Small interface for registering game-to-app callbacks.
- *
+ * GameBridge - Small interface for registering game-to-app callbacks.  
  * Call `GameBridge.init({ teleportPlayer, getPlayerPos, requestBehindInteract, requestFrontInteract })` to provide app-side implementations which the game can call into.
  */
 export const GameBridge = {
@@ -27,8 +26,7 @@ export const GameBridge = {
 	},
 
 	/**
-	 * Returns the current player position from the registered implementation or `null`.
-	 * @returns {{x:number,y:number}|null}
+	 * @returns {{x:number,y:number}|null} the current player position from the registered implementation or `null`.
 	 */
 	get playerPos() {
 		if (this.implementation && typeof this.implementation.getPlayerPos === 'function') {
@@ -39,9 +37,8 @@ export const GameBridge = {
 
 	/**
 	 * Requests the app to perform the behind-interact animation/sequence.
-	 * Returns a Promise that resolves when the request completes (e.g., after fade/teleport).
 	 * @param {number} duration - Suggested duration in ms for the animation.
-	 * @returns {Promise<void>}
+	 * @returns {Promise<void>} a Promise that resolves when the request completes (e.g., after fade/teleport).
 	 */
 	requestBehindInteract(duration = 500) {
 		if (
@@ -55,9 +52,8 @@ export const GameBridge = {
 
 	/**
 	 * Requests the app to perform the front-interact animation/sequence.
-	 * Returns a Promise that resolves when the request completes (e.g., after fade/teleport).
 	 * @param {number} duration - Suggested duration in ms for the animation.
-	 * @returns {Promise<void>}
+	 * @returns {Promise<void>} a Promise that resolves when the request completes (e.g., after fade/teleport).
 	 */
 	requestFrontInteract(duration = 800) {
 		if (this.implementation && typeof this.implementation.requestFrontInteract === 'function') {

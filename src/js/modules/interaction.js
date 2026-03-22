@@ -5,7 +5,7 @@ import { Events } from './events.js';
 import { GameBridge } from './gameBridge.js';
 
 /**
- * InteractionController manages interactive objects in the game world.
+ * InteractionController manages interactive objects in the game world.  
  * Handles detection, highlighting, and triggering of object interactions.
  */
 class InteractionController {
@@ -57,7 +57,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Triggers interaction for the given object.
+	 * Triggers interaction for the given object.  
 	 * Handles navigation or custom actions.
 	 * @param {Object} obj - The interactive object
 	 * @private
@@ -109,7 +109,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Prevent interactions for a duration.
+	 * Prevent interactions for a duration.  
 	 * Useful when closing menus to prevent 'double interactions'.
 	 */
 	setBlock() {
@@ -117,7 +117,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Updates interaction state each frame.
+	 * Updates interaction state each frame.  
 	 * Finds the closest object in range and handles input.
 	 * @param {vec2} playerPos - Current player position
 	 */

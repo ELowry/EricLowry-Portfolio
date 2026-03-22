@@ -1,5 +1,5 @@
 /**
- * Navigation
+ * Navigation  
  * Manages generic focus traversal and scrolling for DOM containers via Gamepad/Keyboard.
  */
 class NavigationController {
@@ -36,7 +36,7 @@ class NavigationController {
 		return 200;
 	}
 	/**
-	 * The minimum scroll delta (as a fraction of the viewport) required to trigger navigation actions.
+	 * The minimum scroll delta (as a fraction of the viewport) required to trigger navigation actions.  
 	 * Used to prevent navigation from responding to very small or accidental scroll movements.
 	 * @constant {number} A value between 0 and 1 representing the scroll deadzone threshold.
 	 */
@@ -44,7 +44,7 @@ class NavigationController {
 		return 0.1;
 	}
 	/**
-	 * The minimum threshold value for navigation input to be considered valid.
+	 * The minimum threshold value for navigation input to be considered valid.  
 	 * Inputs with an absolute value less than this deadzone are ignored to prevent accidental or minor movements.
 	 * @constant {number}
 	 */
@@ -164,7 +164,7 @@ class NavigationController {
 	}
 
 	/**
-	 * Pushes a new navigation context onto the stack.
+	 * Pushes a new navigation context onto the stack.  
 	 * Useful for opening submenus (trapping focus).
 	 * @param {HTMLElement} containerElement
 	 * @param {Object} options
@@ -180,7 +180,7 @@ class NavigationController {
 	}
 
 	/**
-	 * Restores the previous navigation context.
+	 * Restores the previous navigation context.  
 	 * Useful for closing submenus.
 	 */
 	popContext() {
@@ -214,7 +214,7 @@ class NavigationController {
 	}
 
 	/**
-	 * Resets tabindex for all elements in a container to the default roving state.
+	 * Resets tabindex for all elements in a container to the default roving state.  
 	 * (First item 0, all others -1).
 	 * @param {HTMLElement} container
 	 * @private

@@ -366,7 +366,7 @@ class LangController {
 	}
 
 	/**
-	 * Populates language switcher containers with buttons for each available language.
+	 * Populates language switcher containers with buttons for each available language.  
 	 * Each button (except the current language) triggers a page reload with the new language.
 	 * @param {Object} availableLangs - Map of languages from `langs.json`.
 	 * @param {string} currentLang - The active full language code.

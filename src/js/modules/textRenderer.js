@@ -3,6 +3,7 @@ import { Content as AppContent } from './content.js';
 
 /**
  * Responsible for composing and injecting the text-mode UI (breadcrumbs and navigation) into the App's text view.
+ * 
  * @param {AppController} app - Reference to the App instance.
  */
 export class TextRenderer {

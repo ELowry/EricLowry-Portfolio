@@ -2,7 +2,7 @@ import { Input } from './input.js';
 import { App } from '../app.js';
 
 /**
- * Player character controlled by user input.
+ * Player character controlled by user input.  
  * Extends LittleJS `EngineObject` for positioning and rendering.
  */
 export class Player extends App.LJS.EngineObject {
@@ -256,7 +256,7 @@ export class Player extends App.LJS.EngineObject {
 	}
 
 	/**
-	 * Request the behind-interact animation and return a promise that resolves after the requested animation delay so callers can coordinate fade and navigation.
+	 * Request the behind-interact animation and return a promise that resolves after the requested animation delay so callers can coordinate fade and navigation.  
 	 * Handles transition from walking/stopping by playing a stop sequence first.
 	 * @param {number} [duration=800] - milliseconds to wait while animation plays
 	 * @returns {Promise<void>}

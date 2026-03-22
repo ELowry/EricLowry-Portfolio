@@ -3,11 +3,8 @@ import { Input } from './input.js';
 import { Lang } from './lang.js';
 
 /**
- * Controller for managing and updating input prompt elements in the DOM.
- *
+ * Controller for managing and updating input prompt elements in the DOM.  
  * Listens for input type changes and updates all elements with the `[data-prompt]` attribute to display the correct prompt for the current input type (e.g., keyboard, controller).
- *
- * @class
  */
 class InputPromptsController {
 	constructor() {
@@ -120,7 +117,7 @@ class InputPromptsController {
 	}
 
 	/**
-	 * Scans the document for `[data-prompt]` elements and updates them.
+	 * Scans the document for `[data-prompt]` elements and updates them.  
 	 * Call manually when modifying HTML contents susceptible of displaying inputs.
 	 */
 	refresh(root = document) {
@@ -191,7 +188,7 @@ class InputPromptsController {
 	}
 
 	/**
-	 * Detects the user's keyboard layout to properly display `WASD`/`ZQSD`/…
+	 * Detects the user's keyboard layout to properly display `WASD`/`ZQSD`/…  
 	 * Prioritizes the native API, falls back to browser language.
 	 */
 	async #detectKeyboardLayout() {

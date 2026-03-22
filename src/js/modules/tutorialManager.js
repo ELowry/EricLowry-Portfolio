@@ -1,8 +1,7 @@
 import { Events } from './events.js';
 
 /**
- * TutorialManager - Manages touch tutorial detection and presentation.
- *
+ * TutorialManager - Manages touch tutorial detection and presentation.  
  * Shows/hides the touch instructions overlay
  *
  * @param {AppController} app - Reference to the App instance.

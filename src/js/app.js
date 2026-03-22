@@ -230,7 +230,7 @@ class AppController {
 
 		try {
 			/**
-			 * Helper to check if a response is a valid markdown file.
+			 * Helper to check if a response is a valid markdown file.  
 			 * We check status, content-type, and also peek at the body to avoid SPA HTML fallbacks.
 			 */
 			const getValidResponse = async (url) => {

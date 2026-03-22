@@ -7,7 +7,7 @@ import { Content } from './content.js';
  */
 export class LocalLinkParser {
 	/**
-	 * Regular expression to match and extract the logical path from a localized content file URL.
+	 * Regular expression to match and extract the logical path from a localized content file URL.  
 	 * Matches paths like `/content/en_US/about/cv.md` and extracts `about/cv`.
 	 * @returns {RegExp}
 	 * @constant

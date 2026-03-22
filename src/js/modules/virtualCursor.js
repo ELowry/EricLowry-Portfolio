@@ -2,7 +2,7 @@ import { App } from '../app.js';
 import { Input } from './input.js';
 
 /**
- * Manages a screen-space pointer moved via controller.
+ * Manages a screen-space pointer moved via controller.  
  * Used primarily for navigating modals when standard directional focus is impractical.
  */
 class VirtualCursorController {

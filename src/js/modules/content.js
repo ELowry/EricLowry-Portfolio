@@ -279,8 +279,8 @@ class ContentController {
 	}
 
 	/**
-	 * Gets the parent map node (category) for a given path.
-	 * If the path points to content, returns the parent category.
+	 * Gets the parent map node (category) for a given path.  
+	 * If the path points to content, returns the parent category.  
 	 * If the path points to a category, returns that category.
 	 * @param {string} path - Path of the content or category
 	 * @returns {Object} The parent category node or the node itself
@@ -306,7 +306,7 @@ class ContentController {
 	}
 
 	/**
-	 * Builds interactive objects array for a map by combining children data with position data.
+	 * Builds interactive objects array for a map by combining children data with position data.  
 	 * This is the bridge between content structure and game world layout.
 	 * @param {Object} mapNode - Category node with `mapData` and `children`
 	 * @param {string} currentPath - Current path in content tree

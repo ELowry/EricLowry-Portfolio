@@ -1,5 +1,5 @@
 /**
- * RouterController handles application state via URL paths and the History API.
+ * RouterController handles application state via URL paths and the History API.  
  * Manages clean path-based routing (e.g., `/game/about` instead of `?mode=game&path=about`).
  */
 class RouterController {
@@ -65,7 +65,7 @@ class RouterController {
 	}
 
 	/**
-	 * Reads the current URL path and applies the state.
+	 * Reads the current URL path and applies the state.  
 	 * Handles formats like: `/game/about/bio` or `/text/projects`
 	 * @returns {Promise<void>}
 	 */
@@ -91,7 +91,7 @@ class RouterController {
 	}
 
 	/**
-	 * Navigates to a specific mode and path.
+	 * Navigates to a specific mode and path.  
 	 * Pushes a new history entry and updates the URL.
 	 * @param {string} mode - `game` or `text`
 	 * @param {string} path - Content path (e.g., `about/bio`)
