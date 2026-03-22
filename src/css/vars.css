@@ -10,8 +10,8 @@
 	--hex-overlay: #000;
 	--hex-highlight: #fff;
 
-	---luminocity-overlay: 0;
-	---luminocity-highlight: 1;
+	--luminocity-overlay: 0;
+	--luminocity-highlight: 1;
 
 	--color-accent: oklch(from var(--hex-accent) l c h);
 	--color-background: oklch(from var(--hex-background) l c h);
@@ -20,10 +20,10 @@
 	--opacity-overlay: 50%;
 	--opacity-overlay-dark: 80%;
 	--color-overlay: oklch(
-		from var(--hex-overlay) var(---luminocity-overlay) c h / var(--opacity-overlay)
+		from var(--hex-overlay) var(--luminocity-overlay) c h / var(--opacity-overlay)
 	);
 	--color-overlay-dark: oklch(
-		from var(--hex-overlay) var(---luminocity-overlay) c h / var(--opacity-overlay-dark)
+		from var(--hex-overlay) var(--luminocity-overlay) c h / var(--opacity-overlay-dark)
 	);
 
 	--color-border: oklch(from var(--hex-border) l c h);
@@ -31,7 +31,7 @@
 
 	--opacity-highlight: 10%;
 	--color-highlight: oklch(
-		from var(--hex-highlight) var(---luminocity-highlight) c h / var(--opacity-highlight)
+		from var(--hex-highlight) var(--luminocity-highlight) c h / var(--opacity-highlight)
 	);
 
 	--scrollbar-thumb: var(--color-border-active);
@@ -57,6 +57,9 @@
 
 	--content-max-width: 80ch;
 	--table-of-contents-max-width: 80ch;
+
+	--gallery-aspect-ratio: 3 / 1;
+	--gallery-easing: cubic-bezier(0.2, 0.9, 0.25, 0.98);
 
 	@media (forced-colors: active) or (prefers-contrast: more) {
 		--font-sans: 'Atkinson Hyperlegible Next', 'Noto Sans Symbols 2', sans-serif;
@@ -96,8 +99,8 @@
 		--hex-accent: #6d0a1f;
 		--hex-border: #b19f9e;
 
-		---luminocity-overlay: 1;
-		---luminocity-highlight: 0;
+		--luminocity-overlay: 1;
+		--luminocity-highlight: 0;
 		--opacity-highlight: 8%;
 
 		--color-border-active: oklch(from var(--color-border) calc(l - 0.15) calc(c + 0.02) h);

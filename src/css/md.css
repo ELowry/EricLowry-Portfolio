@@ -2,7 +2,7 @@
 /* Scoped to elements with `marked` class */
 
 .marked {
-	& blockquote {
+	blockquote {
 		opacity: 0.8;
 		margin: 1em 0;
 		border-left: 0.25em solid var(--color-border);
@@ -10,7 +10,7 @@
 		color: var(--color-text);
 	}
 
-	& img {
+	img {
 		display: inline-block;
 		background-color: oklch(from var(--color-highlight) l c h / 3%);
 
@@ -29,14 +29,14 @@
 			display: block;
 			margin: auto;
 
-			@media (width >= 800px) {
+			@media (width > 800px) {
 				float: right;
 				margin-left: 1em;
 			}
 		}
 		/* 3 Hair Spaces: Inline -> Floats Right (>= 600px) */
 		&[alt$='   '] {
-			@media (width >= 600px) {
+			@media (width > 600px) {
 				float: right;
 				margin-left: 1em;
 			}
@@ -46,14 +46,14 @@
 			display: block;
 			margin-right: auto;
 
-			@media (width >= 800px) {
+			@media (width > 800px) {
 				float: left;
 				margin-right: 1em;
 			}
 		}
 		/* 1 Space + 2 Hair Spaces: Inline -> Floats Left (>= 800px) */
 		&[alt$='   '] {
-			@media (width >= 800px) {
+			@media (width > 800px) {
 				float: left;
 				margin-right: 1em;
 			}
@@ -61,7 +61,7 @@
 	}
 
 	/* Base Alert Style */
-	& .markdown-alert {
+	.markdown-alert {
 		position: relative;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
@@ -72,7 +72,7 @@
 		font-size: 0.95em;
 
 		/* Alert Title */
-		& .markdown-alert-title {
+		.markdown-alert-title {
 			display: flex;
 			align-items: center;
 			opacity: 0.9;
@@ -84,7 +84,7 @@
 			letter-spacing: 0.05em;
 			text-transform: uppercase;
 
-			& svg {
+			svg {
 				fill: currentColor;
 				margin-right: 0.5em;
 				width: 16px;
@@ -93,10 +93,10 @@
 		}
 
 		/* Alert Content */
-		& > :nth-child(2) {
+		> :nth-child(2) {
 			margin-top: 0;
 		}
-		& > :last-child {
+		> :last-child {
 			margin-bottom: 0;
 		}
 
@@ -104,38 +104,38 @@
 		&.markdown-alert-note,
 		&.markdown-alert-info {
 			border-left-color: var(--color-alert-note);
-			& .markdown-alert-title {
+			.markdown-alert-title {
 				color: var(--color-alert-note);
 			}
 		}
 		&.markdown-alert-tip {
 			border-left-color: var(--color-alert-tip);
-			& .markdown-alert-title {
+			.markdown-alert-title {
 				color: var(--color-alert-tip);
 			}
 		}
 		&.markdown-alert-important {
 			border-left-color: var(--color-alert-important);
-			& .markdown-alert-title {
+			.markdown-alert-title {
 				color: var(--color-alert-important);
 			}
 		}
 		&.markdown-alert-warning {
 			border-left-color: var(--color-alert-warning);
-			& .markdown-alert-title {
+			.markdown-alert-title {
 				color: var(--color-alert-warning);
 			}
 		}
 		&.markdown-alert-caution {
 			border-left-color: var(--color-alert-caution);
-			& .markdown-alert-title {
+			.markdown-alert-title {
 				color: var(--color-alert-caution);
 			}
 		}
 
 		/* Code blocks inside alerts should blend in */
-		& pre,
-		& code {
+		pre,
+		code {
 			background-color: oklch(from var(--color-highlight) l c h / 5%);
 		}
 	}

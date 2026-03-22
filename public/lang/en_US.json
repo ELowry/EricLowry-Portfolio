@@ -101,6 +101,11 @@
 		"contact": {
 			"email_placeholder": "[reveal email]",
 			"phone_placeholder": "[reveal phone number]"
+		},
+		"gallery": {
+			"modalLabel": "Fullscreen image viewer - test",
+			"modalClose": "Close modal - test",
+			"imageOpenModal": "Open image in fullscreen modal"
 		}
 	},
 	"keys": {

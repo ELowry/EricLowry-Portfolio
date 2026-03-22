@@ -1,4 +1,5 @@
 import { Obfuscator } from './obfuscator.js';
+import { Gallery } from './gallery.js';
 import { LocalLinkParser } from './localLinks.js';
 
 /**
@@ -11,6 +12,14 @@ export class MarkedExtensions {
 	constructor(marked) {
 		/** @type {Object} Reference to the marked library instance */
 		this.marked = marked;
+	}
+
+	/**
+	 * Configuration for the `marked-gfm-heading-id` extension.
+	 * @constant {Object}
+	 */
+	static get HEADING_ID_CONFIG() {
+		return { prefix: '_' };
 	}
 
 	/**
@@ -30,21 +39,12 @@ export class MarkedExtensions {
 	}
 
 	/**
-	 * Configuration for the `marked-gfm-heading-id` extension.
-	 * @constant {Object}
-	 */
-	static get HEADING_ID_CONFIG() {
-		return { prefix: '_' };
-	}
-
-	/**
 	 * Configuration for the `marked-responsive-images` extension.
 	 * @constant {Object}
 	 */
 	static get RESPONSIVE_IMAGES_CONFIG() {
 		return {
 			debug: App.isLocal,
-			lazy: false,
 			sizes: '(max-width: 820px) 95vw, 820px',
 			class: 'md-img',
 		};
@@ -69,6 +69,8 @@ export class MarkedExtensions {
 		this.marked.use(Obfuscator.getMarkedExtension());
 		// Local Link Rewriting
 		this.marked.use(LocalLinkParser.getMarkedExtension());
+		// Gallery
+		this.marked.use(Gallery.getMarkedExtension());
 
 		// Alerts
 		if (typeof window.markedAlert !== 'undefined') {

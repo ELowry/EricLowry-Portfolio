@@ -11,7 +11,7 @@
 	user-select: none;
 	-webkit-user-select: none;
 
-	& div {
+	div {
 		align-self: flex-end;
 		pointer-events: auto;
 		text-transform: uppercase;
@@ -20,19 +20,19 @@
 			cursor: pointer;
 		}
 
-		& span {
+		span {
 			display: none;
 		}
 	}
-	& #touch-left,
-	& #touch-right {
+	#touch-left,
+	#touch-right {
 		width: 20%;
 		min-width: 80px;
 		max-width: 300px;
 		height: 66%;
 	}
 
-	& #touch-center {
+	#touch-center {
 		flex: 1;
 		height: 90%;
 	}
@@ -43,7 +43,7 @@
 		backdrop-filter: var(--backdrop-blur-light);
 		background-color: oklch(from var(--color-overlay) l c h / 70%);
 
-		& div {
+		div {
 			display: flex;
 			justify-content: center;
 			align-items: end;
@@ -57,7 +57,7 @@
 			font-family: var(--font-mono);
 			text-shadow: 0 0 10px #000;
 
-			& span {
+			span {
 				display: inline;
 			}
 		}
@@ -149,7 +149,7 @@
 	inset: 10vh 5vw 20vh;
 	pointer-events: none;
 
-	& .modal-box {
+	.modal-box {
 		backdrop-filter: var(--backdrop-blur);
 		box-shadow: 0 0 60px oklch(from var(--color-overlay) l c h / 90%);
 		border-color: var(--color-accent);
@@ -159,13 +159,13 @@
 		pointer-events: auto;
 	}
 
-	& ul {
+	ul {
 		margin: 1.5em 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	& li {
+	li {
 		position: relative;
 		margin-bottom: 0.8em;
 		padding-left: 1.2em;
@@ -178,7 +178,7 @@
 		}
 	}
 
-	& h4 {
+	h4 {
 		margin-top: 0;
 		color: var(--color-accent);
 	}

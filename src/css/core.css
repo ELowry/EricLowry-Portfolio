@@ -27,16 +27,16 @@ button {
 	cursor: pointer;
 	border: var(--border-width) solid var(--color-accent);
 	border-radius: 0;
-	background-color: oklch(from var(--color-highlight) l c h / var(--opacity-highlight));
+	background-color: var(--color-highlight);
 	padding: 0.5em 0.6em;
 	color: var(--color-text);
 
 	&:hover {
-		--opacity-highlight: 0.1;
+		--opacity-highlight: 15%;
 	}
 
 	&:active {
-		--opacity-highlight: 0.2;
+		--opacity-highlight: 20%;
 	}
 }
 

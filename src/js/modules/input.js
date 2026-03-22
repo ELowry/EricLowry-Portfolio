@@ -30,6 +30,9 @@ class InputController {
 		/** @type {'mnk'|'touch'|'gamepad'} */
 		this.lastInputType = 'mnk';
 
+		/** @type {{x: number, y: number}} Current screen-space position of the virtual cursor */
+		this.cursorPos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
 		// Detect Mouse & Keyboard usage
 		window.addEventListener('keydown', () => this.#setInputType('mnk'));
 		window.addEventListener('pointerdown', (e) => {
@@ -80,6 +83,13 @@ class InputController {
 	 */
 	static get GAMEPAD_DEADZONE_Y() {
 		return 0.1;
+	}
+	/**
+	 * Gamepad deadzone threshold for the right stick (analog cursor).
+	 * @constant {number}
+	 */
+	static get GAMEPAD_DEADZONE_STICK_RIGHT() {
+		return 0.02;
 	}
 
 	/**
@@ -157,6 +167,15 @@ class InputController {
 		}
 
 		return App.LJS.vec2(x, y);
+	}
+
+	/**
+	 * Returns the raw input from the secondary (right) gamepad stick.
+	 * @returns {vec2} Right stick axis vector
+	 */
+	get rightAxis() {
+		const stick = App.LJS.gamepadStick(1);
+		return App.LJS.vec2(stick.x, stick.y);
 	}
 
 	/**
@@ -254,6 +273,7 @@ class InputController {
 			|| App.LJS.gamepadWasPressed(9) // Menu
 			|| App.LJS.gamepadStick(0).length() > InputController.GAMEPAD_DEADZONE_X // Left stick X
 			|| App.LJS.gamepadStick(0).length() > InputController.GAMEPAD_DEADZONE_Y // Left stick Y
+			|| App.LJS.gamepadStick(1).length() > InputController.GAMEPAD_DEADZONE_STICK_RIGHT // Right stick
 		) {
 			this.#setInputType('gamepad');
 		}

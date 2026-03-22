@@ -100,7 +100,7 @@ pre {
 	display: flex;
 	font-size: 1rem;
 
-	& pre {
+	pre {
 		display: inline-block;
 		margin: unset;
 	}

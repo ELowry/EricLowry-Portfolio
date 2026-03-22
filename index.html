@@ -18,9 +18,21 @@
 
 		<div id="game-layer">
 			<div id="touch-controls">
-				<div id="touch-left"><span class="lang" data-lang="ui.touch_instructions.left" inert>Left</span></div>
-				<div id="touch-center"><span class="lang" data-lang="ui.touch_instructions.interact" inert>Interact</span></div>
-				<div id="touch-right"><span class="lang" data-lang="ui.touch_instructions.right" inert>Right</span></div>
+				<div id="touch-left"
+					><span class="lang" data-lang="ui.touch_instructions.left" inert
+						>Left</span
+					></div
+				>
+				<div id="touch-center"
+					><span class="lang" data-lang="ui.touch_instructions.interact" inert
+						>Interact</span
+					></div
+				>
+				<div id="touch-right"
+					><span class="lang" data-lang="ui.touch_instructions.right" inert
+						>Right</span
+					></div
+				>
 			</div>
 
 			<button
@@ -350,6 +362,30 @@
 
 		<template id="tmpl-nav-link">
 			<a href="#" role="menuitem" class="nav-btn"></a>
+		</template>
+
+		<template id="gallery-modal-template">
+			<dialog
+				class="gallery-modal langAttr"
+				data-langAttr="aria-label"
+				data-langAria_label="ui.gallery.modalLabel"
+				aria-label="Fullscreen image viewer"
+			>
+				<button
+					class="gallery-modal-close"
+					data-langAttr="aria-label"
+					data-langAria_label="ui.gallery.modalClose"
+					aria-label="Close modal"
+					>x</button
+				>
+				<div class="gallery-modal-content"></div>
+			</dialog>
+		</template>
+
+		<template id="tmpl-virtual-cursor">
+			<div id="virtual-cursor" aria-hidden="true">
+				<div id="virtual-cursor-inner"></div>
+			</div>
 		</template>
 
 		<script type="module" src="/src/js/main.js"></script>

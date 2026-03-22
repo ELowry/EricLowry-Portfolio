@@ -2,6 +2,7 @@ import { App } from './app.js';
 import { Camera } from './modules/camera.js';
 import { Player } from './modules/player.js';
 import { Interaction } from './modules/interaction.js';
+import { VirtualCursor } from './modules/virtualCursor.js';
 import { Input } from './modules/input.js';
 import { GameBridge } from './modules/gameBridge.js';
 
@@ -63,6 +64,10 @@ function gameInit() {
  * Called each frame by LittleJS engine.
  */
 function gameUpdate() {
+	if (!document.hasFocus()) {
+		return;
+	}
+
 	App.handleInput();
 
 	Input.update();
@@ -74,6 +79,8 @@ function gameUpdate() {
 	if (player) {
 		Interaction.update(player.pos);
 	}
+
+	VirtualCursor.update();
 }
 
 /**

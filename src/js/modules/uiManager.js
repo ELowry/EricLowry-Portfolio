@@ -5,6 +5,7 @@ import { InputPrompts } from './inputPrompts.js';
 import { Router } from './router.js';
 import { Content } from './content.js';
 import { Obfuscator } from './obfuscator.js';
+import { VirtualCursor } from './virtualCursor.js';
 
 /**
  * Orchestrates all DOM manipulations, UI state transitions, and event handling.
@@ -49,6 +50,7 @@ export class UIManager {
 			touchControls: document.getElementById('touch-controls'),
 			touchInstructions: document.getElementById('touch-instructions'),
 			touchDontShow: document.getElementById('touch-dont-show'),
+			virtualCursorTemplate: document.getElementById('tmpl-virtual-cursor'),
 		};
 
 		/** @type {number} Timestamp when the last loading task started. */
@@ -115,6 +117,9 @@ export class UIManager {
 	 * Binds global DOM events and initializes interactive UI components.
 	 */
 	init() {
+		// Virtual Cursor
+		VirtualCursor.init(this.elements.virtualCursorTemplate);
+
 		// Welcome Screen
 		this.elements.gameWelcome?.addEventListener('close', () => {
 			this.app.onModalClose(false);
@@ -559,7 +564,10 @@ export class UIManager {
 		this.elements.loadingOverlay.classList.remove('fade-out', 'opaque');
 		document.body.setAttribute('aria-busy', 'false');
 
-		this.app.setLock(false);
+		// Only clear the interaction lock if no modals are currently open
+		if (!this.menuOpen) {
+			this.app.setLock(false);
+		}
 		this.app.tutorialManager?.tryShowTouchTutorial();
 	}
 

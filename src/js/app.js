@@ -9,6 +9,7 @@ import { TextRenderer } from './modules/textRenderer.js';
 import { TutorialManager } from './modules/tutorialManager.js';
 import { UIManager } from './modules/uiManager.js';
 import { MarkedExtensions } from './modules/markedExtensions.js';
+import { GalleryDisplay } from './modules/gallery.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -81,7 +82,7 @@ class AppController {
 
 	/**
 	 * `true` if the application is in `game` mode and not locked.
-	 * @returns {boolean} Whether the game engine should block inputs and interactions.
+	 * @returns {boolean} Whether the game engine should allow inputs and interactions.
 	 */
 	get isInteractable() {
 		return this.isRunning && !this.isLocked && !this.menuOpen;
@@ -156,6 +157,9 @@ class AppController {
 
 			// Initialize UI Manager (event listeners, etc.)
 			this.uiManager.init();
+
+			// Initialize Gallery modal display
+			new GalleryDisplay(this);
 
 			// Ensure all scripts are loaded
 			this.Lang = Lang;
@@ -299,7 +303,7 @@ class AppController {
 		}
 
 		if (this.Input.menu) {
-			if (this.uiManager.elements.gameWelcome?.open) {
+			if (this.uiManager.elements.gameWelcome?.open || Navigation.contextStack.length > 0) {
 				return;
 			}
 
@@ -313,6 +317,14 @@ class AppController {
 		}
 
 		if (this.Input.back) {
+			if (Navigation.contextStack.length > 0) {
+				const active = Navigation.activeContainer;
+				if (active instanceof HTMLDialogElement) {
+					active.close();
+					return;
+				}
+			}
+
 			if (this.uiManager.elements.gameMenu?.open) {
 				this.closeGameMenu();
 				return;
@@ -677,6 +689,16 @@ class AppController {
 
 		this.setPause(false);
 		this.setLock(false);
+
+		// Clean up any sub-modals that might still be open in the navigation stack
+		while (Navigation.contextStack.length > 0) {
+			const active = Navigation.activeContainer;
+			if (active instanceof HTMLDialogElement) {
+				active.close();
+			} else {
+				Navigation.popContext();
+			}
+		}
 
 		this.Input.clearEvents();
 		Interaction.setBlock(200);
