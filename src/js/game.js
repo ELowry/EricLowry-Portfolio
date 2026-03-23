@@ -94,7 +94,7 @@ function gameUpdatePost() {
 	}
 
 	App.LJS.setPaused(App.mode !== 'game');
-	App.LJS.setInputPreventDefault(App.mode === 'game');
+	App.LJS.setInputPreventDefault(App.mode === 'game' && !App.menuOpen);
 
 	if (App.isRunning) {
 		Camera.follow(player);

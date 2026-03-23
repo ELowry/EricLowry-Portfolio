@@ -49,6 +49,11 @@ if (-not (Test-Path $InputFile)) {
 # Hardcoded array of desired widths
 $TargetWidths = @(240, 400, 600, 820, 1400, 1920)
 
+# Target quality for each type
+$QualityWebP = 80
+$QualityJPG = 83
+$QualityPNG = 95
+
 # Save the original string for the Markdown output later
 $MarkdownDestFolder = $DestinationFolder
 
@@ -101,6 +106,7 @@ $ValidWidths = $ValidWidths | Sort-Object
 
 # BUILD IMAGES
 $Tokens = @()
+$GeneratedWebPs = @()
 $GeneratedFallbacks = @()
 
 foreach ($W in $ValidWidths) {
@@ -108,24 +114,32 @@ foreach ($W in $ValidWidths) {
 
 	# Generate WebP
 	$tempWebp = Join-Path $DestinationFolder "temp_$W.webp"
-	& magick $InputFile -resize "${W}x" $tempWebp
+	& magick $InputFile -resize "${W}x" -quality $QualityWebP $tempWebp
     
 	# Read output sizes to avoid rounding errors
 	$dims = (& magick identify -format "%w %h" $tempWebp) -split " "
 	$ActualW = [int]$dims[0]
 	$ActualH = [int]$dims[1]
 
-	# Rename WebP files
+	# Store WebP info to rename later
 	$webpName = "${BaseName}__${ActualW}-${ActualH}.webp"
 	$webpPath = Join-Path $DestinationFolder $webpName
-	Move-Item -Path $tempWebp -Destination $webpPath -Force
+	$GeneratedWebPs += [PSCustomObject]@{
+		TempPath  = $tempWebp
+		FinalPath = $webpPath
+	}
 
 	# Add format token
 	$Tokens += "${ActualW}-${ActualH}-webp"
 
 	# Generate Fallback Images
 	$tempFallback = Join-Path $DestinationFolder "temp_$W.$FallbackExt"
-	& magick $InputFile -resize "${W}x" $tempFallback
+	if ($FallbackExt -eq "jpg") {
+		& magick $InputFile -resize "${W}x" -quality $QualityJPG $tempFallback
+	}
+	else {
+		& magick $InputFile -resize "${W}x" -quality $QualityPNG $tempFallback
+	}
 
 	# Store fallback info to rename later
 	$GeneratedFallbacks += [PSCustomObject]@{
@@ -141,6 +155,36 @@ foreach ($W in $ValidWidths) {
 # PROCESS FILENAMES
 $TokenString = $Tokens -join "_"
 $MainFileName = "${BaseName}__${TokenString}.$FallbackExt"
+
+# Check for Conflicts
+$AllTargetPaths = @()
+foreach ($file in $GeneratedWebPs) { $AllTargetPaths += $file.FinalPath }
+foreach ($file in $GeneratedFallbacks) {
+	if ($file.IsLast) {
+		$AllTargetPaths += (Join-Path $DestinationFolder $MainFileName)
+	}
+	else {
+		$AllTargetPaths += (Join-Path $DestinationFolder "${BaseName}__$($file.Width)-$($file.Height).$FallbackExt")
+	}
+}
+
+$Existing = $AllTargetPaths | Where-Object { Test-Path $_ }
+if ($Existing.Count -gt 0) {
+	Write-Host "`nConflict(s) detected. The following file(s) already exist:" -ForegroundColor Yellow
+	foreach ($path in $Existing) {
+		Write-Host " - $(Split-Path $path -Leaf)"
+	}
+	$choice = Read-Host "`nDo you want to overwrite these files? (y/n)"
+	if ($choice -notmatch "^y$") {
+		Write-Host "`nOperation cancelled by user. Temporary files remain in destination folder." -ForegroundColor Red
+		return
+	}
+}
+
+# Perform Moves
+foreach ($file in $GeneratedWebPs) {
+	Move-Item -Path $file.TempPath -Destination $file.FinalPath -Force
+}
 
 foreach ($file in $GeneratedFallbacks) {
 	if ($file.IsLast) {

@@ -1,6 +1,7 @@
 import { Obfuscator } from './obfuscator.js';
 import { Gallery } from './gallery.js';
 import { LocalLinkParser } from './localLinks.js';
+import { VideoEmbeds } from './embeds.js';
 
 /**
  * Manages custom extensions and renderers for the `marked` library.
@@ -69,6 +70,8 @@ export class MarkedExtensions {
 		this.marked.use(Obfuscator.getMarkedExtension());
 		// Local Link Rewriting
 		this.marked.use(LocalLinkParser.getMarkedExtension());
+		// Video Embeds
+		this.marked.use(VideoEmbeds.getMarkedExtension());
 		// Gallery
 		this.marked.use(Gallery.getMarkedExtension());
 
@@ -89,6 +92,7 @@ export class MarkedExtensions {
 				typeof window.markedResponsiveImages === 'function'
 					? window.markedResponsiveImages
 					: window.markedResponsiveImages.markedResponsiveImages;
+
 			if (responsiveImagesExtension) {
 				this.marked.use(
 					responsiveImagesExtension(MarkedExtensions.RESPONSIVE_IMAGES_CONFIG)

@@ -58,7 +58,7 @@ const category = (id, title, mapLoader, children = []) => ({
 });
 
 /**
- * The static definition of the application's content hierarchy.
+ * The static definition of the application's content hierarchy.  
  * This constant serves as the single source of truth for routing, game level layout, and navigation menus. It is built using factory functions to ensure structural consistency.
  * @type {ContentNode}
  */
@@ -68,7 +68,7 @@ export const ContentTree = category(
 	() => import('../../maps/root.config.js'),
 	[
 		// Hidden
-		// content('privacy', 'Privacy Policy', 'info/privacy.md', true),
+		content('privacy', 'Privacy Policy', 'info/privacy.md', true),
 
 		// ROOT
 		content('index', 'Welcome', 'index.md'),

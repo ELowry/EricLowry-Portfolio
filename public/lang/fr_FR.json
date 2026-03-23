@@ -98,9 +98,14 @@
 		"contact": {
 			"email_placeholder": "[afficher l'email]",
 			"phone_placeholder": "[afficher le numéro de téléphone]"
+		},
+		"gallery": {
+			"modalLabel": "Affichage d'image en plein écran",
+			"modalClose": "Fermer l'affichage plein écran",
+			"imageOpenModal": "Ouvrir l'image en plein écran"
 		}
 	},
 	"keys": {
-		"escape": "[Ech]"
+		"escape": "[Éch]"
 	}
 }

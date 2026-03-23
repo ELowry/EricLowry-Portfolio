@@ -247,7 +247,7 @@ class LangController {
 	 * @param {Object} data - The language data object.
 	 */
 	translateHtml(root, data) {
-		const objs = root.getElementsByClassName ? root.getElementsByClassName('lang') : [];
+		const objs = root.querySelectorAll ? root.querySelectorAll('.lang') : [];
 		const elements = root.classList?.contains('lang') ? [root, ...objs] : objs;
 
 		for (let i = 0; i < elements.length; i++) {
@@ -282,7 +282,7 @@ class LangController {
 	 * @param {Object} data - The language data object.
 	 */
 	translateAttr(root, data) {
-		const objs = root.getElementsByClassName ? root.getElementsByClassName('langAttr') : [];
+		const objs = root.querySelectorAll ? root.querySelectorAll('.langAttr') : [];
 		const elements = root.classList?.contains('langAttr') ? [root, ...objs] : objs;
 
 		for (let i = 0; i < elements.length; i++) {
@@ -327,7 +327,7 @@ class LangController {
 	 * @param {HTMLElement} [root=document] - The root element to search within.
 	 */
 	applyRestrictions(root = document) {
-		const objs = root.getElementsByClassName ? root.getElementsByClassName('restrictLang') : [];
+		const objs = root.querySelectorAll ? root.querySelectorAll('.restrictLang') : [];
 		const elements = root.classList?.contains('restrictLang') ? [root, ...objs] : objs;
 		const currentLang = this.code?.lang;
 
@@ -366,7 +366,7 @@ class LangController {
 	}
 
 	/**
-	 * Populates language switcher containers with buttons for each available language.  
+	 * Populates language switcher containers with buttons for each available language.
 	 * Each button (except the current language) triggers a page reload with the new language.
 	 * @param {Object} availableLangs - Map of languages from `langs.json`.
 	 * @param {string} currentLang - The active full language code.

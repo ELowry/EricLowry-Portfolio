@@ -103,8 +103,8 @@
 			"phone_placeholder": "[reveal phone number]"
 		},
 		"gallery": {
-			"modalLabel": "Fullscreen image viewer - test",
-			"modalClose": "Close modal - test",
+			"modalLabel": "Fullscreen image viewer",
+			"modalClose": "Close modal",
 			"imageOpenModal": "Open image in fullscreen modal"
 		}
 	},

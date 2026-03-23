@@ -154,7 +154,7 @@ export class GalleryDisplay {
 	}
 
 	/**
-	 * Handle global keydown events for keyboard accessibility.  
+	 * Handle global keydown events for keyboard accessibility.
 	 * Enter/Space to open.
 	 * @param {KeyboardEvent} event
 	 * @private
@@ -251,8 +251,12 @@ export class GalleryDisplay {
 			contentContainer.appendChild(mediaClone);
 		}
 
+		// Apply translation from template
+		Lang.performTranslation(clone);
+
+		this.#activeModal = clone.querySelector('dialog');
+
 		document.body.appendChild(clone);
-		this.#activeModal = document.body.lastElementChild;
 
 		const observer = new MutationObserver(() => {
 			if (!itemElement.isConnected) {
