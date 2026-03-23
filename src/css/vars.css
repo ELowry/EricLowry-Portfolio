@@ -61,6 +61,17 @@
 	--gallery-aspect-ratio: 3 / 1;
 	--gallery-easing: cubic-bezier(0.2, 0.9, 0.25, 0.98);
 
+	--percent-10: 10%;
+	--percent-20: 20%;
+	--percent-30: 30%;
+	--percent-40: 40%;
+	--percent-50: 50%;
+	--percent-60: 60%;
+	--percent-70: 70%;
+	--percent-80: 80%;
+	--percent-80: 90%;
+	--percent-100: 100%;
+
 	@media (forced-colors: active) or (prefers-contrast: more) {
 		--font-sans: 'Atkinson Hyperlegible Next', 'Noto Sans Symbols 2', sans-serif;
 		--font-mono: 'Atkinson Hyperlegible Mono', 'Noto Sans Symbols 2', monospace;
@@ -77,8 +88,22 @@
 	}
 
 	@media (prefers-reduced-transparency: reduce) {
-		--opacity-overlay: 80%;
+		--opacity-overlay: 85%;
 		--opacity-overlay-dark: 90%;
+
+		--backdrop-blur: blur(40px);
+		--backdrop-blur-light: blur(20px);
+
+		--percent-10: 40%;
+		--percent-20: 50%;
+		--percent-30: 60%;
+		--percent-40: 70%;
+		--percent-50: 80%;
+		--percent-60: 85%;
+		--percent-70: 90%;
+		--percent-80: 95%;
+		--percent-80: 100%;
+		--percent-100: 100%;
 	}
 
 	@media (prefers-contrast: more) {

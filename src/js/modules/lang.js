@@ -16,6 +16,53 @@ class LangController {
 	}
 
 	/**
+	 * Configuration for meta tags translation.
+	 * @returns {Array<Object>}
+	 * @constant
+	 */
+	static get META_CONFIG() {
+		return [
+			{
+				tag: 'title',
+				path: 'meta.title',
+			},
+			{
+				tag: 'meta',
+				attr: 'name',
+				attrVal: 'description',
+				path: 'meta.description',
+				targetAttr: 'content',
+			},
+			{
+				tag: 'meta',
+				attr: 'property',
+				attrVal: 'og:title',
+				path: 'meta.title',
+				targetAttr: 'content',
+			},
+			{
+				tag: 'meta',
+				attr: 'property',
+				attrVal: 'og:description',
+				path: 'meta.description',
+				targetAttr: 'content',
+			},
+			{
+				tag: 'meta',
+				attr: 'name',
+				attrVal: 'language',
+				path: 'meta.lang',
+				targetAttr: 'content',
+			},
+			{
+				tag: 'html',
+				path: 'meta.lang',
+				targetAttr: 'lang',
+			},
+		];
+	}
+
+	/**
 	 * Returns the current full language code (e.g., `en_US`).
 	 * @returns {string} The full language code.
 	 */
@@ -52,7 +99,8 @@ class LangController {
 			}
 			this.data = await dataResponse.json();
 
-			document.documentElement.lang = this.code.lang;
+			const metaLangValue = this.getString('meta.lang', this.data);
+			document.documentElement.lang = metaLangValue !== 'notFound' ? metaLangValue.toLowerCase() : this.code.lang;
 
 			this.performTranslation();
 			this.setupLanguageSwitchers(availableLangs, bestLang);
@@ -72,6 +120,22 @@ class LangController {
 			window.dispatchEvent(new Event('languageLoaded'));
 			return null;
 		}
+	}
+
+	/**
+	 * Performs a translation pass on the specified document branch.
+	 * @param {HTMLElement|Document} [root=document] - The root element to translate from.
+	 * @param {Object} [data] - Optional language data to use (defaults to current data).
+	 */
+	performTranslation(root = document, data = this.data) {
+		if (!data) {
+			return;
+		}
+
+		this.translateMeta(data);
+		this.translateHtml(root, data);
+		this.translateAttr(root, data);
+		this.applyRestrictions(root);
 	}
 
 	/**
@@ -188,54 +252,47 @@ class LangController {
 	}
 
 	/**
-	 * Performs a translation pass on the specified document branch.
-	 * @param {HTMLElement} [root=document] - The root element to translate from.
-	 * @param {Object} [data] - Optional language data to use (defaults to current data).
-	 */
-	performTranslation(root = document, data = this.data) {
-		if (!data) {
-			return;
-		}
-
-		this.translateMeta(data);
-		this.translateHtml(root, data);
-		this.translateAttr(root, data);
-		this.applyRestrictions(root);
-	}
-
-	/**
 	 * Translates document meta tags (like title).
 	 * @param {Object} data - The language data object.
 	 */
 	translateMeta(data) {
-		if (typeof metaLang === 'undefined' || !metaLang) {
-			return;
-		}
+		const configList = LangController.META_CONFIG;
 
-		for (const m in metaLang) {
-			const config = metaLang[m];
+		for (const config of configList) {
 			const elems = document.getElementsByTagName(config.tag);
 
 			for (let i = 0; i < elems.length; i++) {
 				const el = elems[i];
-				if (
-					!el.hasAttribute(config.attr)
-					|| el.getAttribute(config.attr) !== config.attrVal
-				) {
-					continue;
+
+				if (config.attr) {
+					if (
+						!el.hasAttribute(config.attr)
+						|| el.getAttribute(config.attr) !== config.attrVal
+					) {
+						continue;
+					}
 				}
 
 				const target = this.getString(config.path, data);
 				if (target === 'notFound') {
 					continue;
 				}
-				if (config.props) {
-					const formattedProps = config.props.map((p) => {
-						return typeof p === 'object' ? this.getString(p.path, data) : p;
-					});
-					el.setAttribute(config.targetAttr, this.#formatString(target, formattedProps));
-				} else {
-					el.setAttribute(config.targetAttr, target);
+
+				const translated = config.props
+					? this.#formatString(
+							target,
+							config.props.map((p) => {
+								return typeof p === 'object' ? this.getString(p.path, data) : p;
+							})
+						)
+					: target;
+
+				if (config.tag === 'title') {
+					document.title = translated;
+				} else if (config.tag === 'html' && config.targetAttr === 'lang') {
+					el.setAttribute(config.targetAttr, translated.toLowerCase());
+				} else if (config.targetAttr) {
+					el.setAttribute(config.targetAttr, translated);
 				}
 			}
 		}
@@ -243,11 +300,11 @@ class LangController {
 
 	/**
 	 * Translates innerHTML of elements marked with the `lang` class.
-	 * @param {HTMLElement} root - The root element to search within.
+	 * @param {HTMLElement|Document} root - The root element to search within.
 	 * @param {Object} data - The language data object.
 	 */
 	translateHtml(root, data) {
-		const objs = root.querySelectorAll ? root.querySelectorAll('.lang') : [];
+		const objs = root.querySelectorAll ? Array.from(root.querySelectorAll('.lang')) : [];
 		const elements = root.classList?.contains('lang') ? [root, ...objs] : objs;
 
 		for (let i = 0; i < elements.length; i++) {
@@ -278,11 +335,11 @@ class LangController {
 
 	/**
 	 * Translates specified attributes of elements marked with the `langAttr` class.
-	 * @param {HTMLElement} root - The root element to search within.
+	 * @param {HTMLElement|Document} root - The root element to search within.
 	 * @param {Object} data - The language data object.
 	 */
 	translateAttr(root, data) {
-		const objs = root.querySelectorAll ? root.querySelectorAll('.langAttr') : [];
+		const objs = root.querySelectorAll ? Array.from(root.querySelectorAll('.langAttr')) : [];
 		const elements = root.classList?.contains('langAttr') ? [root, ...objs] : objs;
 
 		for (let i = 0; i < elements.length; i++) {
@@ -324,10 +381,12 @@ class LangController {
 
 	/**
 	 * Toggles visibility based on `restrictLang` class and `dataset.restrict`.
-	 * @param {HTMLElement} [root=document] - The root element to search within.
+	 * @param {HTMLElement|Document} [root=document] - The root element to search within.
 	 */
 	applyRestrictions(root = document) {
-		const objs = root.querySelectorAll ? root.querySelectorAll('.restrictLang') : [];
+		const objs = root.querySelectorAll
+			? Array.from(root.querySelectorAll('.restrictLang'))
+			: [];
 		const elements = root.classList?.contains('restrictLang') ? [root, ...objs] : objs;
 		const currentLang = this.code?.lang;
 
@@ -372,7 +431,7 @@ class LangController {
 	 * @param {string} currentLang - The active full language code.
 	 */
 	setupLanguageSwitchers(availableLangs, currentLang) {
-		const containers = document.getElementsByClassName('languageSwitcherButtons');
+		const containers = document.querySelectorAll('.languageSwitcherButtons');
 
 		for (let i = 0; i < containers.length; i++) {
 			const container = containers[i];

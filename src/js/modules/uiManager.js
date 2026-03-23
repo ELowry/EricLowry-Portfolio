@@ -206,6 +206,10 @@ export class UIManager {
 			firstItem?.focus({ focusVisible: true });
 			this.elements.gameMenuButton?.setAttribute('aria-expanded', 'true');
 		});
+
+		this.elements.gameMenu.addEventListener('keydown', (e) => {
+			this.#handleMenuNavigation(e, this.elements.gameMenu, 'y');
+		});
 	}
 
 	/**
@@ -340,6 +344,10 @@ export class UIManager {
 	#handleMenuNavigation(e, container, axis = 'both') {
 		const allItems = Array.from(container.querySelectorAll('[role^="menuitem"], a[href]'));
 		const items = allItems.filter((el) => {
+			if (el.disabled || el.hasAttribute('disabled')) {
+				return false;
+			}
+
 			// Exclude items inside hidden parents
 			const hiddenParent = el.closest('[hidden]');
 			if (hiddenParent && hiddenParent !== container) {
@@ -363,14 +371,16 @@ export class UIManager {
 			nextIndex = 0;
 		} else if (e.key === 'End') {
 			nextIndex = items.length - 1;
-		} else if ((axis === 'y' || axis === 'both') && e.key === 'ArrowDown') {
-			nextIndex = (currentIndex + 1) % items.length;
-		} else if ((axis === 'y' || axis === 'both') && e.key === 'ArrowUp') {
-			nextIndex = (currentIndex - 1 + items.length) % items.length;
-		} else if ((axis === 'x' || axis === 'both') && e.key === 'ArrowRight') {
-			nextIndex = (currentIndex + 1) % items.length;
-		} else if ((axis === 'x' || axis === 'both') && e.key === 'ArrowLeft') {
-			nextIndex = (currentIndex - 1 + items.length) % items.length;
+		} else if (!Navigation.activeContainer || !Navigation.activeContainer.contains(container)) {
+			if ((axis === 'y' || axis === 'both') && e.key === 'ArrowDown') {
+				nextIndex = (currentIndex + 1) % items.length;
+			} else if ((axis === 'y' || axis === 'both') && e.key === 'ArrowUp') {
+				nextIndex = (currentIndex - 1 + items.length) % items.length;
+			} else if ((axis === 'x' || axis === 'both') && e.key === 'ArrowRight') {
+				nextIndex = (currentIndex + 1) % items.length;
+			} else if ((axis === 'x' || axis === 'both') && e.key === 'ArrowLeft') {
+				nextIndex = (currentIndex - 1 + items.length) % items.length;
+			}
 		}
 
 		if (nextIndex !== null) {
@@ -716,6 +726,7 @@ export class UIManager {
 
 					if (e.key === 'Home' || e.key === 'End') {
 						e.preventDefault();
+						e.stopPropagation();
 						this.#handleMenuNavigation(e, targetMenu, 'y');
 						return;
 					}

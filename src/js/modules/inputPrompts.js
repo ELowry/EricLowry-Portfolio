@@ -204,7 +204,7 @@ class InputPromptsController {
 				// Map physical codes to the actual label on the user's key
 				this.layoutMap.set('A', '[' + map.get('KeyA')?.toUpperCase() + ']' || '[A]');
 				this.layoutMap.set('D', '[' + map.get('KeyD')?.toUpperCase() + ']' || '[D]');
-				this.layoutMap.set('E', '[' + map.get('KeyD')?.toUpperCase() + ']' || '[E]');
+				this.layoutMap.set('E', '[' + map.get('KeyE')?.toUpperCase() + ']' || '[E]');
 				this.layoutMap.set('S', '[' + map.get('KeyS')?.toUpperCase() + ']' || '[S]');
 				this.layoutMap.set('W', '[' + map.get('KeyW')?.toUpperCase() + ']' || '[W]');
 				return;

@@ -1,4 +1,9 @@
 {
+	"meta": {
+		"title": "Eric Lowry – Portfolio",
+		"description": "Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, environment design, and interactive tech.",
+		"lang": "EN"
+	},
 	"portfolio": {
 		"title": "Portfolio",
 		"rootTitle": "Home"
@@ -61,6 +66,7 @@
 			"header": "Welcome to Eric Lowry's portfolio",
 			"p1": "I have set up a small interactive experience which lets you explore my work in a fun little game.",
 			"p2": "However, whether for accessibility reasons or efficiency, a simplified interface is available with all the same information.",
+			"mode_selection": "Mode Selection",
 			"btn_game": "Exploration Mode",
 			"btn_text": "Text Mode",
 			"note": "In exploration mode, you can press {0} at any point to open up a menu which lets you navigate back to text mode."

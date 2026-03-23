@@ -1,4 +1,9 @@
 {
+	"meta": {
+		"title": "Eric Lowry – Portfolio",
+		"description": "Designer UX/UI et entrepreneur orienté systèmes (10+ ans d'exp). Spécialiste en formation, Unity3D, le design d'espaces et la technologie interactive.",
+		"lang": "FR"
+	},
 	"portfolio": {
 		"title": "Portfolio",
 		"rootTitle": "Bienvenue"
@@ -61,6 +66,7 @@
 			"header": "Bienvenue sur le portfolio d'Eric Lowry",
 			"p1": "J'ai mis en place une petite expérience interactive qui vous permet d'explorer mon travail à travers un petit jeu ludique.",
 			"p2": "Toutefois, pour des raisons d'accessibilité ou d'efficacité, une interface simplifiée est disponible avec toutes les mêmes informations.",
+			"mode_selection": "Choissisez un mode d'affichage",
 			"btn_game": "Mode Exploration",
 			"btn_text": "Mode Texte",
 			"note": "En mode exploration, vous pouvez appuyer sur la touche {0} à tout moment pour ouvrir un menu vous permettant de revenir au mode texte."

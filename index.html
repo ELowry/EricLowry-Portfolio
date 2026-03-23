@@ -1,11 +1,60 @@
 <!doctype html>
-<html>
+<html lang="en">
 	<head>
-		<meta charset="utf-8" />
+		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Eric Lowry</title>
+		<meta name="color-scheme" content="dark light" />
+		<meta name="darkreader-lock" />
+
+		<title>Eric Lowry – Portffolio</title>
+
+		<meta
+			name="description"
+			content="Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech."
+		/>
+		<meta name="author" content="Eric Lowry" />
+		<meta name="language" content="EN" />
+
+		<meta property="og:title" content="Eric Lowry – Portffolio" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://eric-lowry.com/" />
+		<meta
+			property="og:description"
+			content="Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech."
+		/>
+
+		<!-- WILL ENABLE ONCE ON THE MAIN DOMAIN -->
+		<!-- <meta
+			property="og:image"
+			content="https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240.webp"
+		/>
+		<meta property="og:image:type" content="image/webp" />
+		<meta property="og:image:width" content="240" />
+		<meta property="og:image:height" content="240" />
+		<meta property="og:image:alt" content="Portrait of Eric Lowry" />
+		<meta
+			property="og:image"
+			content="https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240-webp_240-240.jpg"
+		/>
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="240" />
+		<meta property="og:image:height" content="240" />
+		<meta property="og:image:alt" content="Portrait of Eric Lowry" /> -->
 
 		<link rel="stylesheet" href="/src/css/main.css" />
+
+		<script>
+			// Block indexing on firebase default URL
+			if (
+				window.location.hostname.includes('.web.app')
+				|| window.location.hostname.includes('.firebaseapp.com')
+			) {
+				const meta = document.createElement('meta');
+				meta.name = 'robots';
+				meta.content = 'noindex, nofollow';
+				document.head.appendChild(meta);
+			}
+		</script>
 	</head>
 
 	<body>
@@ -88,21 +137,33 @@
 				</div>
 			</div>
 
-			<dialog id="welcome-screen">
+			<dialog
+				id="welcome-screen"
+				aria-labelledby="WelcomeTitle"
+				aria-describedby="WelcomeDescription"
+			>
 				<div class="modal-box">
 					<div>
-						<h1 class="lang" data-lang="ui.welcome.header"
+						<h1 id="WelcomeTitle" class="lang" data-lang="ui.welcome.header"
 							>Welcome to Eric Lowry's portfolio</h1
 						>
-						<p class="lang" data-lang="ui.welcome.p1"
-							>I have set up a small interactive experience which lets you explore my
-							work in a fun little game.</p
+						<div id="WelcomeDescription">
+							<p class="lang" data-lang="ui.welcome.p1"
+								>I have set up a small interactive experience which lets you explore
+								my work in a fun little game.</p
+							>
+							<p class="lang" data-lang="ui.welcome.p2"
+								>However, whether for accessibility reasons or efficiency, a
+								simplified interface is available with all the same information.</p
+							>
+						</div>
+						<nav
+							class="classic-nav langAttr"
+							role="toolbar"
+							data-langAttr="aria-label"
+							data-langAria_label="ui.welcome.mode_selection"
+							aria-label="Mode Selection"
 						>
-						<p class="lang" data-lang="ui.welcome.p2"
-							>However, whether for accessibility reasons or efficiency, a simplified
-							interface is available with all the same information.</p
-						>
-						<nav class="classic-nav">
 							<button
 								class="lang"
 								data-lang="ui.welcome.btn_game"
@@ -127,9 +188,9 @@
 				</div>
 			</dialog>
 
-			<dialog id="game-menu">
+			<dialog id="game-menu" aria-labelledby="GameMenuTitle">
 				<div class="modal-box">
-					<h1>
+					<h1 id="GameMenuTitle">
 						<span class="sr-only accessible-forced lang" data-lang="ui.game_menu.header"
 							>Menu</span
 						>
