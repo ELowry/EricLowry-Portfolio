@@ -156,10 +156,7 @@ class InputPromptsController {
 
 			// Check if the string looks like a key or just try to translate it
 			if (content.includes('.')) {
-				const translated = Lang.getString(content);
-				if (translated !== 'notFound') {
-					content = translated;
-				}
+				content = Lang.getString(content, null, content);
 			}
 
 			prompt.innerHTML = content;

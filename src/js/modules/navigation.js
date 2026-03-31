@@ -1,3 +1,5 @@
+import { LayeredInput } from './layeredInputs.js';
+
 /**
  * Navigation  
  * Manages generic focus traversal and scrolling for DOM containers via Gamepad/Keyboard.
@@ -58,6 +60,11 @@ class NavigationController {
 	 */
 	update(inputState) {
 		if (!this.activeContainer) {
+			return;
+		}
+
+		// Ensure we are in a UI-capable layer.
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
 			return;
 		}
 

@@ -1,15 +1,16 @@
 import { App } from './app.js';
 import { Camera } from './modules/camera.js';
 import { Player } from './modules/player.js';
+import { Input } from './modules/input.js';
+import { LayeredInput } from './modules/layeredInputs.js';
 import { Interaction } from './modules/interaction.js';
 import { VirtualCursor } from './modules/virtualCursor.js';
-import { Input } from './modules/input.js';
 import { GameBridge } from './modules/gameBridge.js';
 
 let player;
 
 /**
- * Initializes the game world and player.  
+ * Initializes the game world and player.
  * Called once by LittleJS engine on startup.
  */
 function gameInit() {
@@ -60,7 +61,7 @@ function gameInit() {
 }
 
 /**
- * Main game update loop.  
+ * Main game update loop.
  * Called each frame by LittleJS engine.
  */
 function gameUpdate() {
@@ -84,8 +85,8 @@ function gameUpdate() {
 }
 
 /**
- * Post-update logic.  
- * Used for camera and pause state management.  
+ * Post-update logic.
+ * Used for camera and pause state management.
  * Called each frame by LittleJS engine after `gameUpdate`.
  */
 function gameUpdatePost() {
@@ -94,7 +95,7 @@ function gameUpdatePost() {
 	}
 
 	App.LJS.setPaused(App.mode !== 'game');
-	App.LJS.setInputPreventDefault(App.mode === 'game' && !App.menuOpen);
+	App.LJS.setInputPreventDefault(LayeredInput.isActive(LayeredInput.LAYER_GAME));
 
 	if (App.isRunning) {
 		Camera.follow(player);
@@ -105,7 +106,7 @@ function gameUpdatePost() {
 }
 
 /**
- * Renders the game world and interactive objects.  
+ * Renders the game world and interactive objects.
  * Called each frame by LittleJS engine.
  */
 function gameRender() {
@@ -128,7 +129,7 @@ function gameRender() {
 }
 
 /**
- * Post-render logic.  
+ * Post-render logic.
  * Called each frame by LittleJS engine after `gameRender`.
  */
 function gameRenderPost() {

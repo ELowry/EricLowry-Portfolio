@@ -55,6 +55,12 @@ export class LocalLinkParser {
 						return `<a href="/${App.mode}/${contentPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}');">${text}</a>`;
 					}
 
+					// External links
+					if (href.startsWith('http') || href.startsWith('//')) {
+						const titleAttr = title ? ` title="${title}"` : '';
+						return `<a href="${href}"${titleAttr} class="md-external-link" target="_blank" rel="noopener noreferrer">${text}</a>`;
+					}
+
 					return false;
 				},
 			},

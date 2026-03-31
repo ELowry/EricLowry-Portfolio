@@ -2,7 +2,7 @@ import { App } from '../app.js';
 import { Events } from './events.js';
 
 /**
- * InputController manages physical keyboard, virtual touch, and gamepad inputs.  
+ * InputController manages physical keyboard, virtual touch, and gamepad inputs.
  * It translates raw hardware signals into game-specific actions (axis, interact, menu).
  */
 class InputController {
@@ -97,12 +97,11 @@ class InputController {
 	 */
 	get interact() {
 		return (
-			App.mode === 'game'
-			&& (App.LJS.gamepadWasPressed(0) // A
-				|| App.LJS.keyWasPressed('KeyE')
-				|| App.LJS.keyWasPressed('Space')
-				|| App.LJS.keyWasPressed('Enter')
-				|| this.virtualState.interact)
+			App.LJS.gamepadWasPressed(0) // A
+			|| App.LJS.keyWasPressed('KeyE')
+			|| App.LJS.keyWasPressed('Space')
+			|| App.LJS.keyWasPressed('Enter')
+			|| this.virtualState.interact
 		);
 	}
 
@@ -111,9 +110,8 @@ class InputController {
 	 */
 	get menu() {
 		return (
-			App.mode === 'game'
-			&& (App.LJS.gamepadWasPressed(9) // Menu
-				|| App.LJS.keyWasPressed('Escape'))
+			App.LJS.gamepadWasPressed(9) // Menu
+			|| App.LJS.keyWasPressed('Escape')
 		);
 	}
 
@@ -121,19 +119,15 @@ class InputController {
 	 * @returns {boolean} `true` if the menu action was triggered this frame.
 	 */
 	get back() {
-		return App.mode === 'game' && App.LJS.gamepadWasPressed(1); // B
+		return App.LJS.gamepadWasPressed(1); // B
 	}
 
 	/**
-	 * Returns the current horizontal movement axis (`-1`, `0`, or `1`).  
+	 * Returns the current horizontal movement axis (`-1`, `0`, or `1`).
 	 * Priorities: Gamepad > Touch > Keyboard.
 	 * @returns {vec2} Movement vector
 	 */
 	get axis() {
-		if (App.mode !== 'game') {
-			return App.LJS.vec2(0, 0);
-		}
-
 		let x = 0;
 		let y = 0;
 
@@ -167,7 +161,7 @@ class InputController {
 	}
 
 	/**
-	 * Returns the raw input from the secondary (right) gamepad stick.  
+	 * Returns the raw input from the secondary (right) gamepad stick.
 	 * @returns {vec2} Right stick axis vector
 	 */
 	get rightAxis() {
@@ -176,7 +170,7 @@ class InputController {
 	}
 
 	/**
-	 * Initializes touch event listeners on a container.  
+	 * Initializes touch event listeners on a container.
 	 * Uses a 'Swipe Guard' to distinguish between intentional taps and browser gestures.
 	 * @param {HTMLElement} container - The element to attach listeners to.
 	 */
@@ -396,7 +390,7 @@ class InputController {
 	}
 
 	/**
-	 * Spawns a one-shot tap ripple at the last interact touch position.  
+	 * Spawns a one-shot tap ripple at the last interact touch position.
 	 * Should be called externally when a touch-based interaction actually succeeds.
 	 */
 	spawnTapRipple() {
@@ -422,4 +416,3 @@ class InputController {
 }
 
 export const Input = new InputController();
-

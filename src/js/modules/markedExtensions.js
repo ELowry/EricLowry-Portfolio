@@ -1,3 +1,4 @@
+import { App } from '../app.js';
 import { Obfuscator } from './obfuscator.js';
 import { Gallery } from './gallery.js';
 import { LocalLinkParser } from './localLinks.js';

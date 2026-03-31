@@ -1,6 +1,7 @@
 import { Navigation } from './navigation.js';
 import { Events } from './events.js';
 import { Lang } from './lang.js';
+import { LayeredInput } from './layeredInputs.js';
 import { InputPrompts } from './inputPrompts.js';
 import { Router } from './router.js';
 import { Content } from './content.js';
@@ -51,6 +52,8 @@ export class UIManager {
 			touchInstructions: document.getElementById('touch-instructions'),
 			touchDontShow: document.getElementById('touch-dont-show'),
 			virtualCursorTemplate: document.getElementById('tmpl-virtual-cursor'),
+			tmpl404Breadcrumbs: document.getElementById('404-breadcrumbs'),
+			tmpl404Content: document.getElementById('404-content'),
 		};
 
 		/** @type {number} Timestamp when the last loading task started. */
@@ -94,18 +97,6 @@ export class UIManager {
 	}
 
 	/**
-	 * True if any interactive dialog (menu, modal, or welcome) is visible.
-	 * @returns {boolean} Whether any blocking UI is currently open.
-	 */
-	get menuOpen() {
-		return (
-			this.elements.gameMenu?.open
-			|| this.elements.gameModal?.open
-			|| this.elements.gameWelcome?.open
-		);
-	}
-
-	/**
 	 * Returns the LittleJS canvas element.
 	 * @returns {HTMLCanvasElement|null} The canvas if it exists within the game layer.
 	 */
@@ -122,6 +113,7 @@ export class UIManager {
 
 		// Welcome Screen
 		this.elements.gameWelcome?.addEventListener('close', () => {
+			LayeredInput.deactivate(LayeredInput.LAYER_GAME_WELCOME);
 			this.app.onModalClose(false);
 			this.app.tutorialManager.tryShowTouchTutorial();
 		});
@@ -176,6 +168,22 @@ export class UIManager {
 		// Contact Obfuscation Restoration
 		document.addEventListener('focus', Obfuscator.restoreProtectedLink, true);
 		document.addEventListener('mouseover', Obfuscator.restoreProtectedLink);
+		document.addEventListener('click', Obfuscator.restoreProtectedLink);
+
+		Events.on('route:changed', (payload) => {
+			if (payload.mode === 'text') {
+				const navButtons = document.querySelectorAll('#text-navbar button[data-nav-path]');
+				for (const navButton of navButtons) {
+					const isCurrent = navButton.dataset.navPath === payload.path;
+					navButton.disabled = isCurrent;
+					if (isCurrent) {
+						navButton.setAttribute('aria-current', 'page');
+					} else {
+						navButton.removeAttribute('aria-current');
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -192,6 +200,7 @@ export class UIManager {
 		});
 
 		this.elements.gameMenu.addEventListener('close', () => {
+			LayeredInput.deactivate(LayeredInput.LAYER_GAME_MENU);
 			this.app.onModalClose();
 			this.app.tutorialManager?.tryShowTouchTutorial();
 			this.elements.gameMenuButton?.setAttribute('aria-expanded', 'false');
@@ -226,12 +235,13 @@ export class UIManager {
 		});
 
 		this.elements.gameModal.addEventListener('close', () => {
+			LayeredInput.deactivate(LayeredInput.LAYER_GAME_MODAL);
 			// Ensure the URL reverts to the parent path when closing a content node dialogue
 			if (Router.currentMode === 'game') {
 				const node = Content.findNodeByPath(Router.currentPath);
 				if (node && node.type === 'content') {
 					const parentPath = Router.currentPath.split('/').slice(0, -1).join('/');
-					Router.go('game', parentPath);
+					this.app.navigate(parentPath);
 				}
 			}
 
@@ -537,6 +547,8 @@ export class UIManager {
 	 * @param {boolean} [fadeIn=false] - If `true`, performs a CSS transition.
 	 */
 	showLoading(opaque = false, fadeIn = false) {
+		LayeredInput.activate(LayeredInput.LAYER_LOADING);
+
 		const isHidden = this.elements.loadingOverlay.classList.contains('hidden');
 
 		this.loadingStartTime = performance.now();
@@ -562,6 +574,8 @@ export class UIManager {
 	 * @returns {Promise<void>} Resolves when the overlay is completely hidden.
 	 */
 	async hideLoading(fade = false) {
+		LayeredInput.deactivate(LayeredInput.LAYER_LOADING);
+
 		const elapsed = performance.now() - (this.loadingStartTime || 0);
 		const shouldFade = fade && elapsed > UIManager.FADE_MIN_ELAPSED_MS;
 
@@ -574,8 +588,8 @@ export class UIManager {
 		this.elements.loadingOverlay.classList.remove('fade-out', 'opaque');
 		document.body.setAttribute('aria-busy', 'false');
 
-		// Only clear the interaction lock if no modals are currently open
-		if (!this.menuOpen) {
+		// Only clear the interaction lock if the game is the active layer
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
 			this.app.setLock(false);
 		}
 		this.app.tutorialManager?.tryShowTouchTutorial();
@@ -765,6 +779,8 @@ export class UIManager {
 	 * @param {string} html - The raw HTML string to insert into the modal.
 	 */
 	displayContentInModal(html) {
+		LayeredInput.activate(LayeredInput.LAYER_GAME_MODAL);
+
 		this.elements.gameModalContent.innerHTML = html;
 
 		Obfuscator.processDomElements(this.elements.gameModalContent);
@@ -816,37 +832,22 @@ export class UIManager {
 	 * Displays a localized 404 error page inside the text view.
 	 */
 	render404() {
-		const labels = {
-			root:
-				Lang.getString('portfolio.title') !== 'notFound'
-					? Lang.getString('portfolio.title')
-					: 'Portfolio',
-			title: Lang.getString('ui.text_mode.404.title'),
-			text: Lang.getString('ui.text_mode.404.text'),
-			btn_home: Lang.getString('ui.text_mode.404.btn_home'),
-			btn_game: Lang.getString('ui.text_mode.404.btn_game'),
-		};
-
-		if (this.elements.textNav) {
-			this.elements.textNav.innerHTML = `
-			<ol class="breadcrumbs" aria-label="Breadcrumb">
-				<li><a href="/${this.app.mode}" onclick="event.preventDefault(); App.navigate('')">${labels.root}</a></li>
-				<li aria-current="page">${labels.title !== 'notFound' ? labels.title : '404 Not Found'}</li>
-			</ol>
-		`;
+		if (this.elements.textNav && this.elements.tmpl404Breadcrumbs) {
+			this.elements.textNav.innerHTML = '';
+			const clone = this.elements.tmpl404Breadcrumbs.content.cloneNode(true);
+			const link = clone.querySelector('a');
+			if (link) {
+				link.href = `/${this.app.mode}`;
+			}
+			this.elements.textNav.appendChild(clone);
+			Lang.performTranslation(this.elements.textNav);
 		}
 
-		if (this.elements.textContent) {
-			this.elements.textContent.innerHTML = `
-			<section class="error-404">
-				<h2>${labels.title !== 'notFound' ? labels.title : 'Page Not Found'}</h2>
-				<p>${labels.text !== 'notFound' ? labels.text : "The path you've entered doesn't seem to lead anywhere."}</p>
-				<div class="nav-list" role="menu" aria-label="Fallback Options" style="margin-top: 2em;">
-					<button role="menuitem" tabindex="0" class="nav-btn" onclick="App.navigate('')">${labels.btn_home !== 'notFound' ? labels.btn_home : 'Back to Home'}</button>
-					<button role="menuitem" tabindex="-1" class="nav-btn" onclick="App.setMode('game')">${labels.btn_game !== 'notFound' ? labels.btn_game : 'Switch to Exploration Mode'}</button>
-				</div>
-			</section>
-		`;
+		if (this.elements.textContent && this.elements.tmpl404Content) {
+			this.elements.textContent.innerHTML = '';
+			const clone = this.elements.tmpl404Content.content.cloneNode(true);
+			this.elements.textContent.appendChild(clone);
+			Lang.performTranslation(this.elements.textContent);
 		}
 
 		if (this.elements.tableOfContents) {

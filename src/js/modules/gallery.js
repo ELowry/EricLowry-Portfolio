@@ -1,5 +1,6 @@
 import { Lang } from './lang.js';
 import { Navigation } from './navigation.js';
+import { LayeredInput } from './layeredInputs.js';
 
 /**
  * Converts marked.js markdown tables into HTML galleries.
@@ -180,6 +181,8 @@ export class GalleryDisplay {
 			return;
 		}
 
+		LayeredInput.activate(LayeredInput.LAYER_GALLERY);
+
 		const template = document.getElementById(GalleryDisplay.TEMPLATE_ID);
 		if (!template) {
 			console.error(`Gallery template #${GalleryDisplay.TEMPLATE_ID} not found.`);
@@ -298,6 +301,7 @@ export class GalleryDisplay {
 		this.#activeModal.remove();
 		this.#activeModal = null;
 		document.body.style.overflow = ''; // Restores the body scroll
+		LayeredInput.deactivate(LayeredInput.LAYER_GALLERY);
 		Navigation.popContext();
 
 		// Restore focus back to the selected gallery item

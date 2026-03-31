@@ -99,8 +99,7 @@ class LangController {
 			}
 			this.data = await dataResponse.json();
 
-			const metaLangValue = this.getString('meta.lang', this.data);
-			document.documentElement.lang = metaLangValue !== 'notFound' ? metaLangValue.toLowerCase() : this.code.lang;
+			document.documentElement.lang = this.getString('meta.lang', this.data, this.code.lang).toLowerCase();
 
 			this.performTranslation();
 			this.setupLanguageSwitchers(availableLangs, bestLang);
@@ -404,20 +403,22 @@ class LangController {
 	 * Returns a translated string from the loaded data object using a dot-path.
 	 * @param {string} pathString - Dot-separated path to the target string.
 	 * @param {Object} [data] - Data object to search (defaults to current data).
-	 * @returns {string} The translated string or `notFound`.
+	 * @param {string} [fallback] - Optional fallback string if the target path is not found.
+	 * @returns {string} The translated string, fallback, or `notFound`.
 	 */
-	getString(pathString, data = this.data) {
-		if (!data) {
-			return 'notFound';
+	getString(pathString, data = this.data, fallback = 'notFound') {
+		const searchData = data || this.data;
+		if (!searchData) {
+			return fallback;
 		}
 		const path = pathString.split('.');
-		let target = data;
+		let target = searchData;
 
 		for (let i = 0; i < path.length; i++) {
 			const key = path[i];
 			if (!target || !Object.prototype.hasOwnProperty.call(target, key)) {
 				console.warn(`Translation: no translation for "${pathString}"`);
-				return 'notFound';
+				return fallback;
 			}
 			target = target[key];
 		}
@@ -454,12 +455,13 @@ class LangController {
 					button.setAttribute('tabindex', '-1');
 					button.setAttribute('lang', code.split('_')[0]);
 
-					const langName = this.getString(`languages.${code}`);
+					const langName = this.getString(`languages.${code}`, null, code);
 					const switchTemplate = this.getString('ui.btn_switch_language');
-					if (switchTemplate !== 'notFound' && langName !== 'notFound') {
+
+					if (switchTemplate !== 'notFound') {
 						button.textContent = switchTemplate.replace('{lang}', langName);
 					} else {
-						button.textContent = langName !== 'notFound' ? langName : code;
+						button.textContent = langName;
 					}
 
 					button.addEventListener('click', () => {

@@ -1,8 +1,10 @@
 import { App } from '../app.js';
+import { Events } from './events.js';
 import { Input } from './input.js';
+import { LayeredInput } from './layeredInputs.js';
 
 /**
- * Manages a screen-space pointer moved via controller.  
+ * Manages a screen-space pointer moved via controller.
  * Used primarily for navigating modals when standard directional focus is impractical.
  */
 class VirtualCursorController {
@@ -11,6 +13,8 @@ class VirtualCursorController {
 		this.element = null;
 		/** @type {boolean} Whether the cursor is currently active and visible. */
 		this.isActive = false;
+		/** @type {boolean} Whether a modal layer is currently active. */
+		this.isModalActive = false;
 		/** @type {HTMLElement|null} The element currently under the virtual cursor. */
 		this.currentHover = null;
 		/** @type {number} The time at which the current element was hovered. */
@@ -44,6 +48,29 @@ class VirtualCursorController {
 		const clone = template.content.cloneNode(true);
 		document.body.appendChild(clone);
 		this.element = document.getElementById('virtual-cursor');
+
+		// Subscribe to events instead of polling
+		const modalLayers = [
+			LayeredInput.LAYER_GAME_MODAL,
+			LayeredInput.LAYER_GAME_WELCOME,
+			LayeredInput.LAYER_GALLERY,
+		];
+
+		Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
+			if (modalLayers.includes(layerId)) {
+				this.isModalActive = true;
+			}
+		});
+
+		Events.on(LayeredInput.LAYER_DEACTIVATION_EVENT, (layerId) => {
+			if (modalLayers.includes(layerId)) {
+				// Fallback check in case modals are stacked
+				this.isModalActive =
+					LayeredInput.isActive(LayeredInput.LAYER_GAME_MODAL, true)
+					|| LayeredInput.isActive(LayeredInput.LAYER_GAME_WELCOME, true)
+					|| LayeredInput.isActive(LayeredInput.LAYER_GALLERY, true);
+			}
+		});
 	}
 
 	/**
@@ -55,7 +82,7 @@ class VirtualCursorController {
 		}
 
 		// Only active in content modals (isLocked) and when using a controller.
-		const shouldBeActive = App.isLocked && Input.lastInputType === 'gamepad';
+		const shouldBeActive = this.isModalActive && Input.lastInputType === 'gamepad';
 		const topModal = Array.from(document.querySelectorAll('dialog[open]')).pop();
 
 		if (shouldBeActive && topModal) {

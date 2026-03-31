@@ -3,6 +3,7 @@ import { Content, ContentTree } from './modules/content.js';
 import { Interaction } from './modules/interaction.js';
 import { Lang } from './modules/lang.js';
 import { Input } from './modules/input.js';
+import { LayeredInput } from './modules/layeredInputs.js';
 import { Navigation } from './modules/navigation.js';
 import { GameBridge } from './modules/gameBridge.js';
 import { TextRenderer } from './modules/textRenderer.js';
@@ -10,6 +11,7 @@ import { TutorialManager } from './modules/tutorialManager.js';
 import { UIManager } from './modules/uiManager.js';
 import { MarkedExtensions } from './modules/markedExtensions.js';
 import { GalleryDisplay } from './modules/gallery.js';
+import { Events } from './modules/events.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -65,27 +67,11 @@ class AppController {
 	}
 
 	/**
-	 * `true` if any modal, overlay, or menu is currently active.
-	 * @returns {boolean} Whether the UI is currently blocking game input.
-	 */
-	get menuOpen() {
-		return this.uiManager.menuOpen;
-	}
-
-	/**
 	 * `true` if the application is in `game` mode and not paused.
 	 * @returns {boolean} Whether the game engine is actively updating/rendering.
 	 */
 	get isRunning() {
 		return Router.currentMode === 'game' && !this.isPaused;
-	}
-
-	/**
-	 * `true` if the application is in `game` mode and not locked.
-	 * @returns {boolean} Whether the game engine should allow inputs and interactions.
-	 */
-	get isInteractable() {
-		return this.isRunning && !this.isLocked && !this.menuOpen;
 	}
 
 	/**
@@ -106,6 +92,9 @@ class AppController {
 
 		// Start by showing loading (it should be visible by default in HTML, but just in case)
 		this.uiManager.showLoading();
+
+		// Activate the default base layer (overridden by Router if necessary)
+		LayeredInput.activate(LayeredInput.LAYER_GAME);
 
 		try {
 			const markedSrc = '/vendor/marked.min.js';
@@ -164,6 +153,13 @@ class AppController {
 			// Ensure all scripts are loaded
 			this.Lang = Lang;
 			await Promise.all([langPromise, contentPromise]);
+
+			// Listen for route changes
+			Events.on('route:changed', async (payload) => {
+				if (payload.mode === 'game') {
+					await this.#handleGameTransition(payload);
+				}
+			});
 
 			// Initialize Router which will trigger the first onStateChange
 			await Router.init(this.onStateChange.bind(this));
@@ -230,7 +226,7 @@ class AppController {
 
 		try {
 			/**
-			 * Helper to check if a response is a valid markdown file.  
+			 * Helper to check if a response is a valid markdown file.
 			 * We check status, content-type, and also peek at the body to avoid SPA HTML fallbacks.
 			 */
 			const getValidResponse = async (url) => {
@@ -293,51 +289,67 @@ class AppController {
 	 * Processes global input actions like menu toggling and back navigation.
 	 */
 	handleInput() {
-		if (this.mode !== 'game') {
+		// Modal layers
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_WELCOME)) {
+			Navigation.update(this.Input);
+			if (this.Input.interact) {
+				const current = document.activeElement;
+				if (current?.id === 'welcome-start-game') {
+					this.closeGameWelcome('game');
+				} else if (current?.id === 'welcome-start-text') {
+					this.closeGameWelcome('text');
+				}
+			}
 			return;
 		}
 
-		if (this.menuOpen) {
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MODAL)) {
 			Navigation.update(this.Input);
-			this.uiManager.handleSubmenuInput(this.Input);
-		}
-
-		if (this.Input.menu) {
-			if (this.uiManager.elements.gameWelcome?.open || Navigation.contextStack.length > 0) {
-				return;
-			}
-
-			if (this.uiManager.elements.gameMenu?.open) {
-				this.closeGameMenu();
-			} else if (this.uiManager.elements.gameModal?.open) {
+			if (this.Input.back || this.Input.menu) {
 				this.closeGameModal();
-			} else if (!this.uiManager.elements.loadingOverlay?.classList.contains('opaque')) {
-				this.openGameMenu();
 			}
+			return;
 		}
 
-		if (this.Input.back) {
-			if (Navigation.contextStack.length > 0) {
-				const active = Navigation.activeContainer;
-				if (active instanceof HTMLDialogElement) {
-					active.close();
-					return;
+		if (LayeredInput.isActive(LayeredInput.LAYER_GALLERY)) {
+			Navigation.update(this.Input);
+			if (this.Input.back || this.Input.menu || this.Input.interact) {
+				const galleryModal = document.querySelector('.md-gallery-modal');
+				if (galleryModal) {
+					galleryModal.close();
 				}
 			}
+			return;
+		}
 
-			if (this.uiManager.elements.gameMenu?.open) {
+		// UI layer
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MENU)) {
+			Navigation.update(this.Input);
+			this.uiManager.handleSubmenuInput(this.Input);
+
+			if (this.Input.menu || this.Input.back) {
 				this.closeGameMenu();
+			}
+			return;
+		}
+
+		// Game logic layer
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
+			if (this.Input.menu) {
+				this.openGameMenu();
 				return;
 			}
-			if (this.uiManager.elements.gameModal?.open) {
-				this.closeGameModal();
-				return;
-			}
-			if (
-				this.uiManager.elements.touchInstructions
-				&& !this.uiManager.elements.touchInstructions.classList.contains('hidden')
-			) {
-				this.tutorialManager.closeTouchInstructions();
+
+			if (this.Input.back) {
+				// Special tutorial check or just open menu if nothing else
+				if (
+					this.uiManager.elements.touchInstructions
+					&& !this.uiManager.elements.touchInstructions.classList.contains('hidden')
+				) {
+					this.tutorialManager.closeTouchInstructions();
+				} else {
+					this.openGameMenu();
+				}
 				return;
 			}
 		}
@@ -361,6 +373,15 @@ class AppController {
 		// Delegate mode switching to UI Manager
 		this.uiManager.setMode(mode);
 
+		// Swap the base input layer
+		if (mode === 'game') {
+			LayeredInput.deactivate(LayeredInput.LAYER_TEXT);
+			LayeredInput.activate(LayeredInput.LAYER_GAME);
+		} else {
+			LayeredInput.deactivate(LayeredInput.LAYER_GAME);
+			LayeredInput.activate(LayeredInput.LAYER_TEXT);
+		}
+
 		if (mode === 'game') {
 			this.setPause(false);
 			this.tutorialManager?.tryShowTouchTutorial();
@@ -380,113 +401,46 @@ class AppController {
 			}
 		}
 
-		if (mode === 'game') {
-			const mapNode = Content.getParentMapNode(path);
+		Events.emit('route:changed', { mode, path, node });
+	}
 
-			if (mapNode && mapNode.mapData) {
-				const pathParts = path.split('/').filter((p) => p);
-				const isContent = node && node.type === 'content';
-				const mapPath = isContent ? pathParts.slice(0, -1).join('/') : path;
+	/**
+	 * Handles high-level game mode transitions.
+	 * @param {Object} payload - The route:changed event payload.
+	 * @private
+	 */
+	async #handleGameTransition({ path, node }) {
+		const mapNode = Content.getParentMapNode(path);
 
-				const currentObjects = Content.buildMapObjects(mapNode, mapPath);
-
-				if (mapNode.id !== 'root') {
-					const parentPath = mapPath.split('/').slice(0, -1).join('/');
-
-					currentObjects.push({
-						id: 'parent_exit',
-						pos: mapNode.mapData.startPos,
-						radius: 1.5,
-						label: 'Exit Area',
-						path: parentPath,
-						below: true,
-						type: 'category',
-					});
-				}
-
-				const gameObjects = currentObjects.map((obj) => {
-					return {
-						id: obj.id,
-						pos: App.LJS.vec2(obj.pos.x, obj.pos.y),
-						radius: obj.radius,
-						file: obj.file,
-						label: obj.label,
-						path: obj.path,
-						below: obj.below,
-						type: obj.type,
+		if (mapNode && mapNode.mapData) {
+			if (this.currentMapId !== mapNode.id) {
+				this.currentMapId = mapNode.id;
+				let desiredStart = mapNode.mapData.startPos;
+				if (this.pendingEntryX !== undefined && typeof this.pendingEntryX === 'number') {
+					desiredStart = {
+						x: this.pendingEntryX,
+						y: mapNode.mapData.startPos.y,
 					};
-				});
-
-				Interaction.setObjects(gameObjects);
-
-				if (this.currentMapId !== mapNode.id) {
-					this.currentMapId = mapNode.id;
-					let desiredStart = mapNode.mapData.startPos;
-					if (
-						this.pendingEntryX !== undefined
-						&& typeof this.pendingEntryX === 'number'
-					) {
-						desiredStart = {
-							x: this.pendingEntryX,
-							y: mapNode.mapData.startPos.y,
-						};
-						this.pendingEntryX = undefined;
-					}
-					this.pendingStartPos = desiredStart;
-					this.teleportPlayer(desiredStart);
+					this.pendingEntryX = undefined;
 				}
-			} else {
-				Interaction.setObjects([]);
+				this.pendingStartPos = desiredStart;
+				this.teleportPlayer(desiredStart);
 			}
+		}
 
-			if (node && node.type === 'content' && node.file) {
-				await this.loadContentInModal(node.file);
-			} else {
-				if (this.uiManager.elements.gameModal.open) {
-					this.uiManager.elements.gameModal.close();
-				}
-			}
-
-			if (
-				this.uiManager.elements.loadingOverlay
-				&& !this.uiManager.elements.loadingOverlay.classList.contains('hidden')
-			) {
-				await this.uiManager.hideLoading(false).catch(() => {});
-			}
+		if (node && node.type === 'content' && node.file) {
+			await this.loadContentInModal(node.file);
 		} else {
-			this.textRenderer.render(Router.currentPath, node);
-
-			// If we are at a specific content node, show it
-			if (node && node.type === 'content' && node.file) {
-				await this.loadContentIntoText(node.file);
-			} else if (node && node.type === 'category') {
-				// Check if the category has a main file
-				let mainChild = null;
-				if (node.id === 'root') {
-					mainChild = node.children.find((c) => c.id === 'index');
-				} else {
-					mainChild = node.children.find((c) => c.id === node.id);
-				}
-
-				if (mainChild && mainChild.file) {
-					await this.loadContentIntoText(mainChild.file);
-				} else {
-					this.uiManager.elements.textContent.innerHTML = '';
-				}
-			} else {
-				this.uiManager.elements.textContent.innerHTML = '';
+			if (this.uiManager.elements.gameModal.open) {
+				this.uiManager.elements.gameModal.close();
 			}
+		}
 
-			const navButtons = document.querySelectorAll('#text-navbar button[data-nav-path]');
-			for (const navButton of navButtons) {
-				const isCurrent = navButton.dataset.navPath === path;
-				navButton.disabled = isCurrent;
-				if (isCurrent) {
-					navButton.setAttribute('aria-current', 'page');
-				} else {
-					navButton.removeAttribute('aria-current');
-				}
-			}
+		if (
+			this.uiManager.elements.loadingOverlay
+			&& !this.uiManager.elements.loadingOverlay.classList.contains('hidden')
+		) {
+			await this.uiManager.hideLoading(false).catch(() => {});
 		}
 	}
 
@@ -525,6 +479,7 @@ class AppController {
 	setMode(mode) {
 		this.setPause(false);
 		this.setLock(false);
+
 		Router.go(mode, Router.currentPath);
 	}
 
@@ -603,6 +558,7 @@ class AppController {
 	 * Opens the initial welcome/help modal.
 	 */
 	openGameWelcome() {
+		LayeredInput.activate(LayeredInput.LAYER_GAME_WELCOME);
 		this.uiManager.openGameWelcome();
 	}
 
@@ -611,6 +567,7 @@ class AppController {
 	 * @param {string} mode - The mode to transition to after closing, usually `game` or `text`.
 	 */
 	closeGameWelcome(mode) {
+		LayeredInput.deactivate(LayeredInput.LAYER_GAME_WELCOME);
 		this.uiManager.closeGameWelcome();
 		this.setMode(mode);
 	}
@@ -620,6 +577,7 @@ class AppController {
 	 */
 	openGameMenu() {
 		this.setPause(true);
+		LayeredInput.activate(LayeredInput.LAYER_GAME_MENU);
 
 		// Calculate reset button state
 		if (this.uiManager.elements.gameResetButton) {
@@ -660,6 +618,7 @@ class AppController {
 	 * Closes the in-game menu and resumes play.
 	 */
 	closeGameMenu() {
+		LayeredInput.deactivate(LayeredInput.LAYER_GAME_MENU);
 		this.uiManager.closeGameMenu();
 
 		this.Input.clearEvents();

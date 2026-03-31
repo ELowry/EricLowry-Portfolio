@@ -1,5 +1,6 @@
 import { Input } from './input.js';
 import { App } from '../app.js';
+import { LayeredInput } from './layeredInputs.js';
 
 /**
  * Player character controlled by user input.  
@@ -117,7 +118,7 @@ export class Player extends App.LJS.EngineObject {
 			return;
 		}
 
-		const moveDir = !App.isInteractable || App.menuOpen ? 0 : Input.axis.x;
+		const moveDir = LayeredInput.isActive(LayeredInput.LAYER_GAME) ? Input.axis.x : 0;
 
 		if (this.state === 'walk') {
 			this.velocity.x = moveDir * this.moveSpeed;

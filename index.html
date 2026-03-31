@@ -24,9 +24,18 @@
 		/>
 
 		<!-- WILL ENABLE ONCE ON THE MAIN DOMAIN -->
-		<!-- <meta
+		<!-- 
+		<link
+			rel="icon"
+			type="image/x-icon"
+			sizes="16x16 32x32 48x48 64x64 128x128 256x256"
+			href="media/head/favicon.ico"
+		/>
+		<link rel="icon" type="image/svg" href="https://eric-lowry.com/assets/favicon.svg" />
+
+		<meta
 			property="og:image"
-			content="https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240.webp"
+			content="https://eric-lowry.com/assets/eric_lowry_portrait__240-240.webp"
 		/>
 		<meta property="og:image:type" content="image/webp" />
 		<meta property="og:image:width" content="240" />
@@ -39,7 +48,8 @@
 		<meta property="og:image:type" content="image/jpeg" />
 		<meta property="og:image:width" content="240" />
 		<meta property="og:image:height" content="240" />
-		<meta property="og:image:alt" content="Portrait of Eric Lowry" /> -->
+		<meta property="og:image:alt" content="Portrait of Eric Lowry" />
+		-->
 
 		<link rel="stylesheet" href="/src/css/main.css" />
 
@@ -447,6 +457,55 @@
 			<div id="virtual-cursor" aria-hidden="true">
 				<div id="virtual-cursor-inner"></div>
 			</div>
+		</template>
+
+		<template id="404-breadcrumbs">
+			<ol class="breadcrumbs" aria-label="Breadcrumb">
+				<li>
+					<a
+						href="/"
+						onclick="event.preventDefault(); App.navigate('')"
+						class="lang"
+						data-lang="portfolio.title"
+						>Portfolio</a
+					>
+				</li>
+				<li aria-current="page" class="lang" data-lang="ui.text_mode.404.title"
+					>404 Not Found</li
+				>
+			</ol>
+		</template>
+
+		<template id="404-content">
+			<section class="error-404">
+				<h2 class="lang" data-lang="ui.text_mode.404.title">Page Not Found</h2>
+				<p class="lang" data-lang="ui.text_mode.404.text"
+					>The path you've entered doesn't seem to lead anywhere.</p
+				>
+				<div
+					class="nav-list"
+					role="menu"
+					aria-label="Fallback Options"
+					style="margin-top: 2em"
+				>
+					<button
+						role="menuitem"
+						tabindex="0"
+						class="nav-btn lang"
+						data-lang="ui.text_mode.404.btn_home"
+						onclick="App.navigate('')"
+						>Back to Home</button
+					>
+					<button
+						role="menuitem"
+						tabindex="-1"
+						class="nav-btn lang"
+						data-lang="ui.text_mode.404.btn_game"
+						onclick="App.setMode('game')"
+						>Switch to Exploration Mode</button
+					>
+				</div>
+			</section>
 		</template>
 
 		<script type="module" src="/src/js/main.js"></script>

@@ -125,7 +125,7 @@
 		scrollbar-width: var(--scrollbar-thinner-width);
 		color: var(--color-text);
 
-		@media (width <= 800px) {
+		@media (width <= 50em) {
 			max-width: 95vw;
 		}
 
@@ -282,6 +282,8 @@
 	top: 0;
 	left: 0;
 	box-sizing: border-box;
+	container-name: layout-root;
+	container-type: inline-size;
 	background-color: var(--color-background);
 	width: 100%;
 	height: 100%;
@@ -297,7 +299,7 @@
 
 	.text-layout {
 		padding: 4em;
-		@media (width <= 800px) {
+		@media (width <= 50em) {
 			padding: calc(1em + 2vw);
 		}
 	}
@@ -319,7 +321,7 @@
 		font-size: 1.072em;
 		font-family: var(--font-mono);
 
-		@media (width > 120ch) {
+		@container layout-root (width > 120ch) {
 			position: sticky;
 			top: calc(var(--topbar-padding) + 1rem);
 			grid-column-start: 2;
@@ -330,7 +332,7 @@
 			scrollbar-width: var(--scrollbar-thinner-width);
 		}
 
-		@media (width <= 32ch) {
+		@container layout-root (width <= 32ch) {
 			position: absolute;
 			margin: -1px;
 			padding: 0;
@@ -393,7 +395,7 @@
 		}
 
 		li ol li ol {
-			@media (width <= 130ch) {
+			@container layout-root (width <= 130ch) {
 				position: absolute;
 				margin: -1px;
 				padding: 0;
@@ -412,7 +414,7 @@
 		max-width: var(--content-max-width);
 	}
 
-	@media (width <= 120ch) {
+	@container layout-root (width <= 120ch) {
 		display: flex;
 		flex-direction: column;
 	}

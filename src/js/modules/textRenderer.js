@@ -1,9 +1,10 @@
 import { Lang } from './lang.js';
 import { Content as AppContent } from './content.js';
+import { Events } from './events.js';
 
 /**
  * Responsible for composing and injecting the text-mode UI (breadcrumbs and navigation) into the App's text view.
- * 
+ *
  * @param {AppController} app - Reference to the App instance.
  */
 export class TextRenderer {
@@ -14,6 +15,8 @@ export class TextRenderer {
 		this.breadcrumbTemplate = document.getElementById('tmpl-breadcrumb-item');
 		/** @type {HTMLTemplateElement|null} Template for navigation links. */
 		this.navLinkTemplate = document.getElementById('tmpl-nav-link');
+
+		Events.on('route:changed', (payload) => this.#handleTextContent(payload));
 	}
 
 	/**
@@ -57,10 +60,7 @@ export class TextRenderer {
 		};
 
 		// Root Crumb
-		const rootLabel =
-			Lang.getString('portfolio.rootTitle') !== 'notFound'
-				? Lang.getString('portfolio.rootTitle')
-				: 'Welcome';
+		const rootLabel = Lang.getString('portfolio.rootTitle', null, 'Welcome');
 		createCrumb(rootLabel, '', currentNode.id === 'root');
 
 		// Path Crumbs
@@ -73,8 +73,7 @@ export class TextRenderer {
 			let label = part;
 			if (currNode) {
 				const langKey = `content.${currentPath.replace(/\//g, '.')}.title`;
-				const labelText = Lang.getString(langKey);
-				label = labelText !== 'notFound' ? labelText : currNode.title;
+				label = Lang.getString(langKey, null, currNode.title);
 			}
 
 			createCrumb(label, currentPath, index === pathParts.length - 1);
@@ -108,8 +107,7 @@ export class TextRenderer {
 
 			// Label Logic
 			const langKey = `content.${childPath.replace(/\//g, '.')}.title`;
-			const labelText = Lang.getString(langKey);
-			const label = labelText !== 'notFound' ? labelText : child.title;
+			const label = Lang.getString(langKey, null, child.title);
 
 			// Clone Template
 			const clone = this.navLinkTemplate.content.cloneNode(true);
@@ -130,5 +128,39 @@ export class TextRenderer {
 		});
 
 		this.app.uiManager.elements.textNav.appendChild(navContainer);
+	}
+
+	/**
+	 * Handles text rendering and content loading based on the current route.
+	 * @param {Object} payload - The route:changed event payload.
+	 * @private
+	 */
+	async #handleTextContent({ mode, path, node }) {
+		if (mode !== 'text') {
+			return;
+		}
+
+		this.render(path, node);
+
+		// If we are at a specific content node, show it
+		if (node && node.type === 'content' && node.file) {
+			await this.app.loadContentIntoText(node.file);
+		} else if (node && node.type === 'category') {
+			// Check if the category has a main file
+			let mainChild = null;
+			if (node.id === 'root') {
+				mainChild = node.children.find((c) => c.id === 'index');
+			} else {
+				mainChild = node.children.find((c) => c.id === node.id);
+			}
+
+			if (mainChild && mainChild.file) {
+				await this.app.loadContentIntoText(mainChild.file);
+			} else {
+				this.app.uiManager.elements.textContent.innerHTML = '';
+			}
+		} else {
+			this.app.uiManager.elements.textContent.innerHTML = '';
+		}
 	}
 }

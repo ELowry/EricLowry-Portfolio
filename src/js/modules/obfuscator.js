@@ -62,7 +62,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Converts characters randomly to hex or decimal HTML entities.  
+	 * Converts characters randomly to hex or decimal HTML entities.
 	 * Ensures non-Latin1 characters are converted to safely pass through base64 encoding.
 	 * @param {string} text
 	 * @returns {string}
@@ -97,7 +97,7 @@ export class Obfuscator {
 				name: Obfuscator.EXTENSION_NAME,
 				level: 'inline',
 				/**
-				 * Hints to the marked.js parser where the next token starts.  
+				 * Hints to the marked.js parser where the next token starts.
 				 * Required for inline extensions to function correctly mid-string.
 				 * @param {string} src
 				 * @returns {number|undefined}
@@ -160,7 +160,7 @@ export class Obfuscator {
 				if (isMail || isPhone) {
 					if (typeof navigator !== 'undefined') {
 						const isCrawler = /bot|crawler|spider|crawling|slurp|yandex/i.test(
-							navigator.userAgent || '',
+							navigator.userAgent || ''
 						);
 						if (navigator.webdriver || isCrawler) {
 							return `<span class="protected-link" data-nosnippet></span>`;
@@ -191,12 +191,13 @@ export class Obfuscator {
 
 					if ((isMail && hasEmail) || (isPhone && hasPhone)) {
 						const type = isMail ? 'email' : 'phone';
-						displayText = Lang.getString(`ui.contact.${type}_placeholder`);
+						const fallback = isMail ? '[Reveal Email]' : '[Reveal Phone]';
+						displayText = Lang.getString(
+							`ui.contact.${type}_placeholder`,
+							null,
+							fallback
+						);
 						isObfuscated = true;
-
-						if (displayText === 'notFound') {
-							displayText = isMail ? '[Reveal Email]' : '[Reveal Phone]';
-						}
 					}
 
 					return `
@@ -228,8 +229,8 @@ export class Obfuscator {
 		try {
 			let output = btoa(
 				encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
-					String.fromCharCode(Number('0x' + p1)),
-				),
+					String.fromCharCode(Number('0x' + p1))
+				)
 			);
 			output = Obfuscator.#reverse(output);
 			output = Obfuscator.#rot13(output);
@@ -259,7 +260,7 @@ export class Obfuscator {
 				output
 					.split('')
 					.map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-					.join(''),
+					.join('')
 			);
 			return output;
 		} catch (e) {
@@ -272,7 +273,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Obfuscates text unless it appears to be valid Base64, in which case it attempts to decode it.  
+	 * Obfuscates text unless it appears to be valid Base64, in which case it attempts to decode it.
 	 * Useful for handling user input that may already be obfuscated or encoded.
 	 * @param {string} text
 	 * @return {Object} An object containing both the obfuscated and deobfuscated versions of the text.
@@ -300,7 +301,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Generates the marked.js extension configuration object.  
+	 * Generates the marked.js extension configuration object.
 	 * Used to parse zero-width space delimited text and securely encode it.
 	 * @returns {Object}
 	 */
@@ -329,7 +330,7 @@ export class Obfuscator {
 
 		if (typeof navigator !== 'undefined') {
 			const isCrawler = /bot|crawler|spider|crawling|slurp|yandex/i.test(
-				navigator.userAgent || '',
+				navigator.userAgent || ''
 			);
 			if (isCrawler) {
 				for (let i = 0; i < elements.length; i++) {
@@ -365,9 +366,23 @@ export class Obfuscator {
 		}
 
 		const link = target.closest('.protected-link');
-
-		if (!link || link.href.startsWith('mailto:') || link.href.startsWith('tel:')) {
+		if (!link) {
 			return;
+		}
+
+		// On touch devices (no hover capability), the first tap reveals, and the second tap clicks.
+		const canHover = window.matchMedia('(hover: hover)').matches;
+		if ((event.type === 'mouseover' || event.type === 'focus') && !canHover) {
+			return;
+		}
+
+		if (link.href.startsWith('mailto:') || link.href.startsWith('tel:')) {
+			return;
+		}
+
+		// First click reveals and prevents navigation; subsequent clicks navigate normally.
+		if (event.type === 'click') {
+			event.preventDefault();
 		}
 
 		const encodedHref = link.getAttribute('data-enc');

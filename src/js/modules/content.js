@@ -145,6 +145,7 @@ export const ContentTree = category(
 				'Marked Responsive Images',
 				'osd/marked-responsive-images.md'
 			),
+			content('obsidian-replace-commands', 'Obsidian Replace Commands', 'osd/obsidian-replace-commands.md'),
 			content('StadiaIcons', 'StadiaIcons', 'osd/StadiaIcons.md'),
 		]),
 
@@ -327,20 +328,13 @@ class ContentController {
 			}
 
 			const keyBase = currentPath ? `${currentPath}.${child.id}` : child.id;
-			const translatedTitle = Lang.getString(`content.${keyBase}.title`);
-			const fallbackTitle = child.title || '';
-			const title = translatedTitle !== 'notFound' ? translatedTitle : fallbackTitle;
+			const title = Lang.getString(`content.${keyBase}.title`, null, child.title || '');
 
 			let label = title;
 			if (posData.label) {
-				const translatedLabelAttempt = Lang.getString(posData.label);
-				label =
-					translatedLabelAttempt !== 'notFound' ? translatedLabelAttempt : posData.label;
+				label = Lang.getString(posData.label, null, posData.label);
 			} else {
-				const translatedPosLabel = Lang.getString(`content.${keyBase}.label`);
-				if (translatedPosLabel !== 'notFound') {
-					label = translatedPosLabel;
-				}
+				label = Lang.getString(`content.${keyBase}.label`, null, title);
 			}
 
 			const obj = {

@@ -5,7 +5,7 @@
 	--h4-size: 1.47rem;
 	--h5-size: 1.1rem;
 
-	@media (width <= 800px) {
+	@media (width <= 50em) {
 		--h1-size: 2.56rem;
 		--h2-size: 2.05rem;
 		--h3-size: 1.64rem;
@@ -13,24 +13,20 @@
 		--h5-size: 1.05rem;
 	}
 
-	@media (width <= 540px) {
+	@media (width <= 33.75em) {
 		--h1-size: 1.73rem;
 		--h2-size: 1.5rem;
 		--h3-size: 1.31rem;
 		--h4-size: 1.14rem;
 		--h5-size: 0.99rem;
 	}
+
+	.readability-mode {
+		font-size: 112.5%;
+	}
 }
 
-html {
-	font-size: 16px;
-}
-
-:root.readability-mode {
-	font-size: 18px;
-}
-
-body {
+:root body {
 	font-weight: normal;
 	line-height: 1.65;
 	text-wrap: pretty;

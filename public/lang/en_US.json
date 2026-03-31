@@ -13,45 +13,153 @@
 		"fr_FR": "French"
 	},
 	"content": {
+		"privacy": {
+			"title": "Privacy Policy",
+			"label": "Privacy Policy"
+		},
 		"index": {
 			"title": "Welcome",
 			"label": "Welcome"
 		},
+		"cv": {
+			"title": "Curriculum Vitae",
+			"label": "Curriculum Vitae"
+		},
 		"about": {
-			"title": "About Me",
-			"label": "About Me",
-			"about": {
-				"title": "About Overview",
-				"label": "About Overview"
-			},
-			"cv": {
-				"title": "Curiculum Vitae",
-				"label": "Curiculum Vitae"
-			},
-			"bio": {
-				"title": "Biography",
-				"label": "Read Bio"
-			},
-			"history": {
-				"title": "Work History",
-				"label": "Work History"
-			}
+			"title": "Personal Philosophy",
+			"label": "Personal Philosophy"
 		},
-		"projects": {
-			"title": "Projects",
-			"label": "Projects",
+		"architecture": {
+			"title": "Architecture Studies",
+			"label": "Architecture Studies",
+			"architecture": {
+				"title": "ENSA-V & ENSP-V",
+				"label": "ENSA-V & ENSP-V"
+			},
+			"3Dgallery": {
+				"title": "3D Works Gallery",
+				"label": "3D Works Gallery",
+				"3Dgallery": {
+					"title": "About my 3D work",
+					"label": "About my 3D work"
+				}
+			},
 			"projects": {
-				"title": "Projects Overview",
-				"label": "Projects Overview"
-			},
-			"cool-game": {
-				"title": "Cool Game",
-				"label": "Game Project"
+				"title": "Selection of Architecture Projects",
+				"label": "Selection of Architecture Projects",
+				"projects": {
+					"title": "Overview",
+					"label": "Overview"
+				},
+				"Unstant": {
+					"title": "Unstant",
+					"label": "Unstant"
+				}
 			}
 		},
-		"privacy": {
-			"title": "Privacy Policy",
-			"label": "Privacy Policy"
+		"coaching-business": {
+			"title": "Coaching & Business",
+			"label": "Coaching & Business",
+			"coaching-business": {
+				"title": "Overview",
+				"label": "Overview"
+			},
+			"medium": {
+				"title": "Medium Editing",
+				"label": "Medium Editing"
+			},
+			"podcast": {
+				"title": "Podcast Editing",
+				"label": "Podcast Editing"
+			}
+		},
+		"gaming": {
+			"title": "Video Games",
+			"label": "Video Games",
+			"gaming": {
+				"title": "Overview",
+				"label": "Overview"
+			},
+			"InputLayers": {
+				"title": "InputLayers",
+				"label": "InputLayers"
+			},
+			"Unstant": {
+				"title": "Unstant",
+				"label": "Unstant"
+			},
+			"CinQ": {
+				"title": "CinQ – corporate team training video game",
+				"label": "CinQ – corporate team training video game",
+				"CinQ": {
+					"title": "About CinQ",
+					"label": "About CinQ"
+				},
+				"gallery": {
+					"title": "CinQ Footage",
+					"label": "CinQ Footage"
+				},
+				"website": {
+					"title": "CinQ Website",
+					"label": "CinQ Website"
+				}
+			}
+		},
+		"osd": {
+			"title": "Open Source Development",
+			"label": "Open Source Development",
+			"osd": {
+				"title": "Open Source Projects",
+				"label": "Open Source Projects"
+			},
+			"InputLayers": {
+				"title": "InputLayers",
+				"label": "InputLayers"
+			},
+			"winget-updater": {
+				"title": "WinGet Updater",
+				"label": "WinGet Updater"
+			},
+			"marked-responsive-images": {
+				"title": "Marked Responsive Images",
+				"label": "Marked Responsive Images"
+			},
+			"obsidian-replace-commands": {
+				"title": "Obsidian Replace Commands",
+				"label": "Obsidian Replace Commands"
+			},
+			"StadiaIcons": {
+				"title": "StadiaIcons",
+				"label": "StadiaIcons"
+			}
+		},
+		"websites": {
+			"title": "Web Development & Design",
+			"label": "Web Development & Design",
+			"websites": {
+				"title": "Web Development & Design",
+				"label": "Web Development & Design"
+			},
+			"CinQ": {
+				"title": "CinQ – corporate team training video game",
+				"label": "CinQ – corporate team training video game"
+			},
+			"thenextmind": {
+				"title": "The Next Mind",
+				"label": "The Next Mind"
+			},
+			"luzech": {
+				"title": "Luzech",
+				"label": "Luzech"
+			},
+			"koalakrash": {
+				"title": "Koala Krash",
+				"label": "Koala Krash"
+			},
+			"archive": {
+				"title": "Archive of Defunct Websites",
+				"label": "Archive of Defunct Websites"
+			}
 		}
 	},
 	"ui": {
