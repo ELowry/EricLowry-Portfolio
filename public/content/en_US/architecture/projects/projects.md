@@ -1,1 +1,3 @@
 # Gallery of my Architecture Studies Projects
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae lectus vitae sapien commodo pellentesque. Pellentesque placerat risus et imperdiet consectetur. Nam a hendrerit ligula. Nullam faucibus magna tempor bibendum auctor. Quisque eros purus, tempus a venenatis nec, fringilla at erat. Maecenas viverra augue id erat pretium, a ullamcorper erat bibendum. Mauris malesuada sollicitudin ligula et euismod. Nam at aliquet odio. Vestibulum convallis et metus eu sollicitudin. Praesent sodales facilisis lectus at faucibus. Sed arcu nisl, semper at nulla eget, tristique hendrerit justo. Aliquam sapien magna, ultricies sed ultricies nec, vehicula vitae eros. Nullam et venenatis velit.
