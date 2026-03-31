@@ -218,6 +218,42 @@ export class Obfuscator {
 	}
 
 	/**
+	 * Extracts the decoding logic to be reusable.
+	 * @param {HTMLAnchorElement} link
+	 * @private
+	 */
+	static #decodeLink(link) {
+		if (link.href.startsWith('mailto:') || link.href.startsWith('tel:')) {
+			return;
+		}
+
+		const encodedHref = link.getAttribute('data-enc');
+		const encodedText = link.getAttribute('data-text-enc');
+		const type = link.getAttribute('data-type') || 'mailto';
+
+		if (encodedHref) {
+			try {
+				const value = Obfuscator.deobfuscate(encodedHref);
+				link.href = `${type}:${value}`;
+
+				if (link.dataset.obfuscatedText === 'true' && encodedText) {
+					link.textContent = Obfuscator.deobfuscate(encodedText);
+					link.removeAttribute('data-obfuscated-text');
+				}
+
+				link.classList.remove('protected-link');
+				if (!App.isLocal) {
+					link.removeAttribute('data-enc');
+					link.removeAttribute('data-text-enc');
+					link.removeAttribute('data-type');
+				}
+			} catch (e) {
+				console.error('Failed to decode contact information');
+			}
+		}
+	}
+
+	/**
 	 * Obfuscates a string.
 	 * @param {string} str
 	 * @returns {string}
@@ -385,6 +421,8 @@ export class Obfuscator {
 			event.preventDefault();
 		}
 
+		Obfuscator.#decodeLink(link);
+
 		const encodedHref = link.getAttribute('data-enc');
 		const encodedText = link.getAttribute('data-text-enc');
 		const type = link.getAttribute('data-type') || 'mailto';
@@ -408,6 +446,17 @@ export class Obfuscator {
 			} catch (e) {
 				console.error('Failed to decode contact information');
 			}
+		}
+	}
+
+	/**
+	 * Finds all remaining protected links on the page and decodes them.
+	 * Designed to be hooked to the browser's 'beforeprint' event.
+	 */
+	static revealAllForPrint() {
+		const links = document.querySelectorAll('.protected-link');
+		for (let i = 0; i < links.length; i++) {
+			Obfuscator.#decodeLink(links[i]);
 		}
 	}
 }

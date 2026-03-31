@@ -169,6 +169,8 @@ export class UIManager {
 		document.addEventListener('focus', Obfuscator.restoreProtectedLink, true);
 		document.addEventListener('mouseover', Obfuscator.restoreProtectedLink);
 		document.addEventListener('click', Obfuscator.restoreProtectedLink);
+		// Reveal before the print spooler grabs the DOM
+		window.addEventListener('beforeprint', Obfuscator.revealAllForPrint);
 
 		Events.on('route:changed', (payload) => {
 			if (payload.mode === 'text') {

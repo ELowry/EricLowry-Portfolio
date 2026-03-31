@@ -11,6 +11,10 @@
 	user-select: none;
 	-webkit-user-select: none;
 
+	@media print {
+		display: none !important;
+	}
+
 	div {
 		align-self: flex-end;
 		pointer-events: auto;

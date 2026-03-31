@@ -13,9 +13,12 @@ html {
 body {
 	margin: 0;
 	background-color: var(--color-background);
-	overflow: hidden;
 	color: var(--color-text);
 	font-family: var(--font-sans);
+
+	@media screen {
+		overflow: hidden;
+	}
 }
 
 *:focus-visible {
@@ -50,6 +53,15 @@ a {
 
 	&:active {
 		text-decoration: underline;
+	}
+
+	@media print {
+		&[href^='http']::after {
+			opacity: 0.9;
+			content: ' <' attr(href) '>';
+			color: var(--color-text);
+			font-size: 0.9em;
+		}
 	}
 }
 

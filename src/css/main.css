@@ -54,6 +54,10 @@
 	font-family: var(--font-sans);
 	text-decoration: none;
 
+	@media print {
+		display: none;
+	}
+
 	&:focus {
 		top: 10px;
 	}
@@ -86,6 +90,10 @@
 	canvas:focus,
 	canvas:focus-visible {
 		outline: none;
+
+		@media print {
+			display: none;
+		}
 	}
 
 	/* Modal System */
@@ -102,6 +110,18 @@
 			background-color: var(--color-overlay-dark);
 		}
 
+		@media print {
+			display: block;
+			position: static;
+			background-color: var(--color-background);
+			height: auto;
+			overflow: unset;
+
+			&::backdrop {
+				display: none;
+			}
+		}
+
 		&:focus,
 		&:focus-visible {
 			outline: none;
@@ -115,15 +135,29 @@
 	.modal-box {
 		position: relative;
 		backdrop-filter: var(--backdrop-blur);
-		border: var(--border-width) solid var(--color-border);
-		background-color: var(--color-overlay-dark);
-		padding: 1.5rem;
 		width: auto;
-		max-width: min(80ch, 90vw);
-		max-height: 85vh;
 		overflow-y: auto;
 		scrollbar-width: var(--scrollbar-thinner-width);
 		color: var(--color-text);
+
+		@media screen {
+			border: var(--border-width) solid var(--color-border);
+			background-color: var(--color-background);
+			padding: 1.5rem;
+			max-width: min(80ch, 90vw);
+			max-height: 85vh;
+		}
+
+		@media print {
+			display: block;
+			box-shadow: none;
+			border: none;
+			padding: 0;
+			width: 100%;
+			max-width: none;
+			max-height: none;
+			overflow: unset;
+		}
 
 		@media (width <= 50em) {
 			max-width: 95vw;
@@ -137,6 +171,10 @@
 			background-color: oklch(
 				from var(--hex-overlay) var(--luminocity-overlay) c h / var(--opacity-overlay)
 			);
+
+			@media print {
+				display: none;
+			}
 
 			&:hover {
 				--opacity-overlay: 65%;
@@ -177,6 +215,10 @@
 		align-items: center;
 		width: auto;
 		font-family: var(--font-mono);
+	}
+
+	@media print {
+		width: 100vw;
 	}
 
 	nav {
@@ -266,6 +308,10 @@
 	padding: 0.4em 1em;
 	font-family: var(--font-mono);
 
+	@media print {
+		display: none;
+	}
+
 	button {
 		font-family: var(--font-mono);
 
@@ -278,19 +324,22 @@
 }
 
 #text-layer {
-	position: absolute;
-	top: 0;
-	left: 0;
 	box-sizing: border-box;
 	container-name: layout-root;
 	container-type: inline-size;
 	background-color: var(--color-background);
-	width: 100%;
-	height: 100%;
-	overflow-y: auto;
 	scroll-behavior: smooth;
 	scroll-padding-top: var(--topbar-padding);
 	color: var(--color-text);
+
+	@media screen {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		overflow-y: auto;
+	}
 
 	&:focus,
 	&:focus-visible {
@@ -301,6 +350,10 @@
 		padding: 4em;
 		@media (width <= 50em) {
 			padding: calc(1em + 2vw);
+		}
+
+		@media print {
+			padding: 0;
 		}
 	}
 
@@ -315,11 +368,20 @@
 	align-items: start;
 	gap: 2em;
 
+	@media print {
+		display: block;
+	}
+
 	#text-table-of-contents {
 		background-color: var(--color-highlight);
 		padding: 2em;
 		font-size: 1.072em;
 		font-family: var(--font-mono);
+
+		@media print {
+			display: none;
+			padding: 0;
+		}
 
 		@container layout-root (width > 120ch) {
 			position: sticky;
@@ -412,6 +474,10 @@
 	#text-content {
 		grid-row-start: 1;
 		max-width: var(--content-max-width);
+
+		@media print {
+			max-width: none;
+		}
 	}
 
 	@container layout-root (width <= 120ch) {
@@ -430,6 +496,10 @@
 	margin-bottom: 1.5em;
 	border-bottom: var(--border-width) solid var(--color-highlight);
 	padding-bottom: 1em;
+
+	@media print {
+		display: none;
+	}
 
 	ol.breadcrumbs {
 		display: flex;
@@ -483,6 +553,10 @@
 	pointer-events: none;
 	color: var(--color-text);
 	font-size: 2rem;
+
+	@media print {
+		display: none;
+	}
 
 	&.shown {
 		transform: translateY(0);

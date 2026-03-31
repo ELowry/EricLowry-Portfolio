@@ -19,7 +19,7 @@
 		}
 	}
 
-	@media (width <= 50em) {
+	@media print, (width <= 50em) {
 		flex-wrap: wrap;
 		justify-content: center;
 
@@ -28,7 +28,7 @@
 		}
 	}
 
-	@media (width > 50em) {
+	@media screen and (width > 50em) {
 		aspect-ratio: var(--gallery-aspect-ratio);
 
 		.md-gallery-item {
