@@ -1,5 +1,6 @@
 import { Router } from './modules/router.js';
-import { Content, ContentTree } from './modules/content.js';
+import { Content } from './modules/content.js';
+import { ContentTree } from './modules/contentTree.js';
 import { Interaction } from './modules/interaction.js';
 import { Lang } from './modules/lang.js';
 import { Input } from './modules/input.js';
@@ -384,7 +385,6 @@ class AppController {
 
 		if (mode === 'game') {
 			this.setPause(false);
-			this.tutorialManager?.tryShowTouchTutorial();
 		} else {
 			this.setPause(true);
 		}

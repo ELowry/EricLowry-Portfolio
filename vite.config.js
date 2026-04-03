@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import path from 'path'
-import fs from 'fs'
+import { defineConfig } from 'vite';
+import path from 'path';
+import fs from 'fs';
 
 /**
  * A simple Vite plugin to exclude specific folders from the final build output.
@@ -14,13 +14,13 @@ function excludePublicFolders(folders) {
 		apply: 'build',
 		closeBundle() {
 			folders.forEach((folder) => {
-				const fullPath = path.resolve('dist', folder)
+				const fullPath = path.resolve('dist', folder);
 				if (fs.existsSync(fullPath)) {
-					fs.rmSync(fullPath, { recursive: true, force: true })
+					fs.rmSync(fullPath, { recursive: true, force: true });
 				}
-			})
+			});
 		},
-	}
+	};
 }
 
 export default defineConfig(({ mode }) => {
@@ -45,6 +45,7 @@ export default defineConfig(({ mode }) => {
 					'*.{crt,pem}',
 					'**/obsidian/**',
 					'**/.obsidian/**',
+					'.vault-nickname',
 				],
 			},
 		},
@@ -56,5 +57,5 @@ export default defineConfig(({ mode }) => {
 			emptyOutDir: true,
 			cssMinify: 'lightningcss',
 		},
-	}
-})
+	};
+});

@@ -25,11 +25,14 @@ export class TutorialManager {
 			}
 		});
 
-		// Check for tutorial visibility whenever the game layer becomes active
+		// Check for tutorial visibility on layer change events
 		Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
 			if (layerId === LayeredInput.LAYER_GAME) {
 				this.tryShowTouchTutorial();
 			}
+		});
+		Events.on(LayeredInput.LAYER_DEACTIVATION_EVENT, () => {
+			this.tryShowTouchTutorial();
 		});
 	}
 
@@ -41,8 +44,8 @@ export class TutorialManager {
 			return;
 		}
 
-		// Only show the tutorial if the game layer is the singular active layer.
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
+		// Only show the tutorial if the game layer is the singular active layer
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME, true)) {
 			this.openTouchInstructions();
 		}
 	}

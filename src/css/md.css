@@ -155,7 +155,7 @@
 	}
 
 	.md-img {
-		@media screen {
+		@media not print {
 			border-right: 0.2rem solid var(--color-accent);
 		}
 
@@ -172,7 +172,7 @@
 }
 
 .md-external-link {
-	@media screen {
+	@media not print {
 		&::after {
 			display: inline-block;
 			vertical-align: super;

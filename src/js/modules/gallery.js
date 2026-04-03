@@ -111,6 +111,12 @@ export class GalleryDisplay {
 	#activeModal;
 	/** @type {HTMLElement|null} The last element that triggered the modal. */
 	#lastFocusedElement;
+	/** @type {HTMLElement[]} Array of gallery items in the active gallery. */
+	#currentGalleryItems;
+	/** @type {number} The index of the currently active item. */
+	#currentIndex;
+	/** @type {IntersectionObserver|null} Observer to keep #currentIndex in sync with scrolling. */
+	#intersectionObserver;
 
 	constructor(app) {
 		/** @type {AppController} Main application instance. */
@@ -118,6 +124,9 @@ export class GalleryDisplay {
 
 		this.#activeModal = null;
 		this.#lastFocusedElement = null;
+		this.#currentGalleryItems = [];
+		this.#currentIndex = 0;
+		this.#intersectionObserver = null;
 
 		this.#init();
 	}
@@ -161,7 +170,13 @@ export class GalleryDisplay {
 	 * @private
 	 */
 	#handleKeyDown(event) {
-		if (event.key === 'Enter' || event.key === ' ') {
+		if (this.#activeModal) {
+			if (event.key === 'ArrowRight') {
+				this.#navigate(1);
+			} else if (event.key === 'ArrowLeft') {
+				this.#navigate(-1);
+			}
+		} else if (event.key === 'Enter' || event.key === ' ') {
 			const activeElement = document.activeElement;
 			if (activeElement && activeElement.classList.contains(Gallery.DEFAULT_ITEM_CLASS)) {
 				// Prevent Space from scrolling
@@ -189,77 +204,42 @@ export class GalleryDisplay {
 			return;
 		}
 
-		const mediaNode = itemElement.querySelector('picture, img');
-		if (!mediaNode) {
-			return;
-		}
-
 		this.#lastFocusedElement = itemElement;
 
-		const clone = template.content.cloneNode(true);
-		const contentContainer = clone.querySelector('.gallery-modal-content');
-
-		if (contentContainer) {
-			const mediaClone = mediaNode.cloneNode(true);
-
-			// Progressive blur-up loading.
-			if (mediaClone.tagName === 'PICTURE') {
-				const originalImg = mediaNode.querySelector('img');
-				const imgElement = mediaClone.querySelector('img');
-
-				// Grab the exact responsive thumbnail the browser is currently displaying
-				const cachedSrc = originalImg ? originalImg.currentSrc || originalImg.src : null;
-
-				if (imgElement) {
-					imgElement.removeAttribute('class');
-					if (imgElement.hasAttribute('sizes')) {
-						imgElement.setAttribute('sizes', '100vw');
-					}
-
-					// Use lower resolution image as background until the high-res version is loaded
-					if (cachedSrc) {
-						mediaClone.style.backgroundImage = `url("${cachedSrc}")`;
-
-						const onImageLoad = () => {
-							imgElement.classList.add('loaded');
-							setTimeout(() => {
-								if (mediaClone) {
-									// mediaClone.style.backgroundImage = 'none';
-								}
-							}, 300); // Match CSS transition duration
-						};
-
-						// If the high-res image is already fully cached, the 'load' event might not fire.
-						if (imgElement.complete) {
-							onImageLoad();
-						} else {
-							imgElement.addEventListener('load', onImageLoad, { once: true });
-						}
-					}
-				}
-
-				const sources = mediaClone.querySelectorAll('source');
-				for (const source of sources) {
-					if (source.hasAttribute('sizes')) {
-						source.setAttribute('sizes', '100vw');
-					}
-				}
-			} else {
-				if (mediaClone.hasAttribute('sizes')) {
-					mediaClone.setAttribute('sizes', '100vw');
-				}
-				mediaClone.removeAttribute('class');
-			}
-
-			contentContainer.appendChild(mediaClone);
+		const galleryContainer = itemElement.closest(`.${Gallery.DEFAULT_GALLERY_CLASS}`);
+		if (galleryContainer) {
+			this.#currentGalleryItems = Array.from(
+				galleryContainer.querySelectorAll(`.${Gallery.DEFAULT_ITEM_CLASS}`)
+			);
+			this.#currentIndex = this.#currentGalleryItems.indexOf(itemElement);
+		} else {
+			this.#currentGalleryItems = [itemElement];
+			this.#currentIndex = 0;
 		}
+
+		const clone = template.content.cloneNode(true);
 
 		// Apply translation from template
 		Lang.performTranslation(clone);
 
 		this.#activeModal = clone.querySelector('dialog');
-
 		document.body.appendChild(clone);
+
+		const prevBtn = this.#activeModal.querySelector('.gallery-modal-prev');
+		const nextBtn = this.#activeModal.querySelector('.gallery-modal-next');
+
+		if (prevBtn) {
+			prevBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				this.#navigate(-1);
+			});
+		}
+		if (nextBtn) {
+			nextBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				this.#navigate(1);
+			});
+		}
 
 		const observer = new MutationObserver(() => {
 			if (!itemElement.isConnected) {
@@ -275,16 +255,34 @@ export class GalleryDisplay {
 		});
 
 		this.#activeModal.addEventListener('click', (e) => {
-			if (e.target.tagName !== 'IMG') {
+			if (
+				e.target.tagName !== 'IMG'
+				&& !e.target.closest('.gallery-modal-prev')
+				&& !e.target.closest('.gallery-modal-next')
+			) {
 				this.#activeModal.close();
 			}
 		});
+
+		this.#renderAllImages();
 
 		requestAnimationFrame(() => {
 			if (this.#activeModal) {
 				Navigation.pushContext(this.#activeModal, { scroll: true, axis: 'x' });
 				this.#activeModal.showModal();
 				document.body.style.overflow = 'hidden';
+
+				const contentContainer = this.#activeModal.querySelector('.gallery-modal-content');
+				if (contentContainer) {
+					contentContainer.setAttribute('tabindex', '-1');
+					contentContainer.focus();
+
+					contentContainer.style.scrollBehavior = 'auto';
+					contentContainer.scrollLeft = contentContainer.clientWidth * this.#currentIndex;
+					requestAnimationFrame(() => {
+						contentContainer.style.scrollBehavior = 'smooth';
+					});
+				}
 			}
 		});
 	}
@@ -298,8 +296,15 @@ export class GalleryDisplay {
 			return;
 		}
 
+		if (this.#intersectionObserver) {
+			this.#intersectionObserver.disconnect();
+			this.#intersectionObserver = null;
+		}
+
 		this.#activeModal.remove();
 		this.#activeModal = null;
+		this.#currentGalleryItems = [];
+		this.#currentIndex = 0;
 		document.body.style.overflow = ''; // Restores the body scroll
 		LayeredInput.deactivate(LayeredInput.LAYER_GALLERY);
 		Navigation.popContext();
@@ -308,6 +313,176 @@ export class GalleryDisplay {
 		if (this.#lastFocusedElement) {
 			this.#lastFocusedElement.focus();
 			this.#lastFocusedElement = null;
+		}
+	}
+
+	/**
+	 * Populates the layout with all images mapped to scroll snapshots
+	 * @private
+	 */
+	#renderAllImages() {
+		if (!this.#activeModal || this.#currentGalleryItems.length === 0) {
+			return;
+		}
+
+		const contentContainer = this.#activeModal.querySelector('.gallery-modal-content');
+		if (!contentContainer) {
+			return;
+		}
+
+		contentContainer.innerHTML = '';
+
+		this.#currentGalleryItems.forEach((currentItem, index) => {
+			const itemContainer = document.createElement('div');
+			itemContainer.className = 'gallery-modal-item';
+			itemContainer.dataset.index = index;
+
+			const mediaNode = currentItem.querySelector('picture, img');
+			if (mediaNode) {
+				const mediaClone = mediaNode.cloneNode(true);
+
+				// Progressive blur-up loading.
+				if (mediaClone.tagName === 'PICTURE') {
+					const originalImg = mediaNode.querySelector('img');
+					const imgElement = mediaClone.querySelector('img');
+
+					const cachedSrc = originalImg
+						? originalImg.currentSrc || originalImg.src
+						: null;
+
+					if (imgElement) {
+						imgElement.removeAttribute('class');
+						if (imgElement.hasAttribute('sizes')) {
+							imgElement.setAttribute('sizes', '100vw');
+						}
+
+						if (cachedSrc) {
+							mediaClone.style.backgroundImage = `url("${cachedSrc}")`;
+
+							const onImageLoad = () => {
+								imgElement.classList.add('loaded');
+							};
+
+							if (imgElement.complete) {
+								onImageLoad();
+							} else {
+								imgElement.addEventListener('load', onImageLoad, { once: true });
+							}
+						}
+					}
+
+					const sources = mediaClone.querySelectorAll('source');
+					for (const source of sources) {
+						if (source.hasAttribute('sizes')) {
+							source.setAttribute('sizes', '100vw');
+						}
+					}
+				} else {
+					if (mediaClone.hasAttribute('sizes')) {
+						mediaClone.setAttribute('sizes', '100vw');
+					}
+					mediaClone.removeAttribute('class');
+				}
+
+				itemContainer.appendChild(mediaClone);
+			}
+
+			contentContainer.appendChild(itemContainer);
+		});
+
+		// Intersection observer for snap layout
+		this.#intersectionObserver = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						const newIndex = parseInt(entry.target.dataset.index, 10);
+						if (this.#currentIndex !== newIndex) {
+							this.#currentIndex = newIndex;
+							this.#updateUI();
+						}
+					}
+				}
+			},
+			{
+				root: contentContainer,
+				threshold: 0.5,
+			}
+		);
+
+		const snapItems = contentContainer.querySelectorAll('.gallery-modal-item');
+		for (const el of snapItems) {
+			this.#intersectionObserver.observe(el);
+		}
+
+		// Initialize UI variables/classes
+		this.#updateUI();
+	}
+
+	/**
+	 * Keeps carousel controls, screen-readers, and labels synced with UI
+	 * @private
+	 */
+	#updateUI() {
+		if (!this.#activeModal || this.#currentGalleryItems.length === 0) {
+			return;
+		}
+
+		const prevBtn = this.#activeModal.querySelector('.gallery-modal-prev');
+		const nextBtn = this.#activeModal.querySelector('.gallery-modal-next');
+		let galleryIsMultiple = this.#currentGalleryItems.length > 1;
+
+		if (prevBtn) {
+			prevBtn.classList.toggle('disabled', !(galleryIsMultiple && this.#currentIndex > 0));
+		}
+		if (nextBtn) {
+			nextBtn.classList.toggle(
+				'disabled',
+				!(galleryIsMultiple && this.#currentIndex < this.#currentGalleryItems.length - 1)
+			);
+		}
+
+		const announcer = this.#activeModal.querySelector('.gallery-modal-announcer');
+		const currentItem = this.#currentGalleryItems[this.#currentIndex];
+		const modalItems = this.#activeModal.querySelectorAll('.gallery-modal-item');
+		modalItems.forEach((item, index) => {
+			if (index === this.#currentIndex) {
+				item.removeAttribute('aria-hidden');
+			} else {
+				item.setAttribute('aria-hidden', 'true');
+			}
+		});
+
+		if (announcer && currentItem) {
+			const mediaNode = currentItem.querySelector('picture, img');
+			const imgElement =
+				mediaNode?.tagName === 'PICTURE' ? mediaNode.querySelector('img') : mediaNode;
+			const altText = imgElement ? imgElement.alt : '';
+			announcer.textContent = `Image ${this.#currentIndex + 1} of ${this.#currentGalleryItems.length}: ${altText}`;
+		}
+	}
+
+	/**
+	 * Navigates to the next or previous image in the gallery context.
+	 * @param {number} direction - 1 for next, -1 for previous.
+	 * @private
+	 */
+	#navigate(direction) {
+		if (!this.#currentGalleryItems.length) return;
+
+		const newIndex = this.#currentIndex + direction;
+		const maxIndex = this.#currentGalleryItems.length - 1;
+
+		// Prevent out-of-bounds navigation
+		if (newIndex < 0 || newIndex > maxIndex) {
+			return;
+		}
+
+		const contentContainer = this.#activeModal.querySelector('.gallery-modal-content');
+		if (contentContainer) {
+			contentContainer.scrollTo({
+				left: contentContainer.clientWidth * newIndex,
+				behavior: 'smooth',
+			});
 		}
 	}
 }

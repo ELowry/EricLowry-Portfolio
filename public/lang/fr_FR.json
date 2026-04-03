@@ -108,7 +108,9 @@
 		"gallery": {
 			"modalLabel": "Affichage d'image en plein écran",
 			"modalClose": "Fermer l'affichage plein écran",
-			"imageOpenModal": "Ouvrir l'image en plein écran"
+			"imageOpenModal": "Ouvrir l'image en plein écran",
+			"prev": "Image précédente",
+			"next": "Image suivante"
 		}
 	},
 	"keys": {

@@ -143,6 +143,12 @@ function gameRenderPost() {
  * Initialize LittleJS into the `#game-layer` DOM object.
  */
 function initLittleJS() {
+	// Prevent duplicate engine instances
+	if (App.uiManager.elements.gameLayer.querySelector('canvas')) {
+		console.log('LittleJS already initialized, skipping.');
+		return;
+	}
+
 	App.LJS.engineInit(
 		gameInit,
 		gameUpdate,

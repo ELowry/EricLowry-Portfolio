@@ -53,6 +53,8 @@
 
 		<link rel="stylesheet" href="/src/css/main.css" />
 
+		<link rel="/human.json" />
+
 		<script>
 			// Block indexing on firebase default URL
 			if (
@@ -443,12 +445,27 @@
 				aria-label="Fullscreen image viewer"
 			>
 				<button
-					class="gallery-modal-close langAttr"
+					class="gallery-modal-btn gallery-modal-close langAttr"
 					data-langAttr="aria-label"
 					data-langAria_label="ui.gallery.modalClose"
 					aria-label="Close modal"
 					>x</button
 				>
+				<button
+					class="gallery-modal-btn gallery-modal-prev langAttr"
+					data-langAttr="aria-label"
+					data-langAria_label="ui.gallery.prev"
+					aria-label="Previous image"
+					>‹</button
+				>
+				<button
+					class="gallery-modal-btn gallery-modal-next langAttr"
+					data-langAttr="aria-label"
+					data-langAria_label="ui.gallery.next"
+					aria-label="Next image"
+					>›</button
+				>
+				<div class="gallery-modal-announcer sr-only" aria-live="polite"></div>
 				<div class="gallery-modal-content"></div>
 			</dialog>
 		</template>
@@ -464,7 +481,10 @@
 				<li>
 					<a
 						href="/"
-						onclick="event.preventDefault(); App.navigate('')"
+						onclick="
+							event.preventDefault();
+							App.navigate('');
+						"
 						class="lang"
 						data-lang="portfolio.title"
 						>Portfolio</a

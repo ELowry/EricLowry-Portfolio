@@ -16,7 +16,7 @@ body {
 	color: var(--color-text);
 	font-family: var(--font-sans);
 
-	@media screen {
+	@media not print {
 		overflow: hidden;
 	}
 }

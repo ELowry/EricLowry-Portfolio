@@ -115,7 +115,6 @@ export class UIManager {
 		this.elements.gameWelcome?.addEventListener('close', () => {
 			LayeredInput.deactivate(LayeredInput.LAYER_GAME_WELCOME);
 			this.app.onModalClose(false);
-			this.app.tutorialManager.tryShowTouchTutorial();
 		});
 
 		// Text Nav (Breadcrumbs)
@@ -204,7 +203,6 @@ export class UIManager {
 		this.elements.gameMenu.addEventListener('close', () => {
 			LayeredInput.deactivate(LayeredInput.LAYER_GAME_MENU);
 			this.app.onModalClose();
-			this.app.tutorialManager?.tryShowTouchTutorial();
 			this.elements.gameMenuButton?.setAttribute('aria-expanded', 'false');
 			this.elements.gameMenuButton?.focus({ focusVisible: false });
 
@@ -248,7 +246,6 @@ export class UIManager {
 			}
 
 			this.app.onModalClose();
-			this.app.tutorialManager?.tryShowTouchTutorial();
 
 			Navigation.setContext(null);
 		});
@@ -594,7 +591,6 @@ export class UIManager {
 		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
 			this.app.setLock(false);
 		}
-		this.app.tutorialManager?.tryShowTouchTutorial();
 	}
 
 	/**
