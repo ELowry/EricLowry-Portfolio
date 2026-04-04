@@ -98,6 +98,7 @@
 
 	/* Modal System */
 	dialog {
+		position: relative;
 		border: none;
 		background-color: transparent;
 		padding: 0;
@@ -134,11 +135,34 @@
 		.hidden & {
 			display: none;
 		}
+
+		&::before,
+		&::after {
+			display: block;
+			position: absolute;
+			right: 1.5rem;
+			left: 1.5rem;
+			height: calc(1.5rem - var(--border-width));
+			pointer-events: none;
+			content: '';
+			z-index: 1;
+		}
+
+		&::before {
+			top: var(--border-width);
+			background-image: linear-gradient(var(--color-background), transparent);
+		}
+
+		&::after {
+			bottom: var(--border-width);
+			background-image: linear-gradient(transparent, var(--color-background));
+		}
 	}
 
 	.modal-box {
 		position: relative;
 		backdrop-filter: var(--backdrop-blur);
+		padding: 1rem;
 		width: auto;
 		overflow-y: auto;
 		scrollbar-width: var(--scrollbar-thinner-width);
@@ -215,7 +239,6 @@
 	.modal-box {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
 		width: auto;
 		font-family: var(--font-mono);
