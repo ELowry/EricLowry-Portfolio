@@ -4,7 +4,6 @@ import { Player } from './modules/player.js';
 import { Input } from './modules/input.js';
 import { LayeredInput } from './modules/layeredInputs.js';
 import { Interaction } from './modules/interaction.js';
-import { VirtualCursor } from './modules/virtualCursor.js';
 import { GameBridge } from './modules/gameBridge.js';
 
 let player;
@@ -65,23 +64,9 @@ function gameInit() {
  * Called each frame by LittleJS engine.
  */
 function gameUpdate() {
-	if (!document.hasFocus()) {
+	if (!document.hasFocus() || App.mode !== 'game') {
 		return;
 	}
-
-	App.handleInput();
-
-	Input.update();
-
-	if (App.mode !== 'game') {
-		return;
-	}
-
-	if (player) {
-		Interaction.update(player.pos);
-	}
-
-	VirtualCursor.update();
 }
 
 /**
@@ -90,14 +75,20 @@ function gameUpdate() {
  * Called each frame by LittleJS engine after `gameUpdate`.
  */
 function gameUpdatePost() {
-	if (!player) {
-		return;
+	if (document.hasFocus()) {
+		Input.update();
+		App.handleInput();
 	}
 
 	App.LJS.setPaused(App.mode !== 'game');
 	App.LJS.setInputPreventDefault(LayeredInput.isActive(LayeredInput.LAYER_GAME));
 
+	if (!player) {
+		return;
+	}
+
 	if (App.isRunning) {
+		Interaction.update(player.pos);
 		Camera.follow(player);
 	}
 

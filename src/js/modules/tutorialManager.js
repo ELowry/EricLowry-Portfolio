@@ -37,6 +37,23 @@ export class TutorialManager {
 	}
 
 	/**
+	 * Consumes input for the tutorial layer.
+	 * @param {Object} inputState - The current state from the Input module.
+	 * @returns {boolean} True if the input was consumed by the tutorial manager.
+	 */
+	handleInput(inputState) {
+		if (!LayeredInput.isActive(LayeredInput.LAYER_TOUCH_INSTRUCTIONS)) {
+			return false;
+		}
+
+		if (inputState.back || inputState.menu) {
+			this.closeTouchInstructions();
+		}
+
+		return true;
+	}
+
+	/**
 	 * Attempts to show the touch tutorial if appropriate conditions are met.
 	 */
 	tryShowTouchTutorial() {

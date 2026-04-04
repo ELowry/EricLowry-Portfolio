@@ -1,5 +1,6 @@
 import { App } from '../app.js';
 import { Events } from './events.js';
+import { VirtualCursor } from './virtualCursor.js';
 
 /**
  * InputController manages physical keyboard, virtual touch, and gamepad inputs.
@@ -10,8 +11,6 @@ class InputController {
 	#tapDirectionTemplate = null;
 	/** @type {HTMLTemplateElement|null} */
 	#tapRippleTemplate = null;
-	/** @type {Map<number, number>} Active direction pulse interval handles keyed by pointer ID */
-	#directionIntervals = new Map();
 	/** @type {{x: number, y: number}|null} Screen position of the last interact touch */
 	#lastInteractPos = null;
 
@@ -200,6 +199,7 @@ class InputController {
 							lastX: e.clientX,
 							lastY: e.clientY,
 							startTime: performance.now(),
+							lastPulseTime: 0,
 							dist: 0,
 							isActive: false,
 							triggered: false,
@@ -218,7 +218,6 @@ class InputController {
 
 						const currentElement = document.elementFromPoint(e.clientX, e.clientY);
 						if (!currentElement || currentElement.id !== data.zoneId) {
-							this.#removeTapDirection(e.pointerId);
 							this.activePointers.delete(e.pointerId);
 							break;
 						}
@@ -230,8 +229,22 @@ class InputController {
 					}
 					break;
 				}
+				case 'pointerup':
+				case 'pointercancel':
 				default: {
-					this.#removeTapDirection(e.pointerId);
+					const data = this.activePointers.get(e.pointerId);
+
+					// Catch quick taps that end before the 32ms validation delay finishes
+					if (
+						data
+						&& !data.triggered
+						&& data.zoneId === 'touch-center'
+						&& data.dist < InputController.TAP_MAX_MOVE_PX
+					) {
+						this.virtualState.interact = true;
+						this.#lastInteractPos = { x: data.lastX, y: data.lastY };
+					}
+
 					this.activePointers.delete(e.pointerId);
 					break;
 				}
@@ -255,7 +268,9 @@ class InputController {
 	 * Frame-update for time-based input validation.
 	 */
 	update() {
-		this.#updateVirtualState();
+		if (App.mode === 'game') {
+			this.#updateVirtualState();
+		}
 
 		// Detect Gamepad usage
 		if (
@@ -268,6 +283,8 @@ class InputController {
 		) {
 			this.#setInputType('gamepad');
 		}
+
+		VirtualCursor.update();
 	}
 
 	/**
@@ -279,6 +296,7 @@ class InputController {
 		if (this.lastInputType !== type) {
 			this.lastInputType = type;
 			Events.emit('input:typeChanged', type);
+			document.body.setAttribute('data-input-type', type);
 		}
 	}
 
@@ -297,11 +315,11 @@ class InputController {
 			if (data.isActive) {
 				if (data.zoneId === 'touch-left') {
 					this.virtualState.left = true;
-					this.#updateTapDirection(id, data);
+					this.#handleDirectionPulse(data, now);
 				}
 				if (data.zoneId === 'touch-right') {
 					this.virtualState.right = true;
-					this.#updateTapDirection(id, data);
+					this.#handleDirectionPulse(data, now);
 				}
 
 				if (data.zoneId === 'touch-center' && !data.triggered) {
@@ -331,32 +349,25 @@ class InputController {
 			}
 		}
 
-		for (const id of pointersToCleanup) {
-			this.#removeTapDirection(id);
-			this.activePointers.delete(id);
+		for (const pointerId of pointersToCleanup) {
+			this.activePointers.delete(pointerId);
 		}
 	}
 
 	/**
-	 * Starts spawning periodic outward-pulsing ring elements for a continuous touch zone.
-	 * @param {number} pointerId - The pointer ID to associate with.
-	 * @param {Object} data - The pointer tracking data with lastX, lastY, and zoneId.
+	 * Evaluates the time elapsed since the last visual ring pulse and spawns a new one if needed.
+	 * @param {Object} data - The pointer tracking data.
+	 * @param {number} now - The current performance.now() timestamp.
 	 * @private
 	 */
-	#updateTapDirection(pointerId, data) {
+	#handleDirectionPulse(data, now) {
 		if (!this.#tapDirectionTemplate) {
 			return;
 		}
 
-		if (!this.#directionIntervals.has(pointerId)) {
+		if (now - data.lastPulseTime >= InputController.TOUCH_PULSE_INTERVAL_MS) {
 			this.#spawnDirectionRing(data);
-			const intervalId = setInterval(() => {
-				const current = this.activePointers.get(pointerId);
-				if (current) {
-					this.#spawnDirectionRing(current);
-				}
-			}, 400);
-			this.#directionIntervals.set(pointerId, intervalId);
+			data.lastPulseTime = now;
 		}
 	}
 
@@ -374,19 +385,6 @@ class InputController {
 		element.style.top = `${data.lastY}px`;
 		document.body.appendChild(element);
 		element.addEventListener('animationend', () => element.remove(), { once: true });
-	}
-
-	/**
-	 * Stops the direction pulse interval and cleans up for a given pointer.
-	 * @param {number} pointerId - The pointer ID whose feedback should be removed.
-	 * @private
-	 */
-	#removeTapDirection(pointerId) {
-		const intervalId = this.#directionIntervals.get(pointerId);
-		if (intervalId !== undefined) {
-			clearInterval(intervalId);
-			this.#directionIntervals.delete(pointerId);
-		}
 	}
 
 	/**

@@ -33,6 +33,22 @@ class InteractionController {
 		return 500;
 	}
 
+	/**
+	 * The duration in milliseconds to wait before transitioning to a new map.
+	 * @constant {number}
+	 */
+	static get TRANSITION_BEHIND_MS() {
+		return 500;
+	}
+
+	/**
+	 * The duration in milliseconds to wait before transitioning to a new map.
+	 * @constant {number}
+	 */
+	static get TRANSITION_FRONT_MS() {
+		return 800;
+	}
+
 	/** @type {Object<string, Function>} Map of interaction type handlers. */
 	#interactionHandlers = {
 		category: (obj) => this.#handleCategoryInteraction(obj),
@@ -97,19 +113,20 @@ class InteractionController {
 	 */
 	#findClosestObject(playerPos) {
 		let closest = null;
-		let minDist = this.interactionRadius;
+		let minDistSq = this.interactionRadius * this.interactionRadius;
 
 		for (const obj of this.activeObjects) {
-			const dist = playerPos.distance(obj.pos);
-			if (dist > obj.radius) {
+			const dx = playerPos.x - obj.pos.x;
+			const dy = playerPos.y - obj.pos.y;
+			const distSq = dx * dx + dy * dy;
+
+			const radiusSq = obj.radius * obj.radius;
+
+			if (distSq > radiusSq || distSq >= minDistSq) {
 				continue;
 			}
 
-			if (dist >= minDist) {
-				continue;
-			}
-
-			minDist = dist;
+			minDistSq = distSq;
 			closest = obj;
 		}
 		return closest;
@@ -202,17 +219,25 @@ class InteractionController {
 		}
 
 		if (!obj.below) {
-			GameBridge.requestBehindInteract(500).then(async () => {
-				App.uiManager.showLoading(true, true);
-				await new Promise((r) => setTimeout(r, 500));
-				App.navigate(obj.path);
-			});
+			GameBridge.requestBehindInteract(InteractionController.TRANSITION_BEHIND_MS).then(
+				async () => {
+					App.uiManager.showLoading(true, true);
+					await new Promise((r) =>
+						setTimeout(r, InteractionController.TRANSITION_BEHIND_MS)
+					);
+					App.navigate(obj.path);
+				}
+			);
 		} else {
-			GameBridge.requestFrontInteract(800).then(async () => {
-				App.uiManager.showLoading(true, true);
-				await new Promise((r) => setTimeout(r, 800));
-				App.navigate(obj.path);
-			});
+			GameBridge.requestFrontInteract(InteractionController.TRANSITION_FRONT_MS).then(
+				async () => {
+					App.uiManager.showLoading(true, true);
+					await new Promise((r) =>
+						setTimeout(r, InteractionController.TRANSITION_FRONT_MS)
+					);
+					App.navigate(obj.path);
+				}
+			);
 		}
 	}
 

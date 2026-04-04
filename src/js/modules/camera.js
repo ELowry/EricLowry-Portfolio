@@ -4,10 +4,17 @@ import { App } from '../app.js';
  * CameraController manages smooth camera following with a deadzone.
  */
 class CameraController {
-	constructor() {
-		this.damping = 0.02;
-		this.deadzoneWidth = 0.04;
-		this.baselineY = 4;
+	/** @type {number} Camera damping factor */
+	static get DAMPING() {
+		return 0.02;
+	}
+	/** @type {number} Deadzone width factor */
+	static get DEADZONE_WIDTH() {
+		return 0.04;
+	}
+	/** @type {number} Camera baseline Y position */
+	static get BASELINE_Y() {
+		return 4;
 	}
 
 	/**
@@ -27,15 +34,15 @@ class CameraController {
 			return;
 		}
 
-		const deadzoneX = this.viewWidth * this.deadzoneWidth;
+		const deadzoneX = this.viewWidth * CameraController.DEADZONE_WIDTH;
 		const offset = player.pos.x - App.LJS.cameraPos.x;
 
 		if (Math.abs(offset) > deadzoneX) {
 			const drift = offset - Math.sign(offset) * deadzoneX;
-			App.LJS.cameraPos.x += drift * this.damping;
+			App.LJS.cameraPos.x += drift * CameraController.DAMPING;
 		}
 
-		App.LJS.cameraPos.y = player.pos.y + this.baselineY;
+		App.LJS.cameraPos.y = player.pos.y + CameraController.BASELINE_Y;
 	}
 }
 

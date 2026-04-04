@@ -1,4 +1,7 @@
 import { Router } from './modules/router.js';
+import { Events } from './modules/events.js';
+import { GameBridge } from './modules/gameBridge.js';
+import { UIManager } from './modules/uiManager.js';
 import { Content } from './modules/content.js';
 import { ContentTree } from './modules/contentTree.js';
 import { Interaction } from './modules/interaction.js';
@@ -6,13 +9,10 @@ import { Lang } from './modules/lang.js';
 import { Input } from './modules/input.js';
 import { LayeredInput } from './modules/layeredInputs.js';
 import { Navigation } from './modules/navigation.js';
-import { GameBridge } from './modules/gameBridge.js';
 import { TextRenderer } from './modules/textRenderer.js';
 import { TutorialManager } from './modules/tutorialManager.js';
-import { UIManager } from './modules/uiManager.js';
 import { MarkedExtensions } from './modules/markedExtensions.js';
 import { GalleryDisplay } from './modules/gallery.js';
-import { Events } from './modules/events.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -41,6 +41,8 @@ class AppController {
 		this.tutorialManager = null;
 		/** @type {UIManager|null} Manages all UI elements, interactions, and mode transitions, initialized after core setup. */
 		this.uiManager = null;
+		/** @type {GalleryDisplay|null} Manages the gallery display, initialized after core setup. */
+		this.galleryDisplay = null;
 
 		// Input bridge
 		/** @type {Input} Centralized input controller instance, initialized immediately. */
@@ -122,7 +124,7 @@ class AppController {
 			document.addEventListener(
 				'contextmenu',
 				(e) => {
-					if (this.mode === 'text') {
+					if (e.target !== this.canvas) {
 						e.stopImmediatePropagation();
 					}
 				},
@@ -149,7 +151,7 @@ class AppController {
 			this.uiManager.init();
 
 			// Initialize Gallery modal display
-			new GalleryDisplay(this);
+			this.galleryDisplay = new GalleryDisplay(this);
 
 			// Ensure all scripts are loaded
 			this.Lang = Lang;
@@ -175,7 +177,7 @@ class AppController {
 			const pathName = window.location.pathname.replace(/^\/|\/$/g, '');
 			const searchParams = new URLSearchParams(window.location.search);
 			if ((pathName === '' || pathName === 'index.html') && !searchParams.has('mode')) {
-				this.uiManager.openGameWelcome();
+				this.openGameWelcome();
 			}
 
 			// Finally hide loading with a fade
@@ -287,70 +289,86 @@ class AppController {
 	}
 
 	/**
+	 * Handles high-level game mode transitions.
+	 * @param {Object} payload - The route:changed event payload.
+	 * @private
+	 */
+	async #handleGameTransition({ path, node }) {
+		try {
+			const mapNode = Content.getParentMapNode(path);
+
+			if (mapNode && mapNode.mapData) {
+				if (this.currentMapId !== mapNode.id) {
+					this.currentMapId = mapNode.id;
+					let desiredStart = mapNode.mapData.startPos;
+					if (
+						this.pendingEntryX !== undefined
+						&& typeof this.pendingEntryX === 'number'
+					) {
+						desiredStart = {
+							x: this.pendingEntryX,
+							y: mapNode.mapData.startPos.y,
+						};
+						this.pendingEntryX = undefined;
+					}
+					this.pendingStartPos = desiredStart;
+					this.teleportPlayer(desiredStart);
+				}
+			}
+
+			if (node && node.type === 'content' && node.file) {
+				await this.loadContentInModal(node.file);
+			} else {
+				if (this.uiManager.elements.gameModal.open) {
+					this.uiManager.elements.gameModal.close();
+				}
+			}
+
+			if (
+				this.uiManager.elements.loadingOverlay
+				&& !this.uiManager.elements.loadingOverlay.classList.contains('hidden')
+			) {
+				await this.uiManager.hideLoading(false);
+			}
+		} catch (error) {
+			console.error('Failed to transition game state:', error);
+			this.uiManager.hideLoading(false);
+		}
+	}
+
+	/**
+	 * Synchronizes the visibility of interaction elements based on pause/lock state.
+	 * @private
+	 */
+	#syncPauseUI() {
+		const hidden = this.isPaused || this.isLocked;
+		this.uiManager.elements.gameMenuButton?.classList.toggle('hidden', hidden);
+		this.uiManager.elements.touchControls?.classList.toggle('hidden', hidden);
+	}
+
+	/**
 	 * Processes global input actions like menu toggling and back navigation.
 	 */
 	handleInput() {
-		// Modal layers
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_WELCOME)) {
-			Navigation.update(this.Input);
-			if (this.Input.interact) {
-				const current = document.activeElement;
-				if (current?.id === 'welcome-start-game') {
-					this.closeGameWelcome('game');
-				} else if (current?.id === 'welcome-start-text') {
-					this.closeGameWelcome('text');
-				}
-			}
+		// UI Layers
+		if (this.uiManager.handleInput(this.Input)) {
 			return;
 		}
 
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MODAL)) {
-			Navigation.update(this.Input);
-			if (this.Input.back || this.Input.menu) {
-				this.closeGameModal();
-			}
+		// Gallery Layer
+		if (this.galleryDisplay.handleInput(this.Input)) {
 			return;
 		}
 
-		if (LayeredInput.isActive(LayeredInput.LAYER_GALLERY)) {
-			Navigation.update(this.Input);
-			if (this.Input.back || this.Input.menu || this.Input.interact) {
-				const galleryModal = document.querySelector('.md-gallery-modal');
-				if (galleryModal) {
-					galleryModal.close();
-				}
-			}
-			return;
-		}
-
-		// UI layer
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MENU)) {
-			Navigation.update(this.Input);
-			this.uiManager.handleSubmenuInput(this.Input);
-
-			if (this.Input.menu || this.Input.back) {
-				this.closeGameMenu();
-			}
+		// Tutorial Layer
+		if (this.tutorialManager.handleInput(this.Input)) {
 			return;
 		}
 
 		// Game logic layer
 		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
-			if (this.Input.menu) {
+			if (this.Input.menu || this.Input.back) {
 				this.openGameMenu();
-				return;
-			}
-
-			if (this.Input.back) {
-				// Special tutorial check or just open menu if nothing else
-				if (
-					this.uiManager.elements.touchInstructions
-					&& !this.uiManager.elements.touchInstructions.classList.contains('hidden')
-				) {
-					this.tutorialManager.closeTouchInstructions();
-				} else {
-					this.openGameMenu();
-				}
 				return;
 			}
 		}
@@ -405,46 +423,6 @@ class AppController {
 	}
 
 	/**
-	 * Handles high-level game mode transitions.
-	 * @param {Object} payload - The route:changed event payload.
-	 * @private
-	 */
-	async #handleGameTransition({ path, node }) {
-		const mapNode = Content.getParentMapNode(path);
-
-		if (mapNode && mapNode.mapData) {
-			if (this.currentMapId !== mapNode.id) {
-				this.currentMapId = mapNode.id;
-				let desiredStart = mapNode.mapData.startPos;
-				if (this.pendingEntryX !== undefined && typeof this.pendingEntryX === 'number') {
-					desiredStart = {
-						x: this.pendingEntryX,
-						y: mapNode.mapData.startPos.y,
-					};
-					this.pendingEntryX = undefined;
-				}
-				this.pendingStartPos = desiredStart;
-				this.teleportPlayer(desiredStart);
-			}
-		}
-
-		if (node && node.type === 'content' && node.file) {
-			await this.loadContentInModal(node.file);
-		} else {
-			if (this.uiManager.elements.gameModal.open) {
-				this.uiManager.elements.gameModal.close();
-			}
-		}
-
-		if (
-			this.uiManager.elements.loadingOverlay
-			&& !this.uiManager.elements.loadingOverlay.classList.contains('hidden')
-		) {
-			await this.uiManager.hideLoading(false).catch(() => {});
-		}
-	}
-
-	/**
 	 * Pauses or unpauses game physics and updates UI visibility.
 	 * @param {boolean} state - `true` to pause the app, `false` to resume.
 	 */
@@ -460,16 +438,6 @@ class AppController {
 	setLock(state) {
 		this.isLocked = state;
 		this.#syncPauseUI();
-	}
-
-	/**
-	 * Synchronizes the visibility of interaction elements based on pause/lock state.
-	 * @private
-	 */
-	#syncPauseUI() {
-		const hidden = this.isPaused || this.isLocked;
-		this.uiManager.elements.gameMenuButton?.classList.toggle('hidden', hidden);
-		this.uiManager.elements.touchControls?.classList.toggle('hidden', hidden);
 	}
 
 	/**

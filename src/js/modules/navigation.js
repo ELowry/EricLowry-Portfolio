@@ -1,7 +1,8 @@
 import { LayeredInput } from './layeredInputs.js';
+import { VirtualCursor } from './virtualCursor.js';
 
 /**
- * Navigation  
+ * Navigation
  * Manages generic focus traversal and scrolling for DOM containers via Gamepad/Keyboard.
  */
 class NavigationController {
@@ -38,7 +39,7 @@ class NavigationController {
 		return 200;
 	}
 	/**
-	 * The minimum scroll delta (as a fraction of the viewport) required to trigger navigation actions.  
+	 * The minimum scroll delta (as a fraction of the viewport) required to trigger navigation actions.
 	 * Used to prevent navigation from responding to very small or accidental scroll movements.
 	 * @constant {number} A value between 0 and 1 representing the scroll deadzone threshold.
 	 */
@@ -46,7 +47,7 @@ class NavigationController {
 		return 0.1;
 	}
 	/**
-	 * The minimum threshold value for navigation input to be considered valid.  
+	 * The minimum threshold value for navigation input to be considered valid.
 	 * Inputs with an absolute value less than this deadzone are ignored to prevent accidental or minor movements.
 	 * @constant {number}
 	 */
@@ -72,14 +73,38 @@ class NavigationController {
 		const now = performance.now();
 		const debounceActive = now - this.lastMoveTime < NavigationController.NAV_DEBOUNCE;
 
+		if (!this._lastUpdateTime) {
+			this._lastUpdateTime = now;
+		}
+		const dt = Math.max(1, now - this._lastUpdateTime);
+		this._lastUpdateTime = now;
+		const frameRateMultiplier = dt / (1000 / 60);
+
 		// Handle Scrolling
 		if (this.options.scroll && Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
+			let scrollTarget = this.activeContainer;
 			if (
-				this.activeContainer.parentElement
-				&& this.activeContainer.parentElement.classList.contains('modal-box')
+				this.activeContainer.classList.contains('modal-box')
+				|| this.activeContainer.classList.contains('gallery-modal-content')
+				|| this.activeContainer.id === 'text-layer'
 			) {
-				this.activeContainer.parentElement.scrollTop -=
-					axis.y * NavigationController.SCROLL_SPEED;
+				scrollTarget = this.activeContainer;
+			} else if (this.activeContainer.parentElement?.classList.contains('modal-box')) {
+				scrollTarget = this.activeContainer.parentElement;
+			} else {
+				const childBox = this.activeContainer.querySelector(
+					'.modal-box, .gallery-modal-content'
+				);
+				if (childBox) {
+					scrollTarget = childBox;
+				}
+			}
+
+			if (scrollTarget) {
+				scrollTarget.scrollBy({
+					top: -axis.y * NavigationController.SCROLL_SPEED * frameRateMultiplier,
+					behavior: 'instant',
+				});
 			}
 		}
 
@@ -106,6 +131,7 @@ class NavigationController {
 			&& inputState.lastInputType === 'gamepad'
 			&& current
 			&& this.activeContainer.contains(current)
+			&& !VirtualCursor.isActive
 		) {
 			current.classList.add('active');
 			setTimeout(() => current.classList.remove('active'), 100);
@@ -171,7 +197,7 @@ class NavigationController {
 	}
 
 	/**
-	 * Pushes a new navigation context onto the stack.  
+	 * Pushes a new navigation context onto the stack.
 	 * Useful for opening submenus (trapping focus).
 	 * @param {HTMLElement} containerElement
 	 * @param {Object} options
@@ -187,7 +213,7 @@ class NavigationController {
 	}
 
 	/**
-	 * Restores the previous navigation context.  
+	 * Restores the previous navigation context.
 	 * Useful for closing submenus.
 	 */
 	popContext() {
@@ -221,7 +247,7 @@ class NavigationController {
 	}
 
 	/**
-	 * Resets tabindex for all elements in a container to the default roving state.  
+	 * Resets tabindex for all elements in a container to the default roving state.
 	 * (First item 0, all others -1).
 	 * @param {HTMLElement} container
 	 * @private

@@ -210,9 +210,9 @@ export class UIManager {
 		});
 
 		this.elements.gameMenu.addEventListener('open', () => {
-			const items = Array.from(this.elements.gameMenu.querySelectorAll('[role^="menuitem"]'));
-			const firstItem = items.find((el) => !el.disabled);
-			firstItem?.focus({ focusVisible: true });
+			// const items = Array.from(this.elements.gameMenu.querySelectorAll('[role^="menuitem"]'));
+			// const firstItem = items.find((el) => !el.disabled);
+			// firstItem?.focus({ focusVisible: true });
 			this.elements.gameMenuButton?.setAttribute('aria-expanded', 'true');
 		});
 
@@ -609,6 +609,7 @@ export class UIManager {
 			this.elements.textLayer.focus({ focusVisible: false });
 
 			this.#resetGameInterface();
+			Navigation.setContext(this.elements.textLayer, { scroll: true, axis: null });
 		}
 	}
 
@@ -633,6 +634,53 @@ export class UIManager {
 		toggles.forEach((btn) => {
 			btn.setAttribute('aria-checked', newState.toString());
 		});
+	}
+
+	/**
+	 * Consumes input for UI-specific layers (modals, menus, text).
+	 * @param {Object} inputState - The current state from the Input module.
+	 * @returns {boolean} True if the input was consumed by the UI.
+	 */
+	handleInput(inputState) {
+		// UI Layer
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MODAL)) {
+			Navigation.update(inputState);
+			if (inputState.back || inputState.menu) {
+				this.closeGameModal();
+			}
+			return true;
+		}
+
+		// Text Layer
+		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT)) {
+			Navigation.update(inputState);
+			return true;
+		}
+
+		// Modal layers
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_WELCOME)) {
+			Navigation.update(inputState);
+			if (inputState.interact) {
+				const current = document.activeElement;
+				if (current?.id === 'welcome-start-game') {
+					this.app.closeGameWelcome('game');
+				} else if (current?.id === 'welcome-start-text') {
+					this.app.closeGameWelcome('text');
+				}
+			}
+			return true;
+		}
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MENU)) {
+			Navigation.update(inputState);
+			this.handleSubmenuInput(inputState);
+
+			if (inputState.menu || inputState.back) {
+				this.app.closeGameMenu();
+			}
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

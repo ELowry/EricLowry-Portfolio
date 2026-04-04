@@ -1,4 +1,5 @@
 import { Lang } from './lang.js';
+import { Events } from './events.js';
 import { Navigation } from './navigation.js';
 import { LayeredInput } from './layeredInputs.js';
 
@@ -147,6 +148,12 @@ export class GalleryDisplay {
 	#init() {
 		document.addEventListener('click', (e) => this.#handleClick(e));
 		document.addEventListener('keydown', (e) => this.#handleKeyDown(e));
+
+		Events.on('route:changed', () => {
+			if (this.#activeModal) {
+				this.#activeModal.close();
+			}
+		});
 	}
 
 	/**
@@ -241,16 +248,7 @@ export class GalleryDisplay {
 			});
 		}
 
-		const observer = new MutationObserver(() => {
-			if (!itemElement.isConnected) {
-				this.#activeModal?.close();
-			}
-		});
-
-		observer.observe(document.body, { childList: true, subtree: true });
-
 		this.#activeModal.addEventListener('close', () => {
-			observer.disconnect();
 			this.#cleanupModal();
 		});
 
@@ -484,5 +482,41 @@ export class GalleryDisplay {
 				behavior: 'smooth',
 			});
 		}
+	}
+
+	/**
+	 * Consumes input for the gallery layer.
+	 * @param {Object} inputState - The current state from the Input module.
+	 * @returns {boolean} True if the input was consumed by the UI.
+	 */
+	handleInput(inputState) {
+		if (!LayeredInput.isActive(LayeredInput.LAYER_GALLERY)) {
+			return false;
+		}
+
+		Navigation.update(inputState);
+		if (inputState.back || inputState.menu) {
+			const galleryModal = document.querySelector('dialog.gallery-modal');
+			if (galleryModal) {
+				galleryModal.close();
+			}
+		}
+
+		// Debounced horizontal navigation for Gallery
+		if (Math.abs(inputState.axis.x) > 0.5) {
+			const now = performance.now();
+			if (!this.lastGalleryNavTime || now - this.lastGalleryNavTime > 300) {
+				this.lastGalleryNavTime = now;
+				document.dispatchEvent(
+					new KeyboardEvent('keydown', {
+						key: inputState.axis.x > 0 ? 'ArrowRight' : 'ArrowLeft',
+					})
+				);
+			}
+		} else {
+			this.lastGalleryNavTime = 0;
+		}
+
+		return true;
 	}
 }

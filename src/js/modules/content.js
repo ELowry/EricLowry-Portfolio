@@ -5,17 +5,15 @@ import { ContentTree } from './contentTree.js';
  * ContentController provides utility methods for navigating and manipulating the `ContentTree`.
  */
 class ContentController {
+	/** @type {Map<string, string[]>} Internal mapping of markdown files to their tree paths. */
+	#fileToPaths = new Map();
+
 	constructor() {
 		/** @type {import('./contentTree.js').ContentNode} The root of the content hierarchical tree. */
 		this.tree = ContentTree;
 		/** @type {boolean} True if the content tree has been fully processed. */
 		this.isReady = false;
-		/** @type {Map<string, string[]>} Internal mapping of markdown files to their tree paths. */
-		this.#fileToPaths = new Map();
 	}
-
-	/** @type {Map<string, string[]>} */
-	#fileToPaths;
 
 	/**
 	 * Walks the tree and loads all map configurations.

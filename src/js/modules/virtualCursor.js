@@ -5,7 +5,7 @@ import { LayeredInput } from './layeredInputs.js';
 
 /**
  * Manages a screen-space pointer moved via controller.
- * Used primarily for navigating modals when standard directional focus is impractical.
+ * Used primarily for navigating UI elements when standard directional focus is impractical.
  */
 class VirtualCursorController {
 	constructor() {
@@ -13,12 +13,18 @@ class VirtualCursorController {
 		this.element = null;
 		/** @type {boolean} Whether the cursor is currently active and visible. */
 		this.isActive = false;
-		/** @type {boolean} Whether a modal layer is currently active. */
-		this.isModalActive = false;
+		/** @type {boolean} Whether a viable parent layer is currently active. */
+		this.isLayerActive = false;
 		/** @type {HTMLElement|null} The element currently under the virtual cursor. */
 		this.currentHover = null;
 		/** @type {number} The time at which the current element was hovered. */
 		this.hoverStartTime = 0;
+		/** @type {boolean} Whether the cursor is actively triggering edge-scrolling. */
+		this.isScrolling = false;
+		/** @type {Array<HTMLElement>} Cache of interactive elements for magnetism. */
+		this.magnetismTargets = [];
+		/** @type {HTMLElement|null} Cache of the last container element. */
+		this.lastContainer = null;
 	}
 
 	/**
@@ -50,26 +56,39 @@ class VirtualCursorController {
 		this.element = document.getElementById('virtual-cursor');
 
 		// Subscribe to events instead of polling
-		const modalLayers = [
+		const activeLayers = [
 			LayeredInput.LAYER_GAME_MODAL,
-			LayeredInput.LAYER_GAME_WELCOME,
 			LayeredInput.LAYER_GALLERY,
+			LayeredInput.LAYER_TEXT,
 		];
 
 		Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
-			if (modalLayers.includes(layerId)) {
-				this.isModalActive = true;
+			if (activeLayers.includes(layerId)) {
+				this.isLayerActive = true;
 			}
 		});
 
 		Events.on(LayeredInput.LAYER_DEACTIVATION_EVENT, (layerId) => {
-			if (modalLayers.includes(layerId)) {
-				// Fallback check in case modals are stacked
-				this.isModalActive =
-					LayeredInput.isActive(LayeredInput.LAYER_GAME_MODAL, true)
-					|| LayeredInput.isActive(LayeredInput.LAYER_GAME_WELCOME, true)
-					|| LayeredInput.isActive(LayeredInput.LAYER_GALLERY, true);
+			if (activeLayers.includes(layerId)) {
+				// Fallback check in case active layers are stacked
+				this.isLayerActive = activeLayers.some((layer) =>
+					LayeredInput.isActive(layer, true)
+				);
 			}
+		});
+
+		let resizeTimeout;
+		window.addEventListener('resize', () => {
+			if (!this.isActive) {
+				return;
+			}
+			if (resizeTimeout) {
+				cancelAnimationFrame(resizeTimeout);
+			}
+			resizeTimeout = requestAnimationFrame(() => {
+				this.#clampToParent();
+				this.#updateVisuals();
+			});
 		});
 	}
 
@@ -81,19 +100,34 @@ class VirtualCursorController {
 			return;
 		}
 
-		// Only active in content modals (isLocked) and when using a controller.
-		const shouldBeActive = this.isModalActive && Input.lastInputType === 'gamepad';
-		const topModal = Array.from(document.querySelectorAll('dialog[open]')).pop();
+		// Only active for specific layers and when using a controller.
+		const shouldBeActive = this.isLayerActive && Input.lastInputType === 'gamepad';
+		let activeParent = null;
 
-		if (shouldBeActive && topModal) {
-			if (!this.isActive || this.element.parentElement !== topModal) {
+		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT, true)) {
+			activeParent = document.getElementById('text-layer');
+		} else {
+			activeParent = Array.from(document.querySelectorAll('dialog[open]')).pop();
+		}
+
+		const now = performance.now();
+		if (!this._lastUpdateTime) {
+			this._lastUpdateTime = now;
+		}
+		const dt = Math.max(1, now - this._lastUpdateTime);
+		this._lastUpdateTime = now;
+		this.frameRateMultiplier = dt / (1000 / 60);
+
+		if (shouldBeActive && activeParent) {
+			if (!this.isActive || this.element.parentElement !== activeParent) {
 				this.isActive = true;
-				topModal.appendChild(this.element);
+				activeParent.appendChild(this.element);
 				this.element.classList.add('active');
-				this.#centerCursorInModal();
+				this.#centerCursorInParent();
 			}
 		} else if (this.isActive) {
 			this.isActive = false;
+			this.lastContainer = null;
 			this.#clearHover();
 			this.element.classList.remove('active');
 			this.element.remove();
@@ -114,7 +148,7 @@ class VirtualCursorController {
 	 */
 	#handleMovement() {
 		const stick = Input.rightAxis;
-		const speed = VirtualCursorController.BASE_SPEED;
+		const speed = VirtualCursorController.BASE_SPEED * this.frameRateMultiplier;
 
 		if (stick.length() > VirtualCursorController.STICK_DEADZONE) {
 			// Steeper analog sensitivity curve
@@ -143,7 +177,7 @@ class VirtualCursorController {
 			Input.cursorPos.y += moveY;
 
 			this.#applyMagnetism(stick);
-			this.#clampToModal();
+			this.#clampToParent();
 			this.#handleAutoScroll();
 			this.#updateVisuals();
 		}
@@ -155,8 +189,22 @@ class VirtualCursorController {
 	 * @private
 	 */
 	#applyMagnetism(stick) {
-		const container = this.#getModalContainer();
+		const container = this.#getContainer();
 		if (!container) {
+			return;
+		}
+
+		const rect = container.getBoundingClientRect();
+		const scaleFactor = Math.max(0.6, Math.min(1.4, window.innerHeight / 1080));
+		const scrollThreshold = 60 * scaleFactor;
+
+		// Disable magnetism if the cursor is trying to scroll the page
+		if (
+			Input.cursorPos.y < rect.top + scrollThreshold
+			|| Input.cursorPos.y > rect.bottom - scrollThreshold
+			|| Input.cursorPos.x < rect.left + scrollThreshold
+			|| Input.cursorPos.x > rect.right - scrollThreshold
+		) {
 			return;
 		}
 
@@ -169,28 +217,45 @@ class VirtualCursorController {
 		);
 
 		const maxRange = 100;
-		const pullStrength = 0.25;
+		const pullStrength = 0.15 * this.frameRateMultiplier;
 		const exitThreshold = 0.2; // Speed required to break magnetism
 
 		let bestTarget = null;
 		let bestScore = -Infinity;
 
-		for (const target of targets) {
-			const rect = target.getBoundingClientRect();
-			const center = App.LJS.vec2(rect.left + rect.width / 2, rect.top + rect.height / 2);
+		const clampPull = (x, y) => {
+			const maxPull = 12 * this.frameRateMultiplier;
+			const len = Math.sqrt(x * x + y * y);
+			if (len > maxPull) {
+				return { x: (x / len) * maxPull, y: (y / len) * maxPull };
+			}
+			return { x, y };
+		};
+
+		this.#updateMagnetismCache(container);
+		for (const target of this.magnetismTargets) {
+			const targetRect = target.getBoundingClientRect();
+			const center = App.LJS.vec2(
+				targetRect.left + targetRect.width / 2,
+				targetRect.top + targetRect.height / 2
+			);
 			const toCenter = center.subtract(App.LJS.vec2(Input.cursorPos.x, Input.cursorPos.y));
 			const dist = toCenter.length();
 
-			if (target === this.currentHover) {
-				// Pull harder at slows speed
-				if (stick.length() < exitThreshold) {
-					Input.cursorPos.x += toCenter.x * pullStrength * 2;
-					Input.cursorPos.y += toCenter.y * pullStrength * 2;
-				}
+			if (dist > maxRange) {
 				continue;
 			}
 
-			if (dist > maxRange) {
+			if (target === this.currentHover) {
+				// Gentle center pull when moving slowly inside element
+				if (stick.length() < exitThreshold) {
+					const pull = clampPull(
+						toCenter.x * pullStrength * 0.4,
+						toCenter.y * pullStrength * 0.4
+					);
+					Input.cursorPos.x += pull.x;
+					Input.cursorPos.y += pull.y;
+				}
 				continue;
 			}
 
@@ -212,17 +277,29 @@ class VirtualCursorController {
 			// Apply pull
 			const force = pullStrength * (1 - bestTarget.dist / maxRange);
 			const toTarget = bestTarget.pos.subtract(Input.cursorPos);
-			Input.cursorPos.x += toTarget.x * force;
-			Input.cursorPos.y += toTarget.y * force;
+			const pull = clampPull(toTarget.x * force, toTarget.y * force);
+			Input.cursorPos.x += pull.x;
+			Input.cursorPos.y += pull.y;
+		}
+	}
+
+	#updateMagnetismCache(container) {
+		if (this.lastContainer !== container) {
+			this.magnetismTargets = Array.from(
+				container.querySelectorAll(
+					'button, a, [role="button"], [tabindex]:not([tabindex="-1"]), .md-gallery-item'
+				)
+			);
+			this.lastContainer = container;
 		}
 	}
 
 	/**
-	 * Scrolls the modal content if the cursor is near the edges.
+	 * Scrolls the parent content if the cursor is near the edges.
 	 * @private
 	 */
 	#handleAutoScroll() {
-		const container = this.#getModalContainer();
+		const container = this.#getContainer();
 		if (!container) {
 			return;
 		}
@@ -232,15 +309,37 @@ class VirtualCursorController {
 		// Scroll feel slightly adjusted based on resolution
 		const scaleFactor = Math.max(0.6, Math.min(1.4, window.innerHeight / 1080));
 		const scrollThreshold = 60 * scaleFactor;
-		const maxScrollSpeed = 12 * scaleFactor;
+		const maxScrollSpeed = 12 * scaleFactor * this.frameRateMultiplier;
+
+		let scrollY = 0;
+		let scrollX = 0;
 
 		// Scroll speed based on proximity to edge
 		if (Input.cursorPos.y < rect.top + scrollThreshold) {
 			const intensity = 1 - (Input.cursorPos.y - rect.top) / scrollThreshold;
-			container.scrollTop -= intensity * maxScrollSpeed;
+			scrollY = -intensity * maxScrollSpeed;
 		} else if (Input.cursorPos.y > rect.bottom - scrollThreshold) {
 			const intensity = 1 - (rect.bottom - Input.cursorPos.y) / scrollThreshold;
-			container.scrollTop += intensity * maxScrollSpeed;
+			scrollY = intensity * maxScrollSpeed;
+		}
+
+		if (Input.cursorPos.x < rect.left + scrollThreshold) {
+			const intensity = 1 - (Input.cursorPos.x - rect.left) / scrollThreshold;
+			scrollX = -intensity * maxScrollSpeed;
+		} else if (Input.cursorPos.x > rect.right - scrollThreshold) {
+			const intensity = 1 - (rect.right - Input.cursorPos.x) / scrollThreshold;
+			scrollX = intensity * maxScrollSpeed;
+		}
+
+		if (scrollY !== 0 || scrollX !== 0) {
+			this.isScrolling = true;
+			container.scrollBy({
+				top: scrollY,
+				left: scrollX,
+				behavior: 'instant',
+			});
+		} else {
+			this.isScrolling = false;
 		}
 	}
 
@@ -262,8 +361,10 @@ class VirtualCursorController {
 
 			if (this.currentHover) {
 				this.hoverStartTime = performance.now();
-				// Trigger focus state.
-				this.currentHover.focus({ focusVisible: true });
+				this.currentHover.focus({
+					focusVisible: true,
+					preventScroll: this.isScrolling,
+				});
 			}
 		}
 	}
@@ -276,29 +377,30 @@ class VirtualCursorController {
 		if (Input.interact) {
 			this.element.classList.add('clicking');
 
-			if (this.currentHover) {
-				this.currentHover.click();
-			}
-
 			// Visual feedback duration
 			setTimeout(() => {
 				this.element?.classList.remove('clicking');
 			}, 150);
+
+			this.currentHover?.click();
 		}
 	}
 
-	#getModalContainer() {
+	#getContainer() {
+		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT, true)) {
+			return document.getElementById('text-layer');
+		}
 		return document.querySelector(
 			'dialog[open] .modal-box, dialog[open] .gallery-modal-content'
 		);
 	}
 
 	/**
-	 * Restricts the cursor position to the boundaries of the current modal.
+	 * Restricts the cursor position to the boundaries of the current parent.
 	 * @private
 	 */
-	#clampToModal() {
-		const container = this.#getModalContainer();
+	#clampToParent() {
+		const container = this.#getContainer();
 		if (!container) {
 			return;
 		}
@@ -317,11 +419,11 @@ class VirtualCursorController {
 	}
 
 	/**
-	 * Centers the cursor within the current modal.
+	 * Centers the cursor within the current parent.
 	 * @private
 	 */
-	#centerCursorInModal() {
-		const container = this.#getModalContainer();
+	#centerCursorInParent() {
+		const container = this.#getContainer();
 		if (!container) {
 			return;
 		}

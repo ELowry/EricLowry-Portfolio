@@ -99,7 +99,11 @@ class LangController {
 			}
 			this.data = await dataResponse.json();
 
-			document.documentElement.lang = this.getString('meta.lang', this.data, this.code.lang).toLowerCase();
+			document.documentElement.lang = this.getString(
+				'meta.lang',
+				this.data,
+				this.code.lang
+			).toLowerCase();
 
 			this.performTranslation();
 			this.setupLanguageSwitchers(availableLangs, bestLang);
@@ -109,14 +113,12 @@ class LangController {
 
 			this.isLoaded = true;
 			document.body.classList.add('translated');
-			window.dispatchEvent(new Event('languageLoaded'));
 
 			return this.data;
 		} catch (err) {
 			console.error('Language initialization failed:', err);
 			document.body.classList.add('translated');
 			this.isLoaded = true;
-			window.dispatchEvent(new Event('languageLoaded'));
 			return null;
 		}
 	}
