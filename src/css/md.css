@@ -10,6 +10,12 @@
 		color: var(--color-text);
 	}
 
+	code {
+		background-color: oklch(from var(--color-highlight) l c h / 5%);
+		padding-inline: 0.2em;
+		font-family: 'Atkinson Hyperlegible Mono', 'Noto Sans Symbols 2', monospace;
+	}
+
 	img {
 		display: inline-block;
 		background-color: oklch(from var(--color-highlight) l c h / 3%);
