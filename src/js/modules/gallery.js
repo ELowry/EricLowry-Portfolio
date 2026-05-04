@@ -17,7 +17,16 @@ export class Gallery {
 	}
 
 	/**
-	 * The default class applied to each gallery item figure.
+	 * The default class applied to accordion galleries.
+	 * @returns {string}
+	 * @constant
+	 */
+	static get DEFAULT_ACCORDION_CLASS() {
+		return 'md-gallery-accordion';
+	}
+
+	/**
+	 * The default class applied to each gallery carousel item figure.
 	 * @returns {string}
 	 * @constant
 	 */
@@ -26,12 +35,18 @@ export class Gallery {
 	}
 
 	/**
-	 * The default keyword to place in the first table header cell to trigger the gallery render.
-	 * @returns {string}
+	 * The default keywords to place in the first table header cell to trigger the gallery render,
+	 * along with their configuration options.
+	 * @returns {Object}
 	 * @constant
 	 */
-	static get DEFAULT_TRIGGER_KEYWORD() {
-		return 'Gallery:';
+	static get DEFAULT_TRIGGER_KEYWORDS() {
+		return {
+			'Gallery:': { accordion: true },
+			Gallery: { accordion: false },
+			'Gallerie:': { accordion: true },
+			Gallerie: { accordion: false },
+		};
 	}
 
 	/**
@@ -42,8 +57,9 @@ export class Gallery {
 	static #getMarkedRenderer(options) {
 		const config = {
 			galleryClass: options?.galleryClass || Gallery.DEFAULT_GALLERY_CLASS,
+			accordionClass: options?.accordionClass || Gallery.DEFAULT_ACCORDION_CLASS,
 			itemClass: options?.itemClass || Gallery.DEFAULT_ITEM_CLASS,
-			triggerKeyword: options?.triggerKeyword || Gallery.DEFAULT_TRIGGER_KEYWORD,
+			triggerKeywords: options?.triggerKeywords || Gallery.DEFAULT_TRIGGER_KEYWORDS,
 		};
 
 		return {
@@ -54,16 +70,25 @@ export class Gallery {
 			 * @returns {string|boolean} The rendered HTML, or false to fall back to default table rendering.
 			 */
 			table(token) {
-				const isGallery =
-					token.header
-					&& token.header.length > 0
-					&& token.header[0].text.trim() === config.triggerKeyword;
+				let isGallery = false;
+				let useAccordion = true;
+
+				if (token.header && token.header.length > 0) {
+					const headerText = token.header[0].text.trim();
+					if (Object.prototype.hasOwnProperty.call(config.triggerKeywords, headerText)) {
+						isGallery = true;
+						useAccordion = config.triggerKeywords[headerText].accordion ?? true;
+					}
+				}
 
 				if (!isGallery) {
 					return false;
 				}
 
-				let galleryHtml = `<div class="${config.galleryClass}">\n`;
+				const classNames = useAccordion
+					? `${config.galleryClass} ${config.accordionClass}`
+					: config.galleryClass;
+				let galleryHtml = `<div class="${classNames}">\n`;
 
 				for (const row of token.rows) {
 					for (const cell of row) {

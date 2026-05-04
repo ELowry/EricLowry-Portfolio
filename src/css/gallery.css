@@ -40,46 +40,69 @@
 
 	@media not print {
 		@media (width > 50em) {
-			aspect-ratio: var(--gallery-aspect-ratio);
+			&.md-gallery-accordion {
+				aspect-ratio: var(--gallery-aspect-ratio);
 
-			.md-gallery-item {
-				flex: 1 1 0;
-				transition:
-					flex-grow var(--transition-duration-long) var(--gallery-easing),
-					flex-basis var(--transition-duration-long) var(--gallery-easing);
-
-				&:hover,
-				&:focus-visible {
-					flex-grow: 4;
-				}
-
-				&:focus-visible {
-					margin-inline: calc(var(--border-width) * 2);
-				}
-
-				@supports (interpolate-size: allow-keywords) {
-					interpolate-size: allow-keywords;
+				.md-gallery-item {
+					flex: 1 1 0;
+					transition:
+						flex-grow var(--transition-duration-long) var(--gallery-easing),
+						flex-basis var(--transition-duration-long) var(--gallery-easing);
 
 					&:hover,
 					&:focus-visible {
-						flex-grow: 0;
-						flex-basis: content;
+						flex-grow: 4;
+					}
+
+					&:focus-visible {
+						margin-inline: calc(var(--border-width) * 2);
+					}
+
+					@supports (interpolate-size: allow-keywords) {
+						interpolate-size: allow-keywords;
+
+						&:hover,
+						&:focus-visible {
+							flex-grow: 0;
+							flex-basis: content;
+						}
+					}
+
+					picture {
+						display: flex;
+						justify-content: center;
+					}
+
+					picture,
+					img {
+						height: 100%;
+					}
+
+					img {
+						width: auto;
+						object-fit: cover;
+					}
+				}
+			}
+
+			&:not(.md-gallery-accordion) {
+				.md-gallery-item {
+					transition: opacity var(--transition-duration-long) var(--transition-easing);
+
+					.md-img {
+						transition: border-right-color var(--transition-duration-long)
+							var(--transition-easing);
 					}
 				}
 
-				picture {
-					display: flex;
-					justify-content: center;
-				}
+				&:has(.md-gallery-item:hover, .md-gallery-item:focus-visible) {
+					.md-gallery-item:not(:hover, :focus-visible) {
+						opacity: var(--opacity-overlay);
 
-				picture,
-				img {
-					height: 100%;
-				}
-
-				img {
-					width: auto;
-					object-fit: cover;
+						.md-img {
+							border-right-color: var(--color-border);
+						}
+					}
 				}
 			}
 		}
