@@ -7,5 +7,7 @@
 	"editor.unicodeHighlight.includeStrings": true,
 	"editor.unicodeHighlight.allowedLocales": {
 		"en": true
-	}
+	},
+	"powershell.integratedConsole.focusConsoleOnExecute": false,
+	"powershell.integratedConsole.showOnStartup": false
 }
