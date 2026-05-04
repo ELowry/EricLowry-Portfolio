@@ -50,8 +50,8 @@ if (-not (Test-Path $InputFile)) {
 $TargetWidths = @(240, 400, 600, 820, 1400, 1920)
 
 # Target quality for each type
-$QualityWebP = 80
-$QualityJPG = 83
+$QualityWebP = 85
+$QualityJPG = 88
 $QualityPNG = 95
 
 # Save the original string for the Markdown output later
