@@ -79,7 +79,7 @@ export const ContentTree = category(
 			'Architecture Studies',
 			() => import('../../maps/architecture.config.js'),
 			[
-				content('architecture', 'ENSA-V & ENSP-V', 'architecture/architecture.md'),
+				content('architecture', 'ENSA-V & ENSP-V', 'architecture/architecture.md', true),
 				category(
 					'3Dgallery',
 					'3D Works Gallery',
@@ -88,7 +88,8 @@ export const ContentTree = category(
 						content(
 							'3Dgallery',
 							'About my 3D work',
-							'architecture/3Dgallery/3Dgallery.md'
+							'architecture/3Dgallery/3Dgallery.md',
+							true
 						),
 					]
 				),
@@ -97,7 +98,7 @@ export const ContentTree = category(
 					'Selection of Architecture Projects',
 					() => import('../../maps/architecture/projects.config.js'),
 					[
-						content('projects', 'Overview', 'architecture/projects/projects.md'),
+						content('projects', 'Overview', 'architecture/projects/projects.md', true),
 						content('Unstant', 'Unstant', 'gaming/Unstant.md'),
 					]
 				),
@@ -110,7 +111,12 @@ export const ContentTree = category(
 			'Coaching & Business',
 			() => import('../../maps/coaching-business.config.js'),
 			[
-				content('coaching-business', 'Overview', 'coaching-business/coaching-business.md'),
+				content(
+					'coaching-business',
+					'Overview',
+					'coaching-business/coaching-business.md',
+					true
+				),
 				content('medium', 'Medium Editing', 'coaching-business/medium.md'),
 				content('podcast', 'Podcast Editing', 'coaching-business/podcast.md'),
 			]
@@ -118,7 +124,7 @@ export const ContentTree = category(
 
 		// GAMING
 		category('gaming', 'Video Games', () => import('../../maps/gaming.config.js'), [
-			content('gaming', 'Overview', 'gaming/gaming.md'),
+			content('gaming', 'Overview', 'gaming/gaming.md', true),
 			content('InputLayers', 'InputLayers', 'gaming/InputLayers.md'),
 			content('Unstant', 'Unstant', 'gaming/Unstant.md'),
 			category(
@@ -126,7 +132,7 @@ export const ContentTree = category(
 				'CinQ – corporate team training video game',
 				() => import('../../maps/gaming/CinQ.config.js'),
 				[
-					content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md'),
+					content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md', true),
 					content('gallery', 'CinQ Footage', 'gaming/CinQ/gallery.md'),
 					content('website', 'CinQ Website', 'gaming/CinQ/website.md'),
 				]
@@ -135,7 +141,7 @@ export const ContentTree = category(
 
 		// OpenSource
 		category('osd', 'Open Source Development', () => import('../../maps/osd.config.js'), [
-			content('osd', 'Open Source Projects', 'osd/osd.md'),
+			content('osd', 'Open Source Projects', 'osd/osd.md', true),
 			content('InputLayers', 'InputLayers', 'gaming/InputLayers.md'),
 			content('winget-updater', 'WinGet Updater', 'osd/winget-updater.md'),
 			content(
@@ -148,6 +154,7 @@ export const ContentTree = category(
 				'Obsidian Replace Commands',
 				'osd/obsidian-replace-commands.md'
 			),
+			content('dns-toggle', 'DNS Toggle', 'osd/dns-toggle.md'),
 			content('StadiaIcons', 'StadiaIcons', 'osd/StadiaIcons.md'),
 		]),
 
@@ -157,7 +164,7 @@ export const ContentTree = category(
 			'Web Development & Design',
 			() => import('../../maps/websites.config.js'),
 			[
-				content('websites', 'Web Development & Design', 'websites/websites.md'),
+				content('websites', 'Web Development & Design', 'websites/websites.md', true),
 				content(
 					'CinQ',
 					'CinQ – corporate team training video game',

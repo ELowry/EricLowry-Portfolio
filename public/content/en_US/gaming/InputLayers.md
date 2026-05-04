@@ -2,12 +2,20 @@
 
 ## Simplified Unity3D Input Management
 
-> [!INFO]
+> [!SUMMARY]
 >
-> - Available for [download on the Unity Asset Store](https://assetstore.unity.com/packages/slug/259582)
-> - [Full documentation on GitHuib](https://github.com/ELowry/Unity_InputLayers_Documentation)
+> |               |                                   |
+> | ------------- | --------------------------------- |
+> | **Languages** | C#, USS                           |
+> | **Tools**     | Unity3D, UI Toolkit, Input System |
+> | **Skillset**  | Game Dev, UI, UX                  |
+>
+> - 📦 [Download on the Unity Asset Store](https://assetstore.unity.com/packages/slug/259582)
+> - 🗎 [Documentation on GitHuib](https://github.com/ELowry/Unity_InputLayers_Documentation)
+>
+> **License:** Unity Asset Store Extension Asset (source available)
 
-After over a decade of building UIs in Unity3D, there has been one thing that has kept feeling off about how it handles inputs. When they introduced the "new" InputSystem and Action Maps, it felt closer to something fully realized, but not quite _right_ either.
+After over a decade of building UIs in Unity3D, there has been one thing that has kept feeling off about how it handles inputs. When they introduced the "new" Input System and Action Maps, it felt closer to something fully realized, but not quite _right_ either.
 
 So for a couple of projects I was working on, I decided to try and fix my biggest peeve with the whole thing: implementing a simple, straightforward, way to determine which UI, popup, or character controller, should receive inputs at any given time. I started building InputLayers as a system for my own games, but quickly realized it could be useful for other developers, giving me an excuse to play around with publishing a package to the Unity Asset Store.
 
