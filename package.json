@@ -1,4 +1,5 @@
 {
+	"type": "module",
 	"dependencies": {
 		"littlejsengine": "^1.18.0",
 		"marked": "^17.0.4",

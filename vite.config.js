@@ -56,6 +56,15 @@ export default defineConfig(({ mode }) => {
 			outDir: 'dist',
 			emptyOutDir: true,
 			cssMinify: 'lightningcss',
+			rollupOptions: {
+				output: {
+					manualChunks(id) {
+						if (id.includes('.config.js')) {
+							return 'configs';
+						}
+					},
+				},
+			},
 		},
 	};
 });
