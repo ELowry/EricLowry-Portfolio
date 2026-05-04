@@ -7,6 +7,7 @@
 		<meta name="darkreader-lock" />
 
 		<title>Eric Lowry – Portffolio</title>
+		<link rel="canonical" href="https://eric-lowry.com/" />
 
 		<meta
 			name="description"
@@ -23,19 +24,18 @@
 			content="Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech."
 		/>
 
-		<!-- WILL ENABLE ONCE ON THE MAIN DOMAIN -->
-		<!-- 
+		<link rel="icon" href="/assets/images/favicon.png" type="image/png" sizes="512x512" />
 		<link
 			rel="icon"
+			href="/assets/images/favicon.ico"
 			type="image/x-icon"
-			sizes="16x16 32x32 48x48 64x64 128x128 256x256"
-			href="media/head/favicon.ico"
+			sizes="16x16 32x32 48x48"
 		/>
-		<link rel="icon" type="image/svg" href="https://eric-lowry.com/assets/favicon.svg" />
+		<link rel="apple-touch-icon" href="/assets/images/touch-icon.png" sizes="192x192" />
 
 		<meta
 			property="og:image"
-			content="https://eric-lowry.com/assets/eric_lowry_portrait__240-240.webp"
+			content="https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240.webp"
 		/>
 		<meta property="og:image:type" content="image/webp" />
 		<meta property="og:image:width" content="240" />
@@ -49,22 +49,78 @@
 		<meta property="og:image:width" content="240" />
 		<meta property="og:image:height" content="240" />
 		<meta property="og:image:alt" content="Portrait of Eric Lowry" />
-		-->
 
 		<link rel="stylesheet" href="/src/css/main.css" />
 
 		<link rel="human-json" href="/human.json" />
+		<link
+			rel="alternate"
+			type="text/markdown"
+			href="/llms.txt"
+			title="Machine-readable index of the site's content"
+		/>
 
 		<script>
 			// Block indexing on firebase default URL
-			if (
-				window.location.hostname.includes('.web.app')
-				|| window.location.hostname.includes('.firebaseapp.com')
-			) {
-				const meta = document.createElement('meta');
-				meta.name = 'robots';
-				meta.content = 'noindex, nofollow';
-				document.head.appendChild(meta);
+			(() => {
+				if (
+					window.location.hostname.includes('.web.app')
+					|| window.location.hostname.includes('.firebaseapp.com')
+				) {
+					const meta = document.createElement('meta');
+					meta.name = 'robots';
+					meta.content = 'noindex, nofollow';
+					document.head.appendChild(meta);
+				}
+			})();
+
+			// Predictive Content Preload
+			(() => {
+				window.__CACHE_BUSTER__ = Date.now();
+				const pathName = window.location.pathname
+					.replace(/\/+/g, '/')
+					.replace(/^\/|\/$/g, '')
+					.toLowerCase();
+
+				let contentPath = '';
+				if (pathName && pathName !== 'index.html') {
+					const segments = pathName.split('/');
+					contentPath =
+						segments[0] === 'game' || segments[0] === 'text'
+							? segments.slice(1).join('/')
+							: pathName;
+				}
+
+				if (!contentPath) {
+					return;
+				}
+
+				const lang = localStorage.getItem('portfolio-lang') || 'en_US';
+				const mdUrl = `/content/${lang}/${contentPath}.md?v=${window.__CACHE_BUSTER__}`;
+
+				window.__PRELOADED_CONTENT__ = {
+					url: mdUrl,
+					promise: fetch(mdUrl)
+						.then((res) => (res.ok ? res : null))
+						.catch(() => null),
+				};
+			})();
+		</script>
+
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebPage",
+				"name": "Eric Lowry – Portfolio",
+				"description": "Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech.",
+				"url": "https://eric-lowry.com/",
+				"subjectOf": {
+					"@type": "CreativeWork",
+					"name": "Machine-readable index (llms.txt)",
+					"description": "A comprehensive index of portfolio content optimized for Large Language Models.",
+					"encodingFormat": "text/markdown",
+					"url": "https://eric-lowry.com/llms.txt"
+				}
 			}
 		</script>
 	</head>

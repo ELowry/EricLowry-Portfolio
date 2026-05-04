@@ -11,9 +11,13 @@
 	}
 
 	code {
+		margin-inline: 0.2ch;
+		border: 1px solid var(--color-border);
 		background-color: oklch(from var(--color-highlight) l c h / 5%);
 		padding-inline: 0.2em;
 		font-family: 'Atkinson Hyperlegible Mono', 'Noto Sans Symbols 2', monospace;
+		word-break: break-word;
+		overflow-wrap: break-word;
 	}
 
 	img {
@@ -32,7 +36,7 @@
 		}
 		/* 2× Hair Spaces: Centered block -> Floats Right (>= breakpoint) */
 		&[alt$='  '] {
-			display: block;
+			/* display: block; */
 			margin: auto;
 
 			@media (width > 50em) {
@@ -49,7 +53,7 @@
 		}
 		/* 1× Space + 1× Hair Space: Left-aligned block -> Floats Left (>= breakpoint) */
 		&[alt$='  '] {
-			display: block;
+			/* display: block; */
 			margin-right: auto;
 
 			@media (width > 50em) {
@@ -139,6 +143,48 @@
 			}
 		}
 
+		&.markdown-alert-summary {
+			display: inline-block;
+			border: 0.25em solid var(--color-border);
+			padding: 0;
+
+			.markdown-alert-title {
+				justify-content: center;
+				margin: 0;
+				background-color: var(--color-border);
+				padding: 0.2rem 0.5rem;
+				text-align: center;
+			}
+
+			> * {
+				margin: 0.8rem 1rem;
+			}
+			> ul {
+				display: flex;
+				flex-direction: column;
+				gap: 0.2em;
+				padding: 0;
+				list-style: none;
+			}
+		}
+
+		/* Tables */
+		table {
+			border-collapse: collapse;
+			background-color: var(--color-background);
+
+			th,
+			td {
+				padding: 0.2rem 0.5rem;
+			}
+			th {
+				border: 0.2rem solid var(--color-border);
+			}
+			td {
+				border: 0.1rem solid var(--color-border);
+			}
+		}
+
 		/* Code blocks inside alerts should blend in */
 		pre,
 		code {
@@ -163,6 +209,10 @@
 	.md-img {
 		@media not print {
 			border-right: 0.2rem solid var(--color-accent);
+
+			&[src$='.png'] {
+				border-right: none;
+			}
 		}
 
 		@media print {
@@ -175,6 +225,11 @@
 			text-align: center;
 		}
 	}
+
+	/* Headless Tables */
+	thead:has(th:empty):not(:has(th:not(:empty))) {
+		display: none;
+	}
 }
 
 .md-external-link {
@@ -185,6 +240,7 @@
 			opacity: 0.4;
 			transition: opacity var(--transition-duration) var(--transition-easing);
 			content: '⌝';
+			line-height: 0;
 			text-decoration: none;
 
 			@media (prefers-reduced-transparency: reduce) {

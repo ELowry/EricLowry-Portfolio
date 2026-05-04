@@ -79,8 +79,7 @@
 @font-face {
 	font-style: italic;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-mono-ext-i.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-mono-ext-i.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Mono';
 	font-display: swap;
 	unicode-range:
@@ -92,8 +91,7 @@
 @font-face {
 	font-style: italic;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-mono-i.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-mono-i.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Mono';
 	font-display: swap;
 	unicode-range:
@@ -104,8 +102,7 @@
 @font-face {
 	font-style: normal;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-mono-ext.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-mono-ext.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Mono';
 	font-display: swap;
 	unicode-range:
@@ -117,8 +114,7 @@
 @font-face {
 	font-style: normal;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-mono.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-mono.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Mono';
 	font-display: swap;
 	unicode-range:
@@ -130,8 +126,7 @@
 @font-face {
 	font-style: italic;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-next-ext-i.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-next-ext-i.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Next';
 	font-display: swap;
 	unicode-range:
@@ -143,8 +138,7 @@
 @font-face {
 	font-style: italic;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-next-i.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-next-i.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Next';
 	font-display: swap;
 	unicode-range:
@@ -155,8 +149,7 @@
 @font-face {
 	font-style: normal;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-next-ext.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-next-ext.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Next';
 	font-display: swap;
 	unicode-range:
@@ -168,8 +161,7 @@
 @font-face {
 	font-style: normal;
 	font-weight: 200 800;
-	src: url(/assets/fonts/atkinson-hyperlegible-next.woff2)
-		format('woff2');
+	src: url(/assets/fonts/atkinson-hyperlegible-next.woff2) format('woff2');
 	font-family: 'Atkinson Hyperlegible Next';
 	font-display: swap;
 	unicode-range:

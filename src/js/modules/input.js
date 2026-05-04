@@ -90,6 +90,13 @@ class InputController {
 	static get GAMEPAD_DEADZONE_STICK_RIGHT() {
 		return 0.02;
 	}
+	/**
+	 * Interval (ms) between visual pulse animations for directional touch.
+	 * @constant {number}
+	 */
+	static get TOUCH_PULSE_INTERVAL_MS() {
+		return 400;
+	}
 
 	/**
 	 * @returns {boolean} `true` if the interact action was triggered this frame.

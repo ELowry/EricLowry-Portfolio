@@ -512,7 +512,17 @@ export class UIManager {
 		const stack = [{ level: 0, children: [] }];
 		let complexityScore = 0;
 
-		const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+		const allHeadings = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+		if (allHeadings.length === 0) {
+			return { headings: [], complexity: 0 };
+		}
+
+		const h1s = allHeadings.filter((h) => {
+			return h.tagName === 'H1';
+		});
+		const skipFirstH1 = h1s.length === 1 && allHeadings[0] === h1s[0];
+
+		const headings = skipFirstH1 ? allHeadings.slice(1) : allHeadings;
 
 		headings.forEach((heading) => {
 			const level = parseInt(heading.tagName[1]);
@@ -588,7 +598,7 @@ export class UIManager {
 		document.body.setAttribute('aria-busy', 'false');
 
 		// Only clear the interaction lock if the game is the active layer
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
+		if (LayeredInput.isActive(LayeredInput.LAYER_GAME, true)) {
 			this.app.setLock(false);
 		}
 	}

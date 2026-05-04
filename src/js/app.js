@@ -233,8 +233,25 @@ class AppController {
 			 * We check status, content-type, and also peek at the body to avoid SPA HTML fallbacks.
 			 */
 			const getValidResponse = async (url) => {
-				const cacheBuster = `?v=${Date.now()}`;
-				const res = await fetch(url + cacheBuster);
+				const cacheBuster = `?v=${window.__CACHE_BUSTER__ || Date.now()}`;
+				const fullUrl = url + cacheBuster;
+
+				// Check if this URL was preloaded
+				let res;
+				if (window.__PRELOADED_CONTENT__ && window.__PRELOADED_CONTENT__.url === fullUrl) {
+					res = await window.__PRELOADED_CONTENT__.promise;
+					// Avoid reuse of preloaded response
+					window.__PRELOADED_CONTENT__ = null;
+				}
+
+				if (!res) {
+					res = await fetch(fullUrl);
+				}
+
+				if (!res) {
+					return null;
+				}
+
 				const contentType = res.headers.get('content-type') || '';
 
 				if (!res.ok) {
