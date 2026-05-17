@@ -170,9 +170,23 @@ export const ContentTree = category(
 					'CinQ – corporate team training video game',
 					'gaming/CinQ/website.md'
 				),
-				content('thenextmind', 'The Next Mind', 'websites/thenextmind.md'),
-				content('luzech', 'Luzech', 'websites/luzech.md'),
-				content('koalakrash', 'Koala Krash', 'websites/koalakrash.md'),
+				content('altoe', 'Alto´e', 'websites/altoe.md'),
+				category(
+					'lightweight-static',
+					'Lightweight Static Sites',
+					() => import('../../maps/websites/lightweight-static.config.js'),
+					[
+						content(
+							'lightweight-static',
+							'Lightweight Static Framework',
+							'websites/lightweight-static/lightweight-static.md',
+							true
+						),
+						content('thenextmind', 'The Next Mind', 'websites/lightweight-static/thenextmind.md'),
+						content('luzech', 'Luzech', 'websites/lightweight-static/luzech.md'),
+						content('koalakrash', 'Koala Krash', 'websites/lightweight-static/koalakrash.md'),
+					]
+				),
 				content('archive', 'Archive of Defunct Websites', 'websites/archive.md'),
 			]
 		),

@@ -6,9 +6,9 @@
 >
 > |               |                               |
 > | ------------- | ----------------------------- |
-> | **Platform** | Android                       |
+> | **Platform**  | Android                       |
 > | **Languages** | Kotlin                        |
-> | **Skillset** | App Development, UI/UX Design |
+> | **Skillset**  | App Development, UI/UX Design |
 >
 > - ⏱ Pending availability on F-Droid
 > - 📦 [Download on GitHub](https://github.com/ELowry/DNSToggle/releases)

@@ -21,7 +21,7 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 
 ---
 
-## Proffessional Experience
+## Professional Experience
 
 ### CinQ (Disruptive Learning Solutions)
 

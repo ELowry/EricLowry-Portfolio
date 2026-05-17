@@ -8,8 +8,7 @@
 > | **Tools**     | Obsidian API                      |
 > | **Skillset**  | Web Development, UI/UX Design     |
 >
-> - ⏱ Pending availability as a Community Plugin for Obsidian
-> - 📦 [Download on GitHub](https://github.com/ELowry/obsidian-replace-commands/releases)
+> - 📦 [Available as a Community Plugin for Obsidian](https://community.obsidian.md/plugins/replace-commands)
 > - 🗎 [Source code on GitHub](https://github.com/ELowry/obsidian-replace-commands)
 >
 > **License:** 0-BSD
