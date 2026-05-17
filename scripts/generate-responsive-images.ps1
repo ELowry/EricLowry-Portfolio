@@ -39,12 +39,6 @@ param (
 	[string]$OutputName
 )
 
-# VALIDATE INPUT
-if (-not (Test-Path $InputFile)) {
-	Write-Error "Input file not found: $InputFile"
-	return
-}
-
 # CONFIGURATION
 # Hardcoded array of desired widths
 $TargetWidths = @(240, 400, 600, 820, 1400, 1920)
@@ -56,6 +50,43 @@ $QualityPNG = 95
 
 # Save the original string for the Markdown output later
 $MarkdownDestFolder = $DestinationFolder
+
+# CHECK FOR IMAGEMAGICK (v7+)
+try {
+	# Attempt to run magick and grab the first line of the output
+	$magickOutput = & magick -version
+	$versionLine = $magickOutput | Select-Object -First 1
+
+	# Extract the major version number using regex
+	if ($versionLine -match "ImageMagick (\d+)\.") {
+		$majorVersion = [int]$Matches[1]
+		
+		if ($majorVersion -lt 7) {
+			Write-Host "Warning: ImageMagick v7 or higher is required, but v$majorVersion was detected." -ForegroundColor Yellow
+			Write-Host "Please update ImageMagick: https://imagemagick.org/download/#windows" -ForegroundColor Yellow
+			pause
+			exit
+		}
+	}
+	else {
+		# Force a throw if the command runs but the output format is completely unexpected
+		throw "Unrecognized ImageMagick version format."
+	}
+}
+catch {
+	Write-Host "Warning: ImageMagick ('magick' command) was not found on this system." -ForegroundColor Yellow
+	Write-Host "This script requires ImageMagick v7+ to resize and format images." -ForegroundColor Yellow
+	Write-Host "1. Download it here: https://imagemagick.org/download/#windows" -ForegroundColor Yellow
+	Write-Host "2. Ensure 'Install legacy utilities' or 'Add to PATH' is checked during installation." -ForegroundColor Yellow
+	pause
+	exit
+}
+
+# VALIDATE INPUT
+if (-not (Test-Path $InputFile)) {
+	Write-Error "Input file not found: $InputFile"
+	return
+}
 
 # Ensure destination exists
 if (-not (Test-Path $DestinationFolder)) {

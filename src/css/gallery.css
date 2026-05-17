@@ -204,7 +204,6 @@
 			opacity var(--transition-duration) var(--transition-easing);
 		cursor: pointer;
 		border: none;
-		border-radius: 50%;
 		background: transparent;
 		padding: 0.5rem;
 		width: 3rem;

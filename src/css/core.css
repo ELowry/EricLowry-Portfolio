@@ -41,6 +41,13 @@ button {
 	&:active {
 		--opacity-highlight: 20%;
 	}
+
+	&:hover,
+	&:active {
+		background-color: oklch(
+			from var(--hex-highlight) var(--luminocity-highlight) c h / var(--opacity-highlight)
+		);
+	}
 }
 
 a {

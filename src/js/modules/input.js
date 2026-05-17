@@ -185,8 +185,8 @@ class InputController {
 			return;
 		}
 
-		this.#tapDirectionTemplate = document.getElementById('tmpl-touch-half-circle');
-		this.#tapRippleTemplate = document.getElementById('tmpl-touch-tap-ripple');
+		this.#tapDirectionTemplate = document.getElementById('template-touch-half-circle');
+		this.#tapRippleTemplate = document.getElementById('template-touch-tap-ripple');
 
 		const handlePointer = (e) => {
 			if (e.pointerType !== 'touch') {

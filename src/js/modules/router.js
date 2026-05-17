@@ -87,6 +87,10 @@ class RouterController {
 			}
 		}
 
+		// TEMP TEXT-ONLY START
+		mode = 'text';
+		// TEMP TEXT-ONLY END
+
 		await this.applyState({ mode, path }, true);
 	}
 
@@ -98,6 +102,9 @@ class RouterController {
 	 * @returns {Promise<void>}
 	 */
 	async go(mode, path) {
+		// TEMP TEXT-ONLY START
+		mode = 'text';
+		// TEMP TEXT-ONLY END
 		const validMode = ['game', 'text'].includes(mode) ? mode : 'game';
 		const cleanPath = this.sanitizePath(path);
 		const newState = { mode: validMode, path: cleanPath };

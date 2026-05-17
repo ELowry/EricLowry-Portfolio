@@ -61,10 +61,17 @@ export class TutorialManager {
 			return;
 		}
 
-		// Only show the tutorial if the game layer is the singular active layer
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME, true)) {
-			this.openTouchInstructions();
-		}
+		// Defer execution to allow state changes (like mode switching) to settle
+		Promise.resolve().then(() => {
+			if (this.hasSeenTouchTutorial || this.app.Input.lastInputType !== 'touch') {
+				return;
+			}
+
+			// Only show the tutorial if the game layer is the singular active layer
+			if (this.app.mode === 'game' && LayeredInput.isActive(LayeredInput.LAYER_GAME, true)) {
+				this.openTouchInstructions();
+			}
+		});
 	}
 
 	/**

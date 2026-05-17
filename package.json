@@ -1,10 +1,10 @@
 {
 	"type": "module",
 	"dependencies": {
-		"littlejsengine": "^1.18.0",
-		"marked": "^17.0.4",
+		"littlejsengine": "^1.18.2",
+		"marked": "^18.0.3",
 		"marked-alert": "^2.1.2",
-		"marked-gfm-heading-id": "^4.1.3",
+		"marked-gfm-heading-id": "^4.1.4",
 		"marked-responsive-images": "*"
 	},
 	"scripts": {
@@ -16,9 +16,9 @@
 		"deploy": "npm run build && firebase deploy"
 	},
 	"devDependencies": {
-		"lightningcss": "^1.31.1",
-		"prettier": "^3.8.1",
+		"lightningcss": "^1.32.0",
+		"prettier": "^3.8.3",
 		"prettier-plugin-css-order": "^2.2.0",
-		"vite": "^7.3.1"
+		"vite": "^8.0.10"
 	}
 }

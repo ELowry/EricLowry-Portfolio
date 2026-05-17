@@ -94,7 +94,7 @@ class AppController {
 		this.uiManager = new UIManager(this);
 
 		// Start by showing loading (it should be visible by default in HTML, but just in case)
-		this.uiManager.showLoading();
+		this.uiManager.showLoading(true);
 
 		// Activate the default base layer (overridden by Router if necessary)
 		LayeredInput.activate(LayeredInput.LAYER_GAME);
@@ -177,7 +177,9 @@ class AppController {
 			const pathName = window.location.pathname.replace(/^\/|\/$/g, '');
 			const searchParams = new URLSearchParams(window.location.search);
 			if ((pathName === '' || pathName === 'index.html') && !searchParams.has('mode')) {
-				this.openGameWelcome();
+				// TEMP TEXT-ONLY START
+				// this.openGameWelcome();
+				// TEMP TEXT-ONLY END
 			}
 
 			// Finally hide loading with a fade

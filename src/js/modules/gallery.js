@@ -163,7 +163,7 @@ export class GalleryDisplay {
 	 * @constant
 	 */
 	static get TEMPLATE_ID() {
-		return 'gallery-modal-template';
+		return 'template-gallery-modal';
 	}
 
 	/**

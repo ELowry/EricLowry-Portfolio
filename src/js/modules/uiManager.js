@@ -51,9 +51,9 @@ export class UIManager {
 			touchControls: document.getElementById('touch-controls'),
 			touchInstructions: document.getElementById('touch-instructions'),
 			touchDontShow: document.getElementById('touch-dont-show'),
-			virtualCursorTemplate: document.getElementById('tmpl-virtual-cursor'),
-			tmpl404Breadcrumbs: document.getElementById('404-breadcrumbs'),
-			tmpl404Content: document.getElementById('404-content'),
+			virtualCursorTemplate: document.getElementById('template-virtual-cursor'),
+			tmpl404Breadcrumbs: document.getElementById('template-404-breadcrumbs'),
+			tmpl404Content: document.getElementById('template-404-content'),
 		};
 
 		/** @type {number} Timestamp when the last loading task started. */

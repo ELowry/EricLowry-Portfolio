@@ -7,7 +7,7 @@ import { Content } from './content.js';
  */
 export class LocalLinkParser {
 	/**
-	 * Regular expression to match and extract the logical path from a localized content file URL.  
+	 * Regular expression to match and extract the logical path from a localized content file URL.
 	 * Matches paths like `/content/en_US/about/cv.md` and extracts `about/cv`.
 	 * @returns {RegExp}
 	 * @constant
@@ -41,18 +41,34 @@ export class LocalLinkParser {
 						const file = match[1] + '.md';
 						const paths = Content.findPathsByFile(file);
 
-						let contentPath = match[1];
+						if (paths.length === 0) {
+							return false;
+						}
 
 						// If there are multiple paths (shared content), try to stay in current branch context, or default to the first one found.
-						if (paths.length > 0) {
-							const currentPath = Router.currentPath;
-							const contextMatch = paths.find((p) => p.startsWith(currentPath));
-							contentPath = contextMatch || paths[0];
+						const currentPath = Router.currentPath;
+						const contextMatch = paths.find((p) => p.startsWith(currentPath));
+						let contentPath = contextMatch || paths[0];
+
+						let urlPath = contentPath;
+						const segments = contentPath.split('/');
+						const lastSegment = segments[segments.length - 1];
+
+						// Handle 'index' files where the name matches the parent directory or is literally 'index'
+						if (segments.length > 1 && lastSegment === segments[segments.length - 2]) {
+							segments.pop();
+							contentPath = segments.join('/');
+							urlPath = contentPath + '/';
+						} else if (lastSegment === 'index') {
+							segments.pop();
+							contentPath = segments.join('/');
+							urlPath = contentPath ? contentPath + '/' : '';
 						}
 
 						const titleAttr = title ? ` title="${title}"` : '';
+						const hrefPath = urlPath ? `/${App.mode}/${urlPath}` : `/${App.mode}/`;
 
-						return `<a href="/${App.mode}/${contentPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}');">${text}</a>`;
+						return `<a href="${hrefPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}');">${text}</a>`;
 					}
 
 					// External links

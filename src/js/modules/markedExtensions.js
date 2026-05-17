@@ -54,6 +54,7 @@ export class MarkedExtensions {
 			debug: App.isLocal,
 			sizes: '(max-width: 820px) 95vw, 820px',
 			class: 'md-img',
+			decoding: 'async',
 		};
 	}
 

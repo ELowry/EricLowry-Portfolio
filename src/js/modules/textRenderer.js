@@ -12,9 +12,9 @@ export class TextRenderer {
 		/** @type {AppController} Main application instance. */
 		this.app = app;
 		/** @type {HTMLTemplateElement|null} Template for breadcrumb list items. */
-		this.breadcrumbTemplate = document.getElementById('tmpl-breadcrumb-item');
+		this.breadcrumbTemplate = document.getElementById('template-breadcrumb-item');
 		/** @type {HTMLTemplateElement|null} Template for navigation links. */
-		this.navLinkTemplate = document.getElementById('tmpl-nav-link');
+		this.navLinkTemplate = document.getElementById('template-nav-link');
 
 		Events.on('route:changed', (payload) => this.#handleTextContent(payload));
 	}
