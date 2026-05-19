@@ -40,7 +40,7 @@ In terms of user experience, the main challenge was structuring Daniel's extensi
 <!-- prettier-ignore -->
 | Gallery |  |
 | -- | -- |
-| ![Your Alt Text](/assets/images/websites/altoe/design__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Your Alt Text](/assets/images/websites/altoe/landing__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of a section of the home page showing the brand design in use](/assets/images/websites/altoe/design__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screeenshot from a landing page](/assets/images/websites/altoe/landing__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
 
 <!-- prettier-ignore end -->
 

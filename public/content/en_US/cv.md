@@ -114,11 +114,12 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 - **Web Projects**:
     - [playcinq.com](https://playcinq.com)
     - [altoe.net](https://altoe.net/)
-    - [oobpdx.com](https://oobpdx.com)
-    - [totte-imagery.com](https://www.totte-imagery.com/)
-    - [koalakrash.com](https://koalakrash.com/)
-    - [thenextmind.ai](https://stephane-next-mind.web.app/) _(archived version)_
     - [luzech.co.uk](https://luzech.co.uk/)
+    - [thenextmind.ai](https://stephane-next-mind.web.app/) _(archived version)_
+    - [koalakrash.com](https://koalakrash.com/)
+    - [maia-archi.com](http://www.maia-archi.com/)
+    - [oobpdx.com](https://oobpdx.com)
+    - [pennsardinpdx.com](https://web.archive.org/web/20180103153941/http://pennsardinpdx.com/) _(internet archive)_
 
 ### Utilities & Open Source
 
