@@ -6,7 +6,7 @@ export default defineConfig((configEnv) => {
 		viteConfig(configEnv),
 		defineConfig({
 			test: {
-				environment: 'happy-dom',
+				environment: 'jsdom',
 				globals: true,
 				include: ['src/**/*.test.js'],
 			},
