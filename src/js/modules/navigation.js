@@ -6,34 +6,38 @@ import { VirtualCursor } from './virtualCursor.js';
  * Manages generic focus traversal and scrolling for DOM containers via Gamepad/Keyboard.
  */
 class NavigationController {
+	/**
+	 * @property {HTMLElement|null} activeContainer - The container currently handling focus navigation.
+	 * @property {Object} options - Configuration for the current context.
+	 * @property {number} options.scroll - Whether the Y-axis scrolls the container.
+	 * @property {string|null} options.axis - Navigation axis ('x', 'y', or 'null').
+	 * @property {boolean} options.roving - Whether to use roving tabindex.
+	 * @property {boolean} options.autoFocus - Whether to auto-focus the first element.
+	 * @property {number} lastMoveTime - Last time a navigation input was handled (for debouncing).
+	 * @property {Function|null} _onFocusIn - Local reference to the focusin listener for cleanup.
+	 * @property {Array<Object>} contextStack - Stack to store previous navigation contexts for submenus.
+	 */
 	constructor() {
-		/** @type {HTMLElement|null} The container currently handling focus navigation. */
 		this.activeContainer = null;
-
-		/** @type {Object} Configuration for the current context. */
 		this.options = {
-			scroll: false, // Can this container be scrolled with the stick?
-			axis: 'y', // 'x' for horizontal, 'y' for vertical, null for none
+			scroll: false,
+			axis: 'y',
 		};
-
-		/** @type {number} Last time a navigation input was handled (for debouncing). */
 		this.lastMoveTime = 0;
-		/** @type {Function|null} Local reference to the focusin listener for cleanup. */
 		this._onFocusIn = null;
-		/** @type {Array} Stack to store previous navigation contexts for submenus. */
 		this.contextStack = [];
 	}
 
 	/**
-	 * The speed at which the navigation scrolls, measured in pixels per animation frame.
-	 * @constant {number}
+	 * @returns {number} the speed at which the navigation scrolls, measured in pixels per animation frame.
+	 * @constant
 	 */
 	static get SCROLL_SPEED() {
 		return 15;
 	}
 	/**
-	 * Debounce interval for navigation-related event handlers, in milliseconds.
-	 * @constant {number}
+	 * @returns {number} the debounce interval for navigation-related event handlers, in milliseconds.
+	 * @constant
 	 */
 	static get NAV_DEBOUNCE() {
 		return 200;
@@ -41,15 +45,16 @@ class NavigationController {
 	/**
 	 * The minimum scroll delta (as a fraction of the viewport) required to trigger navigation actions.
 	 * Used to prevent navigation from responding to very small or accidental scroll movements.
-	 * @constant {number} A value between 0 and 1 representing the scroll deadzone threshold.
+	 * @returns {number} a value between 0 and 1 representing the scroll deadzone threshold.
+	 * @constant
 	 */
 	static get SCROLL_DEADZONE() {
 		return 0.1;
 	}
 	/**
-	 * The minimum threshold value for navigation input to be considered valid.
 	 * Inputs with an absolute value less than this deadzone are ignored to prevent accidental or minor movements.
-	 * @constant {number}
+	 * @returns {number} the minimum threshold value for navigation input to be considered valid.
+	 * @constant
 	 */
 	static get NAVIGATE_DEADZONE() {
 		return 0.5;
@@ -226,6 +231,8 @@ class NavigationController {
 
 	/**
 	 * Internal helper to find focusable elements.
+	 * @param {HTMLElement|null} container - The container to search within.
+	 * @returns {Array<HTMLElement>} An array of focusable elements.
 	 * @private
 	 */
 	#getFocusables(container = this.activeContainer) {

@@ -17,6 +17,9 @@ class LayeredInputController {
 	/** @type {boolean} Flag for development-only console output. */
 	#debug;
 
+	/**
+	 * Constructor for `LayeredInputController`
+	 */
 	constructor() {
 		this.#layers = new Map();
 		this.#priorityStacks = [];
@@ -62,82 +65,121 @@ class LayeredInputController {
 
 	// PRIORITIES
 
-	/** @constant {number} */
+	/**
+	 * @returns {number} the lowest priority level, assigned to layers that should never receive inputs.
+	 * @constant
+	 */
 	get PRIORITY_BACKGROUND() {
 		return 0;
 	}
-	/** @constant {number} */
+	/**
+	 * @returns {number} the default priority level for interactive game layers.
+	 * @constant
+	 */
 	get PRIORITY_GAME() {
 		return 1;
 	}
-	/** @constant {number} */
+	/**
+	 * @returns {number} the priority level for UI elements such as menus.
+	 * @constant
+	 */
 	get PRIORITY_UI() {
 		return 2;
 	}
-	/** @constant {number} */
+	/**
+	 * @returns {number} the priority level for modal dialogs and popups.
+	 * @constant
+	 */
 	get PRIORITY_MODAL() {
 		return 3;
 	}
-	/** @constant {number} */
+	/**
+	 * @returns {number} the priority level for system-critical layers.
+	 * @constant
+	 */
 	get PRIORITY_SYSTEM() {
 		return 4;
 	}
 
 	// LAYER IDs
 
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the main game layer.
+	 * @constant
+	 */
 	get LAYER_GAME() {
 		return 'game';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the text layer.
+	 * @constant
+	 */
 	get LAYER_TEXT() {
 		return 'text';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the pause menu layer.
+	 * @constant
+	 */
 	get LAYER_GAME_MENU() {
 		return 'gameMenu';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the in-game modal layer.
+	 * @constant
+	 */
 	get LAYER_GAME_MODAL() {
 		return 'gameModal';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the welcome screen layer.
+	 * @constant
+	 */
 	get LAYER_GAME_WELCOME() {
 		return 'gameWelcome';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the gallery layer.
+	 * @constant
+	 */
 	get LAYER_GALLERY() {
 		return 'gallery';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the touch instructions layer.
+	 * @constant
+	 */
 	get LAYER_TOUCH_INSTRUCTIONS() {
 		return 'touchInstructions';
 	}
-	/** @constant {string} */
+	/**
+	 * @returns {string} the identifier for the loading screen layer.
+	 * @constant
+	 */
 	get LAYER_LOADING() {
 		return 'loading';
 	}
 
 	/**
-	 * Event name for layer activation.
-	 * @constant {string}
+	 * @returns {string} event name for layer activation.
+	 * @constant
 	 */
 	get LAYER_ACTIVATION_EVENT() {
 		return 'layer:activated';
 	}
 
 	/**
-	 * Event name for layer deactivation.
-	 * @constant {string}
+	 * @returns {string} the event name for layer deactivation.
+	 * @constant
 	 */
 	get LAYER_DEACTIVATION_EVENT() {
 		return 'layer:deactivated';
 	}
 
 	/**
-	 * The minimum time in milliseconds that must pass before an activated layer can process inputs.
 	 * Acts as a safeguard against same-frame trigger bleed-through.
-	 * @constant {number}
+	 * @returns {number} the minimum time in milliseconds that must pass before an activated layer can process inputs.
+	 * @constant
 	 */
 	static get FRAME_SECURITY_MS() {
 		return 16;
@@ -145,7 +187,7 @@ class LayeredInputController {
 
 	/**
 	 * Gets the ID of the currently active layer.
-	 * @returns {string|null} The ID of the active layer, or null if no layers are active.
+	 * @returns {string|null} the ID of the active layer, or null if no layers are active.
 	 */
 	get activeLayerId() {
 		if (this.#currentActiveLayer) {

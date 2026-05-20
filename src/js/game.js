@@ -26,37 +26,40 @@ function gameInit() {
 	player = new Player(startVec);
 
 	// Register game-level implementations with GameBridge so the rest of the app can delegate game-specific behavior without creating circular imports.
-	GameBridge.init({
-		teleportPlayer: (pos) => {
-			if (!player) {
-				return;
-			}
-			player.pos = App.LJS.vec2(pos.x, pos.y);
-			App.LJS.setCameraPos(player.pos);
-			if (typeof player.setState === 'function') {
-				player.setState('idle');
-			}
-		},
-		getPlayerPos: () => (player ? player.pos : null),
-		requestBehindInteract: (duration = 500) => {
-			if (!player) {
+	GameBridge.init(
+		{
+			teleportPlayer: (pos) => {
+				if (!player) {
+					return;
+				}
+				player.pos = App.LJS.vec2(pos.x, pos.y);
+				App.LJS.setCameraPos(player.pos);
+				if (typeof player.setState === 'function') {
+					player.setState('idle');
+				}
+			},
+			getPlayerPos: () => (player ? player.pos : null),
+			requestBehindInteract: (duration = 500) => {
+				if (!player) {
+					return Promise.resolve();
+				}
+				if (typeof player.playBehindInteract === 'function') {
+					return player.playBehindInteract(duration);
+				}
 				return Promise.resolve();
-			}
-			if (typeof player.playBehindInteract === 'function') {
-				return player.playBehindInteract(duration);
-			}
-			return Promise.resolve();
-		},
-		requestFrontInteract: (duration = 800) => {
-			if (!player) {
+			},
+			requestFrontInteract: (duration = 800) => {
+				if (!player) {
+					return Promise.resolve();
+				}
+				if (typeof player.playFrontInteract === 'function') {
+					return player.playFrontInteract(duration);
+				}
 				return Promise.resolve();
-			}
-			if (typeof player.playFrontInteract === 'function') {
-				return player.playFrontInteract(duration);
-			}
-			return Promise.resolve();
+			},
 		},
-	});
+		App.isLocal
+	);
 }
 
 /**

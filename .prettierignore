@@ -1,0 +1,23 @@
+# Package manager
+node_modules/
+
+# Build output
+dist/
+
+# Firebase cache/hosting
+.firebase/
+
+# IDE and Environment
+.vscode/
+
+# Third-party Obsidian plugins/settings
+public/.obsidian/
+public/obsidian/
+
+# Third-party vendor files
+public/vendor/
+vendor/
+
+# Minified files or specific assets (optional but good practice)
+*.min.js
+*.min.css

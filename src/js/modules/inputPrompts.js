@@ -7,18 +7,18 @@ import { Lang } from './lang.js';
  * Listens for input type changes and updates all elements with the `[data-prompt]` attribute to display the correct prompt for the current input type (e.g., keyboard, controller).
  */
 class InputPromptsController {
+	/**
+	 * @property {'mnk'|'touch'|'gamepad'} currentType - The active input device group.
+	 * @property {'default'|'ps'|'switch'} gamepadType - The variant of the gamepad/controller.
+	 * @property {Map<string, string>} layoutMap - Mapping for keyboard localized labels.
+	 */
 	constructor() {
-		/** @type {'mnk'|'touch'|'gamepad'} The active input device group. */
 		this.currentType = 'mnk';
-		/** @type {'default'|'ps'|'switch'} The variant of the gamepad/controller. */
 		this.gamepadType = 'default';
-		/** @type {Map<string, string>} Mapping for keyboard localized labels. */
 		this.layoutMap = new Map();
 	}
 
 	/**
-	 * A mapping of input actions to their corresponding prompt representations for different input devices: mouse & keyboard (mnk), gamepad, and touch.
-	 *
 	 * Structure:
 	 * ```
 	 * {
@@ -34,7 +34,8 @@ class InputPromptsController {
 	 * }
 	 * ```
 	 *
-	 * @constant {Object}
+	 * @returns {Object} a mapping of input actions to their corresponding prompt representations for different input devices: mouse & keyboard (mnk), gamepad, and touch
+	 * @constant
 	 */
 	static get PROMPT_MAPPING() {
 		return {
@@ -87,7 +88,7 @@ class InputPromptsController {
 	/**
 	 * Initializes the input prompt module by detecting the current layout, setting up event listeners for input type and language changes, and refreshing the prompt state accordingly.
 	 *
-	 * @returns {Promise<void>} Resolves when initialization is complete.
+	 * @returns {Promise<void>} (resolves) when initialization is complete.
 	 */
 	async init() {
 		await this.#detectKeyboardLayout();
@@ -119,6 +120,8 @@ class InputPromptsController {
 	/**
 	 * Scans the document for `[data-prompt]` elements and updates them.
 	 * Call manually when modifying HTML contents susceptible of displaying inputs.
+	 * @param {HTMLElement} [root=document] - The root element to scan for prompt elements. Defaults to the main document.
+	 * @returns {void} nothing
 	 */
 	refresh(root = document) {
 		const promptElements = root.querySelectorAll('[data-prompt]');

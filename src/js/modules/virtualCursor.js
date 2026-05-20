@@ -8,36 +8,38 @@ import { LayeredInput } from './layeredInputs.js';
  * Used primarily for navigating UI elements when standard directional focus is impractical.
  */
 class VirtualCursorController {
+	/**
+	 * @property {HTMLElement|null} element - The cursor element.
+	 * @property {boolean} isActive - Whether the cursor is currently active and visible.
+	 * @property {boolean} isLayerActive - Whether a viable parent layer is currently active.
+	 * @property {HTMLElement|null} currentHover - The element currently under the virtual cursor.
+	 * @property {number} hoverStartTime - The time at which the current element was hovered.
+	 * @property {boolean} isScrolling - Whether the cursor is actively triggering edge-scrolling.
+	 * @property {Array<HTMLElement>} magnetismTargets - Cache of interactive elements for magnetism.
+	 * @property {HTMLElement|null} lastContainer - Cache of the last container element.
+	 */
 	constructor() {
-		/** @type {HTMLElement|null} The cursor element. */
 		this.element = null;
-		/** @type {boolean} Whether the cursor is currently active and visible. */
 		this.isActive = false;
-		/** @type {boolean} Whether a viable parent layer is currently active. */
 		this.isLayerActive = false;
-		/** @type {HTMLElement|null} The element currently under the virtual cursor. */
 		this.currentHover = null;
-		/** @type {number} The time at which the current element was hovered. */
 		this.hoverStartTime = 0;
-		/** @type {boolean} Whether the cursor is actively triggering edge-scrolling. */
 		this.isScrolling = false;
-		/** @type {Array<HTMLElement>} Cache of interactive elements for magnetism. */
 		this.magnetismTargets = [];
-		/** @type {HTMLElement|null} Cache of the last container element. */
 		this.lastContainer = null;
 	}
 
 	/**
-	 * Base movement speed of the cursor.
-	 * @constant {number}
+	 * @returns {number} the base movement speed of the cursor.
+	 * @constant
 	 */
 	static get BASE_SPEED() {
 		return 15;
 	}
 
 	/**
-	 * Deadzone for the right stick to prevent drifting.
-	 * @constant {number}
+	 * @returns {number} the deadzone for the right stick to prevent drifting.
+	 * @constant
 	 */
 	static get STICK_DEADZONE() {
 		return 0.15;
@@ -102,8 +104,8 @@ class VirtualCursorController {
 
 		// Only active for specific layers and when using a controller.
 		const shouldBeActive = this.isLayerActive && Input.lastInputType === 'gamepad';
-		let activeParent = null;
 
+		let activeParent;
 		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT, true)) {
 			activeParent = document.getElementById('text-layer');
 		} else {
@@ -211,11 +213,6 @@ class VirtualCursorController {
 		// Y negative is Up
 		const stickDir = App.LJS.vec2(stick.x, -stick.y);
 
-		// Find interactive elements within range
-		const targets = container.querySelectorAll(
-			'button, a, [role="button"], [tabindex]:not([tabindex="-1"]), .md-gallery-item'
-		);
-
 		const maxRange = 100;
 		const pullStrength = 0.15 * this.frameRateMultiplier;
 		const exitThreshold = 0.2; // Speed required to break magnetism
@@ -283,6 +280,11 @@ class VirtualCursorController {
 		}
 	}
 
+	/**
+	 * Updates the cache of interactive elements for magnetism.
+	 * @param {HTMLElement} container - The container element to search for interactive elements.
+	 * @private
+	 */
 	#updateMagnetismCache(container) {
 		if (this.lastContainer !== container) {
 			this.magnetismTargets = Array.from(
@@ -386,6 +388,10 @@ class VirtualCursorController {
 		}
 	}
 
+	/**
+	 * @returns {HTMLElement|null} the active container element.
+	 * @private
+	 */
 	#getContainer() {
 		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT, true)) {
 			return document.getElementById('text-layer');

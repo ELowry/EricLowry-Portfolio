@@ -1,3 +1,5 @@
+/* global marked */
+
 import { Router } from './modules/router.js';
 import { Events } from './modules/events.js';
 import { GameBridge } from './modules/gameBridge.js';
@@ -18,44 +20,47 @@ import { GalleryDisplay } from './modules/gallery.js';
  * Manages high-level application state, routing, and ecosystem orchestration.
  */
 class AppController {
+	/**
+	 * @property {Object} LJS - The LittleJS engine namespace, set after dynamic import.
+	 * @property {boolean} isPaused - Whether the game engine is actively running and rendering.
+	 * @property {boolean} isLocked - Whether the game engine should block inputs and interactions.
+	 * @property {Map<string, string>} contentCache - Caches fetched markdown content as HTML, keyed by `${langCode}:${filename}`.
+	 * @property {ContentTree|null} currentMapId - The root of the content tree, initialized after content loading.
+	 * @property {Object|null} pendingStartPos - The currently active LittleJS engine namespace, set after dynamic import.
+	 * @property {number|undefined} pendingEntryX - If set, indicates a pending X coordinate for player entry on the next map load.
+	 * @property {TextRenderer|null} textRenderer - Responsible for rendering text-mode content, initialized after core setup.
+	 * @property {TutorialManager|null} tutorialManager - Handles tutorial state and display logic, initialized after core setup.
+	 * @property {UIManager|null} uiManager - Manages all UI elements, interactions, and mode transitions, initialized after core setup.
+	 * @property {GalleryDisplay|null} galleryDisplay - Manages the gallery display, initialized after core setup.
+	 * @property {Input} Input - Centralized input controller instance, initialized immediately.
+	 * @property {boolean} isLocal - Indicates whether the app is running in a local development environment.
+	 */
 	constructor() {
-		/** @type {Object} LJS - The LittleJS engine namespace, set after dynamic import. */
 		this.isPaused = false;
-		/** @type {boolean} Whether the game engine should block inputs and interactions. */
 		this.isLocked = false;
 
 		// Content Cache
-		/** @type {Map<string, string>} Caches fetched markdown content as HTML, keyed by `${langCode}:${filename}`. */
 		this.contentCache = new Map();
-		/** @type {ContentTree|null} The root of the content tree, initialized after content loading. */
 		this.currentMapId = null;
-		/** @type {Object|null} The currently active LittleJS engine namespace, set after dynamic import. */
 		this.pendingStartPos = null;
-		/** @type {number|undefined} If set, indicates a pending X coordinate for player entry on the next map load. */
 		this.pendingEntryX = undefined;
 
 		// Delegated subsystems
-		/** @type {TextRenderer|null} Responsible for rendering text-mode content, initialized after core setup. */
 		this.textRenderer = null;
-		/** @type {TutorialManager|null} Handles tutorial state and display logic, initialized after core setup. */
 		this.tutorialManager = null;
-		/** @type {UIManager|null} Manages all UI elements, interactions, and mode transitions, initialized after core setup. */
 		this.uiManager = null;
-		/** @type {GalleryDisplay|null} Manages the gallery display, initialized after core setup. */
 		this.galleryDisplay = null;
 
 		// Input bridge
-		/** @type {Input} Centralized input controller instance, initialized immediately. */
 		this.Input = Input;
 
-		/** @type {boolean} Indicates whether the app is running in a local development environment. */
 		this.isLocal =
 			window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 	}
 
 	/**
 	 * Returns the LittleJS canvas element.
-	 * @returns {HTMLCanvasElement|null} The active game canvas or null if not yet created.
+	 * @returns {HTMLCanvasElement|null} the active game canvas or null if not yet created.
 	 */
 	get canvas() {
 		return this.uiManager.canvas;
@@ -63,7 +68,7 @@ class AppController {
 
 	/**
 	 * Returns the current active mode.
-	 * @returns {string} Either `game` or `text`.
+	 * @returns {string} either `game` or `text`.
 	 */
 	get mode() {
 		return Router.currentMode;
@@ -71,7 +76,7 @@ class AppController {
 
 	/**
 	 * `true` if the application is in `game` mode and not paused.
-	 * @returns {boolean} Whether the game engine is actively updating/rendering.
+	 * @returns {boolean} whether the game engine is actively updating/rendering.
 	 */
 	get isRunning() {
 		return Router.currentMode === 'game' && !this.isPaused;
@@ -79,7 +84,7 @@ class AppController {
 
 	/**
 	 * Returns the current position vector of the player from the GameBridge.
-	 * @returns {Object|null} A vector object with `{x, y}` properties.
+	 * @returns {Object|null} a vector object with `{x, y}` properties.
 	 */
 	get playerPos() {
 		return GameBridge.playerPos;
@@ -87,7 +92,7 @@ class AppController {
 
 	/**
 	 * Performs core initialization of libraries, modules, and application state.
-	 * @returns {Promise<void>} Resolves when all core systems are ready.
+	 * @returns {Promise<void>} (resolves) when all core systems are ready.
 	 */
 	async init() {
 		// Initialize UI Manager
@@ -192,7 +197,7 @@ class AppController {
 	/**
 	 * Injects a `<script>` tag into the document head.
 	 * @param {string} src - The source URL of the script to load.
-	 * @returns {Promise<void>} Resolves when the script has finished loading.
+	 * @returns {Promise<void>} (resolves) when the script has finished loading.
 	 * @private
 	 */
 	#loadScript(src) {
@@ -218,7 +223,7 @@ class AppController {
 	/**
 	 * Fetches markdown content from the server, handles localization fallbacks, and caches results as HTML.
 	 * @param {string} filename - The relative path (from `/content/`) to the markdown file.
-	 * @returns {Promise<string>} The parsed HTML content of the markdown file.
+	 * @returns {Promise<string>} the parsed HTML content of the markdown file.
 	 * @private
 	 */
 	async #fetchContent(filename) {
@@ -233,6 +238,8 @@ class AppController {
 			/**
 			 * Helper to check if a response is a valid markdown file.
 			 * We check status, content-type, and also peek at the body to avoid SPA HTML fallbacks.
+			 * @param {string} url - The URL to fetch.
+			 * @returns {Promise<Response|null>} the response if valid, null otherwise.
 			 */
 			const getValidResponse = async (url) => {
 				const cacheBuster = `?v=${window.__CACHE_BUSTER__ || Date.now()}`;
@@ -310,6 +317,8 @@ class AppController {
 	/**
 	 * Handles high-level game mode transitions.
 	 * @param {Object} payload - The route:changed event payload.
+	 * @param {string} payload.path - The path of the route.
+	 * @param {Object} payload.node - The content node associated with the path.
 	 * @private
 	 */
 	async #handleGameTransition({ path, node }) {
@@ -396,6 +405,7 @@ class AppController {
 	/**
 	 * Relocates the player to the specified coordinates.
 	 * @param {Object} pos - The target coordinates in `{x, y}` format.
+	 * @returns {Promise<void>} (resolves) when the player has been teleported.
 	 */
 	teleportPlayer(pos) {
 		return GameBridge.teleportPlayer(pos);
@@ -498,7 +508,7 @@ class AppController {
 	/**
 	 * Loads and displays markdown content within the game's modal overlay.
 	 * @param {string} filename - The name of the file within the content directory.
-	 * @returns {Promise<void>} Resolves when the modal has been updated and displayed.
+	 * @returns {Promise<void>} (resolves) when the modal has been updated and displayed.
 	 */
 	async loadContentInModal(filename) {
 		const langCode = Lang.langCode;
@@ -521,7 +531,7 @@ class AppController {
 	/**
 	 * Loads and displays markdown content within the text-mode container.
 	 * @param {string} filename - The name of the file within the content directory.
-	 * @returns {Promise<void>} Resolves when the text view has been updated.
+	 * @returns {Promise<void>} (resolves) when the text view has been updated.
 	 */
 	async loadContentIntoText(filename) {
 		const langCode = Lang.langCode;

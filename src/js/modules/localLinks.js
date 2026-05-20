@@ -7,9 +7,8 @@ import { Content } from './content.js';
  */
 export class LocalLinkParser {
 	/**
-	 * Regular expression to match and extract the logical path from a localized content file URL.
 	 * Matches paths like `/content/en_US/about/cv.md` and extracts `about/cv`.
-	 * @returns {RegExp}
+	 * @returns {RegExp} a regular expression to match and extract the logical path from a localized content file URL.
 	 * @constant
 	 */
 	static get CONTENT_LINK_REGEX() {
@@ -18,7 +17,7 @@ export class LocalLinkParser {
 
 	/**
 	 * Generates the marked.js extension configuration object for parsing links.
-	 * @returns {Object}
+	 * @returns {Object} a marked.js extension configuration object.
 	 */
 	static getMarkedExtension() {
 		return {
@@ -26,7 +25,7 @@ export class LocalLinkParser {
 				/**
 				 * Custom renderer for links to intercept content paths.
 				 * @param {Object} token - The marked token for the link.
-				 * @returns {string|boolean} The rendered HTML for the link, or false to fall back to default rendering.
+				 * @returns {string|boolean} the rendered HTML for the link, or false to fall back to default rendering.
 				 */
 				link(token) {
 					const { href, title, text } = token;

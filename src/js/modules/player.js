@@ -3,7 +3,7 @@ import { App } from '../app.js';
 import { LayeredInput } from './layeredInputs.js';
 
 /**
- * Player character controlled by user input.  
+ * Player character controlled by user input.
  * Extends LittleJS `EngineObject` for positioning and rendering.
  */
 export class Player extends App.LJS.EngineObject {
@@ -30,81 +30,81 @@ export class Player extends App.LJS.EngineObject {
 	}
 
 	/**
-	 * Walking animation speed in frames per second.
-	 * @constant {number}
+	 * @returns {number} the walking animation speed in frames per second.
+	 * @constant
 	 */
 	static get ANIM_SPEED_WALK() {
 		return 14;
 	}
 	/**
-	 * Stopping animation speed in frames per second.
-	 * @constant {number}
+	 * @returns {number} the stopping animation speed in frames per second.
+	 * @constant
 	 */
 	static get ANIM_SPEED_STOP() {
 		return 10;
 	}
 	/**
-	 * Idle animation speed in frames per second.
-	 * @constant {number}
+	 * @returns {number} the idle animation speed in frames per second.
+	 * @constant
 	 */
 	static get ANIM_SPEED_IDLE() {
 		return 3;
 	}
 	/**
-	 * Animation speed for interacting from behind in frames per second.
-	 * @constant {number}
+	 * @returns {number} the animation speed for interacting from behind in frames per second.
+	 * @constant
 	 */
 	static get ANIM_SPEED_INTERACT_BACK() {
 		return 10;
 	}
 	/**
-	 * Speed for the transition into a front-facing interaction in frames per second.
-	 * @constant {number}
+	 * @returns {number} the speed for the transition into a front-facing interaction in frames per second.
+	 * @constant
 	 */
 	static get ANIM_SPEED_INTERACT_FRONT_STOP() {
 		return 12;
 	}
 	/**
-	 * Front-facing interaction animation speed in frames per second.
-	 * @constant {number}
+	 * @returns {number} the front-facing interaction animation speed in frames per second.
+	 * @constant
 	 */
 	static get ANIM_SPEED_INTERACT_FRONT() {
 		return 6;
 	}
 
 	/**
-	 * The base horizontal movement speed of the player.
-	 * @constant {number}
+	 * @returns {number} the base horizontal movement speed of the player.
+	 * @constant
 	 */
 	static get MOVE_SPEED() {
 		return 0.06;
 	}
 
 	/**
-	 * Minimum duration in seconds before the player performs a 'look around' idle action.
-	 * @constant {number}
+	 * @returns {number} the minimum duration in seconds before the player performs a 'look around' idle action.
+	 * @constant
 	 */
 	static get IDLE_LOOK_DURATION_MIN() {
 		return 2;
 	}
 	/**
-	 * Maximum duration in seconds before the player performs a 'look around' idle action.
-	 * @constant {number}
+	 * @returns {number} the maximum duration in seconds before the player performs a 'look around' idle action.
+	 * @constant
 	 */
 	static get IDLE_LOOK_DURATION_MAX() {
 		return 10;
 	}
 
 	/**
-	 * The dimensions of a single player sprite in the spritesheet.
-	 * @constant {Vector2}
+	 * @returns {Vector2} the dimensions of a single player sprite in the spritesheet.
+	 * @constant
 	 */
 	static get SPRITE_RESOLUTION() {
 		return App.LJS.vec2(11, 34);
 	}
 	/**
-	 * The amount of padding between sprites in the spritesheet.
-	 * @constant {number}
+	 * @returns {number} the amount of padding between sprites in the spritesheet.
+	 * @constant
 	 */
 	static get SPRITE_PADDING() {
 		return 1;
@@ -257,7 +257,7 @@ export class Player extends App.LJS.EngineObject {
 	}
 
 	/**
-	 * Request the behind-interact animation and return a promise that resolves after the requested animation delay so callers can coordinate fade and navigation.  
+	 * Request the behind-interact animation and return a promise that resolves after the requested animation delay so callers can coordinate fade and navigation.
 	 * Handles transition from walking/stopping by playing a stop sequence first.
 	 * @param {number} [duration=800] - milliseconds to wait while animation plays
 	 * @returns {Promise<void>}

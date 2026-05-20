@@ -9,7 +9,7 @@ import { LayeredInput } from './layeredInputs.js';
 export class Gallery {
 	/**
 	 * The default class applied to the gallery container.
-	 * @returns {string}
+	 * @returns {string} the default class for gallery containers.
 	 * @constant
 	 */
 	static get DEFAULT_GALLERY_CLASS() {
@@ -18,7 +18,7 @@ export class Gallery {
 
 	/**
 	 * The default class applied to accordion galleries.
-	 * @returns {string}
+	 * @returns {string} the default class for accordion galleries.
 	 * @constant
 	 */
 	static get DEFAULT_ACCORDION_CLASS() {
@@ -27,7 +27,7 @@ export class Gallery {
 
 	/**
 	 * The default class applied to each gallery carousel item figure.
-	 * @returns {string}
+	 * @returns {string} the default class for gallery item figures.
 	 * @constant
 	 */
 	static get DEFAULT_ITEM_CLASS() {
@@ -37,7 +37,7 @@ export class Gallery {
 	/**
 	 * The default keywords to place in the first table header cell to trigger the gallery render,
 	 * along with their configuration options.
-	 * @returns {Object}
+	 * @returns {Object} the default trigger keywords configuration.
 	 * @constant
 	 */
 	static get DEFAULT_TRIGGER_KEYWORDS() {
@@ -67,7 +67,7 @@ export class Gallery {
 			 * Table renderer.
 			 * Converts tables with the trigger keyword into a div structure.
 			 * @param {Object} token - The marked token for the table.
-			 * @returns {string|boolean} The rendered HTML, or false to fall back to default table rendering.
+			 * @returns {string|boolean} the rendered HTML, or false to fall back to default table rendering.
 			 */
 			table(token) {
 				let isGallery = false;
@@ -95,7 +95,7 @@ export class Gallery {
 						const images = cell.tokens.filter((t) => t.type === 'image');
 
 						for (const img of images) {
-							let renderedImg = '';
+							let renderedImg;
 
 							if (this.parser && typeof this.parser.parseInline === 'function') {
 								renderedImg = this.parser.parseInline([img]);
@@ -118,7 +118,7 @@ export class Gallery {
 	/**
 	 * The marked.js extension configuration object.
 	 * @param {Object} [options={}] - Optional configuration overrides.
-	 * @returns {Object}
+	 * @returns {Object} the marked.js extension configuration.
 	 */
 	static getMarkedExtension(options = {}) {
 		return {
@@ -144,8 +144,11 @@ export class GalleryDisplay {
 	/** @type {IntersectionObserver|null} Observer to keep #currentIndex in sync with scrolling. */
 	#intersectionObserver;
 
+	/**
+	 * Creates an instance of GalleryDisplay.
+	 * @param {AppController} app - The main application instance.
+	 */
 	constructor(app) {
-		/** @type {AppController} Main application instance. */
 		this.app = app;
 
 		this.#activeModal = null;
@@ -159,7 +162,7 @@ export class GalleryDisplay {
 
 	/**
 	 * The ID of the HTML template used to construct the modal.
-	 * @returns {string}
+	 * @returns {string} the template ID.
 	 * @constant
 	 */
 	static get TEMPLATE_ID() {
@@ -512,7 +515,7 @@ export class GalleryDisplay {
 	/**
 	 * Consumes input for the gallery layer.
 	 * @param {Object} inputState - The current state from the Input module.
-	 * @returns {boolean} True if the input was consumed by the UI.
+	 * @returns {boolean} `true` if the input was consumed by the UI.
 	 */
 	handleInput(inputState) {
 		if (!LayeredInput.isActive(LayeredInput.LAYER_GALLERY)) {

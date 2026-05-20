@@ -19,7 +19,7 @@ class CameraController {
 
 	/**
 	 * Returns the current width of the viewport in world units.
-	 * @returns {number} Viewport width
+	 * @returns {number} the viewport width
 	 */
 	get viewWidth() {
 		return App.LJS.mainCanvasSize.x / App.LJS.cameraScale;

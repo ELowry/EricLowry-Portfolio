@@ -8,13 +8,15 @@ import { Events } from './events.js';
  * @param {AppController} app - Reference to the App instance.
  */
 export class TextRenderer {
-	constructor(app) {
-		/** @type {AppController} Main application instance. */
+	/**
+	 * @param {AppController} app - Main application instance.
+	 * @param {HTMLTemplateElement|null} breadcrumbTemplate - Template for breadcrumb list items.
+	 * @param {HTMLTemplateElement|null} navLinkTemplate - Template for navigation links.
+	 */
+	constructor(app, breadcrumbTemplate, navLinkTemplate) {
 		this.app = app;
-		/** @type {HTMLTemplateElement|null} Template for breadcrumb list items. */
-		this.breadcrumbTemplate = document.getElementById('template-breadcrumb-item');
-		/** @type {HTMLTemplateElement|null} Template for navigation links. */
-		this.navLinkTemplate = document.getElementById('template-nav-link');
+		this.breadcrumbTemplate = breadcrumbTemplate;
+		this.navLinkTemplate = navLinkTemplate;
 
 		Events.on('route:changed', (payload) => this.#handleTextContent(payload));
 	}
@@ -133,6 +135,9 @@ export class TextRenderer {
 	/**
 	 * Handles text rendering and content loading based on the current route.
 	 * @param {Object} payload - The route:changed event payload.
+	 * @param {string} payload.mode - The content display mode.
+	 * @param {string} payload.path - The route's path.
+	 * @param {Object} payload.node - The route's node.
 	 * @private
 	 */
 	async #handleTextContent({ mode, path, node }) {
@@ -147,7 +152,7 @@ export class TextRenderer {
 			await this.app.loadContentIntoText(node.file);
 		} else if (node && node.type === 'category') {
 			// Check if the category has a main file
-			let mainChild = null;
+			let mainChild;
 			if (node.id === 'root') {
 				mainChild = node.children.find((c) => c.id === 'index');
 			} else {

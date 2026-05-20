@@ -10,40 +10,42 @@ import { GameBridge } from './gameBridge.js';
  * Handles detection, highlighting, and triggering of object interactions.
  */
 class InteractionController {
+	/**
+	 * @property {Object[]} activeObjects - Array of interactive objects in the map.
+	 * @property {Object|null} highlightedObject - The object currently under the player's interaction distance.
+	 * @property {number} interactionRadius - Detection radius for interactions.
+	 * @property {number|null} overlayTimeout - Handle for the UI label fade-out timer.
+	 * @property {number} blockTimer - Timestamp until which input is ignored (cooldown).
+	 */
 	constructor() {
-		/** @type {Object[]} Array of interactive objects in the map. */
 		this.activeObjects = [];
-		/** @type {Object|null} The object currently under the player's interaction distance. */
 		this.highlightedObject = null;
-		/** @type {number} Detection radius for interactions. */
 		this.interactionRadius = 2.2;
-		/** @type {number|null} Handle for the UI label fade-out timer. */
 		this.overlayTimeout = null;
-		/** @type {number} Timestamp until which input is ignored (cooldown). */
 		this.blockTimer = 0;
 
 		Events.on('route:changed', (payload) => this.#handleMapObjects(payload));
 	}
 
 	/**
-	 * The duration in milliseconds to block user input after an interaction.
-	 * @constant {number}
+	 * @returns {number} the duration in milliseconds to block user input after an interaction.
+	 * @constant
 	 */
 	static get BLOCK_INPUT_MS() {
 		return 500;
 	}
 
 	/**
-	 * The duration in milliseconds to wait before transitioning to a new map.
-	 * @constant {number}
+	 * @returns {number} the duration in milliseconds to wait before transitioning to a new map.
+	 * @constant
 	 */
 	static get TRANSITION_BEHIND_MS() {
 		return 500;
 	}
 
 	/**
-	 * The duration in milliseconds to wait before transitioning to a new map.
-	 * @constant {number}
+	 * @returns {number} the duration in milliseconds to wait before transitioning to a new map.
+	 * @constant
 	 */
 	static get TRANSITION_FRONT_MS() {
 		return 800;
@@ -108,7 +110,7 @@ class InteractionController {
 	/**
 	 * Finds the closest interactive object within range.
 	 * @param {vec2} playerPos - Current player position
-	 * @returns {Object|null} The closest object or null
+	 * @returns {Object|null} the closest object or null
 	 * @private
 	 */
 	#findClosestObject(playerPos) {
@@ -150,6 +152,9 @@ class InteractionController {
 	/**
 	 * Handles building and setting interactive objects based on the current route.
 	 * @param {Object} payload - The route:changed event payload.
+	 * @param {string} payload.mode - The mode of the new route.
+	 * @param {string} payload.path - The path of the new route.
+	 * @param {Object} payload.node - The node of the new route.
 	 * @private
 	 */
 	#handleMapObjects({ mode, path, node }) {

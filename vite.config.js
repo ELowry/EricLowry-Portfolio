@@ -6,7 +6,7 @@ import fs from 'fs';
  * A simple Vite plugin to exclude specific folders from the final build output.
  * Since Vite's publicDir copy is all-or-nothing, this cleans up unwanted meta-folders.
  * @param {string[]} folders - Array of folder names to exclude from dist.
- * @returns {import('vite').Plugin}
+ * @returns {import('vite').Plugin} the vite plugin instance.
  */
 function excludePublicFolders(folders) {
 	return {

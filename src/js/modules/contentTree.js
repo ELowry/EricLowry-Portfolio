@@ -17,7 +17,7 @@
  * @typedef {Object} ContentNode
  * @property {string} id - Unique identifier within current level
  * @property {string} title - Fallback literal title
- * @property {'category'|'content'} type
+ * @property {'category'|'content'} type - Whether the node is a category of content or a content node itself.
  * @property {string} [file] - Markdown file path (required if `type === content`)
  * @property {MapConfig} [mapLoader] - Game map settings (used if `type === category`)
  * @property {Array<ContentNode>} [children] - Child nodes (used if `type === category`)
@@ -29,7 +29,7 @@
  * @param {string} title - Fallback human-readable title.
  * @param {string} file - Path to the markdown file relative to the content root.
  * @param {boolean} hidden - Hides the node from text-mode navigation menus if `true`.
- * @returns {ContentNode} A standardized content node object.
+ * @returns {ContentNode} a standardized content node object.
  */
 const content = (id, title, file, hidden = false) => ({
 	id,
@@ -44,7 +44,8 @@ const content = (id, title, file, hidden = false) => ({
  * @param {string} id - Unique identifier for the node (URL segment).
  * @param {string} title - Fallback human-readable title.
  * @param {() => Promise<any>} mapLoader - Function that imports the map's configuration.
- * @param {Array} children
+ * @param {Array<ContentNode>} children - Child nodes (used if `type === category`)
+ * @returns {ContentNode} a standardized content node object.
  */
 const category = (id, title, mapLoader, children = []) => ({
 	id,
@@ -182,9 +183,17 @@ export const ContentTree = category(
 							'websites/lightweight-static/lightweight-static.md',
 							true
 						),
-						content('thenextmind', 'The Next Mind', 'websites/lightweight-static/thenextmind.md'),
+						content(
+							'thenextmind',
+							'The Next Mind',
+							'websites/lightweight-static/thenextmind.md'
+						),
 						content('luzech', 'Luzech', 'websites/lightweight-static/luzech.md'),
-						content('koalakrash', 'Koala Krash', 'websites/lightweight-static/koalakrash.md'),
+						content(
+							'koalakrash',
+							'Koala Krash',
+							'websites/lightweight-static/koalakrash.md'
+						),
 					]
 				),
 				content('archive', 'Archive of Defunct Websites', 'websites/archive.md'),

@@ -8,10 +8,12 @@ class ContentController {
 	/** @type {Map<string, string[]>} Internal mapping of markdown files to their tree paths. */
 	#fileToPaths = new Map();
 
+	/**
+	 * @property {import('./contentTree.js').ContentNode} tree - The root of the content hierarchical tree.
+	 * @property {boolean} isReady - True if the content tree has been fully processed.
+	 */
 	constructor() {
-		/** @type {import('./contentTree.js').ContentNode} The root of the content hierarchical tree. */
 		this.tree = ContentTree;
-		/** @type {boolean} True if the content tree has been fully processed. */
 		this.isReady = false;
 	}
 
@@ -66,7 +68,7 @@ class ContentController {
 	/**
 	 * Finds a node in the ContentTree by its path.
 	 * @param {string} path - Path segments joined by `/` (e.g., `about/bio`)
-	 * @returns {Object|null} The matching node or null if not found
+	 * @returns {Object|null} the matching node or null if not found
 	 */
 	findNodeByPath(path) {
 		if (!path) {
@@ -96,7 +98,7 @@ class ContentController {
 	/**
 	 * Returns all tree paths associated with a specific markdown file.
 	 * @param {string} file - The markdown file path (e.g., `gaming/Unstant.md`)
-	 * @returns {string[]} Array of tree paths (e.g., `['gaming/Unstant', 'architecture/projects/Unstant']`)
+	 * @returns {string[]} an array of tree paths (e.g., `['gaming/Unstant', 'architecture/projects/Unstant']`)
 	 */
 	findPathsByFile(file) {
 		if (!file) {
@@ -113,7 +115,7 @@ class ContentController {
 	 * If the path points to content, returns the parent category.
 	 * If the path points to a category, returns that category.
 	 * @param {string} path - Path of the content or category
-	 * @returns {Object} The parent category node or the node itself
+	 * @returns {Object} the parent category node or the node itself
 	 */
 	getParentMapNode(path) {
 		if (!path) {
@@ -140,7 +142,7 @@ class ContentController {
 	 * This is the bridge between content structure and game world layout.
 	 * @param {Object} mapNode - Category node with `mapData` and `children`
 	 * @param {string} currentPath - Current path in content tree
-	 * @returns {Array} Array of interactive objects with `pos`, `radius`, `file`, `label`, `path`, `id`
+	 * @returns {Array} an array of interactive objects with `pos`, `radius`, `file`, `label`, `path`, `id`
 	 */
 	buildMapObjects(mapNode, currentPath) {
 		if (!mapNode || !mapNode.mapData || !mapNode.children) {
@@ -159,7 +161,7 @@ class ContentController {
 			const keyBase = currentPath ? `${currentPath}.${child.id}` : child.id;
 			const title = Lang.getString(`content.${keyBase}.title`, null, child.title || '');
 
-			let label = title;
+			let label;
 			if (posData.label) {
 				label = Lang.getString(posData.label, null, posData.label);
 			} else {

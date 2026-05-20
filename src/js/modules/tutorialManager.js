@@ -8,11 +8,13 @@ import { LayeredInput } from './layeredInputs.js';
  * @param {AppController} app - Reference to the App instance.
  */
 export class TutorialManager {
-	constructor(app) {
-		/** @type {AppController} Main application instance. */
+	/**
+	 * @param {AppController} app - Main application instance.
+	 * @param {boolean} hasSeenTouchTutorial - Persistent flag indicating if the user has seen the instructions.
+	 */
+	constructor(app, hasSeenTouchTutorial) {
 		this.app = app;
-		/** @type {boolean} Persistent flag indicating if the user has seen the instructions. */
-		this.hasSeenTouchTutorial = localStorage.getItem('hideTouchTutorial') === 'true';
+		this.hasSeenTouchTutorial = hasSeenTouchTutorial;
 	}
 
 	/**
@@ -39,7 +41,7 @@ export class TutorialManager {
 	/**
 	 * Consumes input for the tutorial layer.
 	 * @param {Object} inputState - The current state from the Input module.
-	 * @returns {boolean} True if the input was consumed by the tutorial manager.
+	 * @returns {boolean} `true` if the input was consumed by the tutorial manager.
 	 */
 	handleInput(inputState) {
 		if (!LayeredInput.isActive(LayeredInput.LAYER_TOUCH_INSTRUCTIONS)) {

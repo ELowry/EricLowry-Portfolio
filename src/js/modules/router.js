@@ -11,6 +11,9 @@ class RouterController {
 	/** @type {Function|null} Callback triggered when the URL or state changes. */
 	onStateChange = null;
 
+	/**
+	 * Constructor for `RouterController`
+	 */
 	constructor() {
 		window.addEventListener('popstate', (e) => {
 			if (e.state) {
@@ -23,7 +26,7 @@ class RouterController {
 
 	/**
 	 * Gets the current content path.
-	 * @returns {string} Current path
+	 * @returns {string} the current path
 	 */
 	get currentPath() {
 		return this.state.path;
@@ -31,7 +34,7 @@ class RouterController {
 
 	/**
 	 * Gets the current mode.
-	 * @returns {string} Current mode (`game` or `text`)
+	 * @returns {string} the current mode (`game` or `text`)
 	 */
 	get currentMode() {
 		return this.state.mode;
@@ -50,7 +53,7 @@ class RouterController {
 	/**
 	 * Sanitizes a URL path by removing edge cases.
 	 * @param {string} path - Raw path to sanitize
-	 * @returns {string} Clean path
+	 * @returns {string} a clean path
 	 */
 	sanitizePath(path) {
 		if (!path) {
@@ -113,7 +116,7 @@ class RouterController {
 			return;
 		}
 
-		let newUrl = '/';
+		let newUrl;
 		if (validMode === 'game' && !cleanPath) {
 			newUrl = '/';
 		} else {

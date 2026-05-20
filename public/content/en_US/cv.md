@@ -64,7 +64,7 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 ### Architecture Internships
 
 - **BASE** (2014):  
-  Contributed to the "[BASE 2050](https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2014/537530006.pdf "Open the initial declaration of intent document for the BASE 2050 project")" virtual urban landscaping project.
+  Contributed to the "[BASE 2050](https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2014/537530006.pdf 'Open the initial declaration of intent document for the BASE 2050 project')" virtual urban landscaping project.
 - **Palleroni Leite Design Partnership** (2010–2011):  
   Designed technical diagrams, sections, elevations, and main 3D renders for [SAGE Classroom](https://sageclassroom.com/) project (Oregon, USA), focusing on sustainable envelope design and thermal resources.
 - **JM Couverture** (2010):  
@@ -124,11 +124,11 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 ### Utilities & Open Source
 
 - **GitHub Projects**:
-    - [WinGet-Updater](https://github.com/ELowry/WinGet-Updater "Open WinGet-Updater GitHub project") (Utility tool).
-    - [StadiaIcons](https://elowry.github.io/StadiaIcons/ "Open StadiaIcons landing page") (Design asset automation).
-    - [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 "Open InputLayers Unity Asset Store page") (Unity GUI extension).
-    - [Marked Responsive Images](https://github.com/ELowry/MarkedResponsiveImages "Open Marked Responsive Images GitHub project") (Marked.js extension adding srcset support)
-    - [Obsidian Replace Commands](https://github.com/ELowry/obsidian-replace-commands "Open Obsidian Replace Commands GitHub project") (Obsidian plugin to configure and execute search-replace patterns)
+    - [WinGet-Updater](https://github.com/ELowry/WinGet-Updater 'Open WinGet-Updater GitHub project') (Utility tool).
+    - [StadiaIcons](https://elowry.github.io/StadiaIcons/ 'Open StadiaIcons landing page') (Design asset automation).
+    - [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 'Open InputLayers Unity Asset Store page') (Unity GUI extension).
+    - [Marked Responsive Images](https://github.com/ELowry/MarkedResponsiveImages 'Open Marked Responsive Images GitHub project') (Marked.js extension adding srcset support)
+    - [Obsidian Replace Commands](https://github.com/ELowry/obsidian-replace-commands 'Open Obsidian Replace Commands GitHub project') (Obsidian plugin to configure and execute search-replace patterns)
 
 ---
 

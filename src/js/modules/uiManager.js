@@ -12,8 +12,10 @@ import { VirtualCursor } from './virtualCursor.js';
  * Orchestrates all DOM manipulations, UI state transitions, and event handling.
  */
 export class UIManager {
+	/**
+	 * @param {AppController} app - Main application instance.
+	 */
 	constructor(app) {
-		/** @type {AppController} Main application instance. */
 		this.app = app;
 
 		/** @type {Object} References to core DOM elements used across the application. */
@@ -65,32 +67,32 @@ export class UIManager {
 	}
 
 	/**
-	 * Minimum time threshold for fade animations.
-	 * @constant {number}
+	 * @returns {number} the minimum time threshold for fade animations.
+	 * @constant
 	 */
 	static get FADE_MIN_ELAPSED_MS() {
 		return 16;
 	}
 
 	/**
-	 * Standard duration for screen transitions and UI fades.
-	 * @constant {number}
+	 * @returns {number} the standard duration for screen transitions and UI fades.
+	 * @constant
 	 */
 	static get FADE_DURATION_MS() {
 		return 500;
 	}
 
 	/**
-	 * Minimum complexity score for the table of contents to be displayed.
-	 * @constant {number}
+	 * @returns {number} the minimum complexity score for the table of contents to be displayed.
+	 * @constant
 	 */
 	static get TABLE_OF_CONTENTS_COMPLEXITY_THRESHOLD() {
 		return 2.7;
 	}
 
 	/**
-	 * Maximum nesting depth for the Table of Contents tree.
-	 * @constant {number}
+	 * @returns {number} the maximum nesting depth for the Table of Contents tree.
+	 * @constant
 	 */
 	static get TABLE_OF_CONTENTS_MAX_DEPTH() {
 		return 3;
@@ -98,7 +100,7 @@ export class UIManager {
 
 	/**
 	 * Returns the LittleJS canvas element.
-	 * @returns {HTMLCanvasElement|null} The canvas if it exists within the game layer.
+	 * @returns {HTMLCanvasElement|null} the canvas if it exists within the game layer.
 	 */
 	get canvas() {
 		return this.elements.gameLayer?.querySelector('canvas');
@@ -347,7 +349,7 @@ export class UIManager {
 	 * @param {KeyboardEvent} e - The keyboard event object.
 	 * @param {HTMLElement} container - The DOM container holding the menu items.
 	 * @param {string} [axis='both'] - Which arrow keys to listen to (`x`, `y`, or `both`).
-	 * @returns {boolean} Whether navigation was handled.
+	 * @returns {boolean} whether navigation was handled.
 	 * @private
 	 */
 	#handleMenuNavigation(e, container, axis = 'both') {
@@ -505,7 +507,7 @@ export class UIManager {
 	/**
 	 * Extracts headings from a container and builds a hierarchical tree.
 	 * @param {HTMLElement} container - The container to extract headings from.
-	 * @returns {Array<Object>} The hierarchical tree of headings.
+	 * @returns {Array<Object>} the hierarchical tree of headings.
 	 * @private
 	 */
 	#getHeadingsTree(container) {
@@ -580,7 +582,7 @@ export class UIManager {
 	/**
 	 * Dismisses the loading layer with an optional fade-out.
 	 * @param {boolean} [fade=false] - If `true`, waits for the fade-out animation to finish.
-	 * @returns {Promise<void>} Resolves when the overlay is completely hidden.
+	 * @returns {Promise<void>} (resolves) when the overlay is completely hidden.
 	 */
 	async hideLoading(fade = false) {
 		LayeredInput.deactivate(LayeredInput.LAYER_LOADING);
@@ -649,7 +651,7 @@ export class UIManager {
 	/**
 	 * Consumes input for UI-specific layers (modals, menus, text).
 	 * @param {Object} inputState - The current state from the Input module.
-	 * @returns {boolean} True if the input was consumed by the UI.
+	 * @returns {boolean} `true` if the input was consumed by the UI.
 	 */
 	handleInput(inputState) {
 		// UI Layer

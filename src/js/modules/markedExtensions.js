@@ -17,16 +17,16 @@ export class MarkedExtensions {
 	}
 
 	/**
-	 * Configuration for the `marked-gfm-heading-id` extension.
-	 * @constant {Object}
+	 * @returns {Object} the configuration for the `marked-gfm-heading-id` extension.
+	 * @constant
 	 */
 	static get HEADING_ID_CONFIG() {
 		return { prefix: '_' };
 	}
 
 	/**
-	 * Configuration for the `marked-alert` extension.
-	 * @constant {Object}
+	 * @returns {Object} the configuration for the `marked-alert` extension.
+	 * @constant
 	 */
 	static get ALERT_CONFIG() {
 		return {
@@ -46,8 +46,8 @@ export class MarkedExtensions {
 	}
 
 	/**
-	 * Configuration for the `marked-responsive-images` extension.
-	 * @constant {Object}
+	 * @returns {Object} the configuration for the `marked-responsive-images` extension.
+	 * @constant
 	 */
 	static get RESPONSIVE_IMAGES_CONFIG() {
 		return {

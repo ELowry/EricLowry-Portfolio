@@ -6,8 +6,7 @@ import { Lang } from './lang.js';
  */
 export class Obfuscator {
 	/**
-	 * The name identifier for the marked.js extension.
-	 * @returns {string}
+	 * @returns {string} the name identifier for the marked.js extension.
 	 * @constant
 	 */
 	static get EXTENSION_NAME() {
@@ -15,8 +14,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * Target CSS selector for encoded payload elements in the DOM.
-	 * @returns {string}
+	 * @returns {string} the target CSS selector for encoded payload elements in the DOM.
 	 * @constant
 	 */
 	static get TARGET_SELECTOR() {
@@ -25,8 +23,8 @@ export class Obfuscator {
 
 	/**
 	 * Reverses a string.
-	 * @param {string} str
-	 * @returns {string}
+	 * @param {string} str - The string to reverse.
+	 * @returns {string} the reversed string.
 	 * @private
 	 */
 	static #reverse(str) {
@@ -35,8 +33,8 @@ export class Obfuscator {
 
 	/**
 	 * Applies ROT13 transformation to a string.
-	 * @param {string} str
-	 * @returns {string}
+	 * @param {string} str - The string to apply ROT13 to.
+	 * @returns {string} the ROT13 transformed string.
 	 * @private
 	 */
 	static #rot13(str) {
@@ -48,8 +46,8 @@ export class Obfuscator {
 
 	/**
 	 * Checks if a string is valid Base64.
-	 * @param {string} string
-	 * @return {boolean}
+	 * @param {string} string - The string to check.
+	 * @returns {boolean} true if the string is valid Base64, false otherwise.
 	 * @private
 	 */
 	static #isBase64(string) {
@@ -64,8 +62,8 @@ export class Obfuscator {
 	/**
 	 * Converts characters randomly to hex or decimal HTML entities.
 	 * Ensures non-Latin1 characters are converted to safely pass through base64 encoding.
-	 * @param {string} text
-	 * @returns {string}
+	 * @param {string} text - The text to convert to entities.
+	 * @returns {string} the text converted to entities.
 	 * @private
 	 */
 	static #encodeToEntities(text) {
@@ -88,7 +86,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * @returns {Array<Object>} The array of custom extensions for marked.js.
+	 * @returns {Array<Object>} the array of custom extensions for marked.js.
 	 * @private
 	 */
 	static #getMarkedExtensions() {
@@ -99,16 +97,16 @@ export class Obfuscator {
 				/**
 				 * Hints to the marked.js parser where the next token starts.
 				 * Required for inline extensions to function correctly mid-string.
-				 * @param {string} src
-				 * @returns {number|undefined}
+				 * @param {string} src - The source string to search.
+				 * @returns {number|undefined} the index of the next token, or undefined if not found.
 				 */
 				start(src) {
 					return src.match(/(?:&#8203;|\u200B)/)?.index;
 				},
 				/**
 				 * Tokenizer for matching text bounded by zero-width spaces.
-				 * @param {string} src
-				 * @returns {Object|void}
+				 * @param {string} src - The source string to tokenize.
+				 * @returns {Object|void} the tokenized content, or void if no match found.
 				 */
 				tokenizer(src) {
 					const rule = /^(?:&#8203;|\u200B)(.*?)(?:&#8203;|\u200B)/;
@@ -124,8 +122,8 @@ export class Obfuscator {
 				},
 				/**
 				 * Renders the obfuscated token into a safe HTML structure for DOM injection.
-				 * @param {Object} token
-				 * @returns {string}
+				 * @param {Object} token - The token to render.
+				 * @returns {string} the rendered HTML for the token.
 				 */
 				renderer(token) {
 					const payload = token.text.trim();
@@ -142,7 +140,7 @@ export class Obfuscator {
 	}
 
 	/**
-	 * @returns {Object} The custom renderer object for marked.js.
+	 * @returns {Object} the custom renderer object for marked.js.
 	 * @private
 	 */
 	static #getMarkedRenderer() {
@@ -150,7 +148,7 @@ export class Obfuscator {
 			/**
 			 * Custom renderer for links, handling email and phone obfuscation.
 			 * @param {Object} token - The marked token for the link.
-			 * @returns {string|boolean} The rendered HTML for the link, or false to fall back.
+			 * @returns {string|boolean} the rendered HTML for the link, or false to fall back.
 			 */
 			link(token) {
 				let { href, title, text } = token;
@@ -169,7 +167,7 @@ export class Obfuscator {
 
 					let value = isMail ? href.replace('mailto:', '') : href.replace('tel:', '');
 
-					let decodedText = text;
+					let decodedText;
 					try {
 						const { obfuscated, deobfuscated } = Obfuscator.obfuscateUnlessBase64(text);
 						text = obfuscated;
@@ -255,8 +253,8 @@ export class Obfuscator {
 
 	/**
 	 * Obfuscates a string.
-	 * @param {string} str
-	 * @returns {string}
+	 * @param {string} str - The string to obfuscate.
+	 * @returns {string} the obfuscated string.
 	 */
 	static obfuscate(str) {
 		if (!str) {
@@ -280,8 +278,8 @@ export class Obfuscator {
 
 	/**
 	 * Deobfuscates a string.
-	 * @param {string} str
-	 * @returns {string}
+	 * @param {string} str - The string to deobfuscate.
+	 * @returns {string} the deobfuscated string.
 	 */
 	static deobfuscate(str) {
 		if (!str) {
@@ -311,8 +309,8 @@ export class Obfuscator {
 	/**
 	 * Obfuscates text unless it appears to be valid Base64, in which case it attempts to decode it.
 	 * Useful for handling user input that may already be obfuscated or encoded.
-	 * @param {string} text
-	 * @return {Object} An object containing both the obfuscated and deobfuscated versions of the text.
+	 * @param {string} text - The text to obfuscate.
+	 * @returns {Object} An object containing both the obfuscated and deobfuscated versions of the text.
 	 */
 	static obfuscateUnlessBase64(text) {
 		const trimmedText = text.trim();
@@ -339,7 +337,7 @@ export class Obfuscator {
 	/**
 	 * Generates the marked.js extension configuration object.
 	 * Used to parse zero-width space delimited text and securely encode it.
-	 * @returns {Object}
+	 * @returns {Object} an object containing both extensions and a renderer.
 	 */
 	static getMarkedExtension() {
 		return {
@@ -350,8 +348,8 @@ export class Obfuscator {
 
 	/**
 	 * Decodes payloads and renders entities into the target container element post-injection.
-	 * @param {HTMLElement} containerElement
-	 * @returns {void}
+	 * @param {HTMLElement} containerElement - The container element to process.
+	 * @returns {void} nothing
 	 */
 	static processDomElements(containerElement) {
 		if (!containerElement) {

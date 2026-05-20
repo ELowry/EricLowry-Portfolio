@@ -1,9 +1,16 @@
 /**
- * GameBridge - Small interface for registering game-to-app callbacks.  
+ * GameBridge - Small interface for registering game-to-app callbacks.
  * Call `GameBridge.init({ teleportPlayer, getPlayerPos, requestBehindInteract, requestFrontInteract })` to provide app-side implementations which the game can call into.
+ * @param {Object} implementations - Object with optional methods: `teleportPlayer`, `playerPos`, `requestBehindInteract`, `requestFrontInteract`
+ * @param {function(Object):void} implementations.teleportPlayer - Teleports the player
+ * @param {function():{x:number,y:number}|null} implementations.getPlayerPos - Gets the player position
+ * @param {function(number):Promise<void>} implementations.requestBehindInteract - Requests the behind-interact animation
+ * @param {function(number):Promise<void>} implementations.requestFrontInteract - Requests the front-interact animation
+ * @param {boolean} isLocal - Whether the game is running locally
  */
 export const GameBridge = {
 	implementation: null,
+	isLocal: false,
 	/**
 	 * Register implementations for the bridge.
 	 * @param {Object} implementations - Object with optional methods: `teleportPlayer`, `playerPos`, `requestBehindInteract`, `requestFrontInteract`
@@ -15,12 +22,13 @@ export const GameBridge = {
 	/**
 	 * Teleports the player using the registered implementation.
 	 * @param {{x:number,y:number}} pos - Target position
+	 * @returns {void} nothing
 	 */
 	teleportPlayer(pos) {
 		if (this.implementation && typeof this.implementation.teleportPlayer === 'function') {
 			return this.implementation.teleportPlayer(pos);
 		}
-		if (App.isLocal) {
+		if (this.isLocal) {
 			console.warn('GameBridge.teleportPlayer called but no implementation set.');
 		}
 	},

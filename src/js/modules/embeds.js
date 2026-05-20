@@ -4,7 +4,7 @@
 export class VideoEmbeds {
 	/**
 	 * List of base URLs allowed to be transformed into embeds.
-	 * @returns {string[]}
+	 * @returns {string[]} an array of base URLs allowed to be transformed into embeds.
 	 * @constant
 	 */
 	static get BASE_URLS() {
@@ -13,7 +13,7 @@ export class VideoEmbeds {
 
 	/**
 	 * Default padding-top (aspect ratio) for embeds if not specified.
-	 * @returns {string}
+	 * @returns {string} the default padding-top value.
 	 * @constant
 	 */
 	static get DEFAULT_ASPECT() {
@@ -22,7 +22,7 @@ export class VideoEmbeds {
 
 	/**
 	 * Generates the marked.js extension configuration object for transforming embed links.
-	 * @returns {Object}
+	 * @returns {Object} the marked.js extension configuration object.
 	 */
 	static getMarkedExtension() {
 		return {
@@ -30,7 +30,7 @@ export class VideoEmbeds {
 				/**
 				 * Custom renderer for links to transform specific embed URLs into iframes.
 				 * @param {Object} token - The marked token for the link.
-				 * @returns {string|boolean} The rendered HTML for the iframe, or false to fall back to default rendering.
+				 * @returns {string|boolean} the rendered HTML for the iframe, or false to fall back to default rendering.
 				 */
 				link(token) {
 					const { href, title, text } = token;

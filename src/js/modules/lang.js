@@ -4,20 +4,21 @@ import { InputPrompts } from './inputPrompts.js';
  * LangController manages multi-language support, translation logic, and persistence.
  */
 class LangController {
+	/**
+	 * @property {Object|null} data - The current language data object containing strings.
+	 * @property {Object|null} code - Current language codes { code, lang, region }.
+	 * @property {string} dir - Directory where language JSON files are stored.
+	 * @property {boolean} isLoaded - Whether the language system has finished loading and translating.
+	 */
 	constructor() {
-		/** @type {Object|null} The current language data object containing strings. */
 		this.data = null;
-		/** @type {Object|null} Current language codes { code, lang, region }. */
 		this.code = null;
-		/** @type {string} Directory where language JSON files are stored. */
 		this.dir = '/lang/';
-		/** @type {boolean} Whether the language system has finished loading and translating. */
 		this.isLoaded = false;
 	}
 
 	/**
-	 * Configuration for meta tags translation.
-	 * @returns {Array<Object>}
+	 * @returns {Array<Object>} the meta tag configuration for translation.
 	 * @constant
 	 */
 	static get META_CONFIG() {
@@ -64,7 +65,7 @@ class LangController {
 
 	/**
 	 * Returns the current full language code (e.g., `en_US`).
-	 * @returns {string} The full language code.
+	 * @returns {string} the full language code.
 	 */
 	get langCode() {
 		return this.code ? this.code.code : 'en_US';
@@ -72,7 +73,7 @@ class LangController {
 
 	/**
 	 * Initializes the language system by detecting the best language, fetching data, and translating the page.
-	 * @returns {Promise<Object|null>} Resolves with the loaded language data or null on failure.
+	 * @returns {Promise<Object|null>} (resolves) with the loaded language data or null on failure.
 	 */
 	async init() {
 		try {
@@ -141,7 +142,7 @@ class LangController {
 
 	/**
 	 * Detects browser languages and formats them to our internal scheme (e.g., `en_US`).
-	 * @returns {string[]} Array of detected language codes.
+	 * @returns {string[]} an array of detected language codes.
 	 * @private
 	 */
 	#getBrowserLanguages() {
@@ -161,7 +162,7 @@ class LangController {
 	 * Determines the current best language based on URL, persistent storage, and browser settings.
 	 * @param {string[]} browserLangs - Array of preferred languages from the browser.
 	 * @param {Object} availableLangs - Map of languages available on the server.
-	 * @returns {string} The best matching language code.
+	 * @returns {string} the best matching language code.
 	 * @private
 	 */
 	#determineBestLanguage(browserLangs, availableLangs) {
@@ -209,7 +210,7 @@ class LangController {
 	 * Verifies if a given language code is available in the configuration.
 	 * @param {string} verif - The language code to verify.
 	 * @param {Object} availableLangs - Map of available languages.
-	 * @returns {string|null} The verified language code or null if unavailable.
+	 * @returns {string|null} the verified language code or null if unavailable.
 	 * @private
 	 */
 	#verifyLang(verif, availableLangs) {
@@ -232,7 +233,7 @@ class LangController {
 	 * Formats a string by replacing indexed placeholders like {0}, {1}.
 	 * @param {string} str - The target string containing placeholders.
 	 * @param {string[]} args - Values to inject into placeholders.
-	 * @returns {string} The formatted string.
+	 * @returns {string} the formatted string.
 	 * @private
 	 */
 	#formatString(str, args) {
@@ -245,7 +246,7 @@ class LangController {
 	 * Handles newline processing for elements that require preserved line breaks.
 	 * @param {string} str - The string to process.
 	 * @param {boolean} isPre - Whether the target element is a <pre> block.
-	 * @returns {string} The processed string.
+	 * @returns {string} the processed string.
 	 * @private
 	 */
 	#processPreFormatting(str, isPre) {
@@ -406,7 +407,7 @@ class LangController {
 	 * @param {string} pathString - Dot-separated path to the target string.
 	 * @param {Object} [data] - Data object to search (defaults to current data).
 	 * @param {string} [fallback] - Optional fallback string if the target path is not found.
-	 * @returns {string} The translated string, fallback, or `notFound`.
+	 * @returns {string} the translated string, fallback, or `notFound`.
 	 */
 	getString(pathString, data = this.data, fallback = 'notFound') {
 		const searchData = data || this.data;

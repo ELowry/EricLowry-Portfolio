@@ -1,19 +1,19 @@
 {
-  "version": "0.1.1",
-  "url": "https://eric-lowry.com/",
-  "updated_at": "2026-04-02",
-  "vouches": [
-	{
-		"url": "https://github.com/ELowry/MarkedResponsiveImages",
-		"vouched_at": "2026-04-02"
-	},
-	{
-		"url": "https://github.com/ELowry/WinGet-Updater",
-		"vouched_at": "2026-04-02"
-	},
-	{
-		"url": "https://github.com/ELowry/Unity_InputLayers_Documentation",
-		"vouched_at": "2026-04-02"
-	}
-  ]
+	"version": "0.1.1",
+	"url": "https://eric-lowry.com/",
+	"updated_at": "2026-04-02",
+	"vouches": [
+		{
+			"url": "https://github.com/ELowry/MarkedResponsiveImages",
+			"vouched_at": "2026-04-02"
+		},
+		{
+			"url": "https://github.com/ELowry/WinGet-Updater",
+			"vouched_at": "2026-04-02"
+		},
+		{
+			"url": "https://github.com/ELowry/Unity_InputLayers_Documentation",
+			"vouched_at": "2026-04-02"
+		}
+	]
 }
