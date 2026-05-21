@@ -15,8 +15,9 @@ export class TextRenderer {
 	 */
 	constructor(app, breadcrumbTemplate, navLinkTemplate) {
 		this.app = app;
-		this.breadcrumbTemplate = breadcrumbTemplate;
-		this.navLinkTemplate = navLinkTemplate;
+		this.breadcrumbTemplate =
+			breadcrumbTemplate || document.getElementById('template-breadcrumb-item');
+		this.navLinkTemplate = navLinkTemplate || document.getElementById('template-nav-link');
 
 		Events.on('route:changed', (payload) => this.#handleTextContent(payload));
 	}

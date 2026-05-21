@@ -127,8 +127,8 @@
 		<!-- TEMP TEXT-ONLY START -->
 		<style>
 			/* Hide buttons linking to game mode */
-			#game-mode,
-			button[data-lang='ui.text_mode.404.btn_game'] {
+			body:not(.isLocal) #game-mode,
+			body:not(.isLocal) button[data-lang='ui.text_mode.404.btn_game'] {
 				display: none !important;
 			}
 		</style>

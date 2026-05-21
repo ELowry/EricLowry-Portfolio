@@ -91,7 +91,11 @@ class RouterController {
 		}
 
 		// TEMP TEXT-ONLY START
-		mode = 'text';
+		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+			// TEMP TEXT-ONLY END
+			mode = 'text';
+			// TEMP TEXT-ONLY START
+		}
 		// TEMP TEXT-ONLY END
 
 		await this.applyState({ mode, path }, true);
@@ -106,7 +110,11 @@ class RouterController {
 	 */
 	async go(mode, path) {
 		// TEMP TEXT-ONLY START
-		mode = 'text';
+		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+			// TEMP TEXT-ONLY END
+			mode = 'text';
+			// TEMP TEXT-ONLY START
+		}
 		// TEMP TEXT-ONLY END
 		const validMode = ['game', 'text'].includes(mode) ? mode : 'game';
 		const cleanPath = this.sanitizePath(path);

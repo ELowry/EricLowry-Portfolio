@@ -183,9 +183,25 @@ class AppController {
 			const searchParams = new URLSearchParams(window.location.search);
 			if ((pathName === '' || pathName === 'index.html') && !searchParams.has('mode')) {
 				// TEMP TEXT-ONLY START
-				// this.openGameWelcome();
+				if (
+					window.location.hostname === 'localhost'
+					|| window.location.hostname === '127.0.0.1'
+				) {
+					// TEMP TEXT-ONLY END
+					this.openGameWelcome();
+					// TEMP TEXT-ONLY START
+				}
 				// TEMP TEXT-ONLY END
 			}
+
+			// TEMP TEXT-ONLY START
+			if (
+				window.location.hostname === 'localhost'
+				|| window.location.hostname === '127.0.0.1'
+			) {
+				document.body.classList.add('isLocal');
+			}
+			// TEMP TEXT-ONLY END
 
 			// Finally hide loading with a fade
 		} catch (error) {
