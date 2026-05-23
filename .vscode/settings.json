@@ -1,0 +1,11 @@
+{
+	"search.exclude": {
+		"**/.firebase": true,
+		"**/public/vendor": true
+	},
+	"editor.unicodeHighlight.invisibleCharacters": true,
+	"editor.unicodeHighlight.includeStrings": true,
+	"editor.unicodeHighlight.allowedLocales": {
+		"en": true
+	}
+}

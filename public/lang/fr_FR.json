@@ -1,0 +1,106 @@
+{
+	"portfolio": {
+		"title": "Portfolio",
+		"rootTitle": "Bienvenue"
+	},
+	"languages": {
+		"en_US": "Anglais",
+		"fr_FR": "Français"
+	},
+	"content": {
+		"index": {
+			"title": "Welcome",
+			"label": "Welcome"
+		},
+		"about": {
+			"title": "About Me",
+			"label": "About Me",
+			"about": {
+				"title": "About Overview",
+				"label": "About Overview"
+			},
+			"cv": {
+				"title": "Curiculum Vitae",
+				"label": "Curiculum Vitae"
+			},
+			"bio": {
+				"title": "Biography",
+				"label": "Read Bio"
+			},
+			"history": {
+				"title": "Work History",
+				"label": "Work History"
+			}
+		},
+		"projects": {
+			"title": "Projects",
+			"label": "Projects",
+			"projects": {
+				"title": "Projects Overview",
+				"label": "Projects Overview"
+			},
+			"cool-game": {
+				"title": "Cool Game",
+				"label": "Game Project"
+			}
+		},
+		"privacy": {
+			"title": "Politique de confidentialité",
+			"label": "Politique de confidentialité"
+		}
+	},
+	"ui": {
+		"loading": "Chargement",
+		"submenu_options": "Sous-menu Options",
+		"btn_options": "Options",
+		"btn_readability": "Améliorer la lisibilité",
+		"btn_privacy": "Politique de confidentialité",
+		"submenu_language": "Changer de Langue",
+		"btn_switch_language": "Afficher le site en {lang}",
+		"welcome": {
+			"header": "Bienvenue sur le portfolio d'Eric Lowry",
+			"p1": "J'ai mis en place une petite expérience interactive qui vous permet d'explorer mon travail à travers un petit jeu ludique.",
+			"p2": "Toutefois, pour des raisons d'accessibilité ou d'efficacité, une interface simplifiée est disponible avec toutes les mêmes informations.",
+			"btn_game": "Mode Exploration",
+			"btn_text": "Mode Texte",
+			"note": "En mode exploration, vous pouvez appuyer sur la touche {0} à tout moment pour ouvrir un menu vous permettant de revenir au mode texte."
+		},
+		"game_menu": {
+			"header": "Menu",
+			"btn_reset": "Retour au départ",
+			"btn_text_mode": "Passer au mode texte",
+			"btn_controls": "Afficher les commandes",
+			"btn_close": "Fermer le menu"
+		},
+		"modal": {
+			"btn_close": "Fermer"
+		},
+		"text_mode": {
+			"table_of_contents": "Table des matières",
+			"text_nav": "Navigation du contenu",
+			"btn_game_mode": "Passer au mode exploration",
+			"skip_link": "Passer au contenu",
+			"404": {
+				"title": "Page non trouvée",
+				"text": "Le chemin que vous avez saisi ne semble mener nulle part.",
+				"btn_home": "Retour à l'accueil",
+				"btn_game": "Passer au mode exploration"
+			}
+		},
+		"touch_instructions": {
+			"header": "Commandes tactiles",
+			"p1": "Il semble que vous utilisiez un appareil tactile! Voici comment naviguer:",
+			"sides": "Touchez le côté gauche ou droit pour vous déplacer dans cette direction.",
+			"center": "Touchez la zone centrale pour interagir avec les objets.",
+			"dont_show": "Ne plus afficher ce message",
+			"btn_close": "J'ai compris!"
+		},
+		"contact": {
+			"email_placeholder": "[afficher l'email]",
+			"phone_placeholder": "[afficher le numéro de téléphone]"
+		}
+	},
+	"keys": {
+		"escape": "[Ech]"
+	}
+}

@@ -1,0 +1,142 @@
+/* --- MARKDOWN STYLES --- */
+/* Scoped to elements with `marked` class */
+
+.marked {
+	& blockquote {
+		opacity: 0.8;
+		margin: 1em 0;
+		border-left: 0.25em solid var(--color-border);
+		padding: 0 1em;
+		color: var(--color-text);
+	}
+
+	& img {
+		display: inline-block;
+		background-color: oklch(from var(--color-highlight) l c h / 3%);
+
+		&::before {
+			display: inline-block;
+			padding: 0.4em 0.6em;
+		}
+
+		/* 1 Hair Space: Centered block (All sizes) */
+		&[alt$=' '] {
+			display: block;
+			margin: auto;
+		}
+		/* 2 Hair Spaces: Centered block -> Floats Right (>= 800px) */
+		&[alt$='  '] {
+			display: block;
+			margin: auto;
+
+			@media (width >= 800px) {
+				float: right;
+				margin-left: 1em;
+			}
+		}
+		/* 3 Hair Spaces: Inline -> Floats Right (>= 600px) */
+		&[alt$='   '] {
+			@media (width >= 600px) {
+				float: right;
+				margin-left: 1em;
+			}
+		}
+		/* 1 Space + 1 Hair Space: Left-aligned block -> Floats Left (>= 800px) */
+		&[alt$='  '] {
+			display: block;
+			margin-right: auto;
+
+			@media (width >= 800px) {
+				float: left;
+				margin-right: 1em;
+			}
+		}
+		/* 1 Space + 2 Hair Spaces: Inline -> Floats Left (>= 800px) */
+		&[alt$='   '] {
+			@media (width >= 800px) {
+				float: left;
+				margin-right: 1em;
+			}
+		}
+	}
+
+	/* Base Alert Style */
+	& .markdown-alert {
+		position: relative;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		border-left: 0.25em solid var(--color-border);
+		background-color: oklch(from var(--color-highlight) l c h / 3%);
+		padding: 0.5rem 1rem;
+		overflow: hidden;
+		font-size: 0.95em;
+
+		/* Alert Title */
+		& .markdown-alert-title {
+			display: flex;
+			align-items: center;
+			opacity: 0.9;
+			margin-top: 0;
+			margin-bottom: 0.5em;
+			color: inherit; /* Inherit from specific alert color */
+			font-weight: 600;
+			font-size: 0.9em;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+
+			& svg {
+				fill: currentColor;
+				margin-right: 0.5em;
+				width: 16px;
+				height: 16px;
+			}
+		}
+
+		/* Alert Content */
+		& > :nth-child(2) {
+			margin-top: 0;
+		}
+		& > :last-child {
+			margin-bottom: 0;
+		}
+
+		/* Specific Alert Types */
+		&.markdown-alert-note,
+		&.markdown-alert-info {
+			border-left-color: var(--color-alert-note);
+			& .markdown-alert-title {
+				color: var(--color-alert-note);
+			}
+		}
+		&.markdown-alert-tip {
+			border-left-color: var(--color-alert-tip);
+			& .markdown-alert-title {
+				color: var(--color-alert-tip);
+			}
+		}
+		&.markdown-alert-important {
+			border-left-color: var(--color-alert-important);
+			& .markdown-alert-title {
+				color: var(--color-alert-important);
+			}
+		}
+		&.markdown-alert-warning {
+			border-left-color: var(--color-alert-warning);
+			& .markdown-alert-title {
+				color: var(--color-alert-warning);
+			}
+		}
+		&.markdown-alert-caution {
+			border-left-color: var(--color-alert-caution);
+			& .markdown-alert-title {
+				color: var(--color-alert-caution);
+			}
+		}
+
+		/* Code blocks inside alerts should blend in */
+		& pre,
+		& code {
+			background-color: oklch(from var(--color-highlight) l c h / 5%);
+		}
+	}
+}

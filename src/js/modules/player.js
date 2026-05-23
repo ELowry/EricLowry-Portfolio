@@ -1,0 +1,276 @@
+import { Input } from './input.js';
+import { App } from '../app.js';
+
+/**
+ * Player character controlled by user input.
+ * Extends LittleJS `EngineObject` for positioning and rendering.
+ */
+export class Player extends App.LJS.EngineObject {
+	/**
+	 * Creates a new Player instance.
+	 * @param {Vector2} pos - Initial position in world space
+	 */
+	constructor(pos) {
+		super(pos, App.LJS.vec2(1, 2.9));
+
+		this.moveSpeed = Player.MOVE_SPEED;
+		this.color = new App.LJS.Color(1, 1, 1);
+		this.state = 'idle';
+		this.prevState = 'idle';
+		this.facingLeft = true;
+		this.stateTimer = new App.LJS.Timer();
+		this.idleLookTimer = new App.LJS.Timer(
+			App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX),
+		);
+		this.isLookingAround = false;
+		this.angle = 0;
+
+		this.setCollision(true, true);
+	}
+
+	/**
+	 * Walking animation speed in frames per second.
+	 * @constant {number}
+	 */
+	static get ANIM_SPEED_WALK() {
+		return 14;
+	}
+	/**
+	 * Stopping animation speed in frames per second.
+	 * @constant {number}
+	 */
+	static get ANIM_SPEED_STOP() {
+		return 10;
+	}
+	/**
+	 * Idle animation speed in frames per second.
+	 * @constant {number}
+	 */
+	static get ANIM_SPEED_IDLE() {
+		return 3;
+	}
+	/**
+	 * Animation speed for interacting from behind in frames per second.
+	 * @constant {number}
+	 */
+	static get ANIM_SPEED_INTERACT_BACK() {
+		return 10;
+	}
+	/**
+	 * Speed for the transition into a front-facing interaction in frames per second.
+	 * @constant {number}
+	 */
+	static get ANIM_SPEED_INTERACT_FRONT_STOP() {
+		return 12;
+	}
+	/**
+	 * Front-facing interaction animation speed in frames per second.
+	 * @constant {number}
+	 */
+	static get ANIM_SPEED_INTERACT_FRONT() {
+		return 6;
+	}
+
+	/**
+	 * The base horizontal movement speed of the player.
+	 * @constant {number}
+	 */
+	static get MOVE_SPEED() {
+		return 0.06;
+	}
+
+	/**
+	 * Minimum duration in seconds before the player performs a 'look around' idle action.
+	 * @constant {number}
+	 */
+	static get IDLE_LOOK_DURATION_MIN() {
+		return 2;
+	}
+	/**
+	 * Maximum duration in seconds before the player performs a 'look around' idle action.
+	 * @constant {number}
+	 */
+	static get IDLE_LOOK_DURATION_MAX() {
+		return 10;
+	}
+
+	/**
+	 * The dimensions of a single player sprite in the spritesheet.
+	 * @constant {Vector2}
+	 */
+	static get SPRITE_RESOLUTION() {
+		return App.LJS.vec2(11, 34);
+	}
+	/**
+	 * The amount of padding between sprites in the spritesheet.
+	 * @constant {number}
+	 */
+	static get SPRITE_PADDING() {
+		return 1;
+	}
+
+	/**
+	 * Updates the player's state and position each frame.
+	 */
+	update() {
+		if (App.mode === 'text' || !App.isRunning) {
+			return;
+		}
+
+		const moveDir = App.mode !== 'game' || App.menuOpen ? 0 : Input.axis.x;
+
+		if (this.state === 'walk') {
+			this.velocity.x = moveDir * this.moveSpeed;
+
+			if (moveDir === 0) {
+				this.setState('stopping');
+			} else {
+				this.facingLeft = moveDir < 0;
+			}
+		} else if (this.state === 'stopping') {
+			this.velocity.x *= 0.8;
+
+			if (moveDir !== 0) {
+				this.setState('walk');
+				this.facingLeft = moveDir < 0;
+			}
+
+			const stopDuration = 8 / Player.ANIM_SPEED_STOP;
+			if (this.stateTimer.get() > stopDuration) {
+				this.setState('idle');
+			}
+		} else if (this.state === 'idle') {
+			this.velocity.x *= 0.8;
+
+			if (moveDir !== 0) {
+				this.setState('walk');
+				this.facingLeft = moveDir < 0;
+			}
+
+			if (!this.isLookingAround && this.idleLookTimer.elapsed()) {
+				this.isLookingAround = true;
+				this.stateTimer.set();
+			}
+
+			if (this.isLookingAround && this.stateTimer.get() > 3 / Player.ANIM_SPEED_IDLE) {
+				this.isLookingAround = false;
+				this.idleLookTimer.set(
+					App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX),
+				);
+			}
+		} else if (this.state === 'front_interact_stopping') {
+			this.velocity.x *= 0.8;
+			const startFrame = this.savedStopFrame || 12;
+			const localFrame = Math.floor(
+				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP,
+			);
+			if (startFrame + localFrame > 16) {
+				this.setState('front_interact');
+			}
+		} else if (this.state === 'behind_interact' || this.state === 'front_interact') {
+			this.velocity.x *= 0.8;
+		}
+
+		super.update();
+	}
+
+	/**
+	 * Renders the player using the current animation frame and orientation.
+	 */
+	render() {
+		if (App.mode === 'text' || !App.isRunning) {
+			return;
+		}
+
+		let tileIndex = 21;
+
+		if (this.state === 'walk') {
+			tileIndex = Math.floor(App.LJS.time * Player.ANIM_SPEED_WALK) % 12;
+		} else if (this.state === 'stopping') {
+			const frameOffset = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_STOP);
+			tileIndex = 11 + Math.min(frameOffset, 7);
+		} else if (this.state === 'idle') {
+			if (this.isLookingAround) {
+				const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_IDLE);
+				const lookSequence = [20, 21, 22];
+				tileIndex = lookSequence[Math.min(localFrame, 2)];
+			} else {
+				tileIndex = 21;
+			}
+		} else if (this.state === 'behind_interact') {
+			const startFrame = this.prevState === 'walk' || this.prevState === 'stopping' ? 24 : 23;
+			const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_BACK);
+			tileIndex = Math.min(startFrame + localFrame, 27);
+		} else if (this.state === 'front_interact_stopping') {
+			const startFrame = this.savedStopFrame || 12;
+			const localFrame = Math.floor(
+				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP,
+			);
+			tileIndex = Math.min(startFrame + localFrame, 16);
+		} else if (this.state === 'front_interact') {
+			const startOffset = this.prevState === 'front_interact_stopping' ? 29 : 28;
+			const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT);
+			tileIndex = Math.min(startOffset + localFrame, 32);
+		}
+
+		const playerTile = App.LJS.tile(
+			tileIndex,
+			Player.SPRITE_RESOLUTION,
+			0,
+			Player.SPRITE_PADDING,
+		);
+
+		App.LJS.drawTile(this.pos, this.size, playerTile, this.color, 0, !this.facingLeft);
+	}
+
+	/**
+	 * Sets the player's current state animation.
+	 * @param {any} newState - New state to set
+	 */
+	setState(newState) {
+		if (this.state === 'stopping') {
+			const frameOffset = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_STOP);
+			this.savedStopFrame = 11 + Math.min(frameOffset, 7);
+		} else {
+			this.savedStopFrame = null;
+		}
+		this.prevState = this.state;
+		this.state = newState;
+		this.stateTimer.set();
+		this.isLookingAround = false;
+		this.idleLookTimer.set(
+			App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX),
+		);
+	}
+
+	/**
+	 * Request the behind-interact animation and return a promise that resolves after the requested animation delay so callers can coordinate fade and navigation.
+	 * @param {number} [duration=500] - milliseconds to wait while animation plays
+	 * @returns {Promise<void>}
+	 */
+	playBehindInteract(duration = 500) {
+		if (this.state !== 'behind_interact') {
+			this.setState('behind_interact');
+		}
+		return new Promise((resolve) => setTimeout(resolve, duration));
+	}
+
+	/**
+	 * Request the behind-interact animation and return a promise that resolves after the requested animation delay so callers can coordinate fade and navigation.
+	 * Handles transition from walking/stopping by playing a stop sequence first.
+	 * @param {number} [duration=800] - milliseconds to wait while animation plays
+	 * @returns {Promise<void>}
+	 */
+	playFrontInteract(duration = 800) {
+		if (this.state === 'walk' || this.state === 'stopping') {
+			if (this.state !== 'front_interact_stopping') {
+				this.setState('front_interact_stopping');
+			}
+		} else {
+			if (this.state !== 'front_interact') {
+				this.setState('front_interact');
+			}
+		}
+		return new Promise((resolve) => setTimeout(resolve, duration));
+	}
+}

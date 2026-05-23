@@ -1,0 +1,41 @@
+.hidden {
+	display: none !important;
+}
+
+.sr-only {
+	position: absolute;
+	margin: -1px;
+	padding: 0;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border-width: 0;
+	white-space: nowrap;
+
+	@media (forced-colors: active) or (prefers-contrast: more) or (prefers-reduced-data: reduce) {
+		&.accessible-forced {
+			position: static;
+			margin: unset;
+			padding: unset;
+			width: auto;
+			height: auto;
+			overflow: unset;
+			clip: unset;
+			border-width: unset;
+			white-space: unset;
+		}
+	}
+
+	:root.readability-mode &.accessible-forced {
+		position: static;
+		margin: unset;
+		padding: unset;
+		width: auto;
+		height: auto;
+		overflow: unset;
+		clip: unset;
+		border-width: unset;
+		white-space: unset;
+	}
+}

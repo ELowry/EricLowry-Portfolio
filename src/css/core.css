@@ -1,0 +1,100 @@
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	transition: var(--transition-base);
+	box-sizing: inherit;
+	scrollbar-color: var(--scrollbar-colors);
+}
+
+body {
+	margin: 0;
+	background-color: var(--color-background);
+	overflow: hidden;
+	color: var(--color-text);
+	font-family: var(--font-sans);
+}
+
+*:focus-visible {
+	outline: dotted var(--border-width) var(--color-accent);
+	outline-offset: var(--border-width);
+}
+
+button {
+	cursor: pointer;
+	border: var(--border-width) solid var(--color-accent);
+	border-radius: 0;
+	background-color: oklch(from var(--color-highlight) l c h / var(--opacity-highlight));
+	padding: 0.5em 0.6em;
+	color: var(--color-text);
+
+	&:hover {
+		--opacity-highlight: 0.1;
+	}
+
+	&:active {
+		--opacity-highlight: 0.2;
+	}
+}
+
+a {
+	color: var(--color-accent);
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+
+	&:active {
+		text-decoration: underline;
+	}
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+nav:not(.classic-nav) button:not(.no-arrow),
+nav:not(.classic-nav) a.button:not(.no-arrow) {
+	border: none;
+	background: none;
+	padding: 0;
+	color: var(--color-accent);
+	text-align: left;
+
+	&:hover {
+		text-decoration: underline;
+	}
+
+	&::before {
+		display: inline-block;
+		transition:
+			var(--transition-base),
+			padding 0.02s var(--transition-easing);
+		padding-right: 1ch;
+		content: '>';
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	&:hover::before,
+	&:focus-visible::before {
+		padding-right: 0.2ch;
+		padding-left: 0.8ch;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		color: var(--color-border);
+		text-decoration: none;
+
+		&::before {
+			content: ' ';
+			color: var(--color-border);
+		}
+	}
+}

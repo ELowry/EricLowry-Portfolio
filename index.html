@@ -1,0 +1,349 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Eric Lowry</title>
+
+		<link rel="stylesheet" href="/src/css/main.css" />
+	</head>
+
+	<body>
+		<div id="loading-overlay" class="opaque" role="status" aria-live="polite">
+			<div>
+				<span class="lang" data-lang="ui.loading">Loading</span>
+				<span aria-hidden="true">...</span>
+			</div>
+		</div>
+
+		<div id="game-layer">
+			<div id="touch-controls">
+				<div id="touch-left"></div>
+				<div id="touch-center"></div>
+				<div id="touch-right"></div>
+			</div>
+
+			<button
+				id="menu-button"
+				aria-haspopup="menu"
+				aria-expanded="false"
+				onpointerdown="App.openGameMenu()"
+			>
+				<span class="sr-only">Menu</span>
+			</button>
+
+			<div id="touch-instructions" class="hidden">
+				<div class="modal-box">
+					<h4 class="lang" data-lang="ui.touch_instructions.header">Touch Controls</h4>
+					<p class="lang" data-lang="ui.touch_instructions.p1"
+						>It looks like you're using a touch device! Here's how to navigate:</p
+					>
+					<ul>
+						<li class="lang" data-lang="ui.touch_instructions.sides"
+							>Touch the left or right side to move in that direction.</li
+						>
+						<li class="lang" data-lang="ui.touch_instructions.center"
+							>Touch the center area to interact with objects.</li
+						>
+					</ul>
+					<div
+						style="
+							margin-top: 2em;
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+						"
+					>
+						<label
+							style="display: flex; align-items: center; gap: 0.5em; cursor: pointer"
+						>
+							<input
+								type="checkbox"
+								id="touch-dont-show"
+								style="width: 20px; height: 20px"
+							/>
+							<span class="lang" data-lang="ui.touch_instructions.dont_show"
+								>Don't show this again</span
+							>
+						</label>
+						<button
+							class="lang"
+							data-lang="ui.touch_instructions.btn_close"
+							onclick="App.tutorialManager.closeTouchInstructions()"
+							>Got it!</button
+						>
+					</div>
+				</div>
+			</div>
+
+			<dialog id="welcome-screen">
+				<div class="modal-box">
+					<div>
+						<h1 class="lang" data-lang="ui.welcome.header"
+							>Welcome to Eric Lowry's portfolio</h1
+						>
+						<p class="lang" data-lang="ui.welcome.p1"
+							>I have set up a small interactive experience which lets you explore my
+							work in a fun little game.</p
+						>
+						<p class="lang" data-lang="ui.welcome.p2"
+							>However, whether for accessibility reasons or efficiency, a simplified
+							interface is available with all the same information.</p
+						>
+						<nav class="classic-nav">
+							<button
+								class="lang"
+								data-lang="ui.welcome.btn_game"
+								onclick="App.closeGameWelcome('game')"
+								>Exploration Mode</button
+							>
+							<button
+								class="lang"
+								data-lang="ui.welcome.btn_text"
+								onclick="App.closeGameWelcome('text')"
+								>Text Mode</button
+							>
+						</nav>
+						<p>
+							<em class="lang" data-lang="ui.welcome.note"
+								>In exploration mode, you can press &#8203;
+								<kbd data-prompt="menu">[Esc]</kbd> &#8203; at any point to open up
+								a menu which lets you navigate back to text mode.</em
+							>
+						</p>
+					</div>
+				</div>
+			</dialog>
+
+			<dialog id="game-menu">
+				<div class="modal-box">
+					<h1>
+						<span class="sr-only accessible-forced lang" data-lang="ui.game_menu.header"
+							>Menu</span
+						>
+						<span class="ascii" aria-hidden="true">
+							<pre>
+ __ __ 
+|  V  |
+| \_/ |
+|_| |_|</pre
+							>
+							<pre>
+ ___ 
+| __|
+| _| 
+|___|</pre
+							>
+							<pre>
+ __  _ 
+|  \| |
+| | ' |
+|_|\__|</pre
+							>
+							<pre>
+ _  _ 
+| || |
+| \/ |
+ \__/ </pre
+							>
+						</span>
+					</h1>
+					<nav role="menu">
+						<button
+							id="reset-button"
+							role="menuitem"
+							class="lang"
+							data-lang="ui.game_menu.btn_reset"
+							onclick="App.returnToStart()"
+							>Return to Start</button
+						>
+						<button
+							role="menuitem"
+							class="lang"
+							data-lang="ui.game_menu.btn_text_mode"
+							onclick="
+								App.closeGameMenu();
+								App.setMode('text');
+							"
+							>Switch to Text Mode</button
+						>
+						<button
+							role="menuitem"
+							class="lang"
+							data-lang="ui.game_menu.btn_controls"
+							onclick="
+								App.closeGameMenu();
+								App.loadContentInModal('info/controls.md');
+							"
+							>Display Controls</button
+						>
+						<button
+							role="menuitem"
+							class="lang"
+							data-lang="ui.btn_privacy"
+							onclick="
+								App.closeGameMenu();
+								App.loadContentInModal('info/privacy.md');
+							"
+							>Privacy Policy</button
+						>
+						<button
+							role="menuitem"
+							class="lang"
+							data-lang="ui.btn_options"
+							aria-haspopup="menu"
+							aria-expanded="false"
+							aria-controls="game-options-submenu"
+							>Options</button
+						>
+						<div
+							id="game-options-submenu"
+							class="langAttr"
+							role="menu"
+							data-langattr="aria-label"
+							data-langAria_label="ui.submenu_options"
+							aria-label="Options Submenu"
+							hidden
+						>
+							<button
+								role="menuitemcheckbox"
+								aria-checked="false"
+								class="switch-btn js-readability-toggle"
+								onclick="App.toggleReadabilityMode()"
+							>
+								<span class="switch-track"></span>
+								<span class="lang" data-lang="ui.btn_readability"
+									>Increase Readability</span
+								>
+							</button>
+							<div
+								class="languageSwitcherButtons langAttr"
+								data-langattr="aria-label"
+								data-langAria_label="ui.submenu_language"
+								role="group"
+								aria-label="Language selection"
+							></div>
+						</div>
+						<button
+							role="menuitem"
+							class="lang"
+							data-lang="ui.game_menu.btn_close"
+							onclick="App.closeGameMenu()"
+							>Close Menu</button
+						>
+					</nav>
+				</div>
+			</dialog>
+
+			<dialog id="game-modal">
+				<div class="modal-box">
+					<button onclick="App.closeGameModal()" class="close-modal">
+						<span class="lang" data-lang="ui.modal.btn_close">Close</span>
+						<span data-prompt="back">[x]</span>
+					</button>
+					<div id="game-modal-content" tabindex="-1"></div>
+				</div>
+			</dialog>
+		</div>
+
+		<div id="text-layer" class="hidden">
+			<a href="#text-content" class="skip-link lang" data-lang="ui.text_mode.skip_link"
+				>Skip to content</a
+			>
+			<nav id="text-navbar" role="menubar" aria-label="Main Navigation">
+				<button
+					role="menuitem"
+					id="game-mode"
+					class="lang"
+					data-lang="ui.text_mode.btn_game_mode"
+					onclick="App.setMode('game')"
+					>Switch to Exploration Mode</button
+				>
+				<button
+					role="menuitem"
+					class="lang"
+					data-lang="ui.btn_privacy"
+					data-nav-path="privacy"
+					onclick="App.navigate('privacy')"
+					>Privacy Policy</button
+				>
+				<button
+					role="menuitem"
+					aria-haspopup="menu"
+					aria-expanded="false"
+					aria-controls="text-options-submenu"
+					><span class="menuitem-icon" aria-hidden="true">⚙</span
+					><span class="lang sr-only accessible-forced" data-lang="ui.btn_options"
+						>Options</span
+					></button
+				>
+				<div
+					id="text-options-submenu"
+					role="menu"
+					class="langAttr"
+					data-langattr="aria-label"
+					data-langAria_label="ui.submenu_options"
+					aria-label="Options Submenu"
+					hidden
+				>
+					<button
+						role="menuitemcheckbox"
+						aria-checked="false"
+						class="switch-btn js-readability-toggle"
+						onclick="App.toggleReadabilityMode()"
+					>
+						<span class="switch-track"></span>
+						<span class="lang" data-lang="ui.btn_readability"
+							>Increase Readability</span
+						>
+					</button>
+					<div
+						class="languageSwitcherButtons langAttr"
+						data-langattr="aria-label"
+						data-langAria_label="ui.submenu_language"
+						role="group"
+						aria-label="Language selection"
+					></div>
+				</div>
+			</nav>
+			<div class="text-layout">
+				<nav
+					id="text-nav"
+					class="langAttr"
+					data-langattr="aria-label"
+					data-langAria_label="ui.text_mode.text_nav"
+					aria-label="Content Navigation"
+				></nav>
+				<div class="text-columns">
+					<nav
+						id="text-table-of-contents"
+						class="langAttr"
+						data-langattr="aria-label"
+						data-langAria_label="ui.text_mode.table_of_contents"
+						aria-label="Table of Contents"
+					></nav>
+					<main id="text-content" tabindex="-1"></main>
+				</div>
+			</div>
+		</div>
+
+		<div id="interaction-label-overlay" class="interaction-label-overlay" aria-hidden="true">
+			<div id="interaction-label-contents">
+				<div id="interaction-label-text" aria-live="polite"></div>
+				<span data-prompt="interact">[E]</span>
+			</div>
+		</div>
+
+		<template id="tmpl-breadcrumb-item">
+			<li>
+				<a href="#"></a>
+			</li>
+		</template>
+
+		<template id="tmpl-nav-link">
+			<a href="#" role="menuitem" class="nav-btn"></a>
+		</template>
+
+		<script type="module" src="/src/js/main.js"></script>
+	</body>
+</html>
