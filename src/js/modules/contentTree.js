@@ -118,6 +118,11 @@ export const ContentTree = category(
 					'coaching-business/coaching-business.md',
 					true
 				),
+				content(
+					'CinQ',
+					'CinQ – corporate team training video game',
+					'gaming/CinQ/website.md'
+				),
 				content('medium', 'Medium Editing', 'coaching-business/medium.md'),
 				content('podcast', 'Podcast Editing', 'coaching-business/podcast.md'),
 			]
@@ -196,6 +201,7 @@ export const ContentTree = category(
 						),
 					]
 				),
+				content('StadiaIcons', 'StadiaIcons', 'osd/StadiaIcons.md'),
 				content('archive', 'Archive of Defunct Websites', 'websites/archive.md'),
 			]
 		),

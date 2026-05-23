@@ -382,7 +382,11 @@ export class UIManager {
 			nextIndex = 0;
 		} else if (e.key === 'End') {
 			nextIndex = items.length - 1;
-		} else if (!Navigation.activeContainer || !Navigation.activeContainer.contains(container)) {
+		} else if (
+			!Navigation.activeContainer
+			|| !Navigation.activeContainer.contains(container)
+			|| !Navigation.options.axis
+		) {
 			if ((axis === 'y' || axis === 'both') && e.key === 'ArrowDown') {
 				nextIndex = (currentIndex + 1) % items.length;
 			} else if ((axis === 'y' || axis === 'both') && e.key === 'ArrowUp') {
@@ -413,8 +417,14 @@ export class UIManager {
 	#resetTabFocus(container) {
 		const allItems = Array.from(container.querySelectorAll('[role^="menuitem"], a[href]'));
 		const items = allItems.filter((el) => {
+			if (el.disabled || el.hasAttribute('disabled')) {
+				return false;
+			}
 			const hiddenParent = el.closest('[hidden]');
-			return !hiddenParent || hiddenParent === container;
+			if (hiddenParent && hiddenParent !== container) {
+				return false;
+			}
+			return el.offsetParent !== null;
 		});
 		items.forEach((el, i) => {
 			el.tabIndex = i === 0 ? 0 : -1;
@@ -622,6 +632,10 @@ export class UIManager {
 
 			this.#resetGameInterface();
 			Navigation.setContext(this.elements.textLayer, { scroll: true, axis: null });
+
+			if (this.elements.textNavbar) {
+				this.#resetTabFocus(this.elements.textNavbar);
+			}
 		}
 	}
 

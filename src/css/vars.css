@@ -34,10 +34,12 @@
 		from var(--hex-highlight) var(--luminocity-highlight) c h / var(--opacity-highlight)
 	);
 
-	--scrollbar-thumb: var(--color-border-active);
-	--scrollbar-colors: var(--scrollbar-thumb)
-		oklch(from var(--color-background) calc(l - 0.04) c h);
+	--scrollbar-thumb: oklch(from var(--color-accent) calc(l - 0.1) calc(c - 0.02) h);
+	--scrollbar-thumb-hover: oklch(from var(--scrollbar-thumb) calc(l + 0.05) calc(c - 0.02) h);
+	--scrollbar-track: oklch(from var(--color-background) calc(l - 0.04) c h);
+	--scrollbar-colors: var(--scrollbar-thumb) var(--scrollbar-track);
 	--scrollbar-thinner-width: thin;
+	--scrollbar-thinner-width-legacy: 8px;
 
 	--backdrop-blur: blur(10px);
 	--backdrop-blur-light: blur(4px);
@@ -116,6 +118,7 @@
 
 		--scrollbar-thumb: var(--color-text);
 		--scrollbar-thinner-width: auto;
+		--scrollbar-width-legacy: unset;
 	}
 
 	@media print, (prefers-color-scheme: light) {
@@ -129,6 +132,11 @@
 		--opacity-highlight: 8%;
 
 		--color-border-active: oklch(from var(--color-border) calc(l - 0.15) calc(c + 0.02) h);
+
+		--scrollbar-thumb: oklch(from var(--color-accent) calc(l + 0.1) calc(c - 0.02) h);
+		--scrollbar-thumb-hover: oklch(from var(--scrollbar-thumb) calc(l + 0.04) c h);
+		--scrollbar-track: oklch(from var(--color-background) calc(l + 0.02) c h);
+		--scrollbar-colors: var(--scrollbar-thumb) var(--scrollbar-track);
 
 		--scrollbar-colors: var(--color-border-active)
 			oklch(from var(--color-background) calc(l + 0.04) c h);

@@ -89,6 +89,7 @@ export class TextRenderer {
 			return;
 		}
 		const visibleChildren = currentNode.children.filter((child) => {
+			if (child.hidden === true) return false;
 			return currentNode.id === 'root' ? child.id !== 'index' : true;
 		});
 
@@ -102,10 +103,6 @@ export class TextRenderer {
 		navContainer.setAttribute('aria-label', 'Category Options');
 
 		visibleChildren.forEach((child, idx) => {
-			if (child.hidden === true) {
-				return;
-			}
-
 			const childPath = path ? `${path}/${child.id}` : child.id;
 
 			// Label Logic

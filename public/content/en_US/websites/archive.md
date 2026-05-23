@@ -17,7 +17,7 @@ This archive is a collection of legacy projects, early freelance work, and sites
 > | **Tech Stack** | WordPress, Custom Theming, PHP, Local SEO |
 > | **Status**     | Live (unmaintained)                       |
 >
-> 🌐 [maia-archi.com](http://maia-archi.com)
+> 🌐 [maia-archi.com](http://www.maia-archi.com/)
 
 I was tasked with taking this architecture firm's physical paper portfolio and translating it into a fully functional digital presence. Working from their existing brand identity and a raw list of project descriptions and images, I built the site using a heavily modified WordPress theme.
 

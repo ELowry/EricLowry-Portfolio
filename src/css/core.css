@@ -2,12 +2,27 @@ html {
 	box-sizing: border-box;
 }
 
+:root,
 *,
 *::before,
 *::after {
 	transition: var(--transition-base);
 	box-sizing: inherit;
+
 	scrollbar-color: var(--scrollbar-colors);
+	::-webkit-scrollbar-thumb {
+		background: var(--scrollbar-color-thumb);
+	}
+	::-webkit-scrollbar-track {
+		background: var(--scrollbar-color-track);
+	}
+	::-webkit-scrollbar {
+		max-width: var(--scrollbar-width-legacy);
+		max-height: var(--scrollbar-width-legacy);
+	}
+	:hover::-webkit-scrollbar-thumb {
+		background: var(--scrollbar-color-hover);
+	}
 }
 
 body {
