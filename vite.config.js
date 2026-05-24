@@ -23,6 +23,27 @@ function excludePublicFolders(folders) {
 	};
 }
 
+/**
+ * A Vite plugin that watches public markdown files and triggers a full page reload on changes.
+ * @returns {import('vite').Plugin} The Vite plugin instance.
+ */
+function watchPublicMarkdown() {
+	return {
+		name: 'watch-public-markdown',
+		configureServer(server) {
+			server.watcher.add(path.resolve('public/content'));
+			server.watcher.on('change', (file) => {
+				if (file.endsWith('.md')) {
+					server.hot.send({
+						type: 'full-reload',
+						path: '*',
+					});
+				}
+			});
+		},
+	};
+}
+
 export default defineConfig(({ mode }) => {
 	return {
 		resolve: {
@@ -36,7 +57,7 @@ export default defineConfig(({ mode }) => {
 				),
 			},
 		},
-		plugins: [excludePublicFolders(['obsidian', '.obsidian'])],
+		plugins: [excludePublicFolders(['obsidian', '.obsidian']), watchPublicMarkdown()],
 		server: {
 			fs: {
 				deny: [

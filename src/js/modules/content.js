@@ -158,7 +158,7 @@ class ContentController {
 				continue;
 			}
 
-			const keyBase = currentPath ? `${currentPath}.${child.id}` : child.id;
+			const keyBase = currentPath ? `${currentPath.replace('/', '.')}.${child.id}` : child.id;
 			const title = Lang.getString(`content.${keyBase}.title`, null, child.title || '');
 
 			let label;
