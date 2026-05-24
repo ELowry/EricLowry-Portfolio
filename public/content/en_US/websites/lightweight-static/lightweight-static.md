@@ -7,7 +7,7 @@
 > |                |                                            |
 > | -------------- | ------------------------------------------ |
 > | **Languages**  | JavaScript, HTML, CSS                      |
-> | **Tech stack** | Custom HTML & JavaScript, Firebase Hosting |
+> | **Tech stack** | Custom HTML & JavaScript, Firebase Hosting |
 > | **Skillset**   | Web Engineering, Systems Architecture      |
 
 Over the years, I have had several clients approach me needing extremely simple, low-maintenance landing pages or portfolios. They typically do not need the overhead of a complex CMS like WordPress, nor do they want to deal with ongoing backend maintenance, database updates, or high hosting costs.

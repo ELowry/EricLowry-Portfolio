@@ -118,10 +118,14 @@ export const ContentTree = category(
 					'coaching-business/coaching-business.md',
 					true
 				),
-				content(
+				category(
 					'CinQ',
-					'CinQ – corporate team training video game',
-					'gaming/CinQ/website.md'
+					'CinQ – corporate team training video game',
+					() => import('../../maps/gaming/CinQ.config.js'),
+					[
+						content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md', true),
+						content('website', 'CinQ Website', 'gaming/CinQ/website.md'),
+					]
 				),
 				content('medium', 'Medium Editing', 'coaching-business/medium.md'),
 				content('podcast', 'Podcast Editing', 'coaching-business/podcast.md'),
@@ -139,7 +143,6 @@ export const ContentTree = category(
 				() => import('../../maps/gaming/CinQ.config.js'),
 				[
 					content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md', true),
-					content('gallery', 'CinQ Footage', 'gaming/CinQ/gallery.md'),
 					content('website', 'CinQ Website', 'gaming/CinQ/website.md'),
 				]
 			),

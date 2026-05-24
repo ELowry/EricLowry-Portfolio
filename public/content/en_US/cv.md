@@ -25,7 +25,7 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 
 ### CinQ (Disruptive Learning Solutions)
 
-**Founding Partner / UX/UI Director** (2016 – Present)  
+**Founding Partner / UX/UI Director** (2016 – Present)  
 **[playcinq.com](https://playcinq.com)**
 
 - **Product Strategy**:  
@@ -50,13 +50,13 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 
 ### Digital Skin
 
-**Partner / Digital Designer** (2015 – 2016)
+**Partner / Digital Designer** (2015–2016)
 
 - Developed early-stage prototypes for immersive digital learning experiences and interactive architectural visualizations.
 
 ### Volcji Potok (National Arboretum, Slovenia)
 
-**Landscape Architecture Consultant** (2012 – 2014)
+**Landscape Architecture Consultant** (2012–2014)
 
 - Redesigned dual-zone infrastructure bordering the main alley to facilitate activity center integration.
 - Conceptualized an "initiation garden" and pedagogical garden focusing on local flora and climatic resilience.
@@ -80,10 +80,10 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 
 ### École Nationale Supérieure d'Architecture de Versailles (ENSA-V)
 
-- **Master of Architecture** (2012 – 2015)
+- **Master of Architecture** (2012–2015)
     - Graduated with Honors
     - Thesis: _« L’Apport du Jeu Vidéo à l’Architecture et à l’Architecte »_ (Video Games' Contributions to Architects and Architecture).
-- **Bachelor of Architecture** (2009 – 2012)
+- **Bachelor of Architecture** (2009–2012)
 
 ---
 

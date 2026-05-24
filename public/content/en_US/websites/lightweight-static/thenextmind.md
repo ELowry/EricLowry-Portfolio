@@ -7,7 +7,7 @@
 > |                |                                           |
 > | -------------- | ----------------------------------------- |
 > | **Languages**  | JavaScript, HTML, CSS                     |
-> | **Tech stack** | Custom HTML & JavaScript, Firebase        |
+> | **Tech stack** | Custom HTML & JavaScript, Firebase        |
 > | **Skillset**   | Interaction Design, UI/UX Design, Web Dev |
 >
 > 🌐 [stephane-next-mind.web.app](https://stephane-next-mind.web.app/) _(Archived version of thenextmind.ai)_
@@ -20,7 +20,7 @@ I developed this landing page for Stéphane Amarsy when he started developing hi
 
 Because the company's offerings are designed to be immersive, disruptive experiences that force leaders to confront their impending future, we decided that the website should look and feel unfamiliar and futuristic. The site is meant to be somewhat of an exciting, intriguing digital experience rather than a traditional corporate brochure.
 
-### UX & Visual Design
+### UX & Visual Design
 
 ![A collage of inspiration images  ](/assets/images/websites/thenextmind/inspiration__240-270-webp_240-270_400-450-webp_400-450_480-540-webp_480-540.jpg)
 

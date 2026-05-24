@@ -33,23 +33,23 @@
 			"title": "Architecture Studies",
 			"label": "Architecture Studies",
 			"architecture": {
-				"title": "ENSA-V & ENSP-V",
-				"label": "ENSA-V & ENSP-V"
+				"title": "Architecture Works",
+				"label": "Architecture Works"
 			},
 			"3Dgallery": {
 				"title": "3D Works Gallery",
 				"label": "3D Works Gallery",
 				"3Dgallery": {
-					"title": "About my 3D work",
-					"label": "About my 3D work"
+					"title": "Gallery of my 3D work",
+					"label": "Gallery of my 3D work"
 				}
 			},
 			"projects": {
 				"title": "Selection of Architecture Projects",
 				"label": "Selection of Architecture Projects",
 				"projects": {
-					"title": "Overview",
-					"label": "Overview"
+					"title": "Architecture Projects",
+					"label": "Architecture Projects"
 				},
 				"Unstant": {
 					"title": "Unstant",
@@ -61,8 +61,8 @@
 			"title": "Coaching & Business",
 			"label": "Coaching & Business",
 			"coaching-business": {
-				"title": "Overview",
-				"label": "Overview"
+				"title": "My Work",
+				"label": "My Work"
 			},
 			"medium": {
 				"title": "Medium Editing",
@@ -77,8 +77,8 @@
 			"title": "Video Games",
 			"label": "Video Games",
 			"gaming": {
-				"title": "Overview",
-				"label": "Overview"
+				"title": "Gaming Overview",
+				"label": "Gaming Overview"
 			},
 			"InputLayers": {
 				"title": "InputLayers",
@@ -90,14 +90,10 @@
 			},
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",
-				"label": "CinQ – corporate team training video game",
+				"label": "CinQ",
 				"CinQ": {
 					"title": "About CinQ",
 					"label": "About CinQ"
-				},
-				"gallery": {
-					"title": "CinQ Footage",
-					"label": "CinQ Footage"
 				},
 				"website": {
 					"title": "CinQ Website",
@@ -128,6 +124,10 @@
 				"title": "Obsidian Replace Commands",
 				"label": "Obsidian Replace Commands"
 			},
+			"dns-toggle": {
+				"title": "DNS Toggle",
+				"label": "DNS Toggle"
+			},
 			"StadiaIcons": {
 				"title": "StadiaIcons",
 				"label": "StadiaIcons"
@@ -142,23 +142,39 @@
 			},
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",
-				"label": "CinQ – corporate team training video game"
+				"label": "CinQ"
 			},
-			"thenextmind": {
-				"title": "The Next Mind",
-				"label": "The Next Mind"
+			"altoe": {
+				"title": "Alto´e",
+				"label": "Alto´e"
 			},
-			"luzech": {
-				"title": "Luzech",
-				"label": "Luzech"
+			"lightweight-static": {
+				"title": "Lightweight Static Framework",
+				"label": "Lightweight Static Framework",
+				"lightweight-static": {
+					"title": "Lightweight Static Framework",
+					"label": "Lightweight Static Framework"
+				},
+				"thenextmind": {
+					"title": "The Next Mind",
+					"label": "The Next Mind"
+				},
+				"luzech": {
+					"title": "Luzech",
+					"label": "Luzech"
+				},
+				"koalakrash": {
+					"title": "Koala Krash",
+					"label": "Koala Krash"
+				}
 			},
-			"koalakrash": {
-				"title": "Koala Krash",
-				"label": "Koala Krash"
+			"StadiaIcons": {
+				"title": "StadiaIcons",
+				"label": "StadiaIcons"
 			},
 			"archive": {
 				"title": "Archive of Legacy Projects",
-				"label": "Archive of Legacy Projects"
+				"label": "Project Archive"
 			}
 		}
 	},

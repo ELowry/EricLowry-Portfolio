@@ -7,7 +7,7 @@
 > |                |                                         |
 > | -------------- | --------------------------------------- |
 > | **Languages**  | JavaScript, HTML, CSS                   |
-> | **Tech stack** | Custom HTML & JavaScript, Firebase      |
+> | **Tech stack** | Custom HTML & JavaScript, Firebase      |
 > | **Skillset**   | Branding, UI/UX Design, Web Development |
 >
 > 🌐 [luzech.co.uk](https://luzech.co.uk/)
@@ -20,7 +20,7 @@ I created this page for a business partner working with us as a coach and data c
 
 The site's primary goal is to outline his skillsets, while providing a streamlined way for potential clients to get in touch.
 
-### UX & Visual Design
+### UX & Visual Design
 
 ![Style guide for the LUZECH brand  ](/assets/images/websites/luzech/style__240-284-webp_240-284_330-390-webp_330-390.jpg)
 

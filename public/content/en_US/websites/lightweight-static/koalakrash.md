@@ -7,7 +7,7 @@
 > |                |                                            |
 > | -------------- | ------------------------------------------ |
 > | **Languages**  | JavaScript, HTML, CSS                      |
-> | **Tech stack** | Custom HTML & JavaScript, Firebase         |
+> | **Tech stack** | Custom HTML & JavaScript, Firebase         |
 > | **Skillset**   | Web Development, Logo Design, UI/UX Design |
 >
 > 🌐 [koalakrash.com](https://koalakrash.com)
@@ -21,7 +21,7 @@ They wanted a streamlined way to link out to their social media accounts, outlin
 
 Additionally, both the site and the integrated forms needed to be fully bilingual (English and French).
 
-### UX & Visual Design
+### UX & Visual Design
 
 The artist already had a distinct visual identity and color palette in place, but commissioned me a new logo to anchor the site's branding.
 

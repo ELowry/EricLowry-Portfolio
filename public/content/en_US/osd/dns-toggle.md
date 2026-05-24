@@ -32,7 +32,7 @@ Though this is not the first attempt to make toggling the option more practical,
 
 Over the course of a couple of days, I coded the app, designed its logo, and submitted it to F-Droid to make it more easily available.
 
-### UX & Requirements
+### UX & Requirements
 
 To keep the user experience as frictionless and lightweight as possible, I designed the app to be effectively "invisible". It does not create an icon in the device's app drawer. Instead, everything is managed directly from the quick settings panel: a single tap toggles _private DNS_, and a long-press opens a minimal configuration menu where users can input custom DNS provider hostnames or rename the tile label.
 

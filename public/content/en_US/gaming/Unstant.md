@@ -28,7 +28,7 @@ So we made a first person "walking simulator" that explored incredibly banal, ev
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![desert](/assets/images/gaming/unstant/desert__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![bedroom](/assets/images/gaming/unstant/room__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![living room](/assets/images/gaming/unstant/livingroom__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![basement](/assets/images/gaming/unstant/basement__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![cemetary](/assets/images/gaming/unstant/cemetary__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![A screenshot of the desert level](/assets/images/gaming/unstant/desert__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the bedroom level](/assets/images/gaming/unstant/room__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the living room level](/assets/images/gaming/unstant/livingroom__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the basement level](/assets/images/gaming/unstant/basement__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the cemetery level](/assets/images/gaming/unstant/cemetary__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -39,7 +39,7 @@ Building a full video game from the ground up, with barely any experience of gam
 > [!INFO]
 > Other than the default tools and utilities shipped with Unreal Engine 4, no external tools or assets were used for this project.
 
-### Game development / programming
+### Game development / programming
 
 As the duo's developer I handled building Unstant in Unreal Engine 4, using the blueprint visual scripting system to code:
 
@@ -50,7 +50,7 @@ As the duo's developer I handled building Unstant in Unreal Engine 4, using the 
 - a dynamic audio system (spatial sound effects, multi-track music score)
 - parametric 3D assets (walls/gates generated along a path, tree and foliage generation, bookshelf generation, random tombstone model and texture generation)
 
-### 3D modeling & environment design
+### 3D modeling & environment design
 
 Starting from extensive physical measurements and architectural surveys, I built and optimized 3D meshes for the game's environments and props.
 
@@ -64,7 +64,7 @@ Taking inspiration from the look of architectural diagrams and sketches, we deci
 
 Particular effort was put into blending the screen-space "sketch" shading and per-object sketch materials to recreate a usually two-dimentional style in a fully explorable 3D space.
 
-### Sound design & voice acting
+### Sound design & voice acting
 
 While my project partner was in charge of composing and recording the gam's music, I recorded, mastered, and implemented all the sound design, foley and sound effects into the game. I also recorded, edited, and implemented the English voiceover monologues (with French subtitles) that help the environmental storytelling and narrative come together throughout the game.
 

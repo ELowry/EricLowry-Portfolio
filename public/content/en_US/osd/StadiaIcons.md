@@ -1,6 +1,6 @@
 # StadiaIcons
 
-## Native Desktop Shortcuts & Dynamic PWAs for Cloud Gaming
+## Native Desktop Shortcuts & Dynamic PWAs for Cloud Gaming
 
 > [!SUMMARY]
 >
@@ -29,7 +29,7 @@ A significant part of StadiaIcons was me actually designing and publishing a uni
 
 The main difficulty with this task was sourcing high quality images, and making them work within the bounds of the icons. Trying to make sure recognizing the individual game from key art was a main concern, as well trying to create visually appealing icons across the board.
 
-## Dynamic PWAs & Firebase Architecture
+## Dynamic PWAs & Firebase Architecture
 
 To keep the UX as clean and simple as possible; I effectively created a fancy system to dynamically construct Progressive Web Apps from, so users could "install" the PWA hosted using Firebase, which would transparently launch the Stadia game completely transparently.
 
