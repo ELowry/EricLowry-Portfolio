@@ -8,11 +8,12 @@
 		"marked-responsive-images": "^2.1.2"
 	},
 	"scripts": {
-		"generate-sitemaps": "node scripts/generateSitemaps.mjs",
+		"generate-blog": "node scripts/generateBlogIndex.mjs && prettier --write public/content/blog-index.json public/feed-*.xml && eslint --no-ignore public/content/blog-index.json",
+		"generate-sitemaps": "node scripts/generateSitemaps.mjs && prettier --write public/sitemap.xml public/llms.txt public/robots.txt",
 		"copy-deps": "powershell -ExecutionPolicy Bypass -File scripts/copy-deps.ps1",
 		"copy-deps:prod": "powershell -ExecutionPolicy Bypass -File scripts/copy-deps.ps1 -Prod",
-		"dev": "npm run generate-sitemaps && npm run copy-deps && vite",
-		"build": "npm run generate-sitemaps && npm run copy-deps:prod && vite build",
+		"dev": "npm run generate-blog && npm run generate-sitemaps && npm run copy-deps && vite",
+		"build": "npm run generate-blog && npm run generate-sitemaps && npm run copy-deps:prod && vite build",
 		"deploy": "npm run build && firebase deploy",
 		"lint": "eslint . && prettier --check .",
 		"lint:fix": "eslint --fix . && prettier --write .",

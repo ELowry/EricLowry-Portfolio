@@ -48,7 +48,7 @@ describe('ContentController', () => {
 		});
 
 		it('should return the node itself if the path already points to a category', () => {
-			const node = Content.getParentMapNode('gaming/CinQ');
+			const node = Content.getParentMapNode('coaching-business/CinQ');
 			expect(node).not.toBeNull();
 			expect(node.id).toBe('CinQ');
 			expect(node.type).toBe('category');

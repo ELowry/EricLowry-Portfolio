@@ -84,6 +84,9 @@ class RouterController {
 			if (segments[0] === 'game' || segments[0] === 'text') {
 				mode = segments[0];
 				path = this.sanitizePath(segments.slice(1).join('/'));
+			} else if (segments[0] === 'blog') {
+				mode = 'text';
+				path = pathName;
 			} else {
 				mode = 'game';
 				path = pathName;
@@ -125,7 +128,9 @@ class RouterController {
 		}
 
 		let newUrl;
-		if (validMode === 'game' && !cleanPath) {
+		if (cleanPath.startsWith('blog')) {
+			newUrl = `/${cleanPath}`;
+		} else if (validMode === 'game' && !cleanPath) {
 			newUrl = '/';
 		} else {
 			newUrl = `/${validMode}${cleanPath ? '/' + cleanPath : ''}`;

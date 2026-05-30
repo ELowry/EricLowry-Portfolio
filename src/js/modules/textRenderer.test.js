@@ -96,4 +96,22 @@ describe('TextRenderer', () => {
 		const links = navList.querySelectorAll('a');
 		expect(links.length).toBe(1);
 	});
+
+	it('should render breadcrumbs correctly for dynamic blog paths without a node', () => {
+		Content.findNodeByPath.mockReturnValue(null);
+
+		textRenderer.render('blog/2026-05-30', null);
+
+		const list = textNavContainer.querySelector('ol.breadcrumbs');
+		expect(list).not.toBeNull();
+
+		const crumbs = list.querySelectorAll('li');
+		expect(crumbs.length).toBe(3);
+
+		const blogLink = crumbs[1].querySelector('a');
+		expect(blogLink.getAttribute('href')).toBe('/blog');
+
+		const navList = textNavContainer.querySelector('.nav-list');
+		expect(navList).toBeNull();
+	});
 });

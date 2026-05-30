@@ -58,5 +58,21 @@ describe('RouterController', () => {
 
 			expect(pushStateSpy).not.toHaveBeenCalled();
 		});
+
+		it('should omit the mode prefix for blog paths', async () => {
+			const pushStateSpy = vi.spyOn(window.history, 'pushState');
+			const callback = vi.fn();
+			Router.onStateChange = callback;
+
+			await Router.go('text', 'blog/2026-05-30');
+
+			expect(Router.currentMode).toBe('text');
+			expect(Router.currentPath).toBe('blog/2026-05-30');
+			expect(pushStateSpy).toHaveBeenCalledWith(
+				{ mode: 'text', path: 'blog/2026-05-30' },
+				'',
+				'/blog/2026-05-30'
+			);
+		});
 	});
 });

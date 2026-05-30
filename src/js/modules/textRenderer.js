@@ -33,7 +33,7 @@ export class TextRenderer {
 		}
 
 		const Content = this.app?.Content || AppContent;
-		let currentNode = node || Content.findNodeByPath(path);
+		const currentNode = node || Content.findNodeByPath(path);
 
 		// Clear existing content
 		this.app.uiManager.elements.textNav.innerHTML = '';
@@ -53,30 +53,39 @@ export class TextRenderer {
 			} else {
 				const link = clone.querySelector('a');
 				link.textContent = label;
-				link.href = `/${this.app.mode}/${targetPath}`;
+
+				link.href = targetPath.startsWith('blog')
+					? `/${targetPath}`
+					: `/${this.app.mode}/${targetPath}`;
+
 				link.addEventListener('click', (e) => {
 					e.preventDefault();
 					this.app.navigate(targetPath);
 				});
 			}
+
 			breadcrumbList.appendChild(clone);
 		};
 
 		// Root Crumb
 		const rootLabel = Lang.getString('portfolio.rootTitle', null, 'Welcome');
-		createCrumb(rootLabel, '', currentNode.id === 'root');
+		createCrumb(rootLabel, '', currentNode ? currentNode.id === 'root' : false);
 
 		// Path Crumbs
 		let currentPath = '';
 		const pathParts = path.split('/').filter((p) => p);
+
 		pathParts.forEach((part, index) => {
 			currentPath += (currentPath ? '/' : '') + part;
-			const currNode = Content.findNodeByPath(currentPath);
 
+			const currNode = Content.findNodeByPath(currentPath);
 			let label = part;
+
 			if (currNode) {
 				const langKey = `content.${currentPath.replace(/\//g, '.')}.title`;
 				label = Lang.getString(langKey, null, currNode.title);
+			} else if (part === 'blog') {
+				label = Lang.getString('blog.title', null, 'Blog');
 			}
 
 			createCrumb(label, currentPath, index === pathParts.length - 1);
@@ -88,8 +97,11 @@ export class TextRenderer {
 		if (!currentNode || !currentNode.children) {
 			return;
 		}
+
 		const visibleChildren = currentNode.children.filter((child) => {
-			if (child.hidden === true) return false;
+			if (child.hidden === true) {
+				return false;
+			}
 			return currentNode.id === 'root' ? child.id !== 'index' : true;
 		});
 
@@ -102,7 +114,7 @@ export class TextRenderer {
 		navContainer.setAttribute('role', 'menu');
 		navContainer.setAttribute('aria-label', 'Category Options');
 
-		visibleChildren.forEach((child, idx) => {
+		visibleChildren.forEach((child, index) => {
 			const childPath = path ? `${path}/${child.id}` : child.id;
 
 			// Label Logic
@@ -114,10 +126,12 @@ export class TextRenderer {
 			const link = clone.querySelector('a');
 
 			link.textContent = label;
+
 			if (child.type === 'category') {
 				link.classList.add('category');
 			}
-			link.setAttribute('tabindex', idx === 0 ? '0' : '-1');
+
+			link.setAttribute('tabindex', index === 0 ? '0' : '-1');
 			link.href = `/${this.app.mode}/${childPath}`;
 			link.addEventListener('click', (e) => {
 				e.preventDefault();
@@ -162,8 +176,95 @@ export class TextRenderer {
 			} else {
 				this.app.uiManager.elements.textContent.innerHTML = '';
 			}
+		} else if (path === 'blog') {
+			await this.#renderBlogIndex();
+		} else if (path.startsWith('blog/')) {
+			const date = path.substring(5);
+			await this.app.loadContentIntoText(`blog/${date}.md`);
 		} else {
 			this.app.uiManager.elements.textContent.innerHTML = '';
 		}
+	}
+
+	/**
+	 * Fetches the blog index JSON, generates HTML, and renders the list of articles.
+	 * Includes a fallback to English if the current language has no entries.
+	 * @private
+	 */
+	async #renderBlogIndex() {
+		try {
+			this.app.uiManager.showLoading(true);
+
+			const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
+			const response = await fetch(`/content/blog-index.json?v=${cacheBuster}`);
+
+			if (!response.ok) {
+				throw new Error('Could not load blog index.');
+			}
+
+			const blogEntries = await response.json();
+			let currentLanguage = Lang.langCode;
+			let entries = blogEntries.filter((entry) => entry.language === currentLanguage);
+			let fallbackWarningHtml = '';
+
+			if (entries.length === 0) {
+				currentLanguage = 'en_US';
+				entries = blogEntries.filter((entry) => entry.language === currentLanguage);
+
+				const languageName = Lang.getString(
+					`languages.${Lang.langCode}`,
+					null,
+					'your language'
+				);
+				const rawWarningText = Lang.getString(
+					'blog.languageFallback',
+					null,
+					`No articles were found in ${languageName}. Here are the articles currently available in English:`
+				);
+				const warningText = rawWarningText.replace('{0}', languageName);
+				fallbackWarningHtml = `<p class="blog-warning alert">${warningText}</p>`;
+			}
+
+			let finalHtml = '<div class="blog-index">';
+			finalHtml += fallbackWarningHtml;
+			finalHtml += '<ul class="blog-list">';
+
+			entries.forEach((entry) => {
+				finalHtml += `<li><a href="/blog/${entry.date}" data-route="blog/${entry.date}">${entry.date} | ${entry.title}</a></li>`;
+			});
+
+			finalHtml += '</ul></div>';
+
+			this.app.uiManager.displayContentInTextView(finalHtml);
+			this.#hydrateBlogLinks(this.app.uiManager.elements.textContent);
+		} catch (error) {
+			console.error('Failed to load blog index:', error);
+
+			const errorText = Lang.getString(
+				'blog.errorLoading',
+				null,
+				'Failed to load blog index.'
+			);
+
+			this.app.uiManager.displayContentInTextView(`<p class="error">${errorText}</p>`);
+		} finally {
+			this.app.uiManager.hideLoading(true);
+		}
+	}
+
+	/**
+	 * Attaches router navigation events to the rendered blog links.
+	 * @param {HTMLElement} container - The container holding the blog list.
+	 * @private
+	 */
+	#hydrateBlogLinks(container) {
+		const links = container.querySelectorAll('.blog-list a[data-route]');
+		links.forEach((link) => {
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				const route = e.target.getAttribute('data-route');
+				this.app.navigate(route);
+			});
+		});
 	}
 }

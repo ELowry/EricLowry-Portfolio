@@ -60,6 +60,20 @@ class LangController {
 				path: 'meta.lang',
 				targetAttr: 'lang',
 			},
+			{
+				tag: 'link',
+				attr: 'id',
+				attrVal: 'rss-feed-link',
+				path: 'meta.rss',
+				targetAttr: 'href',
+			},
+			{
+				tag: 'link',
+				attr: 'id',
+				attrVal: 'rss-feed-link',
+				path: 'meta.rssTitle',
+				targetAttr: 'title',
+			},
 		];
 	}
 

@@ -2,7 +2,9 @@
 	"meta": {
 		"title": "Eric Lowry – Portfolio",
 		"description": "Designer UX/UI et entrepreneur orienté systèmes (10+ ans d'exp). Spécialiste en formation, Unity3D, le design d'espaces et la technologie interactive.",
-		"lang": "FR"
+		"lang": "FR",
+		"rss": "/feed-fr_FR.xml",
+		"rssTitle": "Flux RSS du blog d'Eric Lowry"
 	},
 	"portfolio": {
 		"title": "Portfolio",
@@ -115,5 +117,12 @@
 	},
 	"keys": {
 		"escape": "[Éch]"
+	},
+	"blog": {
+		"title": "Blog",
+		"feedTitle": "Blog d'Eric Lowry",
+		"feedDescription": "Derniers articles de blog d'Eric Lowry.",
+		"languageFallback": "Aucun article n'est actuellement disponible en {0}. Voici les articles disponibles en Anglais:",
+		"errorLoading": "Impossible de charger l'index du blog."
 	}
 }

@@ -453,8 +453,9 @@ class AppController {
 		}
 
 		const node = Content.findNodeByPath(path);
+		const isDynamicRoute = path.startsWith('blog');
 
-		if (!node && path !== '') {
+		if (!node && path !== '' && !isDynamicRoute) {
 			if (mode === 'game') {
 				Router.go('game', '');
 				return;

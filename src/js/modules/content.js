@@ -129,7 +129,7 @@ class ContentController {
 			return this.tree;
 		}
 
-		if (node.type === 'content') {
+		if (node.type === 'content' && (!node.children || node.children.length === 0)) {
 			parts.pop();
 			return this.findNodeByPath(parts.join('/'));
 		}

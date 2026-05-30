@@ -7,6 +7,9 @@ export default [
 	{
 		ignores: ['dist/**', 'node_modules/**', 'public/**'],
 	},
+	{
+		files: ['public/content/blog-index.json'],
+	},
 	js.configs.recommended,
 	jsdoc.configs['flat/recommended'],
 	{

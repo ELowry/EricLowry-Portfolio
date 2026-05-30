@@ -127,6 +127,51 @@ const traverseTree = (node, pathSegments = [], currentCategory = 'General') => {
 
 traverseTree(ContentTree);
 
+// ADD BLOG ITEMS TO SITEMAP AND LLMS.TXT
+const blogJsonPath = path.join(contentDirectory, 'blog-index.json');
+if (fs.existsSync(blogJsonPath)) {
+	const blogEntries = JSON.parse(fs.readFileSync(blogJsonPath, 'utf-8'));
+
+	const blogCategoryTitle = 'Blog';
+	if (!llmLinks[blogCategoryTitle]) {
+		llmLinks[blogCategoryTitle] = [];
+	}
+
+	const uniqueDates = [...new Set(blogEntries.map((entry) => entry.date))];
+	uniqueDates.forEach((date) => {
+		const textModeUrl = `/blog/${date}`;
+		sitemapUrls.push({
+			url: `${BASE_URL}${textModeUrl}`,
+			lastmod: date,
+			changefreq: 'monthly',
+			priority: '0.7',
+		});
+
+		const blogEntry =
+			blogEntries.find((entry) => entry.date === date && entry.language === 'en_US')
+			|| blogEntries.find((entry) => entry.date === date);
+
+		if (blogEntry) {
+			llmLinks[blogCategoryTitle].push({ title: blogEntry.title, file: `blog/${date}.md` });
+		}
+	});
+}
+
+// ADD RSS FEEDS TO SITEMAP
+const publicFiles = fs.readdirSync(publicDirectory);
+const feedFiles = publicFiles.filter((fileName) => {
+	return fileName.startsWith('feed-') && fileName.endsWith('.xml');
+});
+
+feedFiles.forEach((feedName) => {
+	sitemapUrls.push({
+		url: `${BASE_URL}/${feedName}`,
+		lastmod: today,
+		changefreq: 'daily',
+		priority: '0.9',
+	});
+});
+
 const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapUrls

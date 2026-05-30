@@ -2,7 +2,9 @@
 	"meta": {
 		"title": "Eric Lowry – Portfolio",
 		"description": "Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, environment design, and interactive tech.",
-		"lang": "EN"
+		"lang": "EN",
+		"rss": "/feed-en_US.xml",
+		"rssTitle": "RSS feed for Eric Lowry's blog"
 	},
 	"portfolio": {
 		"title": "Portfolio",
@@ -242,5 +244,12 @@
 	},
 	"keys": {
 		"escape": "[Esc]"
+	},
+	"blog": {
+		"title": "Blog",
+		"feedTitle": "Eric Lowry's Blog",
+		"feedDescription": "Latest blog posts from Eric Lowry.",
+		"languageFallback": "No articles are currently available.",
+		"errorLoading": "Failed to load blog index."
 	}
 }

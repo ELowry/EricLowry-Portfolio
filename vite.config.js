@@ -44,6 +44,29 @@ function watchPublicMarkdown() {
 	};
 }
 
+/**
+ * A simple Vite plugin to mimic Firebase hosting rewrites locally.
+ * @returns {import('vite').Plugin} The Vite plugin instance.
+ */
+function firebaseRewritesPlugin() {
+	return {
+		name: 'firebase-rewrites',
+		configureServer(server) {
+			server.middlewares.use((request, response, next) => {
+				if (request.url === '/rss' || request.url === '/feed') {
+					request.url = '/feed-en_US.xml';
+				} else if (request.url.startsWith('/content/') && !request.url.includes('.')) {
+					request.url = '/content/404.json';
+				} else if (request.url.startsWith('/lang/') && !request.url.includes('.')) {
+					request.url = '/lang/langs.json';
+				}
+
+				next();
+			});
+		},
+	};
+}
+
 export default defineConfig(({ mode }) => {
 	return {
 		resolve: {
@@ -57,7 +80,11 @@ export default defineConfig(({ mode }) => {
 				),
 			},
 		},
-		plugins: [excludePublicFolders(['obsidian', '.obsidian']), watchPublicMarkdown()],
+		plugins: [
+			excludePublicFolders(['obsidian', '.obsidian']),
+			watchPublicMarkdown(),
+			firebaseRewritesPlugin(),
+		],
 		server: {
 			fs: {
 				deny: [
