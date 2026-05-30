@@ -30,7 +30,7 @@ describe('TextRenderer', () => {
 
 	beforeEach(() => {
 		vi.restoreAllMocks();
-		
+
 		Router.state = { mode: 'game', path: '' };
 
 		textNavContainer = document.createElement('div');

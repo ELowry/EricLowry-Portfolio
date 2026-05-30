@@ -230,7 +230,7 @@ function generateStaticImage(title, date, lang) {
 	const lineHeight = 1.3;
 
 	let fontSize = 80;
-	let lines = [];
+	let lines;
 
 	do {
 		context.font = `normal ${fontSize}pt VT323`;
