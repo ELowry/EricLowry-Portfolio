@@ -630,6 +630,10 @@ export class UIManager {
 			this.elements.textLayer.setAttribute('tabindex', '-1');
 			this.elements.textLayer.focus({ focusVisible: false });
 
+			if (this.elements.textLayer) {
+				this.elements.textLayer.scrollTop = 0;
+			}
+
 			this.#resetGameInterface();
 			Navigation.setContext(this.elements.textLayer, { scroll: true, axis: null });
 
@@ -877,7 +881,11 @@ export class UIManager {
 
 		Obfuscator.processDomElements(this.elements.textContent);
 
-		this.elements.textContent.focus({ focusVisible: false });
+		if (this.elements.textLayer) {
+			this.elements.textLayer.scrollTop = 0;
+		}
+
+		this.elements.textContent.focus({ preventScroll: true, focusVisible: false });
 
 		if (this.elements.tableOfContents) {
 			this.elements.tableOfContents.innerHTML = '';
@@ -904,6 +912,10 @@ export class UIManager {
 	 * Displays a localized 404 error page inside the text view.
 	 */
 	render404() {
+		if (this.elements.textLayer) {
+			this.elements.textLayer.scrollTop = 0;
+		}
+
 		if (this.elements.textNav && this.elements.tmpl404Breadcrumbs) {
 			this.elements.textNav.innerHTML = '';
 			const clone = this.elements.tmpl404Breadcrumbs.content.cloneNode(true);

@@ -239,9 +239,11 @@
 			vertical-align: super;
 			opacity: 0.4;
 			transition: opacity var(--transition-duration) var(--transition-easing);
+			margin-right: 0.4ch;
 			content: '⌝';
 			line-height: 0;
 			text-decoration: none;
+			text-indent: -0.5ch;
 
 			@media (prefers-reduced-transparency: reduce) {
 				opacity: 1;

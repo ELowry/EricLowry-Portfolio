@@ -7,7 +7,7 @@ Through this early work, I started to pay particular attention to the design of 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![Screenshot from the LUZECH website](/assets/images/websites/luzech/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the StadiaIcons website](/assets/images/osd/StadiaIcons/website__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the CinQ website](/assets/images/gaming/cinq/website/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the Maillar Architectes website](/assets/images/websites/archive/maia__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the The Next Mind website](/assets/images/websites/thenextmind/info__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot from the LUZECH website](/assets/images/websites/luzech/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the StadiaIcons website](/assets/images/osd/StadiaIcons/website__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the CinQ website](/assets/images/websites/CinQ/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the Maillar Architectes website](/assets/images/websites/archive/maia__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot from the The Next Mind website](/assets/images/websites/thenextmind/info__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -22,7 +22,7 @@ A major advantage of these shifts is the ability to guarantee that the websites 
 
 You can explore highlights of the web development and design projects I have worked on over the years below:
 
-- [playcinq.com](/content/en_US/gaming/CinQ/website.md)
+- [playcinq.com](content/en_US/websites/CinQ.md)
 - [altoe.net](/content/en_US/websites/altoe.md)
 - [thenextmind.ai](/content/en_US/websites/lightweight-static/thenextmind.md)
 - [luzech.co.uk](/content/en_US/websites/lightweight-static/luzech.md)

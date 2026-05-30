@@ -121,10 +121,10 @@ export const ContentTree = category(
 				category(
 					'CinQ',
 					'CinQ – corporate team training video game',
-					() => import('../../maps/gaming/CinQ.config.js'),
+					() => import('../../maps/coaching-business/CinQ.config.js'),
 					[
-						content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md', true),
-						content('website', 'CinQ Website', 'gaming/CinQ/website.md'),
+						content('CinQ', 'About CinQ', 'gaming/CinQ.md', true),
+						content('website', 'CinQ Website', 'websites/CinQ.md'),
 					]
 				),
 				content('medium', 'Medium Editing', 'coaching-business/medium.md'),
@@ -135,17 +135,9 @@ export const ContentTree = category(
 		// GAMING
 		category('gaming', 'Video Games', () => import('../../maps/gaming.config.js'), [
 			content('gaming', 'Overview', 'gaming/gaming.md', true),
+			content('CinQ', 'CinQ – corporate team training video game', 'gaming/CinQ.md'),
 			content('InputLayers', 'InputLayers', 'gaming/InputLayers.md'),
 			content('Unstant', 'Unstant', 'gaming/Unstant.md'),
-			category(
-				'CinQ',
-				'CinQ – corporate team training video game',
-				() => import('../../maps/gaming/CinQ.config.js'),
-				[
-					content('CinQ', 'About CinQ', 'gaming/CinQ/CinQ.md', true),
-					content('website', 'CinQ Website', 'gaming/CinQ/website.md'),
-				]
-			),
 		]),
 
 		// OpenSource
@@ -174,11 +166,7 @@ export const ContentTree = category(
 			() => import('../../maps/websites.config.js'),
 			[
 				content('websites', 'Web Development & Design', 'websites/websites.md', true),
-				content(
-					'CinQ',
-					'CinQ – corporate team training video game',
-					'gaming/CinQ/website.md'
-				),
+				content('CinQ', 'CinQ – corporate team training video game', 'websites/CinQ.md'),
 				content('altoe', 'Alto´e', 'websites/altoe.md'),
 				category(
 					'lightweight-static',

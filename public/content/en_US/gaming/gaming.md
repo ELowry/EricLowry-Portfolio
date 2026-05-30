@@ -15,11 +15,11 @@ At the very same time, I had already started working with the team that I would 
 
 Over the next decade, I dived deep into Unity3D and C# development, with a focus on UI, UX, environment design, prototyping game mechanics, and navigating complex multiplayer infrastructure. Scaling these projects also required building extensive automation tooling and CI/CD deployment pipelines, which directly shaped the systems-driven mindset I now apply across my [web](/content/en_US/websites/websites.md) and [open-source](/content/en_US/osd/osd.md) work.
 
-Though a majority of my work is closed-source in the form of [CinQ](/content/en_US/gaming/CinQ/CinQ.md) and various off-shoot projects, I did spin out [InputLayers](/content/en_US/gaming/InputLayers.md) as a source-available Unity asset, which serves as a good showcase of my Unity3D coding work.
+Though a majority of my work is closed-source in the form of [CinQ](content/en_US/gaming/CinQ.md) and various off-shoot projects, I did spin out [InputLayers](/content/en_US/gaming/InputLayers.md) as a source-available Unity asset, which serves as a good showcase of my Unity3D coding work.
 
 ## Projects
 
-- **[CinQ](/content/en_US/gaming/CinQ/CinQ.md)**:  
+- **[CinQ](content/en_US/gaming/CinQ.md)**:  
   A cross-platform multiplayer sandbox built in Unity3D for corporate teamwork and communication training.
 - **[Unstant](/content/en_US/gaming/Unstant.md)**:  
   A short, atmospheric first-person exploration game built in Unreal Engine 4, exploring the intersection of architectural space and memory.
