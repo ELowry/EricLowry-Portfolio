@@ -329,6 +329,17 @@
 						<button
 							role="menuitem"
 							class="lang"
+							data-lang="ui.game_menu.btn_blog"
+							onclick="
+								App.closeGameMenu();
+								App.setMode('text');
+								App.navigate('blog');
+							"
+							>Blog</button
+						>
+						<button
+							role="menuitem"
+							class="lang"
 							data-lang="ui.game_menu.btn_controls"
 							onclick="
 								App.closeGameMenu();
@@ -410,6 +421,14 @@
 				>Skip to content</a
 			>
 			<nav id="text-navbar" role="menubar" aria-label="Main Navigation">
+				<button
+					role="menuitem"
+					class="lang"
+					data-lang="ui.text_mode.btn_blog"
+					data-nav-path="blog"
+					onclick="App.navigate('blog')"
+					>Blog</button
+				>
 				<button
 					role="menuitem"
 					id="game-mode"

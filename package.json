@@ -1,10 +1,12 @@
 {
 	"type": "module",
 	"dependencies": {
+		"highlight.js": "^11.11.1",
 		"littlejsengine": "^1.18.12",
 		"marked": "^18.0.4",
 		"marked-alert": "^2.1.2",
 		"marked-gfm-heading-id": "^4.1.4",
+		"marked-highlight": "^2.2.4",
 		"marked-responsive-images": "^2.1.2"
 	},
 	"scripts": {
@@ -22,6 +24,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"canvas": "^3.2.3",
 		"eslint": "^10.4.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jsdoc": "^63.0.0",

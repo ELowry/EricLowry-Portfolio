@@ -178,6 +178,10 @@
 				"title": "Archive of Legacy Projects",
 				"label": "Project Archive"
 			}
+		},
+		"blog": {
+			"title": "Blog",
+			"label": "Blog"
 		}
 	},
 	"ui": {
@@ -202,6 +206,7 @@
 			"btn_reset": "Return to Start",
 			"btn_text_mode": "Switch to Text Mode",
 			"btn_controls": "Display Controls",
+			"btn_blog": "Blog",
 			"btn_close": "Close Menu"
 		},
 		"modal": {
@@ -210,6 +215,7 @@
 		"text_mode": {
 			"table_of_contents": "Table of Contents",
 			"text_nav": "Content Navigation",
+			"btn_blog": "Blog",
 			"btn_game_mode": "Switch to Exploration Mode",
 			"skip_link": "Skip to content",
 			"404": {

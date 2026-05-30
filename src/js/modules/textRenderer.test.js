@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TextRenderer } from './textRenderer.js';
 import { Content } from './content.js';
+import { Router } from './router.js';
 
 vi.mock('./lang.js', () => {
 	return {
@@ -29,6 +30,8 @@ describe('TextRenderer', () => {
 
 	beforeEach(() => {
 		vi.restoreAllMocks();
+		
+		Router.state = { mode: 'game', path: '' };
 
 		textNavContainer = document.createElement('div');
 		textNavContainer.id = 'text-nav';
@@ -99,6 +102,7 @@ describe('TextRenderer', () => {
 
 	it('should render breadcrumbs correctly for dynamic blog paths without a node', () => {
 		Content.findNodeByPath.mockReturnValue(null);
+		Router.state = { mode: 'text', path: 'blog/2026-05-30' };
 
 		textRenderer.render('blog/2026-05-30', null);
 

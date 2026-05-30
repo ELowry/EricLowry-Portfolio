@@ -319,7 +319,7 @@ class AppController {
 			}
 
 			const rawMarkdown = await response.text();
-			const html = this.marked ? this.marked.parse(rawMarkdown) : rawMarkdown;
+			const html = this.marked ? await this.marked.parse(rawMarkdown) : rawMarkdown;
 
 			this.contentCache.set(cacheKey, html);
 
@@ -453,9 +453,8 @@ class AppController {
 		}
 
 		const node = Content.findNodeByPath(path);
-		const isDynamicRoute = path.startsWith('blog');
 
-		if (!node && path !== '' && !isDynamicRoute) {
+		if (!node && path !== '' && !Router.isBlogRoute) {
 			if (mode === 'game') {
 				Router.go('game', '');
 				return;

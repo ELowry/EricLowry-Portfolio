@@ -54,6 +54,10 @@
 		"privacy": {
 			"title": "Politique de confidentialité",
 			"label": "Politique de confidentialité"
+		},
+		"blog": {
+			"title": "Blog",
+			"label": "Blog"
 		}
 	},
 	"ui": {
@@ -78,6 +82,7 @@
 			"btn_reset": "Retour au départ",
 			"btn_text_mode": "Passer au mode texte",
 			"btn_controls": "Afficher les commandes",
+			"btn_blog": "Blog",
 			"btn_close": "Fermer le menu"
 		},
 		"modal": {
@@ -86,6 +91,7 @@
 		"text_mode": {
 			"table_of_contents": "Table des matières",
 			"text_nav": "Navigation du contenu",
+			"btn_blog": "Blog",
 			"btn_game_mode": "Passer au mode exploration",
 			"skip_link": "Passer au contenu",
 			"404": {

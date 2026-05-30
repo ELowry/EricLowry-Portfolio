@@ -1,3 +1,4 @@
+import { Router } from './router.js';
 import { Lang } from './lang.js';
 import { Content as AppContent } from './content.js';
 import { Events } from './events.js';
@@ -54,7 +55,7 @@ export class TextRenderer {
 				const link = clone.querySelector('a');
 				link.textContent = label;
 
-				link.href = targetPath.startsWith('blog')
+				link.href = Router.isBlogRoute
 					? `/${targetPath}`
 					: `/${this.app.mode}/${targetPath}`;
 
@@ -159,8 +160,10 @@ export class TextRenderer {
 
 		this.render(path, node);
 
-		// If we are at a specific content node, show it
-		if (node && node.type === 'content' && node.file) {
+		// Show relevant content if found
+		if (path === 'blog') {
+			await this.#renderBlogIndex();
+		} else if (node && node.type === 'content' && node.file) {
 			await this.app.loadContentIntoText(node.file);
 		} else if (node && node.type === 'category') {
 			// Check if the category has a main file
@@ -176,8 +179,6 @@ export class TextRenderer {
 			} else {
 				this.app.uiManager.elements.textContent.innerHTML = '';
 			}
-		} else if (path === 'blog') {
-			await this.#renderBlogIndex();
 		} else if (path.startsWith('blog/')) {
 			const date = path.substring(5);
 			await this.app.loadContentIntoText(`blog/${date}.md`);
@@ -230,7 +231,7 @@ export class TextRenderer {
 			finalHtml += '<ul class="blog-list">';
 
 			entries.forEach((entry) => {
-				finalHtml += `<li><a href="/blog/${entry.date}" data-route="blog/${entry.date}">${entry.date} | ${entry.title}</a></li>`;
+				finalHtml += `<li><a href="/blog/${entry.date}" data-route="blog/${entry.date}"><span class="blog-list-title" style="--content-length: ${entry.title.length};">${entry.title}</span><time class="blog-list-date" datetime="${entry.date}">${entry.date}</time></a></li>`;
 			});
 
 			finalHtml += '</ul></div>';
@@ -262,8 +263,7 @@ export class TextRenderer {
 		links.forEach((link) => {
 			link.addEventListener('click', (e) => {
 				e.preventDefault();
-				const route = e.target.getAttribute('data-route');
-				this.app.navigate(route);
+				this.app.navigate(link.dataset.route);
 			});
 		});
 	}

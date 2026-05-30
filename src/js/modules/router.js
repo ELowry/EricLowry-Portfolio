@@ -41,6 +41,14 @@ class RouterController {
 	}
 
 	/**
+	 * Determines if the current path belongs to the dynamic blog system.
+	 * @returns {boolean} true if the path starts with `blog`.
+	 */
+	get isBlogRoute() {
+		return this.state.path.startsWith('blog');
+	}
+
+	/**
 	 * Initializes the router and reads the initial URL.
 	 * @param {Function} onStateChangeCallback - Called when state changes
 	 * @returns {Promise<void>}
@@ -81,12 +89,12 @@ class RouterController {
 		if (pathName !== '' && pathName !== 'index.html') {
 			const segments = pathName.split('/');
 
-			if (segments[0] === 'game' || segments[0] === 'text') {
-				mode = segments[0];
-				path = this.sanitizePath(segments.slice(1).join('/'));
-			} else if (segments[0] === 'blog') {
+			if (segments[0] === 'blog') {
 				mode = 'text';
 				path = pathName;
+			} else if (segments[0] === 'game' || segments[0] === 'text') {
+				mode = segments[0];
+				path = this.sanitizePath(segments.slice(1).join('/'));
 			} else {
 				mode = 'game';
 				path = pathName;
@@ -120,7 +128,11 @@ class RouterController {
 		}
 		// TEMP TEXT-ONLY END
 		const validMode = ['game', 'text'].includes(mode) ? mode : 'game';
-		const cleanPath = this.sanitizePath(path);
+
+		let cleanPath = this.sanitizePath(path);
+		if (cleanPath.startsWith('blog') && validMode === 'game') {
+			cleanPath = '';
+		}
 		const newState = { mode: validMode, path: cleanPath };
 
 		if (newState.mode === this.state.mode && newState.path === this.state.path) {

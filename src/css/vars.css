@@ -1,6 +1,9 @@
 :root {
-	--font-sans: 'Space Grotesk', 'Noto Sans Symbols 2', sans-serif;
-	--font-mono: 'VT323', 'Noto Sans Symbols 2', monospace;
+	--font-symbols: 'Noto Sans Symbols 2';
+	--font-sans: 'Space Grotesk', var(--font-symbols), sans-serif;
+	--font-sans-clean: 'Atkinson Hyperlegible Next', var(--font-symbols), sans-serif;
+	--font-mono: 'VT323', var(--font-symbols), monospace;
+	--font-mono-clean: 'Atkinson Hyperlegible Mono', var(--font-symbols), monospace;
 
 	--hex-accent: #e29186;
 	--hex-background: #0f0d0f;
@@ -76,8 +79,8 @@
 	--percent-100: 100%;
 
 	@media (forced-colors: active) or (prefers-contrast: more) {
-		--font-sans: 'Atkinson Hyperlegible Next', 'Noto Sans Symbols 2', sans-serif;
-		--font-mono: 'Atkinson Hyperlegible Mono', 'Noto Sans Symbols 2', monospace;
+		--font-sans: var(--font-sans-clean);
+		--font-mono: var(--font-mono-clean);
 	}
 
 	@media (prefers-reduced-data: reduce) {
@@ -152,7 +155,7 @@
 	@media print {
 		--hex-background: white;
 
-		--font-mono: 'Atkinson Hyperlegible Mono', 'Noto Sans Symbols 2', monospace;
+		--font-mono: var(--font-mono-clean);
 	}
 }
 
@@ -182,6 +185,6 @@
 }
 
 :root.readability-mode {
-	--font-sans: 'Atkinson Hyperlegible Next', 'Noto Sans Symbols 2', sans-serif;
-	--font-mono: 'Atkinson Hyperlegible Mono', 'Noto Sans Symbols 2', monospace;
+	--font-sans: var(--font-sans-clean);
+	--font-mono: var(--font-mono-clean);
 }

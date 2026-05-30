@@ -69,10 +69,7 @@ a {
 	color: var(--color-accent);
 	text-decoration: none;
 
-	&:hover {
-		text-decoration: underline;
-	}
-
+	&:hover,
 	&:active {
 		text-decoration: underline;
 	}

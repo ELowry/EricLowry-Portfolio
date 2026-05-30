@@ -3,6 +3,8 @@ import { Obfuscator } from './obfuscator.js';
 import { Gallery } from './gallery.js';
 import { LocalLinkParser } from './localLinks.js';
 import { VideoEmbeds } from './embeds.js';
+import { markedHighlight } from 'marked-highlight';
+import { codeHighlight } from './codeHighlight.js';
 
 /**
  * Manages custom extensions and renderers for the `marked` library.
@@ -22,6 +24,19 @@ export class MarkedExtensions {
 	 */
 	static get HEADING_ID_CONFIG() {
 		return { prefix: '_' };
+	}
+
+	/**
+	 * @returns {Object} the configuration for the `marked-highlight` extension.
+	 * @constant
+	 */
+	static get HIGHLIGHT_CONFIG() {
+		return {
+			async: true,
+			emptyLangClass: 'hljs',
+			langPrefix: 'hljs language-',
+			highlight: codeHighlight,
+		};
 	}
 
 	/**
@@ -82,6 +97,8 @@ export class MarkedExtensions {
 			}
 		}
 
+		// Code Highlight
+		this.marked.use(markedHighlight(MarkedExtensions.HIGHLIGHT_CONFIG));
 		// Text Obfuscation
 		this.marked.use(Obfuscator.getMarkedExtension());
 		// Local Link Rewriting

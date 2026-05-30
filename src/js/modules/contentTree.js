@@ -73,6 +73,7 @@ export const ContentTree = category(
 		content('index', 'Welcome', 'index.md'),
 		content('cv', 'Curriculum Vitae', 'cv.md'),
 		content('about', 'Personal Philosophy', 'about.md'),
+		content('blog', 'Blog', 'blog-index.json'),
 
 		// ARCHITECTURE
 		category(

@@ -177,7 +177,7 @@ export class UIManager {
 			if (payload.mode === 'text') {
 				const navButtons = document.querySelectorAll('#text-navbar button[data-nav-path]');
 				for (const navButton of navButtons) {
-					const isCurrent = navButton.dataset.navPath === payload.path;
+					const isCurrent = payload.path.startsWith(navButton.dataset.navPath);
 					navButton.disabled = isCurrent;
 					if (isCurrent) {
 						navButton.setAttribute('aria-current', 'page');

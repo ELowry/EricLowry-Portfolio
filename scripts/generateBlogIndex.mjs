@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import { createCanvas } from 'canvas';
 
 const CONTENT_DIR = 'public/content';
 const OUTPUT_FILE = 'public/content/blog-index.json';
 const BASE_URL = 'https://eric-lowry.com';
+const IMAGE_BASE_DIR = 'public/assets/images/blog';
 
 /**
  * Generates the blog-index.json index file and feed-{lang_code}.xml files by parsing markdown files in the `public/content/{languageCode}/blog` directories.
@@ -69,6 +71,8 @@ function generateBlogIndex() {
 				title: bestTitle,
 				date: date,
 			});
+
+			generateStaticImage(bestTitle, date, lang);
 		}
 	}
 
@@ -107,28 +111,52 @@ function generateBlogIndex() {
 			'Latest blog posts from Eric Lowry.'
 		);
 
-		let rssContent = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-		rssContent += `<rss version="2.0">\n`;
-		rssContent += `\t<channel>\n`;
-		rssContent += `\t\t<title>${feedTitle}</title>\n`;
-		rssContent += `\t\t<link>${BASE_URL}/blog</link>\n`;
-		rssContent += `\t\t<description>${feedDesc}</description>\n`;
-		rssContent += `\t\t<language>${rssLangCode}</language>\n`;
-		rssContent += `\t\t<lastBuildDate>${buildDate}</lastBuildDate>\n`;
+		const rssItems = entries
+			.map((entry) => {
+				const pubDate = new Date(entry.date).toUTCString();
+				const link = `${BASE_URL}/blog/${entry.date}?lang=${entry.language}`;
+				const datePath = entry.date.replace(/-/g, '');
+				const imageRelPath = `/assets/images/blog/${datePath}/poster_${entry.language}.png`;
+				const imageUrl = `${BASE_URL}${imageRelPath}`;
+				const localImagePath = path.join(
+					IMAGE_BASE_DIR,
+					datePath,
+					`poster_${entry.language}.png`
+				);
 
-		entries.forEach((entry) => {
-			const pubDate = new Date(entry.date).toUTCString();
-			const link = `${BASE_URL}/blog/${entry.date}?lang=${entry.language}`;
-			rssContent += `\t\t<item>\n`;
-			rssContent += `\t\t\t<title>${entry.title}</title>\n`;
-			rssContent += `\t\t\t<link>${link}</link>\n`;
-			rssContent += `\t\t\t<guid>eric-lowry-blog-${entry.date}-${entry.language}</guid>\n`;
-			rssContent += `\t\t\t<pubDate>${pubDate}</pubDate>\n`;
-			rssContent += `\t\t</item>\n`;
-		});
+				let fileSize = 0;
+				if (fs.existsSync(localImagePath)) {
+					fileSize = fs.statSync(localImagePath).size;
+				}
 
-		rssContent += `\t</channel>\n`;
-		rssContent += `</rss>\n`;
+				return `\t\t<item>
+\t\t\t<title>${entry.title}</title>
+\t\t\t<link>${link}</link>
+\t\t\t<guid isPermaLink="false">eric-lowry-blog-${entry.date}-${entry.language}</guid>
+\t\t\t<pubDate>${pubDate}</pubDate>
+\t\t\t<enclosure url="${imageUrl}" length="${fileSize}" type="image/png" />
+\t\t</item>`;
+			})
+			.join('\n');
+		const rssContent = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+\t<channel>
+\t\t<atom:link href="${BASE_URL}/feed-${lang}.xml" rel="self" type="application/rss+xml" />
+\t\t<title>${feedTitle}</title>
+\t\t<link>${BASE_URL}/blog</link>
+\t\t<description>${feedDesc}</description>
+\t\t<image>
+\t\t\t<url>https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240-webp_240-240.jpg</url>
+\t\t\t<title>${feedTitle}</title>
+\t\t\t<link>${BASE_URL}/blog</link>
+\t\t\t<width>144</width>
+\t\t\t<height>144</height>
+\t\t</image>
+\t\t<language>${rssLangCode}</language>
+\t\t<lastBuildDate>${buildDate}</lastBuildDate>
+${rssItems}
+\t</channel>
+</rss>`;
 
 		fs.writeFileSync(feedFile, rssContent, 'utf-8');
 		console.log(
@@ -163,6 +191,96 @@ function getTranslationNode(langCode, pathString, fallback) {
 	}
 
 	return target;
+}
+
+/**
+ * Generates a static PNG image for a blog post.
+ * @param {string} title - The title of the blog post.
+ * @param {string} date - The date of the blog post (e.g., '2026-05-31').
+ * @param {string} lang - The language code (e.g., 'en_US').
+ */
+function generateStaticImage(title, date, lang) {
+	const width = 1200;
+	const height = 630;
+	const canvas = createCanvas(width, height);
+	const context = canvas.getContext('2d');
+
+	// Background
+	context.fillStyle = '#0f0d0f';
+	context.fillRect(0, 0, width, height);
+
+	// Text color
+	context.fillStyle = '#d1c6c1';
+
+	// Name
+	context.font = 'bold 22pt "Space Grotesk"';
+	context.textAlign = 'left';
+	context.textBaseline = 'top';
+	context.fillText('Eric Lowry', 290, 30);
+
+	// Date
+	context.font = 'bold 22pt "Space Grotesk"';
+	context.textAlign = 'right';
+	context.textBaseline = 'bottom';
+	context.fillText(date, width - 290, height - 30);
+
+	// Title
+	const maxLineWidth = 600;
+	const maxTotalHeight = 360;
+	const lineHeight = 1.3;
+
+	let fontSize = 80;
+	let lines = [];
+
+	do {
+		context.font = `normal ${fontSize}pt VT323`;
+		lines = [];
+		let currentLine = '';
+		const words = title.split(' ');
+
+		for (let i = 0; i < words.length; i++) {
+			const testLine = currentLine + words[i] + ' ';
+			const metrics = context.measureText(testLine);
+
+			if (metrics.width > maxLineWidth && i > 0) {
+				lines.push(currentLine.trim());
+				currentLine = words[i] + ' ';
+			} else {
+				currentLine = testLine;
+			}
+		}
+		lines.push(currentLine.trim());
+
+		const totalHeight = lines.length * (fontSize * lineHeight);
+
+		if (totalHeight <= maxTotalHeight) {
+			break;
+		}
+
+		fontSize -= 4;
+	} while (fontSize > 28);
+
+	context.textAlign = 'center';
+	context.textBaseline = 'middle';
+	context.fillStyle = '#e29186';
+
+	const totalBlockHeight = lines.length * (fontSize * lineHeight);
+	const startY = height / 2 - totalBlockHeight / 2 + fontSize / 2;
+
+	lines.forEach((line, index) => {
+		const yPos = startY + index * fontSize * lineHeight;
+		context.fillText(line, width / 2, yPos);
+	});
+
+	// Render
+	const buffer = canvas.toBuffer('image/png');
+	const dirPath = path.join(IMAGE_BASE_DIR, date.replace(/-/g, ''));
+
+	if (!fs.existsSync(dirPath)) {
+		fs.mkdirSync(dirPath, { recursive: true });
+	}
+
+	fs.writeFileSync(path.join(dirPath, `poster_${lang}.png`), buffer);
 }
 
 generateBlogIndex();

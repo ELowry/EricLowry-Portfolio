@@ -120,56 +120,68 @@ export class Player extends App.LJS.EngineObject {
 
 		const moveDir = LayeredInput.isActive(LayeredInput.LAYER_GAME) ? Input.axis.x : 0;
 
-		if (this.state === 'walk') {
-			this.velocity.x = moveDir * this.moveSpeed;
+		switch (this.state) {
+			case 'walk': {
+				this.velocity.x = moveDir * this.moveSpeed;
 
-			if (moveDir === 0) {
-				this.setState('stopping');
-			} else {
-				this.facingLeft = moveDir < 0;
+				if (moveDir === 0) {
+					this.setState('stopping');
+				} else {
+					this.facingLeft = moveDir < 0;
+				}
+				break;
 			}
-		} else if (this.state === 'stopping') {
-			this.velocity.x *= 0.8;
+			case 'stopping': {
+				this.velocity.x *= 0.8;
 
-			if (moveDir !== 0) {
-				this.setState('walk');
-				this.facingLeft = moveDir < 0;
+				if (moveDir !== 0) {
+					this.setState('walk');
+					this.facingLeft = moveDir < 0;
+				}
+
+				const stopDuration = 8 / Player.ANIM_SPEED_STOP;
+				if (this.stateTimer.get() > stopDuration) {
+					this.setState('idle');
+				}
+				break;
 			}
+			case 'idle': {
+				this.velocity.x *= 0.8;
 
-			const stopDuration = 8 / Player.ANIM_SPEED_STOP;
-			if (this.stateTimer.get() > stopDuration) {
-				this.setState('idle');
+				if (moveDir !== 0) {
+					this.setState('walk');
+					this.facingLeft = moveDir < 0;
+				}
+
+				if (!this.isLookingAround && this.idleLookTimer.elapsed()) {
+					this.isLookingAround = true;
+					this.stateTimer.set();
+				}
+
+				if (this.isLookingAround && this.stateTimer.get() > 3 / Player.ANIM_SPEED_IDLE) {
+					this.isLookingAround = false;
+					this.idleLookTimer.set(
+						App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX)
+					);
+				}
+				break;
 			}
-		} else if (this.state === 'idle') {
-			this.velocity.x *= 0.8;
-
-			if (moveDir !== 0) {
-				this.setState('walk');
-				this.facingLeft = moveDir < 0;
-			}
-
-			if (!this.isLookingAround && this.idleLookTimer.elapsed()) {
-				this.isLookingAround = true;
-				this.stateTimer.set();
-			}
-
-			if (this.isLookingAround && this.stateTimer.get() > 3 / Player.ANIM_SPEED_IDLE) {
-				this.isLookingAround = false;
-				this.idleLookTimer.set(
-					App.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX)
+			case 'front_interact_stopping': {
+				this.velocity.x *= 0.8;
+				const startFrame = this.savedStopFrame || 12;
+				const localFrame = Math.floor(
+					this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP
 				);
+				if (startFrame + localFrame > 16) {
+					this.setState('front_interact');
+				}
+				break;
 			}
-		} else if (this.state === 'front_interact_stopping') {
-			this.velocity.x *= 0.8;
-			const startFrame = this.savedStopFrame || 12;
-			const localFrame = Math.floor(
-				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP
-			);
-			if (startFrame + localFrame > 16) {
-				this.setState('front_interact');
+			case 'behind_interact':
+			case 'front_interact': {
+				this.velocity.x *= 0.8;
+				break;
 			}
-		} else if (this.state === 'behind_interact' || this.state === 'front_interact') {
-			this.velocity.x *= 0.8;
 		}
 
 		super.update();
@@ -185,33 +197,51 @@ export class Player extends App.LJS.EngineObject {
 
 		let tileIndex = 21;
 
-		if (this.state === 'walk') {
-			tileIndex = Math.floor(App.LJS.time * Player.ANIM_SPEED_WALK) % 12;
-		} else if (this.state === 'stopping') {
-			const frameOffset = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_STOP);
-			tileIndex = 11 + Math.min(frameOffset, 7);
-		} else if (this.state === 'idle') {
-			if (this.isLookingAround) {
-				const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_IDLE);
-				const lookSequence = [20, 21, 22];
-				tileIndex = lookSequence[Math.min(localFrame, 2)];
-			} else {
-				tileIndex = 21;
+		switch (this.state) {
+			case 'walk': {
+				tileIndex = Math.floor(App.LJS.time * Player.ANIM_SPEED_WALK) % 12;
+				break;
 			}
-		} else if (this.state === 'behind_interact') {
-			const startFrame = this.prevState === 'walk' || this.prevState === 'stopping' ? 24 : 23;
-			const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_BACK);
-			tileIndex = Math.min(startFrame + localFrame, 27);
-		} else if (this.state === 'front_interact_stopping') {
-			const startFrame = this.savedStopFrame || 12;
-			const localFrame = Math.floor(
-				this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP
-			);
-			tileIndex = Math.min(startFrame + localFrame, 16);
-		} else if (this.state === 'front_interact') {
-			const startOffset = this.prevState === 'front_interact_stopping' ? 29 : 28;
-			const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT);
-			tileIndex = Math.min(startOffset + localFrame, 32);
+			case 'stopping': {
+				const frameOffset = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_STOP);
+				tileIndex = 11 + Math.min(frameOffset, 7);
+				break;
+			}
+			case 'idle': {
+				if (this.isLookingAround) {
+					const localFrame = Math.floor(this.stateTimer.get() * Player.ANIM_SPEED_IDLE);
+					const lookSequence = [20, 21, 22];
+					tileIndex = lookSequence[Math.min(localFrame, 2)];
+				} else {
+					tileIndex = 21;
+				}
+				break;
+			}
+			case 'behind_interact': {
+				const startFrame =
+					this.prevState === 'walk' || this.prevState === 'stopping' ? 24 : 23;
+				const localFrame = Math.floor(
+					this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_BACK
+				);
+				tileIndex = Math.min(startFrame + localFrame, 27);
+				break;
+			}
+			case 'front_interact_stopping': {
+				const startFrame = this.savedStopFrame || 12;
+				const localFrame = Math.floor(
+					this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT_STOP
+				);
+				tileIndex = Math.min(startFrame + localFrame, 16);
+				break;
+			}
+			case 'front_interact': {
+				const startOffset = this.prevState === 'front_interact_stopping' ? 29 : 28;
+				const localFrame = Math.floor(
+					this.stateTimer.get() * Player.ANIM_SPEED_INTERACT_FRONT
+				);
+				tileIndex = Math.min(startOffset + localFrame, 32);
+				break;
+			}
 		}
 
 		const playerTile = App.LJS.tile(
