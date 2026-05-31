@@ -68,6 +68,8 @@
 		"btn_privacy": "Politique de confidentialité",
 		"submenu_language": "Changer de Langue",
 		"btn_switch_language": "Afficher le site en {lang}",
+		"breadcrumbs_aria": "Fil d'ariane",
+		"category_options_aria": "Options des catégories",
 		"welcome": {
 			"header": "Bienvenue sur le portfolio d'Eric Lowry",
 			"p1": "J'ai mis en place une petite expérience interactive qui vous permet d'explorer mon travail à travers un petit jeu ludique.",
@@ -128,7 +130,9 @@
 		"title": "Blog",
 		"feedTitle": "Blog d'Eric Lowry",
 		"feedDescription": "Derniers articles de blog d'Eric Lowry.",
-		"languageFallback": "Aucun article n'est actuellement disponible en {0}. Voici les articles disponibles en Anglais:",
+		"empty": "Aucun article trouvé.",
+		"english_articles": "Articles en anglais:",
+		"english_articles_only": "Articles uniquement disponibles en anglais:",
 		"errorLoading": "Impossible de charger l'index du blog."
 	}
 }

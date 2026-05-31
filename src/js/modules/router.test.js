@@ -1,12 +1,32 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Router } from './router.js';
+
+// Mock the Lang controller so we can test the dynamic feed URL logic
+vi.mock('./lang.js', () => {
+	return {
+		Lang: {
+			langCode: 'fr_FR',
+		},
+	};
+});
 
 describe('RouterController', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
 
+		// Stub window.location to prevent JSDOM navigation crash errors
+		vi.stubGlobal('location', {
+			href: 'http://localhost/',
+			pathname: '/',
+			hostname: 'localhost',
+		});
+
 		Router.state = { mode: 'game', path: '' };
 		Router.onStateChange = null;
+	});
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
 	});
 
 	describe('sanitizePath', () => {
@@ -29,6 +49,14 @@ describe('RouterController', () => {
 			expect(Router.sanitizePath('')).toBe('');
 			expect(Router.sanitizePath(null)).toBe('');
 			expect(Router.sanitizePath(undefined)).toBe('');
+		});
+	});
+
+	describe('readURL', () => {
+		it('should bypass SPA routing and hard redirect to localized feed for rss paths', async () => {
+			window.location.pathname = '/rss';
+			await Router.readURL();
+			expect(window.location.href).toBe('/feed-fr_FR.xml');
 		});
 	});
 
@@ -56,6 +84,15 @@ describe('RouterController', () => {
 
 			await Router.go('text', 'about/cv');
 
+			expect(pushStateSpy).not.toHaveBeenCalled();
+		});
+
+		it('should bypass SPA routing and hard redirect for rss paths', async () => {
+			const pushStateSpy = vi.spyOn(window.history, 'pushState');
+
+			await Router.go('text', 'rss');
+
+			expect(window.location.href).toBe('/feed-en_US.xml');
 			expect(pushStateSpy).not.toHaveBeenCalled();
 		});
 

@@ -2,7 +2,7 @@
 	"type": "module",
 	"dependencies": {
 		"highlight.js": "^11.11.1",
-		"littlejsengine": "^1.18.12",
+		"littlejsengine": "^1.18.15",
 		"marked": "^18.0.4",
 		"marked-alert": "^2.1.2",
 		"marked-gfm-heading-id": "^4.1.4",
@@ -10,7 +10,7 @@
 		"marked-responsive-images": "^2.1.2"
 	},
 	"scripts": {
-		"generate-blog": "node scripts/generateBlogIndex.mjs && prettier --write public/content/blog-index.json public/feed-*.xml public/blog/**/index.html && eslint --no-ignore public/content/blog-index.json",
+		"generate-blog": "node scripts/generateBlog.mjs && prettier --write public/content/blog-index.json public/feed-*.xml public/blog/**/index.html && eslint --no-ignore public/content/blog-index.json",
 		"generate-sitemaps": "node scripts/generateSitemaps.mjs && prettier --write public/sitemap.xml public/llms.txt public/robots.txt",
 		"copy-deps": "powershell -ExecutionPolicy Bypass -File scripts/copy-deps.ps1",
 		"copy-deps:prod": "powershell -ExecutionPolicy Bypass -File scripts/copy-deps.ps1 -Prod",
@@ -27,7 +27,7 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"canvas": "^3.2.3",
-		"eslint": "^10.4.0",
+		"eslint": "^10.4.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jsdoc": "^63.0.0",
 		"globals": "^17.6.0",

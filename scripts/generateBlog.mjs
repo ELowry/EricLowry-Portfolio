@@ -12,13 +12,14 @@ const IMAGE_BASE_DIR = 'public/assets/images/blog';
  * Looks for files matching YYYY-MM-DD.md and extracts the highest-order heading as the title.
  * @returns {void} Nothing
  */
-function generateBlogIndex() {
+function generateBlog() {
 	if (!fs.existsSync(CONTENT_DIR)) {
 		console.error(`Content directory ${CONTENT_DIR} not found.`);
 		process.exit(1);
 	}
 
 	const blogEntries = [];
+	const seenDates = new Set();
 	const dateRegex = /^(\d{4}-\d{2}-\d{2})\.md$/;
 	const headingRegex = /^(#{1,6})\s+(.+)$/m;
 
@@ -41,6 +42,15 @@ function generateBlogIndex() {
 			}
 
 			const date = dateMatch[1];
+
+			if (seenDates.has(date)) {
+				throw new Error(
+					`\nCRITICAL BUILD ERROR: Blog date collision detected for "${date}".\n`
+						+ `Dates act as unique IDs. You cannot have multiple posts on the same day.`
+				);
+			}
+			seenDates.add(date);
+
 			const filePath = path.join(blogDir, file);
 			const content = fs.readFileSync(filePath, 'utf-8');
 
@@ -72,7 +82,7 @@ function generateBlogIndex() {
 				date: date,
 			});
 
-			generateStaticImage(bestTitle, date, lang);
+			generateStaticImage(bestTitle, date);
 
 			// Generate static blog item pages
 			const baseHtmlTemplate = fs.readFileSync('index.html', 'utf-8');
@@ -100,7 +110,7 @@ function generateBlogIndex() {
 	// GENERATE RSS FEEDS
 	const buildDate = new Date().toUTCString();
 
-	// Group entries by language (Removed 'acc' abbreviation)
+	// Group entries by language
 	const entriesByLanguage = blogEntries.reduce((groupedEntries, entry) => {
 		if (!groupedEntries[entry.language]) {
 			groupedEntries[entry.language] = [];
@@ -127,13 +137,9 @@ function generateBlogIndex() {
 				const pubDate = new Date(entry.date).toUTCString();
 				const link = `${BASE_URL}/blog/${entry.date}?lang=${entry.language}`;
 				const datePath = entry.date.replace(/-/g, '');
-				const imageRelPath = `/assets/images/blog/${datePath}/poster_${entry.language}.png`;
+				const imageRelPath = `/assets/images/blog/${datePath}/poster.png`;
 				const imageUrl = `${BASE_URL}${imageRelPath}`;
-				const localImagePath = path.join(
-					IMAGE_BASE_DIR,
-					datePath,
-					`poster_${entry.language}.png`
-				);
+				const localImagePath = path.join(IMAGE_BASE_DIR, datePath, `poster.png`);
 
 				let fileSize = 0;
 				if (fs.existsSync(localImagePath)) {
@@ -208,9 +214,8 @@ function getTranslationNode(langCode, pathString, fallback) {
  * Generates a static PNG image for a blog post.
  * @param {string} title - The title of the blog post.
  * @param {string} date - The date of the blog post (e.g., '2026-05-31').
- * @param {string} lang - The language code (e.g., 'en_US').
  */
-function generateStaticImage(title, date, lang) {
+function generateStaticImage(title, date) {
 	const width = 1200;
 	const height = 630;
 	const canvas = createCanvas(width, height);
@@ -291,7 +296,7 @@ function generateStaticImage(title, date, lang) {
 		fs.mkdirSync(dirPath, { recursive: true });
 	}
 
-	fs.writeFileSync(path.join(dirPath, `poster_${lang}.png`), buffer);
+	fs.writeFileSync(path.join(dirPath, `poster.png`), buffer);
 }
 
 /**
@@ -307,7 +312,7 @@ function generateStaticBlogHtml(entry, baseHtmlContent) {
 	}
 
 	const datePath = entry.date.replace(/-/g, '');
-	const imagePath = `/assets/images/blog/${datePath}/poster_${entry.language}.png`;
+	const imagePath = `/assets/images/blog/${datePath}/poster.png`;
 	const imageUrl = `${BASE_URL}${imagePath}`;
 
 	let updatedHtml = baseHtmlContent;
@@ -360,4 +365,4 @@ function generateStaticBlogHtml(entry, baseHtmlContent) {
 	fs.writeFileSync(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
 }
 
-generateBlogIndex();
+generateBlog();

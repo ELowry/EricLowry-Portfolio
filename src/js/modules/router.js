@@ -1,3 +1,5 @@
+import { Lang } from './lang.js';
+
 /**
  * RouterController handles application state via URL paths and the History API.
  * Manages clean path-based routing (e.g., `/game/about` instead of `?mode=game&path=about`).
@@ -59,7 +61,7 @@ class RouterController {
 	}
 
 	/**
-	 * Sanitizes a URL path by removing edge cases.
+	 * Sanitizes a URL path.
 	 * @param {string} path - Raw path to sanitize
 	 * @returns {string} a clean path
 	 */
@@ -69,19 +71,23 @@ class RouterController {
 		}
 
 		return path
-			.replace(/\/+/g, '/') // Replace multiple slashes with single slash
-			.replace(/^\/|\/$/g, '') // Remove leading and trailing slashes
-			.toLowerCase() // Normalize case
+			.replace(/\/+/g, '/')
+			.replace(/^\/|\/$/g, '')
+			.toLowerCase()
 			.trim();
 	}
 
 	/**
 	 * Reads the current URL path and applies the state.
-	 * Handles formats like: `/game/about/bio` or `/text/projects`
 	 * @returns {Promise<void>}
 	 */
 	async readURL() {
 		const pathName = this.sanitizePath(window.location.pathname);
+
+		if (pathName === 'rss' || pathName === 'feed') {
+			window.location.href = `/feed-${Lang.langCode}.xml`;
+			return;
+		}
 
 		let mode = 'game';
 		let path = '';
@@ -103,9 +109,7 @@ class RouterController {
 
 		// TEMP TEXT-ONLY START
 		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-			// TEMP TEXT-ONLY END
 			mode = 'text';
-			// TEMP TEXT-ONLY START
 		}
 		// TEMP TEXT-ONLY END
 
@@ -120,19 +124,28 @@ class RouterController {
 	 * @returns {Promise<void>}
 	 */
 	async go(mode, path) {
+		const cleanPath = this.sanitizePath(path);
+
+		if (cleanPath === 'rss' || cleanPath === 'feed') {
+			window.location.href = '/feed-en_US.xml';
+			return;
+		}
+
+		let targetMode = mode;
+
+		if (cleanPath.startsWith('blog')) {
+			targetMode = 'text';
+		}
+
 		// TEMP TEXT-ONLY START
 		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
 			// TEMP TEXT-ONLY END
-			mode = 'text';
+			targetMode = 'text';
 			// TEMP TEXT-ONLY START
 		}
 		// TEMP TEXT-ONLY END
-		const validMode = ['game', 'text'].includes(mode) ? mode : 'game';
 
-		let cleanPath = this.sanitizePath(path);
-		if (cleanPath.startsWith('blog') && validMode === 'game') {
-			cleanPath = '';
-		}
+		const validMode = ['game', 'text'].includes(targetMode) ? targetMode : 'game';
 		const newState = { mode: validMode, path: cleanPath };
 
 		if (newState.mode === this.state.mode && newState.path === this.state.path) {

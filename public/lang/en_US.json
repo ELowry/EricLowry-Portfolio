@@ -192,6 +192,8 @@
 		"btn_privacy": "Privacy Policy",
 		"submenu_language": "Language selection",
 		"btn_switch_language": "Display website in {lang}",
+		"breadcrumbs_aria": "Breadcrumb",
+		"category_options_aria": "Category options",
 		"welcome": {
 			"header": "Welcome to Eric Lowry's portfolio",
 			"p1": "I have set up a small interactive experience which lets you explore my work in a fun little game.",
@@ -255,7 +257,9 @@
 		"title": "Blog",
 		"feedTitle": "Eric Lowry's Blog",
 		"feedDescription": "Latest blog posts from Eric Lowry.",
-		"languageFallback": "No articles are currently available.",
+		"empty": "No articles found.",
+		"english_articles": "Articles in English:",
+		"english_articles_only": "Articles only available in English:",
 		"errorLoading": "Failed to load blog index."
 	}
 }

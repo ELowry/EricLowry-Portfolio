@@ -498,6 +498,11 @@ class AppController {
 		this.setPause(false);
 		this.setLock(false);
 
+		if (mode === 'game' && Router.isBlogRoute) {
+			Router.go('game', '');
+			return;
+		}
+
 		Router.go(mode, Router.currentPath);
 	}
 

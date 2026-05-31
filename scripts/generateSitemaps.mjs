@@ -8,7 +8,7 @@ const BASE_URL = 'https://eric-lowry.com';
 
 /**
  * Generates the llms.txt content with categorized links.
- * @param {Object<string, Array<{title: string, file: string}>>} categorizedLinks
+ * @param {Object<string, Array<{title: string, file: string, language?: string}>>} categorizedLinks
  * @returns {string} The formatted llms.txt content.
  */
 const generateLlmsContent = (categorizedLinks) => {
@@ -40,10 +40,17 @@ The portfolio demonstrates Eric's dual-threat capability through two distinct in
 	for (const [category, nodes] of Object.entries(categorizedLinks)) {
 		content += `\n### ${category}\n\n`;
 		nodes.forEach((node) => {
-			languages.forEach((lang) => {
-				const localeSuffix = lang === 'en_US' ? 'EN' : 'FR';
-				content += `- [${node.title} (${localeSuffix})](${BASE_URL}/content/${lang}/${node.file})\n`;
-			});
+			if (node.language) {
+				// Static language routing for blog posts
+				const localeSuffix = node.language === 'en_US' ? 'EN' : 'FR';
+				content += `- [${node.title} (${localeSuffix})](${BASE_URL}/content/${node.language}/${node.file})\n`;
+			} else {
+				// Global language routing for content tree documents
+				languages.forEach((lang) => {
+					const localeSuffix = lang === 'en_US' ? 'EN' : 'FR';
+					content += `- [${node.title} (${localeSuffix})](${BASE_URL}/content/${lang}/${node.file})\n`;
+				});
+			}
 		});
 	}
 
@@ -137,23 +144,20 @@ if (fs.existsSync(blogJsonPath)) {
 		llmLinks[blogCategoryTitle] = [];
 	}
 
-	const uniqueDates = [...new Set(blogEntries.map((entry) => entry.date))];
-	uniqueDates.forEach((date) => {
-		const textModeUrl = `/blog/${date}`;
+	blogEntries.forEach((entry) => {
+		const textModeUrl = `/blog/${entry.date}`;
 		sitemapUrls.push({
 			url: `${BASE_URL}${textModeUrl}`,
-			lastmod: date,
+			lastmod: entry.date,
 			changefreq: 'monthly',
 			priority: '0.7',
 		});
 
-		const blogEntry =
-			blogEntries.find((entry) => entry.date === date && entry.language === 'en_US')
-			|| blogEntries.find((entry) => entry.date === date);
-
-		if (blogEntry) {
-			llmLinks[blogCategoryTitle].push({ title: blogEntry.title, file: `blog/${date}.md` });
-		}
+		llmLinks[blogCategoryTitle].push({
+			title: entry.title,
+			file: `blog/${entry.date}.md`,
+			language: entry.language,
+		});
 	});
 }
 

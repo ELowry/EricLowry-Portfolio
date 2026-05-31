@@ -104,7 +104,7 @@ class LemmySynchronizer {
 		const history = this.#loadHistory();
 
 		if (!fs.existsSync(LemmySynchronizer.BLOG_INDEX_FILE)) {
-			console.error('Error: Blog index not found. Run generateBlogIndex.mjs first.');
+			console.error('Error: Blog index not found. Run generateBlog.mjs first.');
 			process.exit(1);
 		}
 

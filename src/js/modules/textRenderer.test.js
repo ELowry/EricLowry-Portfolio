@@ -57,7 +57,7 @@ describe('TextRenderer', () => {
 		textRenderer = new TextRenderer(appMock, breadcrumbTemplate, navLinkTemplate);
 	});
 
-	it('should render breadcrumbs successfully for a path', () => {
+	it('should render breadcrumbs successfully for a path with translated aria-labels', () => {
 		const nodeMock = { id: 'cv', title: 'CV', children: [] };
 		Content.findNodeByPath.mockImplementation((p) => {
 			if (p === '') {
@@ -70,12 +70,13 @@ describe('TextRenderer', () => {
 
 		const list = textNavContainer.querySelector('ol.breadcrumbs');
 		expect(list).not.toBeNull();
+		expect(list.getAttribute('aria-label')).toBe('Breadcrumb');
 
 		const crumbs = list.querySelectorAll('li');
 		expect(crumbs.length).toBe(3);
 	});
 
-	it('should render category children items', () => {
+	it('should render category children items with translated aria-labels', () => {
 		const childNode = { id: 'cv', title: 'CV', type: 'content' };
 		const categoryNode = {
 			id: 'about',
@@ -95,6 +96,7 @@ describe('TextRenderer', () => {
 
 		const navList = textNavContainer.querySelector('.nav-list');
 		expect(navList).not.toBeNull();
+		expect(navList.getAttribute('aria-label')).toBe('Category options');
 
 		const links = navList.querySelectorAll('a');
 		expect(links.length).toBe(1);

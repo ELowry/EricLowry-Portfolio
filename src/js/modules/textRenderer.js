@@ -42,7 +42,10 @@ export class TextRenderer {
 		// BREADCRUMBS
 		const breadcrumbList = document.createElement('ol');
 		breadcrumbList.className = 'breadcrumbs';
-		breadcrumbList.setAttribute('aria-label', 'Breadcrumb');
+		breadcrumbList.setAttribute(
+			'aria-label',
+			Lang.getString('ui.breadcrumbs_aria', null, 'Breadcrumb')
+		);
 
 		const createCrumb = (label, targetPath, isCurrent) => {
 			const clone = this.breadcrumbTemplate.content.cloneNode(true);
@@ -83,8 +86,11 @@ export class TextRenderer {
 			let label = part;
 
 			if (currNode) {
-				const langKey = `content.${currentPath.replace(/\//g, '.')}.title`;
-				label = Lang.getString(langKey, null, currNode.title);
+				label = Lang.getString(
+					`content.${currentPath.replace(/\//g, '.')}.title`,
+					null,
+					currNode.title
+				);
 			} else if (part === 'blog') {
 				label = Lang.getString('blog.title', null, 'Blog');
 			}
@@ -113,14 +119,20 @@ export class TextRenderer {
 		const navContainer = document.createElement('div');
 		navContainer.className = 'nav-list';
 		navContainer.setAttribute('role', 'menu');
-		navContainer.setAttribute('aria-label', 'Category Options');
+		navContainer.setAttribute(
+			'aria-label',
+			Lang.getString('ui.category_options_aria', null, 'Category options')
+		);
 
 		visibleChildren.forEach((child, index) => {
 			const childPath = path ? `${path}/${child.id}` : child.id;
 
 			// Label Logic
-			const langKey = `content.${childPath.replace(/\//g, '.')}.title`;
-			const label = Lang.getString(langKey, null, child.title);
+			const label = Lang.getString(
+				`content.${childPath.replace(/\//g, '.')}.title`,
+				null,
+				child.title
+			);
 
 			// Clone Template
 			const clone = this.navLinkTemplate.content.cloneNode(true);
@@ -189,7 +201,6 @@ export class TextRenderer {
 
 	/**
 	 * Fetches the blog index JSON, generates HTML, and renders the list of articles.
-	 * Includes a fallback to English if the current language has no entries.
 	 * @private
 	 */
 	async #renderBlogIndex() {
@@ -204,37 +215,66 @@ export class TextRenderer {
 			}
 
 			const blogEntries = await response.json();
-			let currentLanguage = Lang.langCode;
-			let entries = blogEntries.filter((entry) => entry.language === currentLanguage);
-			let fallbackWarningHtml = '';
+			const currentLang = Lang.langCode || 'en_US';
 
-			if (entries.length === 0) {
-				currentLanguage = 'en_US';
-				entries = blogEntries.filter((entry) => entry.language === currentLanguage);
-
-				const languageName = Lang.getString(
-					`languages.${Lang.langCode}`,
-					null,
-					'your language'
-				);
-				const rawWarningText = Lang.getString(
-					'blog.languageFallback',
-					null,
-					`No articles were found in ${languageName}. Here are the articles currently available in English:`
-				);
-				const warningText = rawWarningText.replace('{0}', languageName);
-				fallbackWarningHtml = `<p class="blog-warning alert">${warningText}</p>`;
-			}
+			const renderListItems = (entries) => {
+				let html = '';
+				entries.forEach((entry) => {
+					html += `<li><a href="/blog/${entry.date}" data-route="blog/${entry.date}"><span class="blog-list-title" style="--content-length: ${entry.title.length};">${entry.title}</span><time class="blog-list-date" datetime="${entry.date}">${entry.date}</time></a></li>`;
+				});
+				return html;
+			};
 
 			let finalHtml = '<div class="blog-index">';
-			finalHtml += fallbackWarningHtml;
-			finalHtml += '<ul class="blog-list">';
 
-			entries.forEach((entry) => {
-				finalHtml += `<li><a href="/blog/${entry.date}" data-route="blog/${entry.date}"><span class="blog-list-title" style="--content-length: ${entry.title.length};">${entry.title}</span><time class="blog-list-date" datetime="${entry.date}">${entry.date}</time></a></li>`;
-			});
+			if (currentLang === 'en_US') {
+				const enEntries = blogEntries.filter((e) => e.language === 'en_US');
+				if (enEntries.length > 0) {
+					finalHtml += '<ul class="blog-list">';
+					finalHtml += renderListItems(enEntries);
+					finalHtml += '</ul>';
+				} else {
+					const noArticlesText = Lang.getString('blog.empty', null, 'No articles found.');
+					finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
+				}
+			} else {
+				const localEntries = blogEntries.filter((e) => e.language === currentLang);
+				const enEntries = blogEntries.filter((e) => e.language === 'en_US');
 
-			finalHtml += '</ul></div>';
+				if (localEntries.length > 0) {
+					finalHtml += '<ul class="blog-list">';
+					finalHtml += renderListItems(localEntries);
+					finalHtml += '</ul>';
+				}
+
+				if (enEntries.length > 0) {
+					let separatorText;
+					if (localEntries.length > 0) {
+						separatorText = Lang.getString(
+							'blog.english_articles',
+							null,
+							'Articles in English'
+						);
+					} else {
+						separatorText = Lang.getString(
+							'blog.english_articles_only',
+							null,
+							'Articles only available in English'
+						);
+					}
+					finalHtml += `<hr class="blog-separator" /><h3 class="blog-separator-title">${separatorText}</h3>`;
+					finalHtml += '<ul class="blog-list">';
+					finalHtml += renderListItems(enEntries);
+					finalHtml += '</ul>';
+				}
+
+				if (localEntries.length === 0 && enEntries.length === 0) {
+					const noArticlesText = Lang.getString('blog.empty', null, 'No articles found.');
+					finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
+				}
+			}
+
+			finalHtml += '</div>';
 
 			this.app.uiManager.displayContentInTextView(finalHtml);
 			this.#hydrateBlogLinks(this.app.uiManager.elements.textContent);

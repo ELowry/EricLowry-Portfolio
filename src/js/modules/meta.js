@@ -52,17 +52,7 @@ class MetaController {
 				}
 
 				if (this.#blogIndexCache) {
-					const currentLang = Lang.langCode || 'en_US';
-					const entry =
-						this.#blogIndexCache.find((e) => {
-							return e.date === date && e.language === currentLang;
-						})
-						|| this.#blogIndexCache.find((e) => {
-							return e.date === date && e.language === 'en_US';
-						})
-						|| this.#blogIndexCache.find((e) => {
-							return e.date === date;
-						});
+					const entry = this.#blogIndexCache.find((e) => e.date === date);
 
 					if (entry) {
 						pageTitle = entry.title;
@@ -98,21 +88,11 @@ class MetaController {
 		if (Router.isBlogRoute && path.startsWith('blog/')) {
 			const date = path.substring(5);
 			if (this.#blogIndexCache) {
-				const currentLang = Lang.langCode || 'en_US';
-				const entry =
-					this.#blogIndexCache.find((e) => {
-						return e.date === date && e.language === currentLang;
-					})
-					|| this.#blogIndexCache.find((e) => {
-						return e.date === date && e.language === 'en_US';
-					})
-					|| this.#blogIndexCache.find((e) => {
-						return e.date === date;
-					});
+				const entry = this.#blogIndexCache.find((e) => e.date === date);
 
 				if (entry) {
 					const datePath = entry.date.replace(/-/g, '');
-					const imagePath = `/assets/images/blog/${datePath}/poster_${entry.language}.png`;
+					const imagePath = `/assets/images/blog/${datePath}/poster.png`;
 					const imageUrl = `${window.location.origin}${imagePath}`;
 
 					const currentOgTags = document.querySelectorAll('meta[property^="og:image"]');
