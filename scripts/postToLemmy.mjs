@@ -228,7 +228,7 @@ class LemmySynchronizer {
 	/**
 	 * Reads multi-line input from the terminal until an empty line is entered.
 	 * @param {string} promptText The text to display to the user.
-	 * @returns {Promise<string>}
+	 * @returns {Promise<string>} The multi-line user input value.
 	 * @private
 	 */
 	#readMultiLine(promptText) {

@@ -21,7 +21,7 @@
 		"lint:fix": "eslint --fix . && prettier --write .",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"blog:post": "node scripts/postToLemmy.mjs",
+		"blog:post": "node scripts/postToLemmy.mjs && prettier --write lemmy-history.json",
 		"blog:test": "node scripts/postToLemmy.mjs --dry-run"
 	},
 	"devDependencies": {

@@ -1,10 +1,13 @@
 /* GALLERY */
 .md-gallery {
 	display: flex;
+	align-items: stretch;
 	gap: var(--border-width);
 	max-width: 100%;
 
 	.md-gallery-item {
+		display: flex;
+		align-items: center;
 		cursor: pointer;
 		margin: 0;
 		background-color: var(--color-overlay-dark);
