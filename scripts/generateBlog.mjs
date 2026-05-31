@@ -317,50 +317,30 @@ function generateStaticBlogHtml(entry, baseHtmlContent) {
 
 	let updatedHtml = baseHtmlContent;
 
-	// Eradicate all original open graph image tags AND their structured properties (width, height, type, alt)
-	updatedHtml = updatedHtml.replace(/<meta property="og:image[^>]*>/gm, '');
-
-	// Clear hardcoded head layout description tags to prevent text overlap
-	updatedHtml = updatedHtml.replace(/<meta name="description".*?>/gm, '');
-	updatedHtml = updatedHtml.replace(/<meta property="og:description".*?>/gm, '');
-
-	// Remove layout asset image blocks from body to prevent layout scraping cascades
-	updatedHtml = updatedHtml.replace(
-		/https:\/\/eric-lowry\.com\/assets\/images\/eric_lowry_portrait__240-240\.(webp|jpg)/g,
-		''
-	);
-
-	// Inject explicit structural page titles
-	updatedHtml = updatedHtml.replace(
-		/<title>.*?<\/title>/,
-		`<title>${entry.title} – Eric Lowry</title>`
-	);
-
-	// Override global OG configurations inline
-	updatedHtml = updatedHtml.replace(
-		/<meta property="og:title".*?>/,
-		`<meta property="og:title" content="${entry.title}" />`
-	);
-	updatedHtml = updatedHtml.replace(
-		/<meta property="og:type".*?>/,
-		`<meta property="og:type" content="article" />`
-	);
-
-	// Construct dedicated post social metadata cards
-	const explicitSocialMeta = `
+	const replacementMeta = `<!-- OG_META_START -->
+		<title>${entry.title} – Eric Lowry</title>
+		<link rel="canonical" href="https://eric-lowry.com/blog/${entry.date}" />
 		<meta name="description" content="${entry.title} – Published on ${entry.date}." />
+		<meta name="author" content="Eric Lowry" />
+		<meta name="language" content="${entry.language === 'en_US' ? 'EN' : 'FR'}" />
+		<meta property="og:title" content="${entry.title}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content="https://eric-lowry.com/blog/${entry.date}" />
 		<meta property="og:description" content="${entry.title} – Published on ${entry.date}." />
 		<meta property="og:image" content="${imageUrl}" />
 		<meta property="og:image:type" content="image/png" />
-		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:width" content="1200 " />
 		<meta property="og:image:height" content="630" />
 		<meta property="og:image:alt" content="${entry.title}" />
 		<meta name="twitter:card" content="summary" />
 		<meta name="twitter:title" content="${entry.title}" />
 		<meta name="twitter:image" content="${imageUrl}" />
-	`;
+	<!-- OG_META_END -->`;
 
-	updatedHtml = updatedHtml.replace('</title>', `</title>${explicitSocialMeta}`);
+	updatedHtml = updatedHtml.replace(
+		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
+		() => replacementMeta
+	);
 
 	fs.writeFileSync(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
 }

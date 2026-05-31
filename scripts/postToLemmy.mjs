@@ -90,41 +90,48 @@ class LemmySynchronizer {
 	 * @returns {Promise<void>}
 	 */
 	async init() {
-		if (this.#isDryRun) {
-			console.log('==================================================');
-			console.log('🏃 DRY RUN MODE ACTIVATED - NO DATA WILL BE SAVED');
-			console.log('==================================================');
-		}
+		try {
+			if (this.#isDryRun) {
+				console.log('==================================================');
+				console.log('🏃 DRY RUN MODE ACTIVATED - NO DATA WILL BE SAVED');
+				console.log('==================================================');
+			}
 
-		if (!process.env.LEMMY_JWT) {
-			console.error('Error: LEMMY_JWT environment variable is missing.');
-			process.exit(1);
-		}
+			if (!process.env.LEMMY_JWT) {
+				console.error('Error: LEMMY_JWT environment variable is missing.');
+				process.exit(1);
+			}
 
-		const history = this.#loadHistory();
+			const history = this.#loadHistory();
 
-		if (!fs.existsSync(LemmySynchronizer.BLOG_INDEX_FILE)) {
-			console.error('Error: Blog index not found. Run generateBlog.mjs first.');
-			process.exit(1);
-		}
+			if (!fs.existsSync(LemmySynchronizer.BLOG_INDEX_FILE)) {
+				console.error('Error: Blog index not found. Run generateBlog.mjs first.');
+				process.exit(1);
+			}
 
-		const allPosts = JSON.parse(fs.readFileSync(LemmySynchronizer.BLOG_INDEX_FILE, 'utf-8'));
-		const newPosts = allPosts.filter((post) => {
-			return !history.includes(post.date);
-		});
+			const allPosts = JSON.parse(
+				fs.readFileSync(LemmySynchronizer.BLOG_INDEX_FILE, 'utf-8')
+			);
+			const newPosts = allPosts.filter((post) => {
+				return !history.includes(post.date);
+			});
 
-		if (newPosts.length === 0) {
-			console.log('No new posts to sync to Lemmy.');
+			if (newPosts.length === 0) {
+				console.log('No new posts to sync to Lemmy.');
+				this.#readlineInterface.close();
+				return;
+			}
+
+			for (const post of newPosts) {
+				await this.#processPost(post, history);
+			}
+
 			this.#readlineInterface.close();
-			return;
+			console.log('\nSynchronization session complete.');
+		} finally {
+			// This guarantees readline closes, preventing the Windows crash
+			this.#readlineInterface.close();
 		}
-
-		for (const post of newPosts) {
-			await this.#processPost(post, history);
-		}
-
-		this.#readlineInterface.close();
-		console.log('\nSynchronization session complete.');
 	}
 
 	/**
@@ -189,11 +196,15 @@ class LemmySynchronizer {
 				return availableCommunities[index];
 			});
 
-		const postUrl = `${LemmySynchronizer.BASE_URL}/blog/${post.date}?lang=${post.language}`;
+		const customBody = await this.#readMultiLine(
+			'\nEnter a summary for this Lemmy post (write/paste multi-line text, then press Enter twice to submit): '
+		);
+
+		const postUrl = `${LemmySynchronizer.BASE_URL}/blog/${post.date}`;
 
 		try {
 			console.log(`\nPosting to primary: ${primaryCommunity.name}...`);
-			await this.#postToCommunity(primaryCommunity.id, post.title, postUrl);
+			await this.#postToCommunity(primaryCommunity.id, post.title, postUrl, customBody);
 			console.log('Success!');
 
 			for (const crossCommunity of crossCommunities) {
@@ -201,7 +212,7 @@ class LemmySynchronizer {
 				await this.#sleep(3000);
 
 				console.log(`Crossposting to: ${crossCommunity.name}...`);
-				await this.#postToCommunity(crossCommunity.id, post.title, postUrl);
+				await this.#postToCommunity(crossCommunity.id, post.title, postUrl, customBody);
 				console.log('Success!');
 			}
 
@@ -212,6 +223,31 @@ class LemmySynchronizer {
 			console.log('Stopping synchronization to prevent duplicate errors.');
 			throw error;
 		}
+	}
+
+	/**
+	 * Reads multi-line input from the terminal until an empty line is entered.
+	 * @param {string} promptText The text to display to the user.
+	 * @returns {Promise<string>}
+	 * @private
+	 */
+	#readMultiLine(promptText) {
+		return new Promise((resolve) => {
+			console.log(promptText);
+			let lines = [];
+
+			const onLine = (line) => {
+				if (line === '') {
+					// Stop listening when an empty line is submitted
+					this.#readlineInterface.removeListener('line', onLine);
+					resolve(lines.join('\n'));
+				} else {
+					lines.push(line);
+				}
+			};
+
+			this.#readlineInterface.on('line', onLine);
+		});
 	}
 
 	/**
@@ -248,16 +284,20 @@ class LemmySynchronizer {
 	 * @param {number} communityId The target community integer ID.
 	 * @param {string} title The post title.
 	 * @param {string} url The URL of the blog post.
+	 * @param {string} bodyText The markdown body text for the post.
 	 * @returns {Promise<Object>} The API response payload.
 	 * @private
 	 */
-	async #postToCommunity(communityId, title, url) {
+	async #postToCommunity(communityId, title, url, bodyText) {
 		const payload = {
-			auth: process.env.LEMMY_JWT,
 			community_id: communityId,
 			name: title,
 			url: url,
 		};
+
+		if (bodyText && bodyText.trim() !== '') {
+			payload.body = bodyText;
+		}
 
 		if (this.#isDryRun) {
 			console.log(`[DRY RUN] Would send POST to ${LemmySynchronizer.LEMMY_API_URL}`);
@@ -272,6 +312,7 @@ class LemmySynchronizer {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${process.env.LEMMY_JWT}`,
 			},
 			body: JSON.stringify(payload),
 		});

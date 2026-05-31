@@ -1,5 +1,3 @@
-import { Lang } from './lang.js';
-
 /**
  * RouterController handles application state via URL paths and the History API.
  * Manages clean path-based routing (e.g., `/game/about` instead of `?mode=game&path=about`).
@@ -84,11 +82,6 @@ class RouterController {
 	async readURL() {
 		const pathName = this.sanitizePath(window.location.pathname);
 
-		if (pathName === 'rss' || pathName === 'feed') {
-			window.location.href = `/feed-${Lang.langCode}.xml`;
-			return;
-		}
-
 		let mode = 'game';
 		let path = '';
 
@@ -125,11 +118,6 @@ class RouterController {
 	 */
 	async go(mode, path) {
 		const cleanPath = this.sanitizePath(path);
-
-		if (cleanPath === 'rss' || cleanPath === 'feed') {
-			window.location.href = '/feed-en_US.xml';
-			return;
-		}
 
 		let targetMode = mode;
 

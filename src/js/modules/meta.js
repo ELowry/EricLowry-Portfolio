@@ -1,6 +1,7 @@
 import { Events } from './events.js';
 import { Router } from './router.js';
 import { Lang } from './lang.js';
+import { Blog } from './blog.js';
 
 /**
  * MetaController manages page metadata, updating document title and Open Graph tags.
@@ -11,9 +12,6 @@ class MetaController {
 
 	/** @type {boolean} */
 	#hasOverriddenMeta = false;
-
-	/** @type {Object[]|null} */
-	#blogIndexCache = null;
 
 	/**
 	 * Constructor for MetaController.
@@ -43,20 +41,11 @@ class MetaController {
 		if (Router.isBlogRoute && path.startsWith('blog/')) {
 			const date = path.substring(5);
 			try {
-				if (!this.#blogIndexCache) {
-					const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
-					const response = await fetch(`/content/blog-index.json?v=${cacheBuster}`);
-					if (response.ok) {
-						this.#blogIndexCache = await response.json();
-					}
-				}
+				const blogIndex = await Blog.getIndex();
+				const entry = blogIndex.find((e) => e.date === date);
 
-				if (this.#blogIndexCache) {
-					const entry = this.#blogIndexCache.find((e) => e.date === date);
-
-					if (entry) {
-						pageTitle = entry.title;
-					}
+				if (entry) {
+					pageTitle = entry.title;
 				}
 			} catch (error) {
 				console.error('Failed to get blog entry title:', error);
@@ -87,8 +76,9 @@ class MetaController {
 
 		if (Router.isBlogRoute && path.startsWith('blog/')) {
 			const date = path.substring(5);
-			if (this.#blogIndexCache) {
-				const entry = this.#blogIndexCache.find((e) => e.date === date);
+			try {
+				const blogIndex = await Blog.getIndex();
+				const entry = blogIndex.find((e) => e.date === date);
 
 				if (entry) {
 					const datePath = entry.date.replace(/-/g, '');
@@ -116,6 +106,8 @@ class MetaController {
 
 					this.#hasOverriddenMeta = true;
 				}
+			} catch (error) {
+				console.error('Failed to update blog meta tags:', error);
 			}
 		} else if (this.#hasOverriddenMeta) {
 			const currentOgTags = document.querySelectorAll('meta[property^="og:image"]');

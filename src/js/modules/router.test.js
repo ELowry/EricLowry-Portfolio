@@ -1,15 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Router } from './router.js';
 
-// Mock the Lang controller so we can test the dynamic feed URL logic
-vi.mock('./lang.js', () => {
-	return {
-		Lang: {
-			langCode: 'fr_FR',
-		},
-	};
-});
-
 describe('RouterController', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
@@ -53,10 +44,15 @@ describe('RouterController', () => {
 	});
 
 	describe('readURL', () => {
-		it('should bypass SPA routing and hard redirect to localized feed for rss paths', async () => {
-			window.location.pathname = '/rss';
+		it('should parse window.location.pathname and apply state', async () => {
+			window.location.pathname = '/text/about/bio';
+			const applyStateSpy = vi.spyOn(Router, 'applyState');
+
 			await Router.readURL();
-			expect(window.location.href).toBe('/feed-fr_FR.xml');
+
+			expect(applyStateSpy).toHaveBeenCalledWith({ mode: 'text', path: 'about/bio' }, true);
+			expect(Router.currentMode).toBe('text');
+			expect(Router.currentPath).toBe('about/bio');
 		});
 	});
 
@@ -84,15 +80,6 @@ describe('RouterController', () => {
 
 			await Router.go('text', 'about/cv');
 
-			expect(pushStateSpy).not.toHaveBeenCalled();
-		});
-
-		it('should bypass SPA routing and hard redirect for rss paths', async () => {
-			const pushStateSpy = vi.spyOn(window.history, 'pushState');
-
-			await Router.go('text', 'rss');
-
-			expect(window.location.href).toBe('/feed-en_US.xml');
 			expect(pushStateSpy).not.toHaveBeenCalled();
 		});
 

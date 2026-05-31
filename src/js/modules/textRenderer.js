@@ -2,6 +2,7 @@ import { Router } from './router.js';
 import { Lang } from './lang.js';
 import { Content as AppContent } from './content.js';
 import { Events } from './events.js';
+import { Blog } from './blog.js';
 
 /**
  * Responsible for composing and injecting the text-mode UI (breadcrumbs and navigation) into the App's text view.
@@ -86,11 +87,8 @@ export class TextRenderer {
 			let label = part;
 
 			if (currNode) {
-				label = Lang.getString(
-					`content.${currentPath.replace(/\//g, '.')}.title`,
-					null,
-					currNode.title
-				);
+				const langKey = `content.${currentPath.replace(/\//g, '.')}.title`;
+				label = Lang.getString(langKey, null, currNode.title);
 			} else if (part === 'blog') {
 				label = Lang.getString('blog.title', null, 'Blog');
 			}
@@ -128,11 +126,8 @@ export class TextRenderer {
 			const childPath = path ? `${path}/${child.id}` : child.id;
 
 			// Label Logic
-			const label = Lang.getString(
-				`content.${childPath.replace(/\//g, '.')}.title`,
-				null,
-				child.title
-			);
+			const langKey = `content.${childPath.replace(/\//g, '.')}.title`;
+			const label = Lang.getString(langKey, null, child.title);
 
 			// Clone Template
 			const clone = this.navLinkTemplate.content.cloneNode(true);
@@ -207,14 +202,7 @@ export class TextRenderer {
 		try {
 			this.app.uiManager.showLoading(true);
 
-			const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
-			const response = await fetch(`/content/blog-index.json?v=${cacheBuster}`);
-
-			if (!response.ok) {
-				throw new Error('Could not load blog index.');
-			}
-
-			const blogEntries = await response.json();
+			const blogEntries = await Blog.getIndex();
 			const currentLang = Lang.langCode || 'en_US';
 
 			const renderListItems = (entries) => {

@@ -31,18 +31,18 @@ class BlogController {
 
 	/**
 	 * Internal method to perform the fetch operation.
-	 * @returns {Promise<Object[]>}
+	 * @returns {Promise<Object[]>} The blog index data.
 	 * @private
 	 */
 	async #fetchIndexData() {
 		try {
 			const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
 			const response = await fetch(`/content/blog-index.json?v=${cacheBuster}`);
-			
+
 			if (!response.ok) {
 				throw new Error(`Failed to load blog index: ${response.statusText}`);
 			}
-			
+
 			return await response.json();
 		} catch (error) {
 			console.error('BlogController: Error fetching blog index:', error);
