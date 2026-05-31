@@ -15,6 +15,7 @@ import { TextRenderer } from './modules/textRenderer.js';
 import { TutorialManager } from './modules/tutorialManager.js';
 import { MarkedExtensions } from './modules/markedExtensions.js';
 import { GalleryDisplay } from './modules/gallery.js';
+import { Meta } from './modules/meta.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -33,6 +34,7 @@ class AppController {
 	 * @property {UIManager|null} uiManager - Manages all UI elements, interactions, and mode transitions, initialized after core setup.
 	 * @property {GalleryDisplay|null} galleryDisplay - Manages the gallery display, initialized after core setup.
 	 * @property {Input} Input - Centralized input controller instance, initialized immediately.
+	 * @property {MetaController} Meta - Centralized metadata manager, initialized immediately.
 	 * @property {boolean} isLocal - Indicates whether the app is running in a local development environment.
 	 */
 	constructor() {
@@ -53,6 +55,9 @@ class AppController {
 
 		// Input bridge
 		this.Input = Input;
+
+		// Meta manager
+		this.Meta = Meta;
 
 		this.isLocal =
 			window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';

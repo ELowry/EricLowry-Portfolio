@@ -1,0 +1,308 @@
+import fs from 'fs';
+import * as readline from 'readline/promises';
+import { stdin as input, stdout as output } from 'process';
+
+/**
+ * Handles the interactive synchronization of blog posts to Lemmy communities.
+ */
+class LemmySynchronizer {
+	/**
+	 * @type {readline.Interface|null}
+	 * @private
+	 */
+	#readlineInterface = null;
+
+	/**
+	 * @type {boolean}
+	 * @private
+	 */
+	#isDryRun = false;
+
+	/**
+	 * Initializes the LemmySynchronizer.
+	 */
+	constructor() {
+		this.#readlineInterface = readline.createInterface({ input, output });
+		this.#isDryRun = process.argv.includes('--dry-run');
+	}
+
+	/**
+	 * @constant
+	 * @returns {string} The path to the blog index JSON file.
+	 */
+	static get BLOG_INDEX_FILE() {
+		return 'public/content/blog-index.json';
+	}
+
+	/**
+	 * @constant
+	 * @returns {string} The path to the sync history file.
+	 */
+	static get HISTORY_FILE() {
+		return 'lemmy-history.json';
+	}
+
+	/**
+	 * @constant
+	 * @returns {string} The website's production base URL.
+	 */
+	static get BASE_URL() {
+		return 'https://eric-lowry.com';
+	}
+
+	/**
+	 * @constant
+	 * @returns {string} The API endpoint URL to create a post on Lemmy.
+	 */
+	static get LEMMY_API_URL() {
+		return 'https://lemmy.zip/api/v3/post';
+	}
+
+	/**
+	 * @constant
+	 * @returns {Object<string, Array<{name: string, id: number}>>} Configured Lemmy community mappings grouped by language code.
+	 */
+	static get COMMUNITIES() {
+		return {
+			en_US: [
+				{ name: 'blogging@programming.dev', id: 268897 },
+				{ name: 'blogs@lemmy.ml', id: 963583 },
+				{ name: 'webdev@programming.dev', id: 2714 },
+				{ name: 'webdev@lemmy.world', id: 1019480 },
+				{ name: 'frontend@lemmy.ml', id: 30333 },
+				{ name: 'css@programming.dev', id: 4804 },
+				{ name: 'css@css@lemmy.ml', id: 1030061 },
+				{ name: 'gamedev@programming.dev', id: 4449 },
+				{ name: 'gamedev@lemmy.blahaj.zone', id: 3038 },
+				{ name: 'gamedev@lemmy.ml', id: 36172 },
+			],
+			fr_FR: [
+				{ name: 'technologie@jlai.lu', id: 70243 },
+				{ name: 'forumlibre@jlai.lu', id: 108354 },
+				{ name: 'france@jlai.lu', id: 6678 },
+				{ name: 'interessant@jlai.lu', id: 437540 },
+			],
+		};
+	}
+
+	/**
+	 * Initializes and runs the interactive synchronization process.
+	 * @returns {Promise<void>}
+	 */
+	async init() {
+		if (this.#isDryRun) {
+			console.log('==================================================');
+			console.log('🏃 DRY RUN MODE ACTIVATED - NO DATA WILL BE SAVED');
+			console.log('==================================================');
+		}
+
+		if (!process.env.LEMMY_JWT) {
+			console.error('Error: LEMMY_JWT environment variable is missing.');
+			process.exit(1);
+		}
+
+		const history = this.#loadHistory();
+
+		if (!fs.existsSync(LemmySynchronizer.BLOG_INDEX_FILE)) {
+			console.error('Error: Blog index not found. Run generateBlogIndex.mjs first.');
+			process.exit(1);
+		}
+
+		const allPosts = JSON.parse(fs.readFileSync(LemmySynchronizer.BLOG_INDEX_FILE, 'utf-8'));
+		const newPosts = allPosts.filter((post) => {
+			return !history.includes(post.date);
+		});
+
+		if (newPosts.length === 0) {
+			console.log('No new posts to sync to Lemmy.');
+			this.#readlineInterface.close();
+			return;
+		}
+
+		for (const post of newPosts) {
+			await this.#processPost(post, history);
+		}
+
+		this.#readlineInterface.close();
+		console.log('\nSynchronization session complete.');
+	}
+
+	/**
+	 * Processes a single post for interactive terminal posting.
+	 * @param {Object} post The blog post object containing title, date, and language.
+	 * @param {Array<string>} history The history array of previously posted dates.
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	async #processPost(post, history) {
+		const availableCommunities = LemmySynchronizer.COMMUNITIES[post.language];
+
+		console.log('\n==================================================');
+		console.log(`NEW POST: ${post.title}`);
+		console.log(`Language: ${post.language}`);
+		console.log('==================================================');
+
+		if (!availableCommunities || availableCommunities.length === 0) {
+			console.log(`No communities configured for language '${post.language}'. Skipping.`);
+			return;
+		}
+
+		availableCommunities.forEach((community, index) => {
+			console.log(`${index + 1}. ${community.name}`);
+		});
+		console.log('0. Skip this post completely');
+
+		const primaryInput = await this.#readlineInterface.question(
+			`\nSelect PRIMARY community (0-${availableCommunities.length}): `
+		);
+		const primaryIndex = parseInt(primaryInput, 10) - 1;
+
+		if (
+			primaryInput === '0'
+			|| isNaN(primaryIndex)
+			|| primaryIndex < 0
+			|| primaryIndex >= availableCommunities.length
+		) {
+			console.log('Skipping post...');
+			return;
+		}
+
+		const primaryCommunity = availableCommunities[primaryIndex];
+		const crossInput = await this.#readlineInterface.question(
+			'Select CROSSPOST communities (comma-separated e.g., 1,3 or press Enter for none): '
+		);
+
+		const crossCommunities = crossInput
+			.split(',')
+			.map((string) => {
+				return parseInt(string.trim(), 10) - 1;
+			})
+			.filter((index) => {
+				return (
+					!isNaN(index)
+					&& index >= 0
+					&& index < availableCommunities.length
+					&& index !== primaryIndex
+				);
+			})
+			.map((index) => {
+				return availableCommunities[index];
+			});
+
+		const postUrl = `${LemmySynchronizer.BASE_URL}/blog/${post.date}?lang=${post.language}`;
+
+		try {
+			console.log(`\nPosting to primary: ${primaryCommunity.name}...`);
+			await this.#postToCommunity(primaryCommunity.id, post.title, postUrl);
+			console.log('Success!');
+
+			for (const crossCommunity of crossCommunities) {
+				console.log('Waiting 3 seconds to avoid rate limits...');
+				await this.#sleep(3000);
+
+				console.log(`Crossposting to: ${crossCommunity.name}...`);
+				await this.#postToCommunity(crossCommunity.id, post.title, postUrl);
+				console.log('Success!');
+			}
+
+			history.push(post.date);
+			this.#saveHistory(history);
+		} catch (error) {
+			console.error(`Failed to post ${post.title}:`, error.message);
+			console.log('Stopping synchronization to prevent duplicate errors.');
+			throw error;
+		}
+	}
+
+	/**
+	 * Loads the history file if it currently exists on the file system.
+	 * @returns {Array<string>} An array of dates that have already been posted.
+	 * @private
+	 */
+	#loadHistory() {
+		if (fs.existsSync(LemmySynchronizer.HISTORY_FILE)) {
+			return JSON.parse(fs.readFileSync(LemmySynchronizer.HISTORY_FILE, 'utf-8'));
+		}
+
+		return [];
+	}
+
+	/**
+	 * Saves the history array safely back to the file system.
+	 * @param {Array<string>} history The updated history array to save.
+	 * @private
+	 */
+	#saveHistory(history) {
+		if (this.#isDryRun) {
+			console.log(
+				`[DRY RUN] Skipped saving ${history.length} records to ${LemmySynchronizer.HISTORY_FILE}`
+			);
+			return;
+		}
+
+		fs.writeFileSync(LemmySynchronizer.HISTORY_FILE, JSON.stringify(history, null, 2));
+	}
+
+	/**
+	 * Dispatches the HTTP POST request to the Lemmy API or logs it if in dry-run mode.
+	 * @param {number} communityId The target community integer ID.
+	 * @param {string} title The post title.
+	 * @param {string} url The URL of the blog post.
+	 * @returns {Promise<Object>} The API response payload.
+	 * @private
+	 */
+	async #postToCommunity(communityId, title, url) {
+		const payload = {
+			auth: process.env.LEMMY_JWT,
+			community_id: communityId,
+			name: title,
+			url: url,
+		};
+
+		if (this.#isDryRun) {
+			console.log(`[DRY RUN] Would send POST to ${LemmySynchronizer.LEMMY_API_URL}`);
+			console.log(
+				'[DRY RUN] Payload:',
+				JSON.stringify({ ...payload, auth: '[REDACTED]' }, null, 2)
+			);
+			return { success: true, dryRun: true };
+		}
+
+		const response = await fetch(LemmySynchronizer.LEMMY_API_URL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(payload),
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(JSON.stringify(errorData));
+		}
+
+		return response.json();
+	}
+
+	/**
+	 * Pauses script execution for a specified duration to prevent API rate limiting.
+	 * @param {number} milliseconds The time to sleep in milliseconds.
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	#sleep(milliseconds) {
+		return new Promise((resolve) => {
+			if (this.#isDryRun) {
+				resolve();
+				return;
+			}
+			setTimeout(resolve, milliseconds);
+		});
+	}
+}
+
+const synchronizer = new LemmySynchronizer();
+synchronizer.init().catch((error) => {
+	console.error('Fatal synchronization error:', error);
+	process.exit(1);
+});

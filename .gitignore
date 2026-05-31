@@ -42,3 +42,4 @@ yarn-error.log*
 /public/sitemap.xml
 /public/feed-*.xml
 /public/content/blog-index.json
+/public/blog/

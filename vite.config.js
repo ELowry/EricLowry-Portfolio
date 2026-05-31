@@ -59,6 +59,8 @@ function firebaseRewritesPlugin() {
 					request.url = '/content/404.json';
 				} else if (request.url.startsWith('/lang/') && !request.url.includes('.')) {
 					request.url = '/lang/langs.json';
+				} else if (request.url.startsWith('/blog/') && !request.url.includes('.')) {
+					request.url = `${request.url}/index.html`;
 				}
 
 				next();
