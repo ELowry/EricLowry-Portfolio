@@ -69,15 +69,30 @@ class LemmySynchronizer {
 				{ name: 'blogs@lemmy.ml', id: 963583 },
 				{ name: 'webdev@programming.dev', id: 2714 },
 				{ name: 'webdev@lemmy.world', id: 1019480 },
+				{ name: 'programming@beehaw.org', id: 52 },
+				{ name: 'technology@beehaw.org', id: 14 },
 				{ name: 'frontend@lemmy.ml', id: 30333 },
+				{ name: 'javascript@programming.dev', id: 4799 },
+				{ name: 'javascript@lemmy.ml', id: 12702 },
+				{ name: 'markdown@lemmy.ca', id: 396962 },
+				{ name: 'markdown@piefed.social', id: 1845477 },
 				{ name: 'css@programming.dev', id: 4804 },
 				{ name: 'css@css@lemmy.ml', id: 1030061 },
+				{ name: 'obsidian@sh.itjust.works', id: 23337 },
+				{ name: 'obsidianmd@lemmy.world', id: 570 },
+				{ name: 'opensource@programming.dev', id: 190437 },
+				{ name: 'opensourcegames@lemmy.ml', id: 14192 },
+				{ name: 'opensource@lemmy.ml', id: 19 },
+				{ name: 'foss@beehaw.org', id: 8 },
+				{ name: 'foss_gaming@lemmy.world', id: 1762 },
 				{ name: 'gamedev@programming.dev', id: 4449 },
 				{ name: 'gamedev@lemmy.blahaj.zone', id: 3038 },
 				{ name: 'gamedev@lemmy.ml', id: 36172 },
+				{ name: 'tabletop@beehaw.org', id: 23227 },
 			],
 			fr_FR: [
 				{ name: 'technologie@jlai.lu', id: 70243 },
+				{ name: 'opensource@jlai.lu', id: 191103 },
 				{ name: 'forumlibre@jlai.lu', id: 108354 },
 				{ name: 'france@jlai.lu', id: 6678 },
 				{ name: 'interessant@jlai.lu', id: 437540 },
@@ -99,14 +114,14 @@ class LemmySynchronizer {
 
 			if (!process.env.LEMMY_JWT) {
 				console.error('Error: LEMMY_JWT environment variable is missing.');
-				process.exit(1);
+				return;
 			}
 
 			const history = this.#loadHistory();
 
 			if (!fs.existsSync(LemmySynchronizer.BLOG_INDEX_FILE)) {
 				console.error('Error: Blog index not found. Run generateBlog.mjs first.');
-				process.exit(1);
+				return;
 			}
 
 			const allPosts = JSON.parse(
@@ -197,14 +212,24 @@ class LemmySynchronizer {
 			});
 
 		const customBody = await this.#readMultiLine(
-			'\nEnter a summary for this Lemmy post (write/paste multi-line text, then press Enter twice to submit): '
+			'\nEnter a summary for this Lemmy post (write/paste markdown text, then type EOF on a new line and press Enter to submit): '
 		);
 
 		const postUrl = `${LemmySynchronizer.BASE_URL}/blog/${post.date}`;
+		const customThumbnail = `${LemmySynchronizer.BASE_URL}/assets/images/blog/${post.date.replace(/-/g, '')}/poster.png`;
+
+		const languageId = await this.#getLanguageId(post.language);
 
 		try {
 			console.log(`\nPosting to primary: ${primaryCommunity.name}...`);
-			await this.#postToCommunity(primaryCommunity.id, post.title, postUrl, customBody);
+			await this.#postToCommunity(
+				primaryCommunity.id,
+				post.title,
+				postUrl,
+				customBody,
+				languageId,
+				customThumbnail
+			);
 			console.log('Success!');
 
 			for (const crossCommunity of crossCommunities) {
@@ -212,7 +237,14 @@ class LemmySynchronizer {
 				await this.#sleep(3000);
 
 				console.log(`Crossposting to: ${crossCommunity.name}...`);
-				await this.#postToCommunity(crossCommunity.id, post.title, postUrl, customBody);
+				await this.#postToCommunity(
+					crossCommunity.id,
+					post.title,
+					postUrl,
+					customBody,
+					languageId,
+					customThumbnail
+				);
 				console.log('Success!');
 			}
 
@@ -222,6 +254,30 @@ class LemmySynchronizer {
 			console.error(`Failed to post ${post.title}:`, error.message);
 			console.log('Stopping synchronization to prevent duplicate errors.');
 			throw error;
+		}
+	}
+
+	/**
+	 * Fetches the correct language ID from the Lemmy instance based on the post language code.
+	 * @param {string} langCode The blog language code (e.g., 'en_US', 'fr_FR').
+	 * @returns {Promise<number|null>} The Lemmy language integer ID, or null if not found.
+	 * @private
+	 */
+	async #getLanguageId(langCode) {
+		// Lemmy uses short codes like 'en' or 'fr', so we strip the country code ('_US')
+		const shortCode = langCode.split('_')[0];
+
+		try {
+			const response = await fetch('https://lemmy.zip/api/v3/site');
+			const data = await response.json();
+
+			// Search the API response for the matching language code
+			const langMatch = data.all_languages.find((lang) => lang.code === shortCode);
+
+			return langMatch ? langMatch.id : null;
+		} catch (error) {
+			console.warn(`\nWarning: Could not fetch language ID for ${shortCode}:`, error.message);
+			return null;
 		}
 	}
 
@@ -237,8 +293,8 @@ class LemmySynchronizer {
 			let lines = [];
 
 			const onLine = (line) => {
-				if (line === '') {
-					// Stop listening when an empty line is submitted
+				// Stop listening only when the user types EOF on a new line
+				if (line.trim() === 'EOF') {
 					this.#readlineInterface.removeListener('line', onLine);
 					resolve(lines.join('\n'));
 				} else {
@@ -288,7 +344,7 @@ class LemmySynchronizer {
 	 * @returns {Promise<Object>} The API response payload.
 	 * @private
 	 */
-	async #postToCommunity(communityId, title, url, bodyText) {
+	async #postToCommunity(communityId, title, url, bodyText, languageId, customThumbnail) {
 		const payload = {
 			community_id: communityId,
 			name: title,
@@ -297,6 +353,14 @@ class LemmySynchronizer {
 
 		if (bodyText && bodyText.trim() !== '') {
 			payload.body = bodyText;
+		}
+
+		if (languageId !== null) {
+			payload.language_id = languageId;
+		}
+
+		if (customThumbnail) {
+			payload.custom_thumbnail = customThumbnail;
 		}
 
 		if (this.#isDryRun) {
