@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { marked } from 'marked';
 import { createCanvas } from 'canvas';
 
 const CONTENT_DIR = 'public/content';
@@ -92,7 +93,8 @@ function generateBlog() {
 					title: bestTitle,
 					date: date,
 				},
-				baseHtmlTemplate
+				baseHtmlTemplate,
+				content
 			);
 		}
 	}
@@ -303,8 +305,9 @@ function generateStaticImage(title, date) {
  * Generates a static HTML wrapper for open graph crawlers.
  * @param {Object} entry - The blog entry object from the index.
  * @param {string} baseHtmlContent - The raw content of the main index.html file.
+ * @param {string} content - The raw markdown content of the blog post.
  */
-function generateStaticBlogHtml(entry, baseHtmlContent) {
+function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 	const postDirectory = path.join('public', 'blog', entry.date);
 
 	if (!fs.existsSync(postDirectory)) {
@@ -337,10 +340,9 @@ function generateStaticBlogHtml(entry, baseHtmlContent) {
 		<meta name="twitter:image" content="${imageUrl}" />
 	<!-- OG_META_END -->`;
 
-	updatedHtml = updatedHtml.replace(
-		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
-		() => replacementMeta
-	);
+	updatedHtml = updatedHtml
+		.replace(/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/, () => replacementMeta)
+		.replace(/(<main[^!>]+>)[\s\S]*?(<\/main>)/, `$1${marked.parse(content)}$2`);
 
 	fs.writeFileSync(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
 }

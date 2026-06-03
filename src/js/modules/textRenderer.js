@@ -189,7 +189,7 @@ export class TextRenderer {
 		} else if (path.startsWith('blog/')) {
 			const date = path.substring(5);
 
-			await this.app.loadContentIntoText(`blog/${date}.md`);
+			await this.app.loadContentIntoText(`blog/${date}.md`, 'article');
 
 			const entries = await Blog.getIndex();
 			const entry = entries.find((e) => e.date === date);

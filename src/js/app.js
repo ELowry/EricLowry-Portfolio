@@ -545,9 +545,10 @@ class AppController {
 	/**
 	 * Loads and displays markdown content within the text-mode container.
 	 * @param {string} filename - The name of the file within the content directory.
+	 * @param {string|null} [wrapper=null] - Optional HTML element name to wrap the content in.
 	 * @returns {Promise<void>} (resolves) when the text view has been updated.
 	 */
-	async loadContentIntoText(filename) {
+	async loadContentIntoText(filename, wrapper = null) {
 		const langCode = Lang.langCode;
 		const cacheKey = `${langCode}:${filename}`;
 
@@ -556,7 +557,11 @@ class AppController {
 			this.uiManager.showLoading(true);
 		}
 
-		const html = await this.#fetchContent(filename);
+		let html = await this.#fetchContent(filename);
+
+		if (wrapper) {
+			html = `<${wrapper}>${html}</${wrapper}>`;
+		}
 
 		this.uiManager.displayContentInTextView(html);
 
