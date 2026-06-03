@@ -1,5 +1,3 @@
-/* global marked */
-
 import { Router } from './modules/router.js';
 import { Events } from './modules/events.js';
 import { GameBridge } from './modules/gameBridge.js';
@@ -110,23 +108,22 @@ class AppController {
 		LayeredInput.activate(LayeredInput.LAYER_GAME);
 
 		try {
-			const markedSrc = '/vendor/marked.min.js';
-			const markedHeadingIdSrc = '/vendor/marked-gfm-heading-id.min.js';
-			const markedAlertSrc = '/vendor/marked-alert.min.js';
-			const markedResponsiveImagesSrc = '/vendor/marked-responsive-images.min.js';
-
 			const langPromise = Lang.init();
 			const contentPromise = Content.init();
 
-			const librariesPromise = Promise.all([
+			const [
+				littleModule,
+				{ marked },
+				{ gfmHeadingId },
+				markedAlertModule,
+				markedResponsiveImagesModule,
+			] = await Promise.all([
 				import('$littlejs'),
-				this.#loadScript(markedSrc),
-				this.#loadScript(markedHeadingIdSrc),
-				this.#loadScript(markedAlertSrc),
-				this.#loadScript(markedResponsiveImagesSrc),
+				import('marked'),
+				import('marked-gfm-heading-id'),
+				import('marked-alert'),
+				import('marked-responsive-images'),
 			]);
-
-			const [littleModule] = await librariesPromise;
 
 			this.LJS = (littleModule && (littleModule.default || littleModule)) || null;
 
@@ -141,9 +138,16 @@ class AppController {
 				true
 			);
 
-			if (typeof marked !== 'undefined') {
+			if (marked) {
 				this.marked = marked;
-				new MarkedExtensions(this.marked).setup();
+
+				new MarkedExtensions(this.marked).setup({
+					gfmHeadingId,
+					markedAlert: markedAlertModule.default || markedAlertModule.markedAlert,
+					markedResponsiveImages:
+						markedResponsiveImagesModule.default
+						|| markedResponsiveImagesModule.markedResponsiveImages,
+				});
 			}
 
 			await import('./game.js');
@@ -213,22 +217,6 @@ class AppController {
 			console.error('Core initialization failed:', error);
 		}
 		await this.uiManager.hideLoading(true);
-	}
-
-	/**
-	 * Injects a `<script>` tag into the document head.
-	 * @param {string} src - The source URL of the script to load.
-	 * @returns {Promise<void>} (resolves) when the script has finished loading.
-	 * @private
-	 */
-	#loadScript(src) {
-		return new Promise((resolve, reject) => {
-			const script = document.createElement('script');
-			script.src = src;
-			script.onload = resolve;
-			script.onerror = reject;
-			document.head.appendChild(script);
-		});
 	}
 
 	/**

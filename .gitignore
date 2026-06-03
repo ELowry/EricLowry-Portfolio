@@ -20,8 +20,6 @@ hosting/.cache
 
 # Node modules
 /node_modules
-# Vendor content loaded from node_modules
-/public/vendor/
 
 # Vite build output
 /dist

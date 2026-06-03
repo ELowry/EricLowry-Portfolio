@@ -137,7 +137,7 @@
 		<style>
 			/* Hide buttons linking to game mode */
 			body:not(.isLocal) #game-mode,
-			body:not(.isLocal) button[data-lang='ui.text_mode.404.btn_game'] {
+			body:not(.isLocal) button[data-lang='ui.textMode.404.btnGame'] {
 				display: none !important;
 			}
 		</style>
@@ -155,17 +155,15 @@
 		<div id="game-layer">
 			<div id="touch-controls">
 				<div id="touch-left"
-					><span class="lang" data-lang="ui.touch_instructions.left" inert
-						>Left</span
-					></div
+					><span class="lang" data-lang="ui.touchInstructions.left" inert>Left</span></div
 				>
 				<div id="touch-center"
-					><span class="lang" data-lang="ui.touch_instructions.interact" inert
+					><span class="lang" data-lang="ui.touchInstructions.interact" inert
 						>Interact</span
 					></div
 				>
 				<div id="touch-right"
-					><span class="lang" data-lang="ui.touch_instructions.right" inert
+					><span class="lang" data-lang="ui.touchInstructions.right" inert
 						>Right</span
 					></div
 				>
@@ -182,15 +180,15 @@
 
 			<div id="touch-instructions" class="hidden">
 				<div class="modal-box">
-					<h4 class="lang" data-lang="ui.touch_instructions.header">Touch Controls</h4>
-					<p class="lang" data-lang="ui.touch_instructions.p1"
+					<h4 class="lang" data-lang="ui.touchInstructions.header">Touch Controls</h4>
+					<p class="lang" data-lang="ui.touchInstructions.p1"
 						>It looks like you're using a touch device! Here's how to navigate:</p
 					>
 					<ul>
-						<li class="lang" data-lang="ui.touch_instructions.sides"
+						<li class="lang" data-lang="ui.touchInstructions.sides"
 							>Touch the left or right side to move in that direction.</li
 						>
-						<li class="lang" data-lang="ui.touch_instructions.center"
+						<li class="lang" data-lang="ui.touchInstructions.center"
 							>Touch the center area to interact with objects.</li
 						>
 					</ul>
@@ -210,13 +208,13 @@
 								id="touch-dont-show"
 								style="width: 20px; height: 20px"
 							/>
-							<span class="lang" data-lang="ui.touch_instructions.dont_show"
+							<span class="lang" data-lang="ui.touchInstructions.dontShow"
 								>Don't show this again</span
 							>
 						</label>
 						<button
 							class="lang"
-							data-lang="ui.touch_instructions.btn_close"
+							data-lang="ui.touchInstructions.btnClose"
 							onclick="App.tutorialManager.closeTouchInstructions()"
 							>Got it!</button
 						>
@@ -248,18 +246,18 @@
 							class="classic-nav langAttr"
 							role="toolbar"
 							data-langAttr="aria-label"
-							data-langAria_label="ui.welcome.mode_selection"
+							data-langAria_label="ui.welcome.modeSelection"
 							aria-label="Mode Selection"
 						>
 							<button
 								class="lang"
-								data-lang="ui.welcome.btn_game"
+								data-lang="ui.welcome.btnGame"
 								onclick="App.closeGameWelcome('game')"
 								>Exploration Mode</button
 							>
 							<button
 								class="lang"
-								data-lang="ui.welcome.btn_text"
+								data-lang="ui.welcome.btnText"
 								onclick="App.closeGameWelcome('text')"
 								>Text Mode</button
 							>
@@ -278,7 +276,7 @@
 			<dialog id="game-menu" aria-labelledby="GameMenuTitle">
 				<div class="modal-box">
 					<h1 id="GameMenuTitle">
-						<span class="sr-only accessible-forced lang" data-lang="ui.game_menu.header"
+						<span class="sr-only accessible-forced lang" data-lang="ui.gameMenu.header"
 							>Menu</span
 						>
 						<span class="ascii" aria-hidden="true">
@@ -313,14 +311,14 @@
 							id="reset-button"
 							role="menuitem"
 							class="lang"
-							data-lang="ui.game_menu.btn_reset"
+							data-lang="ui.gameMenu.btnReset"
 							onclick="App.returnToStart()"
 							>Return to Start</button
 						>
 						<button
 							role="menuitem"
 							class="lang"
-							data-lang="ui.game_menu.btn_text_mode"
+							data-lang="ui.gameMenu.btnTextMode"
 							onclick="
 								App.closeGameMenu();
 								App.setMode('text');
@@ -330,7 +328,7 @@
 						<button
 							role="menuitem"
 							class="lang"
-							data-lang="ui.game_menu.btn_blog"
+							data-lang="ui.gameMenu.btnBlog"
 							onclick="
 								App.closeGameMenu();
 								App.setMode('text');
@@ -341,7 +339,7 @@
 						<button
 							role="menuitem"
 							class="lang"
-							data-lang="ui.game_menu.btn_controls"
+							data-lang="ui.gameMenu.btnControls"
 							onclick="
 								App.closeGameMenu();
 								App.loadContentInModal('info/controls.md');
@@ -351,7 +349,7 @@
 						<button
 							role="menuitem"
 							class="lang"
-							data-lang="ui.btn_privacy"
+							data-lang="ui.btnPrivacy"
 							onclick="
 								App.closeGameMenu();
 								App.loadContentInModal('info/privacy.md');
@@ -361,7 +359,7 @@
 						<button
 							role="menuitem"
 							class="lang"
-							data-lang="ui.btn_options"
+							data-lang="ui.btnOptions"
 							aria-haspopup="menu"
 							aria-expanded="false"
 							aria-controls="game-options-submenu"
@@ -372,7 +370,7 @@
 							class="langAttr"
 							role="menu"
 							data-langattr="aria-label"
-							data-langAria_label="ui.submenu_options"
+							data-langAria_label="ui.submenuOptions"
 							aria-label="Options Submenu"
 							hidden
 						>
@@ -383,14 +381,14 @@
 								onclick="App.toggleReadabilityMode()"
 							>
 								<span class="switch-track"></span>
-								<span class="lang" data-lang="ui.btn_readability"
+								<span class="lang" data-lang="ui.btnReadability"
 									>Increase Readability</span
 								>
 							</button>
 							<div
 								class="languageSwitcherButtons langAttr"
 								data-langattr="aria-label"
-								data-langAria_label="ui.submenu_language"
+								data-langAria_label="ui.submenuLanguage"
 								role="group"
 								aria-label="Language selection"
 							></div>
@@ -398,7 +396,7 @@
 						<button
 							role="menuitem"
 							class="lang"
-							data-lang="ui.game_menu.btn_close"
+							data-lang="ui.gameMenu.btnClose"
 							onclick="App.closeGameMenu()"
 							>Close Menu</button
 						>
@@ -409,7 +407,7 @@
 			<dialog id="game-modal">
 				<div class="modal-box">
 					<button onclick="App.closeGameModal()" class="close-modal">
-						<span class="lang" data-lang="ui.modal.btn_close">Close</span>
+						<span class="lang" data-lang="ui.modal.btnClose">Close</span>
 						<span data-prompt="back">[x]</span>
 					</button>
 					<div id="game-modal-content" tabindex="-1"></div>
@@ -418,14 +416,14 @@
 		</div>
 
 		<div id="text-layer" class="hidden">
-			<a href="#text-content" class="skip-link lang" data-lang="ui.text_mode.skip_link"
+			<a href="#text-content" class="skip-link lang" data-lang="ui.textMode.skipLink"
 				>Skip to content</a
 			>
 			<nav id="text-navbar" role="menubar" aria-label="Main Navigation">
 				<button
 					role="menuitem"
 					class="lang"
-					data-lang="ui.text_mode.btn_blog"
+					data-lang="ui.textMode.btnBlog"
 					data-nav-path="blog"
 					onclick="App.navigate('blog')"
 					>Blog</button
@@ -434,14 +432,14 @@
 					role="menuitem"
 					id="game-mode"
 					class="lang"
-					data-lang="ui.text_mode.btn_game_mode"
+					data-lang="ui.textMode.btnGameMode"
 					onclick="App.setMode('game')"
 					>Switch to Exploration Mode</button
 				>
 				<button
 					role="menuitem"
 					class="lang"
-					data-lang="ui.btn_privacy"
+					data-lang="ui.btnPrivacy"
 					data-nav-path="privacy"
 					onclick="App.navigate('privacy')"
 					>Privacy Policy</button
@@ -452,7 +450,7 @@
 					aria-expanded="false"
 					aria-controls="text-options-submenu"
 					><span class="menuitem-icon" aria-hidden="true">⚙</span
-					><span class="lang sr-only accessible-forced" data-lang="ui.btn_options"
+					><span class="lang sr-only accessible-forced" data-lang="ui.btnOptions"
 						>Options</span
 					></button
 				>
@@ -461,7 +459,7 @@
 					role="menu"
 					class="langAttr"
 					data-langattr="aria-label"
-					data-langAria_label="ui.submenu_options"
+					data-langAria_label="ui.submenuOptions"
 					aria-label="Options Submenu"
 					hidden
 				>
@@ -472,14 +470,12 @@
 						onclick="App.toggleReadabilityMode()"
 					>
 						<span class="switch-track"></span>
-						<span class="lang" data-lang="ui.btn_readability"
-							>Increase Readability</span
-						>
+						<span class="lang" data-lang="ui.btnReadability">Increase Readability</span>
 					</button>
 					<div
 						class="languageSwitcherButtons langAttr"
 						data-langattr="aria-label"
-						data-langAria_label="ui.submenu_language"
+						data-langAria_label="ui.submenuLanguage"
 						role="group"
 						aria-label="Language selection"
 					></div>
@@ -490,7 +486,7 @@
 					id="text-nav"
 					class="langAttr"
 					data-langattr="aria-label"
-					data-langAria_label="ui.text_mode.text_nav"
+					data-langAria_label="ui.textMode.textNav"
 					aria-label="Content Navigation"
 				></nav>
 				<div class="text-columns">
@@ -498,7 +494,7 @@
 						id="text-table-of-contents"
 						class="langAttr"
 						data-langattr="aria-label"
-						data-langAria_label="ui.text_mode.table_of_contents"
+						data-langAria_label="ui.textMode.tableOfContents"
 						aria-label="Table of Contents"
 					></nav>
 					<main id="text-content" tabindex="-1"></main>
@@ -587,7 +583,7 @@
 						>Portfolio</a
 					>
 				</li>
-				<li aria-current="page" class="lang" data-lang="ui.text_mode.404.title"
+				<li aria-current="page" class="lang" data-lang="ui.textMode.404.title"
 					>404 Not Found</li
 				>
 			</ol>
@@ -595,8 +591,8 @@
 
 		<template id="template-404-content">
 			<section class="error-404">
-				<h2 class="lang" data-lang="ui.text_mode.404.title">Page Not Found</h2>
-				<p class="lang" data-lang="ui.text_mode.404.text"
+				<h2 class="lang" data-lang="ui.textMode.404.title">Page Not Found</h2>
+				<p class="lang" data-lang="ui.textMode.404.text"
 					>The path you've entered doesn't seem to lead anywhere.</p
 				>
 				<div
@@ -609,7 +605,7 @@
 						role="menuitem"
 						tabindex="0"
 						class="nav-btn lang"
-						data-lang="ui.text_mode.404.btn_home"
+						data-lang="ui.textMode.404.btnHome"
 						onclick="App.navigate('')"
 						>Back to Home</button
 					>
@@ -617,7 +613,7 @@
 						role="menuitem"
 						tabindex="-1"
 						class="nav-btn lang"
-						data-lang="ui.text_mode.404.btn_game"
+						data-lang="ui.textMode.404.btnGame"
 						onclick="App.setMode('game')"
 						>Switch to Exploration Mode</button
 					>

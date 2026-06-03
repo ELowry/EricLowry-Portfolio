@@ -337,10 +337,12 @@ class LemmySynchronizer {
 
 	/**
 	 * Dispatches the HTTP POST request to the Lemmy API or logs it if in dry-run mode.
-	 * @param {number} communityId The target community integer ID.
-	 * @param {string} title The post title.
-	 * @param {string} url The URL of the blog post.
-	 * @param {string} bodyText The markdown body text for the post.
+	 * @param {number} communityId - The target community integer ID.
+	 * @param {string} title - The post title.
+	 * @param {string} url - The URL of the blog post.
+	 * @param {string} bodyText - The markdown body text for the post.
+	 * @param {string} languageId - The language ID for the post.
+	 * @param {string} customThumbnail - The URL for the custom thumbnail.
 	 * @returns {Promise<Object>} The API response payload.
 	 * @private
 	 */

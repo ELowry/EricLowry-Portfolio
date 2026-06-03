@@ -71,8 +71,7 @@ function firebaseRewritesPlugin() {
 
 /**
  * A Vite plugin to fix the static HTML wrappers generated for blog posts.
- * It extracts the Open Graph meta blocks from the raw HTML files and injects
- * them into the final built `dist/index.html` with correct hashed asset links.
+ * It extracts the Open Graph meta blocks from the raw HTML files and injects them into the final built `dist/index.html` with correct hashed asset links.
  * @returns {import('vite').Plugin} the vite plugin instance.
  */
 function blogStaticHtmlPlugin() {
@@ -114,6 +113,36 @@ function blogStaticHtmlPlugin() {
 	};
 }
 
+/**
+ * A Vite plugin to bypass Private Network Access (PNA) blocks for giscus.
+ * This allows public iframes to fetch the giscus.css file during development.
+ * @returns {import('vite').Plugin} the vite plugin instance.
+ */
+function allowPrivateNetworkAccess() {
+	return {
+		name: 'allow-pna',
+		apply: 'serve',
+		configureServer(server) {
+			server.middlewares.use((req, res, next) => {
+				const urlPath = req.url ? req.url.split('?')[0] : '';
+
+				if (urlPath === '/src/css/giscus.css') {
+					res.setHeader('Access-Control-Allow-Private-Network', 'true');
+					res.setHeader('Access-Control-Allow-Origin', '*');
+
+					if (req.method === 'OPTIONS') {
+						res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+						res.setHeader('Access-Control-Allow-Headers', '*');
+						res.end();
+						return;
+					}
+				}
+				next();
+			});
+		},
+	};
+}
+
 export default defineConfig(({ mode }) => {
 	return {
 		resolve: {
@@ -132,6 +161,7 @@ export default defineConfig(({ mode }) => {
 			watchPublicMarkdown(),
 			firebaseRewritesPlugin(),
 			blogStaticHtmlPlugin(),
+			allowPrivateNetworkAccess(),
 		],
 		server: {
 			fs: {

@@ -45,7 +45,7 @@ export class TextRenderer {
 		breadcrumbList.className = 'breadcrumbs';
 		breadcrumbList.setAttribute(
 			'aria-label',
-			Lang.getString('ui.breadcrumbs_aria', null, 'Breadcrumb')
+			Lang.getString('ui.breadcrumbsAria', null, 'Breadcrumb')
 		);
 
 		const createCrumb = (label, targetPath, isCurrent) => {
@@ -119,7 +119,7 @@ export class TextRenderer {
 		navContainer.setAttribute('role', 'menu');
 		navContainer.setAttribute(
 			'aria-label',
-			Lang.getString('ui.category_options_aria', null, 'Category options')
+			Lang.getString('ui.categoryOptionsAria', null, 'Category options')
 		);
 
 		visibleChildren.forEach((child, index) => {
@@ -188,7 +188,16 @@ export class TextRenderer {
 			}
 		} else if (path.startsWith('blog/')) {
 			const date = path.substring(5);
+
 			await this.app.loadContentIntoText(`blog/${date}.md`);
+
+			const entries = await Blog.getIndex();
+			const entry = entries.find((e) => e.date === date);
+
+			if (entry) {
+				const term = `${entry.date} - ${entry.title}`;
+				Blog.injectComments(this.app.uiManager.elements.textContent, term, entry.language);
+			}
 		} else {
 			this.app.uiManager.elements.textContent.innerHTML = '';
 		}
@@ -239,13 +248,13 @@ export class TextRenderer {
 					let separatorText;
 					if (localEntries.length > 0) {
 						separatorText = Lang.getString(
-							'blog.english_articles',
+							'blog.englishArticles',
 							null,
 							'Articles in English'
 						);
 					} else {
 						separatorText = Lang.getString(
-							'blog.english_articles_only',
+							'blog.englishArticlesOnly',
 							null,
 							'Articles only available in English'
 						);

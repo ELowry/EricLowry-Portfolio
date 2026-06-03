@@ -62,58 +62,58 @@
 	},
 	"ui": {
 		"loading": "Chargement",
-		"submenu_options": "Sous-menu Options",
-		"btn_options": "Options",
-		"btn_readability": "Améliorer la lisibilité",
-		"btn_privacy": "Politique de confidentialité",
-		"submenu_language": "Changer de Langue",
-		"btn_switch_language": "Afficher le site en {lang}",
-		"breadcrumbs_aria": "Fil d'ariane",
-		"category_options_aria": "Options des catégories",
+		"submenuOptions": "Sous-menu Options",
+		"btnOptions": "Options",
+		"btnReadability": "Améliorer la lisibilité",
+		"btnPrivacy": "Politique de confidentialité",
+		"submenuLanguage": "Changer de Langue",
+		"btnSwitchLanguage": "Afficher le site en {lang}",
+		"breadcrumbsAria": "Fil d'ariane",
+		"categoryOptionsAria": "Options des catégories",
 		"welcome": {
 			"header": "Bienvenue sur le portfolio d'Eric Lowry",
 			"p1": "J'ai mis en place une petite expérience interactive qui vous permet d'explorer mon travail à travers un petit jeu ludique.",
 			"p2": "Toutefois, pour des raisons d'accessibilité ou d'efficacité, une interface simplifiée est disponible avec toutes les mêmes informations.",
-			"mode_selection": "Choissisez un mode d'affichage",
-			"btn_game": "Mode Exploration",
-			"btn_text": "Mode Texte",
+			"modeSelection": "Choissisez un mode d'affichage",
+			"btnGame": "Mode Exploration",
+			"btnText": "Mode Texte",
 			"note": "En mode exploration, vous pouvez appuyer sur la touche {0} à tout moment pour ouvrir un menu vous permettant de revenir au mode texte."
 		},
-		"game_menu": {
+		"gameMenu": {
 			"header": "Menu",
-			"btn_reset": "Retour au départ",
-			"btn_text_mode": "Passer au mode texte",
-			"btn_controls": "Afficher les commandes",
-			"btn_blog": "Blog",
-			"btn_close": "Fermer le menu"
+			"btnReset": "Retour au départ",
+			"btnTextMode": "Passer au mode texte",
+			"btnControls": "Afficher les commandes",
+			"btnBlog": "Blog",
+			"btnClose": "Fermer le menu"
 		},
 		"modal": {
-			"btn_close": "Fermer"
+			"btnClose": "Fermer"
 		},
-		"text_mode": {
-			"table_of_contents": "Table des matières",
-			"text_nav": "Navigation du contenu",
-			"btn_blog": "Blog",
-			"btn_game_mode": "Passer au mode exploration",
-			"skip_link": "Passer au contenu",
+		"textMode": {
+			"tableOfContents": "Table des matières",
+			"textNav": "Navigation du contenu",
+			"btnBlog": "Blog",
+			"btnGameMode": "Passer au mode exploration",
+			"skipLink": "Passer au contenu",
 			"404": {
 				"title": "Page non trouvée",
 				"text": "Le chemin que vous avez saisi ne semble mener nulle part.",
-				"btn_home": "Retour à l'accueil",
-				"btn_game": "Passer au mode exploration"
+				"btnHome": "Retour à l'accueil",
+				"btnGame": "Passer au mode exploration"
 			}
 		},
-		"touch_instructions": {
+		"touchInstructions": {
 			"header": "Commandes tactiles",
 			"p1": "Il semble que vous utilisiez un appareil tactile! Voici comment naviguer:",
 			"sides": "Touchez le côté gauche ou droit pour vous déplacer dans cette direction.",
 			"center": "Touchez la zone centrale pour interagir avec les objets.",
-			"dont_show": "Ne plus afficher ce message",
-			"btn_close": "J'ai compris!"
+			"dontShow": "Ne plus afficher ce message",
+			"btnClose": "J'ai compris!"
 		},
 		"contact": {
-			"email_placeholder": "[afficher l'email]",
-			"phone_placeholder": "[afficher le numéro de téléphone]"
+			"emailPlaceholder": "[afficher l'email]",
+			"phonePlaceholder": "[afficher le numéro de téléphone]"
 		},
 		"gallery": {
 			"modalLabel": "Affichage d'image en plein écran",
@@ -131,8 +131,12 @@
 		"feedTitle": "Blog d'Eric Lowry",
 		"feedDescription": "Derniers articles de blog d'Eric Lowry.",
 		"empty": "Aucun article trouvé.",
-		"english_articles": "Articles en anglais:",
-		"english_articles_only": "Articles uniquement disponibles en anglais:",
-		"errorLoading": "Impossible de charger l'index du blog."
+		"englishArticles": "Articles en anglais:",
+		"englishArticlesOnly": "Articles uniquement disponibles en anglais:",
+		"errorLoading": "Impossible de charger l'index du blog.",
+		"commentsTitle": "Commentaires",
+		"commentsConsent": "Ce site utilise Giscus pour héberger les commentaires sur GitHub Discussions. Le chargement des commentaires établira une connexion avec GitHub.",
+		"loadingComments": "Chargement des commentaires…",
+		"loadComments": "Afficher les commentaires"
 	}
 }

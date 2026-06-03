@@ -1,0 +1,486 @@
+/*!
+ * Modified from GitHub's Dark Dimmed theme, licensed under the MIT License
+ * Copyright (c) 2018 GitHub Inc.
+ * https://github.com/primer/primitives/blob/main/LICENSE
+ */
+
+/* latin-ext */
+@font-face {
+	font-style: normal;
+	font-weight: 300 700;
+	src: url(https://eric-lowry.com/assets/fonts/space-grotesk-ext.woff2) format('woff2');
+	font-family: 'Space Grotesk';
+	font-display: swap;
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+		U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+	font-style: normal;
+	font-weight: 300 700;
+	src: url(https://eric-lowry.com/assets/fonts/space-grotesk.woff2) format('woff2');
+	font-family: 'Space Grotesk';
+	font-display: swap;
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+		U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+	font-style: italic;
+	font-weight: 200 800;
+	src: url(https://eric-lowry.com/assets/fonts/atkinson-hyperlegible-next-ext-i.woff2)
+		format('woff2');
+	font-family: 'Atkinson Hyperlegible Next';
+	font-display: swap;
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+		U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+	font-style: italic;
+	font-weight: 200 800;
+	src: url(https://eric-lowry.com/assets/fonts/atkinson-hyperlegible-next-i.woff2) format('woff2');
+	font-family: 'Atkinson Hyperlegible Next';
+	font-display: swap;
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+		U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+	font-style: normal;
+	font-weight: 200 800;
+	src: url(https://eric-lowry.com/assets/fonts/atkinson-hyperlegible-next-ext.woff2)
+		format('woff2');
+	font-family: 'Atkinson Hyperlegible Next';
+	font-display: swap;
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+		U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+	font-style: normal;
+	font-weight: 200 800;
+	src: url(https://eric-lowry.com/assets/fonts/atkinson-hyperlegible-next.woff2) format('woff2');
+	font-family: 'Atkinson Hyperlegible Next';
+	font-display: swap;
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+		U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-weight: 400;
+	src: url(https://eric-lowry.com/assets/fonts/atkinson-hyperlegible-mono-nerdfont.woff2)
+		format('woff2');
+	font-family: 'Atkinson Hyperlegible Mono NerdFont';
+	font-display: swap;
+	unicode-range:
+		U+0020-005F, U+0061-007E, U+00A0-00A7, U+00A9-00AC, U+00AE, U+00B0-00B3, U+00B6-00B7,
+		U+00B9-0107, U+010A-0113, U+0116-011B, U+011E-0123, U+0126-0127, U+012A-012B, U+012E-0133,
+		U+0136-0137, U+013B-013E, U+0141-0148, U+0150-0155, U+0158-015B, U+015E-0165, U+016A-016B,
+		U+016E-017E, U+0192, U+0218-021B, U+0237, U+02C9, U+0300-0304, U+0306-0308, U+030A-030C,
+		U+0326-0328, U+0394, U+03A9, U+03BC, U+03C0, U+1E80-1E85, U+1E9E, U+1EF2-1EF3, U+2009,
+		U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044,
+		U+20AC, U+20B9, U+2113, U+2122, U+212E, U+2202, U+220F, U+2211-2212, U+2215, U+2219-221A,
+		U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+23FB-23FE, U+2500-259F, U+25CA, U+2630,
+		U+2665, U+266A, U+26A1, U+276C-2771, U+2B58, U+E000-E00A, U+E0A0-E0A3, U+E0B0-E0C8, U+E0CA,
+		U+E0CC-E0D2, U+E0D4, U+E0D6-E0D7, U+E200-E2A9, U+E300-E3E3, U+E5FA-E6B8, U+E700-E8EF,
+		U+EA60-EA88, U+EA8A-EA8C, U+EA8F-EAC7, U+EAC9, U+EACC-EB09, U+EB0B-EB4E, U+EB50-EC1E,
+		U+ED00-EFCE, U+F000-F381, U+F400-F533, U+F0001-F1AF0;
+}
+
+:root,
+:host,
+html,
+body,
+main {
+	--font-sans-base:
+		-apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', sans-serif,
+		'Apple Color Emoji', 'Segoe UI Emoji';
+	--font-family-sans: 'Space Grotesk', var(--font-sans-base);
+	--font-family-monospace:
+		'Atkinson Hyperlegible Mono NerdFont', ui-monospace, 'SFMono-Regular', 'Menlo', 'Monaco',
+		'Consolas', 'Liberation Mono', 'Courier New', monospace;
+
+	@media (forced-colors: active) or (prefers-contrast: more) {
+		--font-family-sans: 'Atkinson Hyperlegible Next', var(--font-sans-base);
+	}
+
+	@media (prefers-reduced-data: reduce) {
+		--font-sans: inherit;
+		--font-mono: monospace;
+	}
+
+	font-family: var(--font-family-sans);
+}
+
+main {
+	/* BASE VARS */
+	--hex-accent: #e29186;
+	--hex-background: #0f0d0f;
+	--hex-text: #d1c6c1;
+	--hex-border: #3d383b;
+
+	--hex-lilac: #899cfa;
+	--hex-green: #95c785;
+	--hex-purple: #b17abf;
+	--hex-amber: #fab387;
+	--hex-red: #e1739b;
+
+	--color-accent: oklch(from var(--hex-accent) l c h);
+	--color-background: oklch(from var(--hex-background) l c h);
+	--color-text: oklch(from var(--hex-text) l c h);
+
+	--color-border: oklch(from var(--hex-border) l c h);
+	--color-border-active: oklch(from var(--color-border) calc(l + 0.15) calc(c + 0.02) h);
+
+	--color-alert-note: oklch(from var(--hex-lilac) l c h);
+	--color-alert-tip: oklch(from var(--hex-green) l c h);
+	--color-alert-important: oklch(from var(--hex-purple) l c h);
+	--color-alert-warning: oklch(from var(--hex-amber) l c h);
+	--color-alert-caution: oklch(from var(--hex-red) l c h);
+
+	--hex-overlay: #000;
+	--hex-highlight: #fff;
+
+	--luminocity-overlay: 0;
+	--luminocity-highlight: 1;
+
+	--opacity-overlay: 50%;
+	--opacity-overlay-dark: 80%;
+	--color-overlay: oklch(
+		from var(--hex-overlay) var(--luminocity-overlay) c h / var(--opacity-overlay)
+	);
+	--color-overlay-dark: oklch(
+		from var(--hex-overlay) var(--luminocity-overlay) c h / var(--opacity-overlay-dark)
+	);
+
+	--color-highlight: oklch(from var(--hex-highlight) var(--luminocity-highlight) c h / 10%);
+
+	@media (prefers-contrast: more) {
+		--color-accent: oklch(from var(--hex-accent) calc(l + 0.05) c h);
+		--color-background: oklch(from var(--hex-background) 0 c h);
+		--color-text: oklch(from var(--hex-background) 1 c h);
+
+		--color-border: oklch(from var(--hex-border) calc(l - 0.1) calc(c + 0.02) h);
+		--color-border-active: oklch(from var(--hex-border) calc(l + 0.1) calc(c + 0.04) h);
+	}
+
+	@media (prefers-color-scheme: light) {
+		--hex-background: #ddd8d6;
+		--hex-text: #221a1f;
+		--hex-accent: #6d0a1f;
+		--hex-border: #b19f9e;
+
+		--luminocity-overlay: 1;
+		--luminocity-highlight: 0;
+		--opacity-highlight: 8%;
+
+		--color-border-active: oklch(from var(--color-border) calc(l - 0.15) calc(c + 0.02) h);
+	}
+	@media (prefers-color-scheme: light) and (prefers-contrast: more) {
+		--color-accent: oklch(from var(--hex-accent) calc(l - 0.05) c h);
+		--color-background: oklch(from var(--hex-background) 1 c h);
+		--color-text: oklch(from var(--hex-background) 0 c h);
+
+		--color-border-active: oklch(from var(--hex-border) calc(l - 0.25) calc(c + 0.04) h);
+	}
+
+	/* Code Hightlight */
+	--color-prettylights-syntax-comment: #d6baad;
+	--color-prettylights-syntax-constant: #f79a32;
+	--color-prettylights-syntax-entity: #f06431;
+	--color-prettylights-syntax-storage-modifier-import: #98676a;
+	--color-prettylights-syntax-entity-tag: #dc3958;
+	--color-prettylights-syntax-keyword: #98676a;
+	--color-prettylights-syntax-string: #889b4a;
+	--color-prettylights-syntax-variable: #dc3958;
+	--color-prettylights-syntax-brackethighlighter-unmatched: #dc3958;
+	--color-prettylights-syntax-invalid-illegal-text: #221a0f;
+	--color-prettylights-syntax-invalid-illegal-bg: #dc3958;
+	--color-prettylights-syntax-carriage-return-text: #221a0f;
+	--color-prettylights-syntax-carriage-return-bg: #dc3958;
+	--color-prettylights-syntax-string-regexp: #dc3958;
+	--color-prettylights-syntax-markup-list: #889b4a;
+	--color-prettylights-syntax-markup-heading: #f06431;
+	--color-prettylights-syntax-markup-italic: #d3af86;
+	--color-prettylights-syntax-markup-bold: #d3af86;
+	--color-prettylights-syntax-markup-deleted-text: #f79a32;
+	--color-prettylights-syntax-markup-deleted-bg: oklch(from #f79a32 l c h / 0.2);
+	--color-prettylights-syntax-markup-inserted-text: #889b4a;
+	--color-prettylights-syntax-markup-inserted-bg: oklch(from #889b4a l c h / 0.2);
+	--color-prettylights-syntax-markup-changed-text: #f06431;
+	--color-prettylights-syntax-markup-changed-bg: oklch(from #f06431 l c h / 0.2);
+	--color-prettylights-syntax-markup-ignored-text: #d3af86;
+	--color-prettylights-syntax-markup-ignored-bg: oklch(from #d3af86 l c h / 0.2);
+	--color-prettylights-syntax-meta-diff-range: #98676a;
+	--color-prettylights-syntax-brackethighlighter-angle: #d6baad;
+	--color-prettylights-syntax-sublimelinter-gutter-mark: #d6baad;
+	--color-prettylights-syntax-constant-other-reference-link: #f79a32;
+
+	--color-btn-text: var(--color-text);
+	--color-btn-bg: var(--color-highlight);
+	--color-btn-border: var(--color-border);
+	--color-btn-shadow: 0 0 transparent;
+	--color-btn-inset-shadow: 0 0 transparent;
+	--color-btn-hover-bg: oklch(from var(--hex-highlight) var(--luminocity-highlight) c h / 15%);
+	--color-btn-hover-border: var(--color-border);
+	--color-btn-active-bg: oklch(from var(--hex-highlight) var(--luminocity-highlight) c h / 20%);
+	--color-btn-active-border: var(--color-border-active);
+	--color-btn-selected-bg: oklch(from var(--hex-highlight) var(--luminocity-highlight) c h / 30%);
+	--color-btn-primary-text: var(--color-text);
+	--color-btn-primary-bg: oklch(from var(--color-accent) calc(l - 0.4) calc(c - 0.04) h);
+	--color-btn-primary-border: var(--color-btn-primary-bg);
+	--color-btn-primary-shadow: 0 0 transparent;
+	--color-btn-primary-inset-shadow: 0 0 transparent;
+	--color-btn-primary-hover-bg: oklch(from var(--color-accent) calc(l - 0.3) calc(c - 0.02) h);
+	--color-btn-primary-hover-border: var(--color-btn-primary-hover-bg);
+	--color-btn-primary-selected-bg: oklch(
+		from var(--color-accent) calc(l - 0.02) calc(c + 0.08) h
+	);
+	--color-btn-primary-selected-shadow: 0 0 transparent;
+	--color-btn-primary-disabled-text: var(--color-border);
+	--color-btn-primary-disabled-bg: var(--color-overlay);
+	--color-btn-primary-disabled-border: var(--color-overlay-dark);
+	--color-action-list-item-default-hover-bg: oklch(from var(--color-border) l c h / 20%);
+	--color-segmented-control-bg: oklch(from var(--color-border) l c h / 10%);
+	--color-segmented-control-button-bg: var(--hex-overlay);
+	--color-segmented-control-button-selected-border: var(--color-accent);
+	--color-fg-default: var(--color-text);
+	--color-fg-muted: oklch(from var(--color-text) calc(l - 0.05) c h);
+	--color-fg-subtle: oklch(from var(--color-text) calc(l - 0.1) c h);
+	--color-neutral-muted: oklch(from var(--color-fg-muted) l c h / 40%);
+	--color-canvas-default: oklch(from var(--color-background) calc(l - 0.02) c h);
+	--color-canvas-overlay: var(--color-background);
+	--color-canvas-inset: oklch(from var(--color-background) calc(l - 0.1) calc(c - 0.2) h);
+	--color-canvas-subtle: var(--color-background);
+	--color-border-default: var(--color-border);
+	--color-border-muted: oklch(from var(--color-border) l c h / 40%);
+	--color-accent-fg: var(--color-accent);
+	--color-accent-emphasis: oklch(from var(--color-accent) calc(l - 0.01) calc(c + 0.04) h);
+	--color-accent-muted: oklch(from var(--color-accent) l c h / 40%);
+	--color-accent-subtle: oklch(from var(--color-accent) l c h / 10%);
+	--color-success-fg: oklch(from var(--hex-green) l c h);
+	--color-attention-fg: oklch(from var(--hex-amber) l c h);
+	--color-attention-muted: oklch(from var(--color-attention-fg) l c h / 40%);
+	--color-attention-subtle: oklch(from var(--color-attention-fg) l c h / 15%);
+	--color-danger-fg: oklch(from var(--hex-red) l c h);
+	--color-danger-muted: oklch(from var(--color-danger-fg) l c h / 40%);
+	--color-danger-subtle: oklch(from var(--color-danger-fg) l c h / 10%);
+	--color-primer-shadow-inset: 0 0 transparent;
+
+	@media (prefers-color-scheme: light) {
+		--color-btn-primary-bg: oklch(from var(--color-accent) calc(l + 0.4) calc(c - 0.04) h);
+		--color-btn-primary-hover-bg: oklch(
+			from var(--color-accent) calc(l + 0.3) calc(c - 0.02) h
+		);
+		--color-btn-primary-selected-bg: oklch(
+			from var(--color-accent) calc(l + 0.02) calc(c + 0.08) h
+		);
+		--color-fg-muted: oklch(from var(--color-text) calc(l + 0.05) c h);
+		--color-fg-subtle: oklch(from var(--color-text) calc(l + 0.1) c h);
+		--color-canvas-default: oklch(from var(--color-background) calc(l + 0.02) c h);
+		--color-canvas-inset: oklch(from var(--color-background) calc(l + 0.1) calc(c - 0.2) h);
+		--color-accent-emphasis: oklch(from var(--color-accent) calc(l + 0.01) calc(c + 0.04) h);
+	}
+
+	@media (prefers-color-scheme: dark) and (prefers-contrast: more) {
+		--color-canvas-default: oklch(from var(--hex-background) calc(l - 0.06) c h);
+	}
+
+	/*! Extensions from @primer/css/alerts/flash.scss */
+	--color-scale-gray-7: var(--color-btn-bg);
+	--color-scale-blue-8: var(--color-accent);
+	--color-social-reaction-bg-hover: var(--color-scale-gray-7);
+	--color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+
+	@media (prefers-color-scheme: light) {
+		--color-prettylights-syntax-comment: #a57a4c;
+		--color-prettylights-syntax-invalid-illegal-text: #fbebd4;
+		--color-prettylights-syntax-carriage-return-text: #fbebd4;
+		--color-prettylights-syntax-markup-italic: #84613d;
+		--color-prettylights-syntax-markup-bold: #84613d;
+		--color-prettylights-syntax-markup-ignored-text: #84613d;
+		--color-prettylights-syntax-markup-ignored-bg: oklch(from #84613d l c h / 0.2);
+		--color-prettylights-syntax-brackethighlighter-angle: #a57a4c;
+		--color-prettylights-syntax-sublimelinter-gutter-mark: #a57a4c;
+	}
+
+	@media (prefers-contrast: more) {
+		--color-prettylights-syntax-comment: #d4d0ab;
+		--color-prettylights-syntax-constant: #f5ab35;
+		--color-prettylights-syntax-entity: #00e0e0;
+		--color-prettylights-syntax-storage-modifier-import: #dcc6e0;
+		--color-prettylights-syntax-entity-tag: #ffa07a;
+		--color-prettylights-syntax-keyword: #dcc6e0;
+		--color-prettylights-syntax-string: #abe338;
+		--color-prettylights-syntax-variable: #ffa07a;
+		--color-prettylights-syntax-brackethighlighter-unmatched: #ffa07a;
+		--color-prettylights-syntax-invalid-illegal-text: #2b2b2b;
+		--color-prettylights-syntax-invalid-illegal-bg: #ffa07a;
+		--color-prettylights-syntax-carriage-return-text: #2b2b2b;
+		--color-prettylights-syntax-carriage-return-bg: #ffa07a;
+		--color-prettylights-syntax-string-regexp: #ffa07a;
+		--color-prettylights-syntax-markup-list: #abe338;
+		--color-prettylights-syntax-markup-heading: #00e0e0;
+		--color-prettylights-syntax-markup-italic: #f8f8f2;
+		--color-prettylights-syntax-markup-bold: #f8f8f2;
+		--color-prettylights-syntax-markup-deleted-text: #ffa07a;
+		--color-prettylights-syntax-markup-deleted-bg: oklch(from #ffa07a l c h / 0.2);
+		--color-prettylights-syntax-markup-inserted-text: #abe338;
+		--color-prettylights-syntax-markup-inserted-bg: oklch(from #abe338 l c h / 0.2);
+		--color-prettylights-syntax-markup-changed-text: #f5ab35;
+		--color-prettylights-syntax-markup-changed-bg: oklch(from #f5ab35 l c h / 0.2);
+		--color-prettylights-syntax-markup-ignored-text: #f8f8f2;
+		--color-prettylights-syntax-markup-ignored-bg: oklch(from #f8f8f2 l c h / 0.2);
+		--color-prettylights-syntax-meta-diff-range: #dcc6e0;
+		--color-prettylights-syntax-brackethighlighter-angle: #d4d0ab;
+		--color-prettylights-syntax-sublimelinter-gutter-mark: #d4d0ab;
+		--color-prettylights-syntax-constant-other-reference-link: #f5ab35;
+
+		@media (prefers-color-scheme: light) {
+			--color-prettylights-syntax-comment: #696969;
+			--color-prettylights-syntax-constant: #aa5d00;
+			--color-prettylights-syntax-entity: #007faa;
+			--color-prettylights-syntax-storage-modifier-import: #7928a1;
+			--color-prettylights-syntax-entity-tag: #d91e18;
+			--color-prettylights-syntax-keyword: #7928a1;
+			--color-prettylights-syntax-string: #008000;
+			--color-prettylights-syntax-variable: #d91e18;
+			--color-prettylights-syntax-brackethighlighter-unmatched: #d91e18;
+			--color-prettylights-syntax-invalid-illegal-text: #fefefe;
+			--color-prettylights-syntax-invalid-illegal-bg: #d91e18;
+			--color-prettylights-syntax-carriage-return-text: #fefefe;
+			--color-prettylights-syntax-carriage-return-bg: #d91e18;
+			--color-prettylights-syntax-string-regexp: #d91e18;
+			--color-prettylights-syntax-markup-list: #008000;
+			--color-prettylights-syntax-markup-heading: #007faa;
+			--color-prettylights-syntax-markup-italic: #545454;
+			--color-prettylights-syntax-markup-bold: #545454;
+			--color-prettylights-syntax-markup-deleted-text: #d91e18;
+			--color-prettylights-syntax-markup-deleted-bg: oklch(from #d91e18 l c h / 0.2);
+			--color-prettylights-syntax-markup-inserted-text: #008000;
+			--color-prettylights-syntax-markup-inserted-bg: oklch(from #008000 l c h / 0.2);
+			--color-prettylights-syntax-markup-changed-text: #aa5d00;
+			--color-prettylights-syntax-markup-changed-bg: oklch(from #aa5d00 l c h / 0.2);
+			--color-prettylights-syntax-markup-ignored-text: #545454;
+			--color-prettylights-syntax-markup-ignored-bg: oklch(from #545454 l c h / 0.2);
+			--color-prettylights-syntax-meta-diff-range: #7928a1;
+			--color-prettylights-syntax-brackethighlighter-angle: #696969;
+			--color-prettylights-syntax-sublimelinter-gutter-mark: #696969;
+			--color-prettylights-syntax-constant-other-reference-link: #aa5d00;
+		}
+	}
+}
+
+/* Loading Animations */
+main .pagination-loader-container {
+	background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg);
+
+	@media (prefers-color-scheme: light) {
+		background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line.svg);
+	}
+}
+
+main .gsc-loading-image {
+	background-image: url(https://github.githubassets.com/images/mona-loading-dark.gif);
+
+	@media (prefers-color-scheme: light) {
+		background-image: url(https://github.githubassets.com/images/mona-loading-default.gif);
+	}
+}
+
+/* Alert Style */
+.markdown-alert {
+	position: relative;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	border-left: 0.25em solid var(--color-border);
+	background-color: oklch(from var(--color-background) calc(l + 0.04) c h);
+	padding: 0.5rem 1rem;
+	overflow: hidden;
+	font-size: 0.95em;
+
+	/* Alert Title */
+	.markdown-alert-title {
+		display: flex;
+		align-items: center;
+		opacity: 0.9;
+		margin-top: 0;
+		margin-bottom: 0.5em;
+		color: inherit; /* Inherit from specific alert color */
+		font-weight: 600;
+		font-size: 0.9em;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+
+		svg {
+			fill: currentColor;
+			margin-right: 0.5em;
+			width: 16px;
+			height: 16px;
+		}
+	}
+
+	/* Alert Content */
+	> :nth-child(2) {
+		margin-top: 0;
+	}
+	> :last-child {
+		margin-bottom: 0;
+	}
+
+	/* Specific Alert Types */
+	&.markdown-alert-note {
+		border-left-color: var(--color-alert-note);
+		.markdown-alert-title {
+			color: var(--color-alert-note);
+		}
+	}
+	&.markdown-alert-tip {
+		border-left-color: var(--color-alert-tip);
+		.markdown-alert-title {
+			color: var(--color-alert-tip);
+		}
+	}
+	&.markdown-alert-important {
+		border-left-color: var(--color-alert-important);
+		.markdown-alert-title {
+			color: var(--color-alert-important);
+		}
+	}
+	&.markdown-alert-warning {
+		border-left-color: var(--color-alert-warning);
+		.markdown-alert-title {
+			color: var(--color-alert-warning);
+		}
+	}
+	&.markdown-alert-caution {
+		border-left-color: var(--color-alert-caution);
+		.markdown-alert-title {
+			color: var(--color-alert-caution);
+		}
+	}
+}
+
+/* Border Radius Removal */
+main *:not(.btn):not(.gsc-reactions-button) {
+	border-radius: 0 !important;
+}
+
+/* Border Removals */
+.gsc-comment-box-tabs {
+	margin: -1px -1px 0;
+	border: 1px solid var(--color-canvas-subtle);
+	border-bottom-color: var(--color-border-default, var(--color-border-primary));
+}

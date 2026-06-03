@@ -75,8 +75,9 @@ export class MarkedExtensions {
 
 	/**
 	 * Initializes and applies the custom extensions to the marked instance.
+	 * @param {Object} plugins - The dynamically imported markdown plugins
 	 */
-	setup() {
+	setup(plugins) {
 		// Strip HTML comments
 		this.marked.use({
 			walkTokens(token) {
@@ -87,14 +88,8 @@ export class MarkedExtensions {
 		});
 
 		// Heading IDs
-		if (typeof window.markedGfmHeadingId !== 'undefined') {
-			const headingIdExtension =
-				typeof window.markedGfmHeadingId === 'function'
-					? window.markedGfmHeadingId
-					: window.markedGfmHeadingId.gfmHeadingId;
-			if (headingIdExtension) {
-				this.marked.use(headingIdExtension(MarkedExtensions.HEADING_ID_CONFIG));
-			}
+		if (plugins.gfmHeadingId) {
+			this.marked.use(plugins.gfmHeadingId(MarkedExtensions.HEADING_ID_CONFIG));
 		}
 
 		// Code Highlight
@@ -109,28 +104,15 @@ export class MarkedExtensions {
 		this.marked.use(Gallery.getMarkedExtension());
 
 		// Alerts
-		if (typeof window.markedAlert !== 'undefined') {
-			const alertExtension =
-				typeof window.markedAlert === 'function'
-					? window.markedAlert
-					: window.markedAlert.markedAlert;
-			if (alertExtension) {
-				this.marked.use(alertExtension(MarkedExtensions.ALERT_CONFIG));
-			}
+		if (plugins.markedAlert) {
+			this.marked.use(plugins.markedAlert(MarkedExtensions.ALERT_CONFIG));
 		}
 
 		// Responsive Images
-		if (typeof window.markedResponsiveImages !== 'undefined') {
-			const responsiveImagesExtension =
-				typeof window.markedResponsiveImages === 'function'
-					? window.markedResponsiveImages
-					: window.markedResponsiveImages.markedResponsiveImages;
-
-			if (responsiveImagesExtension) {
-				this.marked.use(
-					responsiveImagesExtension(MarkedExtensions.RESPONSIVE_IMAGES_CONFIG)
-				);
-			}
+		if (plugins.markedResponsiveImages) {
+			this.marked.use(
+				plugins.markedResponsiveImages(MarkedExtensions.RESPONSIVE_IMAGES_CONFIG)
+			);
 		}
 	}
 }

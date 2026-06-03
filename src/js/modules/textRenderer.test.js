@@ -21,6 +21,15 @@ vi.mock('./content.js', () => {
 	};
 });
 
+vi.mock('./blog.js', () => {
+	return {
+		Blog: {
+			getIndex: vi.fn().mockResolvedValue([]),
+			injectComments: vi.fn(),
+		},
+	};
+});
+
 describe('TextRenderer', () => {
 	let appMock;
 	let textNavContainer;

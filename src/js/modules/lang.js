@@ -473,7 +473,7 @@ class LangController {
 					button.setAttribute('lang', code.split('_')[0]);
 
 					const langName = this.getString(`languages.${code}`, null, code);
-					const switchTemplate = this.getString('ui.btn_switch_language');
+					const switchTemplate = this.getString('ui.btnSwitchLanguage');
 
 					if (switchTemplate !== 'notFound') {
 						button.textContent = switchTemplate.replace('{lang}', langName);

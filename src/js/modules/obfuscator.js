@@ -189,7 +189,9 @@ export class Obfuscator {
 
 					if ((isMail && hasEmail) || (isPhone && hasPhone)) {
 						const type = isMail ? 'email' : 'phone';
-						const fallback = isMail ? '[Reveal Email]' : '[Reveal Phone]';
+						const fallback = isMail
+							? Lang.getString('ui.contact.emailPlaceholder', null, '[Reveal Email]')
+							: Lang.getString('ui.contact.phonePlaceholder', null, '[Reveal Phone]');
 						displayText = Lang.getString(
 							`ui.contact.${type}_placeholder`,
 							null,
