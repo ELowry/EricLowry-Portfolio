@@ -68,11 +68,19 @@ class RouterController {
 			return '';
 		}
 
-		return path
+		let cleanPath = path
 			.replace(/\/+/g, '/')
 			.replace(/^\/|\/$/g, '')
 			.toLowerCase()
 			.trim();
+
+		if (cleanPath.endsWith('/index.html')) {
+			cleanPath = cleanPath.slice(0, -11);
+		} else if (cleanPath === 'index.html') {
+			cleanPath = '';
+		}
+
+		return cleanPath;
 	}
 
 	/**
