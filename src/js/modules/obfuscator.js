@@ -188,14 +188,10 @@ export class Obfuscator {
 					let isObfuscated = false;
 
 					if ((isMail && hasEmail) || (isPhone && hasPhone)) {
-						const type = isMail ? 'email' : 'phone';
-						const fallback = isMail
-							? Lang.getString('ui.contact.emailPlaceholder', null, '[Reveal Email]')
-							: Lang.getString('ui.contact.phonePlaceholder', null, '[Reveal Phone]');
 						displayText = Lang.getString(
-							`ui.contact.${type}_placeholder`,
+							`ui.contact.${isMail ? 'email' : 'phone'}Placeholder`,
 							null,
-							fallback
+							isMail ? '[Reveal Email]' : '[Reveal Phone]'
 						);
 						isObfuscated = true;
 					}
