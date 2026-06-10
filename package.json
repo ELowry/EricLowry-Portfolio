@@ -13,8 +13,8 @@
 	"scripts": {
 		"generate-blog": "node scripts/generateBlog.mjs && prettier --write public/content/blog-index.json public/feed-*.xml public/blog/**/index.html && eslint --no-ignore public/content/blog-index.json",
 		"generate-sitemaps": "node scripts/generateSitemaps.mjs && prettier --write public/sitemap.xml public/llms.txt public/robots.txt",
-		"dev": "npm run generate-blog && npm run generate-sitemaps && npm run && vite",
-		"build": "npm run generate-blog && npm run generate-sitemaps && npm run && vite build",
+		"dev": "npm run generate-blog && npm run generate-sitemaps && npm run test && vite",
+		"build": "npm run generate-blog && npm run generate-sitemaps && npm run lint && npm run test && vite build",
 		"deploy": "npm run build && firebase deploy",
 		"lint": "eslint . && prettier --check .",
 		"lint:fix": "eslint --fix . && prettier --write .",

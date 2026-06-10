@@ -288,13 +288,18 @@
 	/* Blog List */
 	.blog-list {
 		display: flex;
-		flex-direction: column;
+		flex-wrap: wrap;
 		gap: 1rem;
+		padding: 0;
 		list-style: none;
 
 		li {
 			container-type: inline-size;
-			width: min(100%, 32rem);
+			width: min(100%, calc(40ch - 0.5rem));
+
+			@media (width < calc(80ch + 8em)) {
+				width: min(100%, 34rem);
+			}
 
 			a {
 				display: flex;
