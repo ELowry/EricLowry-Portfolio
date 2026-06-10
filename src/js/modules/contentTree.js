@@ -121,15 +121,15 @@ export const ContentTree = category(
 				),
 				category(
 					'CinQ',
-					'CinQ – corporate team training video game',
+					'CinQ – Operations & Coaching',
 					() => import('../../maps/coaching-business/CinQ.config.js'),
 					[
-						content('CinQ', 'About CinQ', 'gaming/CinQ.md', true),
+						content('CinQ', 'About CinQ', 'coaching-business/CinQ.md', true),
+						content('CinQ-game', 'CinQ Game Development', 'gaming/CinQ.md'),
 						content('website', 'CinQ Website', 'websites/CinQ.md'),
 					]
 				),
-				content('medium', 'Medium Editing', 'coaching-business/medium.md'),
-				content('podcast', 'Podcast Editing', 'coaching-business/podcast.md'),
+				content('multimedia', 'Content & Multimedia', 'coaching-business/multimedia.md'),
 			]
 		),
 

@@ -7,7 +7,6 @@ export default {
 	positions: {
 		'coaching-business': { x: 12, y: 10 },
 		CinQ: { x: 8, y: 10 },
-		medium: { x: 14, y: 10 },
-		podcast: { x: 16, y: 10 },
+		multimedia: { x: 14, y: 10 },
 	},
 };

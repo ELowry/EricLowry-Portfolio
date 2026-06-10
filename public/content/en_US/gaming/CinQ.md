@@ -4,11 +4,11 @@
 
 > [!SUMMARY]
 >
-> |                |                                                               |
-> | -------------- | ------------------------------------------------------------- |
-> | **Platform**   | Windows, macOS, Android, Games Streaming                      |
-> | **Tech Stack** | Unity3D, C#, Netcode for GameObjects, CI/CD                   |
-> | **Skillset**   | Game Design, UI/UX, Game Development, Multiplayer Development |
+> |                |                                                                                     |
+> | -------------- | ----------------------------------------------------------------------------------- |
+> | **Platform**   | Windows, macOS, Android, Games Streaming                                            |
+> | **Tech Stack** | Unity3D, C#, Netcode for GameObjects, CI/CD                                         |
+> | **Skillset**   | Game Design, UI/UX, Game Development, Unity Editor Tooling, Multiplayer Development |
 >
 > 🌐 [playcinq.com](https://playcinq.com)
 
@@ -19,11 +19,13 @@ CinQ is the core technology behind a decade-long applied R&D effort to bring the
 <!-- prettier-ignore -->
 | Gallery |  |
 | -- | -- |
-| ![A screenshot of CinQ environment design](/assets/images/gaming/cinq//environment__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of CinQ with a drone looking for a character in a red jumpsuit with a fox mask](/assets/images/gaming/cinq//hacker-drone__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![A screenshot of CinQ environment design](/assets/images/gaming/cinq/environment__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of CinQ with a drone looking for a character in a red jumpsuit with a fox mask](/assets/images/gaming/cinq/hacker-drone__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
 
 <!-- prettier-ignore end -->
 
 When I first joined the team around 2014, the project (then known as "The Heist") was a conference-room experience built largely from Unity Asset Store components, designed to run locally on dedicated hardware. We quickly realized that to scale effectively, we needed to pivot. Instead of building bespoke projects, we envisioned a single, leaner game that could act as a versatile sandbox for remote and hybrid teamwork training.
+
+![Photos of in-person The Heist events with people using physical maps to navigate ](/assets/images/gaming/cinq/heist__240-190-webp_240-190_400-317-webp_400-317_600-476-webp_600-476.jpg)
 
 This pivot required transforming a controlled local multiplayer prototype into a highly reliable, online multiplayer title capable of running flawlessly on low-end corporate computers, mobile devices, and behind restrictive corporate firewalls.
 
@@ -34,6 +36,13 @@ My initial role on the team was focused on marketing and effectively game design
 Drawing from collaborative games like _Keep Talking and Nobody Explodes_, _PayDay_, and the _Rainbow Six_ series, I designed the fundamental gameplay systems around challenging team skills (communication, agility, and leadership). We also needed to ensure the game remained non-violent, ensuring the experience remained accessible, professional, and adapted to the corporate business world.
 
 The resulting game is a large 5-player structured mission that brings together dozens of game mechanics and puzzles to effectively form a collaborative sandbox thar requires strong real-time, synchronous collaboration. Following customer demand, we later included an in-game AI assistant built using a custom LLM to include AI-enhanced teamwork into our training portfolio.
+
+<!-- prettier-ignore -->
+| Gallery: |  |  |  |  |  |
+| -- | -- | -- | -- | -- | -- |
+| ![A screenshot of the CinQ characters planning their mission inside a van](/assets/images/gaming/cinq/van__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the CinQ live map with character position indicators](/assets/images/gaming/cinq/map__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the CinQ venitlation system with lasers blocking the way](/assets/images/gaming/cinq/ventilation__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the CinQ mission planning UI with a document showing drone specs](/assets/images/gaming/cinq/documents__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of a CinQ character inside a futuristic laboratory](/assets/images/gaming/cinq/lab__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A montage showing how the sewer and ventilation system maps are generated based on a small png file with color-coded nodes and unique assets](/assets/images/gaming/cinq/sewers__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+
+<!-- prettier-ignore end -->
 
 ### Engineering & The Development Journey
 
@@ -63,4 +72,4 @@ Scaling CinQ for the enterprise required overcoming significant technical and ne
 
 > [!NOTE]
 >
-> Beyond the game client itself, I also directed the platform's marketing strategies, podcast editing, and actively facilitated corporate coaching workshops. You can read more about those specific roles in the [Coaching & Business](/content/en_US/coaching/index.md) section of this portfolio.
+> Beyond the game client itself, I also directed the platform's marketing strategies, podcast editing, and actively facilitated corporate coaching workshops. You can read more about those specific roles in the [Coaching & Business](/content/en_US/coaching-business/coaching-business.md) section of this portfolio.

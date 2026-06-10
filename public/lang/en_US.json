@@ -66,16 +66,12 @@
 				"title": "My Work",
 				"label": "My Work"
 			},
-			"medium": {
-				"title": "Medium Editing",
-				"label": "Medium Editing"
-			},
-			"podcast": {
-				"title": "Podcast Editing",
-				"label": "Podcast Editing"
+			"multimedia": {
+				"title": "Content & Multimedia Strategy",
+				"label": "Content & Multimedia Strategy"
 			},
 			"CinQ": {
-				"title": "CinQ – corporate team training video game",
+				"title": "CinQ – Operations & Coaching",
 				"label": "CinQ"
 			}
 		},
