@@ -38,7 +38,7 @@ Beyond the business operations, I became a certified CinQ facilitator, coaching 
 
 ### The Train-the-Trainer Program
 
-As DLS grew, we needed to scale our impact by certifying external executive coaches to use CinQ. I co-designed and executed our Train-the-Trainer curriculum to teach seasoned, formal coaches how to utilize a video game as a behavioral diagnostic tool.
+As DLS grew, we needed to scale our impact by certifying external executive coaches to use CinQ. I co-designed and executed our train-the-trainer curriculum to teach seasoned, formal coaches how to utilize a video game as a behavioral diagnostic tool.
 
 The program began by having the coaches experience the simulation as players to establish a behavioral baseline. I then co-led an intensive two-day course covering the underlying pedagogy, the technical mechanics of the facilitator dashboard, and a deep dive into our extensive behavioral mapping documentation, equipping them with the skills needed to run CinQ workshops on their own.
 
