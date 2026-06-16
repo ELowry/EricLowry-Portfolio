@@ -490,11 +490,11 @@ export class UIManager {
 		if (heading.id != null) {
 			item = document.createElement('a');
 			item.setAttribute('href', `#${heading.id}`);
-			item.textContent = heading.text;
 		} else {
 			item = document.createElement('span');
-			item.textContent = heading.text;
 		}
+		item.textContent = heading.text;
+		item.title = heading.text;
 		listItem.appendChild(item);
 		parentList.appendChild(listItem);
 

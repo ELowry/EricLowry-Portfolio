@@ -17,4 +17,4 @@ Explore my work in business operations, coaching, and marketing below:
 - **[CinQ – Operations & Coaching](/content/en_US/coaching-business/CinQ.md):**  
   A deep dive into my role scaling the Disruptive Learning Solutions business, managing agile product cycles, and facilitating executive team workshops.
 - **[Content & Multimedia Strategy](content.md):**  
-  _(Pending)_ An overview of my work editing podcasts, publishing articles, and driving B2B content strategy.
+  An overview of my work editing podcasts, publishing articles, and driving B2B content strategy.

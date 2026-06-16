@@ -395,7 +395,7 @@
 
 .text-columns {
 	display: grid;
-	grid-template-columns: min(100%, var(--content-max-width)) 1fr;
+	grid-template-columns: min(100%, var(--content-max-width)) minmax(0, 1fr);
 	align-items: start;
 	gap: 2em;
 
@@ -406,6 +406,7 @@
 	#text-table-of-contents {
 		background-color: var(--color-highlight);
 		padding: 2em;
+		min-width: 0;
 		font-size: 1.072em;
 		font-family: var(--font-mono);
 
@@ -451,7 +452,7 @@
 
 			li {
 				display: grid;
-				grid-template-columns: min-content 1fr;
+				grid-template-columns: min-content minmax(0, 1fr);
 				padding: 0;
 				line-height: 1em;
 
@@ -470,6 +471,11 @@
 					text-overflow: ellipsis;
 					white-space: nowrap;
 				}
+
+				a:first-child,
+				> span:not(.toc-marker):first-child {
+					grid-column: 1 / -1;
+				}
 				a {
 					color: var(--color-text);
 
@@ -483,6 +489,7 @@
 
 				ol {
 					grid-column: 1 / -1;
+					min-width: 0;
 				}
 			}
 		}
