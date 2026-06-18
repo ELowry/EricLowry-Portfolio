@@ -218,6 +218,20 @@ function getTranslationNode(langCode, pathString, fallback) {
  * @param {string} date - The date of the blog post (e.g., '2026-05-31').
  */
 function generateStaticImage(title, date) {
+	const datePath = date.replace(/-/g, '');
+	const dirPath = path.join(IMAGE_BASE_DIR, datePath);
+	const targetImagePath = path.join(dirPath, `poster.png`);
+	const metaFilePath = path.join(dirPath, `poster.meta`);
+
+	// Check if the title has changed
+	if (fs.existsSync(targetImagePath) && fs.existsSync(metaFilePath)) {
+		const cachedTitle = fs.readFileSync(metaFilePath, 'utf-8');
+		if (cachedTitle === title) {
+			console.log(`SKIPPED existing poster image: ${date}`);
+			return;
+		}
+	}
+
 	const width = 1200;
 	const height = 630;
 	const canvas = createCanvas(width, height);
@@ -292,13 +306,15 @@ function generateStaticImage(title, date) {
 
 	// Render
 	const buffer = canvas.toBuffer('image/png');
-	const dirPath = path.join(IMAGE_BASE_DIR, date.replace(/-/g, ''));
 
 	if (!fs.existsSync(dirPath)) {
 		fs.mkdirSync(dirPath, { recursive: true });
 	}
 
 	fs.writeFileSync(path.join(dirPath, `poster.png`), buffer);
+
+	fs.writeFileSync(metaFilePath, title, 'utf-8');
+	console.log(`Generated new poster image for ${date}`);
 }
 
 /**
