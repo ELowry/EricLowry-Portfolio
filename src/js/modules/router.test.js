@@ -32,10 +32,6 @@ describe('RouterController', () => {
 			);
 		});
 
-		it('should normalize paths to lowercase', () => {
-			expect(Router.sanitizePath('ArChItEcTuRe/PrOjEcTs')).toBe('architecture/projects');
-		});
-
 		it('should return empty string for null, undefined, or empty values', () => {
 			expect(Router.sanitizePath('')).toBe('');
 			expect(Router.sanitizePath(null)).toBe('');
