@@ -71,7 +71,6 @@ class RouterController {
 		let cleanPath = path
 			.replace(/\/+/g, '/')
 			.replace(/^\/|\/$/g, '')
-			.toLowerCase()
 			.trim();
 
 		if (cleanPath.endsWith('/index.html')) {

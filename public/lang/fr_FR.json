@@ -15,45 +15,161 @@
 		"fr_FR": "Français"
 	},
 	"content": {
-		"index": {
-			"title": "Welcome",
-			"label": "Welcome"
-		},
-		"about": {
-			"title": "About Me",
-			"label": "About Me",
-			"about": {
-				"title": "About Overview",
-				"label": "About Overview"
-			},
-			"cv": {
-				"title": "Curiculum Vitae",
-				"label": "Curiculum Vitae"
-			},
-			"bio": {
-				"title": "Biography",
-				"label": "Read Bio"
-			},
-			"history": {
-				"title": "Work History",
-				"label": "Work History"
-			}
-		},
-		"projects": {
-			"title": "Projects",
-			"label": "Projects",
-			"projects": {
-				"title": "Projects Overview",
-				"label": "Projects Overview"
-			},
-			"cool-game": {
-				"title": "Cool Game",
-				"label": "Game Project"
-			}
-		},
 		"privacy": {
 			"title": "Politique de confidentialité",
 			"label": "Politique de confidentialité"
+		},
+		"index": {
+			"title": "Bienvenue",
+			"label": "Bienvenue"
+		},
+		"cv": {
+			"title": "Curriculum Vitae",
+			"label": "Curriculum Vitae"
+		},
+		"about": {
+			"title": "Philosophie personnelle",
+			"label": "Philosophie personnelle"
+		},
+		"architecture": {
+			"title": "Études d'architecture",
+			"label": "Études d'architecture",
+			"architecture": {
+				"title": "À propos de mes études d'architecture",
+				"label": "Sur l'architecture"
+			},
+			"3Dgallery": {
+				"title": "Galerie de mon travail 3D",
+				"label": "Galerie d'œuvres 3D"
+			},
+			"projects": {
+				"title": "Sélection de projets d'architecture",
+				"label": "Projets d'architecture"
+			},
+			"Unstant": {
+				"title": "Unstant",
+				"label": "Unstant"
+			}
+		},
+		"coaching-business": {
+			"title": "Business & coaching",
+			"label": "Business & coaching",
+			"coaching-business": {
+				"title": "À propos de mon activité de business & coaching",
+				"label": "Business & coaching"
+			},
+			"multimedia": {
+				"title": "Stratégie de contenu & multimédia",
+				"label": "Contenu & Multimédia"
+			},
+			"CinQ": {
+				"title": "CinQ – Opérations & Coaching",
+				"label": "CinQ",
+				"CinQ-game": {
+					"title": "Développement du jeu CinQ",
+					"label": "Développement du jeu CinQ"
+				},
+				"website": {
+					"title": "Le site web CinQ",
+					"label": "Site web CinQ"
+				}
+			}
+		},
+		"gaming": {
+			"title": "Jeux vidéo",
+			"label": "Jeux vidéo",
+			"gaming": {
+				"title": "À propos de mon travail de développement de jeux vidéo",
+				"label": "Mon travail de dev jeu vidéo"
+			},
+			"CinQ": {
+				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
+				"label": "CinQ"
+			},
+			"InputLayers": {
+				"title": "InputLayers",
+				"label": "InputLayers"
+			},
+			"Unstant": {
+				"title": "Unstant",
+				"label": "Unstant"
+			}
+		},
+		"osd": {
+			"title": "Développement Open Source",
+			"label": "Développement Open Source",
+			"osd": {
+				"title": "À propos de mon travail Open Source",
+				"label": "Mon travail Open Source"
+			},
+			"InputLayers": {
+				"title": "InputLayers",
+				"label": "InputLayers"
+			},
+			"winget-updater": {
+				"title": "WinGet Updater",
+				"label": "WinGet Updater"
+			},
+			"marked-responsive-images": {
+				"title": "Marked Responsive Images",
+				"label": "Marked Responsive Images"
+			},
+			"obsidian-replace-commands": {
+				"title": "Obsidian Replace Commands",
+				"label": "Obsidian Replace Commands"
+			},
+			"dns-toggle": {
+				"title": "DNS Toggle",
+				"label": "DNS Toggle"
+			},
+			"StadiaIcons": {
+				"title": "StadiaIcons",
+				"label": "StadiaIcons"
+			}
+		},
+		"websites": {
+			"title": "Développement & Design Web",
+			"label": "Développement & Design Web",
+			"websites": {
+				"title": "À propos de mon travail de développement web",
+				"label": "Mon travail de dev web"
+			},
+			"CinQ": {
+				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
+				"label": "CinQ"
+			},
+			"altoe": {
+				"title": "Alto´e",
+				"label": "Alto´e"
+			},
+			"lightweight-static": {
+				"title": "Framework statique léger",
+				"label": "Framework statique léger",
+				"lightweight-static": {
+					"title": "Framework statique léger",
+					"label": "Framework statique léger"
+				},
+				"thenextmind": {
+					"title": "The Next Mind",
+					"label": "The Next Mind"
+				},
+				"luzech": {
+					"title": "Luzech",
+					"label": "Luzech"
+				},
+				"koalakrash": {
+					"title": "Koala Krash",
+					"label": "Koala Krash"
+				}
+			},
+			"StadiaIcons": {
+				"title": "StadiaIcons",
+				"label": "StadiaIcons"
+			},
+			"archive": {
+				"title": "Archives des anciens projets",
+				"label": "Anciens projets"
+			}
 		},
 		"blog": {
 			"title": "Blog",

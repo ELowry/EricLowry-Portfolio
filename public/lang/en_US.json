@@ -35,52 +35,56 @@
 			"title": "Architecture Studies",
 			"label": "Architecture Studies",
 			"architecture": {
-				"title": "Architecture Works",
-				"label": "Architecture Works"
+				"title": "About my Architecture Studies",
+				"label": "Architecture Overview"
 			},
 			"3Dgallery": {
-				"title": "3D Works Gallery",
-				"label": "3D Works Gallery",
-				"3Dgallery": {
-					"title": "Gallery of my 3D work",
-					"label": "Gallery of my 3D work"
-				}
+				"title": "Gallery of my 3D work",
+				"label": "3D Works Gallery"
 			},
 			"projects": {
 				"title": "Selection of Architecture Projects",
-				"label": "Selection of Architecture Projects",
-				"projects": {
-					"title": "Architecture Projects",
-					"label": "Architecture Projects"
-				},
-				"Unstant": {
-					"title": "Unstant",
-					"label": "Unstant"
-				}
+				"label": "Architecture Projects"
+			},
+			"Unstant": {
+				"title": "Unstant",
+				"label": "Unstant"
 			}
 		},
 		"coaching-business": {
 			"title": "Coaching & Business",
 			"label": "Coaching & Business",
 			"coaching-business": {
-				"title": "My Work",
-				"label": "My Work"
+				"title": "About my Coaching & Business Work",
+				"label": "Coaching Business Overview"
 			},
 			"multimedia": {
 				"title": "Content & Multimedia Strategy",
-				"label": "Content & Multimedia Strategy"
+				"label": "Content & Multimedia"
 			},
 			"CinQ": {
 				"title": "CinQ – Operations & Coaching",
-				"label": "CinQ"
+				"label": "CinQ",
+				"CinQ-game": {
+					"title": "CinQ Game Development",
+					"label": "CinQ Game Development"
+				},
+				"website": {
+					"title": "The CinQ Website",
+					"label": "CinQ Website"
+				}
 			}
 		},
 		"gaming": {
 			"title": "Video Games",
 			"label": "Video Games",
 			"gaming": {
-				"title": "Gaming Overview",
-				"label": "Gaming Overview"
+				"title": "About my Game Development Work",
+				"label": "Game Development Overview"
+			},
+			"CinQ": {
+				"title": "CinQ – corporate team training video game",
+				"label": "CinQ"
 			},
 			"InputLayers": {
 				"title": "InputLayers",
@@ -89,26 +93,14 @@
 			"Unstant": {
 				"title": "Unstant",
 				"label": "Unstant"
-			},
-			"CinQ": {
-				"title": "CinQ – corporate team training video game",
-				"label": "CinQ",
-				"CinQ": {
-					"title": "About CinQ",
-					"label": "About CinQ"
-				},
-				"website": {
-					"title": "CinQ Website",
-					"label": "CinQ Website"
-				}
 			}
 		},
 		"osd": {
 			"title": "Open Source Development",
 			"label": "Open Source Development",
 			"osd": {
-				"title": "Open Source Projects",
-				"label": "Open Source Projects"
+				"title": "About my Open Source Work",
+				"label": "OSD Overview"
 			},
 			"InputLayers": {
 				"title": "InputLayers",
@@ -139,8 +131,8 @@
 			"title": "Web Development & Design",
 			"label": "Web Development & Design",
 			"websites": {
-				"title": "Web Development & Design",
-				"label": "Web Development & Design"
+				"title": "About my Web Development Work",
+				"label": "Web Development Overview"
 			},
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",

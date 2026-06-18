@@ -82,28 +82,9 @@ export const ContentTree = category(
 			() => import('../../maps/architecture.config.js'),
 			[
 				content('architecture', 'ENSA-V & ENSP-V', 'architecture/architecture.md', true),
-				category(
-					'3Dgallery',
-					'3D Works Gallery',
-					() => import('../../maps/architecture/3Dgallery.config.js'),
-					[
-						content(
-							'3Dgallery',
-							'About my 3D work',
-							'architecture/3Dgallery/3Dgallery.md',
-							true
-						),
-					]
-				),
-				category(
-					'projects',
-					'Selection of Architecture Projects',
-					() => import('../../maps/architecture/projects.config.js'),
-					[
-						content('projects', 'Overview', 'architecture/projects/projects.md', true),
-						content('Unstant', 'Unstant', 'gaming/Unstant.md'),
-					]
-				),
+				content('projects', 'Architecture Projects', 'architecture/projects/projects.md'),
+				content('3Dgallery', 'About my 3D work', 'architecture/3Dgallery/3Dgallery.md'),
+				content('Unstant', 'Unstant', 'gaming/Unstant.md'),
 			]
 		),
 
