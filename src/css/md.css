@@ -22,26 +22,12 @@
 
 		pre & {
 			display: block;
-			position: relative;
 			margin: 0;
 			padding: 0.6em;
+			overflow-x: auto;
 
 			@media (prefers-color-scheme: light) {
 				background: var(--hex-highlight);
-			}
-
-			&.hljs::before {
-				position: absolute;
-				top: 0;
-				right: 0;
-
-				padding: 0.3em 0.5rem;
-				color: var(--color-text);
-				font-weight: bold;
-				font-size: 0.75rem;
-				font-family: var(--font-sans);
-				letter-spacing: 0.05em;
-				text-transform: uppercase;
 			}
 
 			&.hljs.language-javascript,
@@ -53,24 +39,44 @@
 			&.hljs.language-markdown {
 				padding-top: 1.4em;
 			}
+		}
+	}
 
-			&.hljs.language-javascript::before,
-			&.hljs.language-js::before {
-				content: 'JavaScript';
-			}
-			&.hljs.language-css::before {
-				content: 'CSS';
-			}
-			&.hljs.language-html::before {
-				content: 'HTML';
-			}
-			&.hljs.language-xml::before {
-				content: 'XML';
-			}
-			&.hljs.language-md::before,
-			&.hljs.language-markdown::before {
-				content: 'Markdown';
-			}
+	pre:has(code.hljs) {
+		position: relative;
+		margin: 0;
+		width: max-content;
+		max-width: 100%;
+
+		&::before {
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 0.3em 0.5rem;
+			color: var(--color-text);
+			font-weight: bold;
+			font-size: 0.75rem;
+			font-family: var(--font-sans);
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+		}
+
+		&:has(code.hljs.language-javascript)::before,
+		&:has(code.hljs.language-js)::before {
+			content: 'JavaScript';
+		}
+		&:has(code.hljs.language-css)::before {
+			content: 'CSS';
+		}
+		&:has(code.hljs.language-html)::before {
+			content: 'HTML';
+		}
+		&:has(code.hljs.language-xml)::before {
+			content: 'XML';
+		}
+		&:has(code.hljs.language-md)::before,
+		&:has(code.hljs.language-markdown)::before {
+			content: 'Markdown';
 		}
 	}
 
@@ -83,7 +89,7 @@
 			padding: 0.4em 0.6em;
 		}
 
-		/* 1× Hair Space: Centered block (All sizes) */
+		/* 1× Hair Space: Centered block (all sizes) */
 		&[alt$=' '] {
 			display: block;
 			margin: auto;
