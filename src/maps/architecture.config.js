@@ -8,6 +8,5 @@ export default {
 		architecture: { x: 12, y: 10 },
 		'3Dgallery': { x: 14, y: 10 },
 		projects: { x: 8, y: 10 },
-		Unstant: { x: 6, y: 10 },
 	},
 };

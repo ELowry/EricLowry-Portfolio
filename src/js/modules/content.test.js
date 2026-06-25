@@ -64,7 +64,7 @@ describe('ContentController', () => {
 		it('should return all tree paths associated with a specific markdown file', () => {
 			const paths = Content.findPathsByFile('gaming/Unstant.md');
 			expect(paths.length).toBe(2);
-			expect(paths).toContain('architecture/Unstant');
+			expect(paths).toContain('architecture/projects/Unstant');
 			expect(paths).toContain('gaming/Unstant');
 		});
 

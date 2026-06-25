@@ -22,7 +22,7 @@ A major advantage of these shifts is the ability to guarantee that the websites 
 
 You can explore highlights of the web development and design projects I have worked on over the years below:
 
-- [playcinq.com](content/en_US/websites/CinQ.md)
+- [playcinq.com](/content/en_US/websites/CinQ.md)
 - [altoe.net](/content/en_US/websites/altoe.md)
 - [thenextmind.ai](/content/en_US/websites/lightweight-static/thenextmind.md)
 - [luzech.co.uk](/content/en_US/websites/lightweight-static/luzech.md)

@@ -122,7 +122,15 @@ export class TextRenderer {
 			Lang.getString('ui.categoryOptionsAria', null, 'Category options')
 		);
 
-		visibleChildren.forEach((child, index) => {
+		let focusableIndex = 0;
+		visibleChildren.forEach((child) => {
+			if (child.type === 'separator') {
+				const separatorEl = document.createElement('span');
+				separatorEl.className = 'nav-separator';
+				navContainer.appendChild(separatorEl);
+				return;
+			}
+
 			const childPath = path ? `${path}/${child.id}` : child.id;
 
 			// Label Logic
@@ -139,7 +147,8 @@ export class TextRenderer {
 				link.classList.add('category');
 			}
 
-			link.setAttribute('tabindex', index === 0 ? '0' : '-1');
+			link.setAttribute('tabindex', focusableIndex === 0 ? '0' : '-1');
+			focusableIndex++;
 			link.href = `/${this.app.mode}/${childPath}`;
 			link.addEventListener('click', (e) => {
 				e.preventDefault();

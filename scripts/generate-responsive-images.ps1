@@ -3,7 +3,7 @@
 Generates responsive image variants (WebP + JPG/PNG) for use with the MarkedResponsiveImages extension.
 
 .DESCRIPTION
-This script uses ImageMagick (magick) to take an input image and generate a hardcoded set of width variants (240, 400, 600, 820, 1400, 1920). 
+This script uses ImageMagick (magick) to take an input image and generate a hardcoded set of width variants. 
 It automatically detects transparency to output PNG fallbacks instead of JPGs if necessary. 
 The output files are named using a specific tokenized convention so they can be parsed by the MarkedResponsiveImages JS extension.
 
@@ -19,13 +19,8 @@ A switch that forces the fallback images to be generated as .png instead of .jpg
 .PARAMETER OutputName
 An optional string to override the base filename of the output images. If omitted, the script uses the name of the InputFile.
 
-.EXAMPLE
-.\generate-responsive-images.ps1 -InputFile ".\src\hero.jpg" -DestinationFolder ".\public\assets"
-Processes 'hero.jpg' and outputs variants to the 'assets' folder using 'hero' as the base name.
-
-.EXAMPLE
-.\generate-responsive-images.ps1 -InputFile ".\src\game3.png" -DestinationFolder "..\assets" -OutputName "banner" -ForceTransparency
-Forces PNG output and renames the generated files to start with 'banner__' instead of 'game3__'.
+.PARAMETER MaxSize
+The maximum allowable dimension (width or height) for the largest generated image variant. Default is 2000.
 #>
 param (
 	[Parameter(Mandatory = $true)]
@@ -36,53 +31,60 @@ param (
 
 	[switch]$ForceTransparency,
 
-	[string]$OutputName
+	[string]$OutputName,
+
+	[int]$MaxSize = 1920
 )
 
 # CONFIGURATION
+
 # Hardcoded array of desired widths
-$TargetWidths = @(240, 400, 600, 820, 1400, 1920)
+$targetWidths = @(240, 400, 600, 820, 1400, 1920)
 
 # Target quality for each type
-$QualityWebP = 85
-$QualityJPG = 88
-$QualityPNG = 95
+$qualityWebP = 85
+$qualityJPG = 88
+$qualityPNG = 95
+
+# EXECUTION
 
 # Save the original string for the Markdown output later
-$MarkdownDestFolder = $DestinationFolder
+$markdownDestFolder = $DestinationFolder
 
 # CHECK FOR IMAGEMAGICK (v7+)
+
 try {
 	# Attempt to run magick and grab the first line of the output
 	$magickOutput = & magick -version
 	$versionLine = $magickOutput | Select-Object -First 1
 
 	# Extract the major version number using regex
-	if ($versionLine -match "ImageMagick (\d+)\.") {
+	if ($versionLine -match 'ImageMagick (\d+)\.') {
 		$majorVersion = [int]$Matches[1]
 		
 		if ($majorVersion -lt 7) {
 			Write-Host "Warning: ImageMagick v7 or higher is required, but v$majorVersion was detected." -ForegroundColor Yellow
-			Write-Host "Please update ImageMagick: https://imagemagick.org/download/#windows" -ForegroundColor Yellow
+			Write-Host 'Please update ImageMagick: https://imagemagick.org/download/#windows' -ForegroundColor Yellow
 			pause
 			exit
 		}
 	}
-	else {
+ else {
 		# Force a throw if the command runs but the output format is completely unexpected
-		throw "Unrecognized ImageMagick version format."
+		throw 'Unrecognized ImageMagick version format.'
 	}
 }
 catch {
 	Write-Host "Warning: ImageMagick ('magick' command) was not found on this system." -ForegroundColor Yellow
-	Write-Host "This script requires ImageMagick v7+ to resize and format images." -ForegroundColor Yellow
-	Write-Host "1. Download it here: https://imagemagick.org/download/#windows" -ForegroundColor Yellow
+	Write-Host 'This script requires ImageMagick v7+ to resize and format images.' -ForegroundColor Yellow
+	Write-Host '1. Download it here: https://imagemagick.org/download/#windows' -ForegroundColor Yellow
 	Write-Host "2. Ensure 'Install legacy utilities' or 'Add to PATH' is checked during installation." -ForegroundColor Yellow
 	pause
 	exit
 }
 
 # VALIDATE INPUT
+
 if (-not (Test-Path $InputFile)) {
 	Write-Error "Input file not found: $InputFile"
 	return
@@ -97,141 +99,163 @@ if (-not (Test-Path $DestinationFolder)) {
 $DestinationFolder = (Resolve-Path $DestinationFolder).Path
 
 # SET BASE FILENAME
+
 if ([string]::IsNullOrWhiteSpace($OutputName)) {
-	$BaseName = [System.IO.Path]::GetFileNameWithoutExtension($InputFile)
+	$baseName = [System.IO.Path]::GetFileNameWithoutExtension($InputFile)
 }
 else {
-	$BaseName = $OutputName
+	$baseName = $OutputName
 }
 
 # GET FILE DIMENSIONS
-# We only need the width to calculate our target array
-$widthStr = & magick identify -format "%w" $InputFile
-$OrigW = $widthStr -as [int]
 
-if (-not $OrigW) {
-	Write-Error "Failed to read width for $InputFile using ImageMagick."
+$dimsStr = & magick identify -format '%w %h' $InputFile
+$dims = $dimsStr -split ' '
+$origW = $dims[0] -as [int]
+$origH = $dims[1] -as [int]
+
+if (-not $origW -or -not $origH) {
+	Write-Error "Failed to read dimensions for $InputFile using ImageMagick."
 	return
 }
 
 # DETECT TRANSPARENCY
-$FallbackExt = "jpg"
+
+$fallbackExt = 'jpg'
 if ($ForceTransparency) {
-	$FallbackExt = "png"
+	$fallbackExt = 'png'
 }
 else {
 	# %[opaque] returns 'true' if the image has NO transparent pixels. 
 	# If it returns 'false', transparency exists.
-	$isOpaque = & magick identify -format "%[opaque]" $InputFile
-	if ($isOpaque -match "false") {
-		$FallbackExt = "png"
+	$isOpaque = & magick identify -format '%[opaque]' $InputFile
+	if ($isOpaque -match 'false') {
+		$fallbackExt = 'png'
 	}
 }
 
 # GET MAX WIDTH
-$ValidWidths = @($TargetWidths | Where-Object { $_ -lt $OrigW })
-if ($OrigW -notin $ValidWidths) {
-	$ValidWidths += $OrigW
+
+$effectiveMaxW = $origW
+
+if ($MaxSize -gt 0) {
+	if ($origW -gt $MaxSize -or $origH -gt $MaxSize) {
+		if ($origW -ge $origH) {
+			$effectiveMaxW = $MaxSize
+		}
+		else {
+			$effectiveMaxW = [math]::Round($origW * ($MaxSize / $origH))
+		}
+	}
 }
-$ValidWidths = $ValidWidths | Sort-Object
+
+$validWidths = @($targetWidths | Where-Object { $_ -lt $effectiveMaxW })
+if ($effectiveMaxW -notin $validWidths) {
+	$validWidths += $effectiveMaxW
+}
+$validWidths = $validWidths | Sort-Object
 
 # BUILD IMAGES
-$Tokens = @()
-$GeneratedWebPs = @()
-$GeneratedFallbacks = @()
 
-foreach ($W in $ValidWidths) {
-	Write-Host "Processing width: ${W}px..."
+$tokens = @()
+$generatedWebPs = @()
+$generatedFallbacks = @()
+
+foreach ($w in $validWidths) {
+	Write-Host "Processing width: ${w}px..."
 
 	# Generate WebP
-	$tempWebp = Join-Path $DestinationFolder "temp_$W.webp"
-	& magick $InputFile -resize "${W}x" -quality $QualityWebP $tempWebp
+	$tempWebp = Join-Path $DestinationFolder "temp_$w.webp"
+	& magick $InputFile -resize "${w}x" -quality $qualityWebP $tempWebp
     
 	# Read output sizes to avoid rounding errors
-	$dims = (& magick identify -format "%w %h" $tempWebp) -split " "
-	$ActualW = [int]$dims[0]
-	$ActualH = [int]$dims[1]
+	$dimsOut = (& magick identify -format '%w %h' $tempWebp) -split ' '
+	$actualW = [int]$dimsOut[0]
+	$actualH = [int]$dimsOut[1]
 
 	# Store WebP info to rename later
-	$webpName = "${BaseName}__${ActualW}-${ActualH}.webp"
+	$webpName = "${baseName}__${actualW}-${actualH}.webp"
 	$webpPath = Join-Path $DestinationFolder $webpName
-	$GeneratedWebPs += [PSCustomObject]@{
+	$generatedWebPs += [PSCustomObject]@{
 		TempPath  = $tempWebp
 		FinalPath = $webpPath
 	}
 
 	# Add format token
-	$Tokens += "${ActualW}-${ActualH}-webp"
+	$tokens += "${actualW}-${actualH}-webp"
 
 	# Generate Fallback Images
-	$tempFallback = Join-Path $DestinationFolder "temp_$W.$FallbackExt"
-	if ($FallbackExt -eq "jpg") {
-		& magick $InputFile -resize "${W}x" -quality $QualityJPG $tempFallback
+	$tempFallback = Join-Path $DestinationFolder "temp_$w.$fallbackExt"
+	if ($fallbackExt -eq 'jpg') {
+		& magick $InputFile -resize "${w}x" -quality $qualityJPG $tempFallback
 	}
-	else {
-		& magick $InputFile -resize "${W}x" -quality $QualityPNG $tempFallback
+ else {
+		& magick $InputFile -resize "${w}x" -quality $qualityPNG $tempFallback
 	}
 
-	# Store fallback info to rename later
-	$GeneratedFallbacks += [PSCustomObject]@{
-		Width    = $ActualW
-		Height   = $ActualH
+	$generatedFallbacks += [PSCustomObject]@{
+		Width    = $actualW
+		Height   = $actualH
 		TempPath = $tempFallback
-		IsLast   = ($W -eq $ValidWidths[-1])
+		IsLast   = ($w -eq $validWidths[-1])
 	}
 
-	$Tokens += "${ActualW}-${ActualH}"
+	$tokens += "${actualW}-${actualH}"
 }
 
 # PROCESS FILENAMES
-$TokenString = $Tokens -join "_"
-$MainFileName = "${BaseName}__${TokenString}.$FallbackExt"
+
+$tokenString = $tokens -join '_'
+$mainFileName = "${baseName}__${tokenString}.$fallbackExt"
 
 # Check for Conflicts
-$AllTargetPaths = @()
-foreach ($file in $GeneratedWebPs) { $AllTargetPaths += $file.FinalPath }
-foreach ($file in $GeneratedFallbacks) {
+$allTargetPaths = @()
+foreach ($file in $generatedWebPs) {
+	$allTargetPaths += $file.FinalPath
+}
+
+foreach ($file in $generatedFallbacks) {
 	if ($file.IsLast) {
-		$AllTargetPaths += (Join-Path $DestinationFolder $MainFileName)
+		$allTargetPaths += (Join-Path $DestinationFolder $mainFileName)
 	}
-	else {
-		$AllTargetPaths += (Join-Path $DestinationFolder "${BaseName}__$($file.Width)-$($file.Height).$FallbackExt")
+ else {
+		$allTargetPaths += (Join-Path $DestinationFolder "${baseName}__$($file.Width)-$($file.Height).$fallbackExt")
 	}
 }
 
-$Existing = $AllTargetPaths | Where-Object { Test-Path $_ }
-if ($Existing.Count -gt 0) {
+$existing = $allTargetPaths | Where-Object { Test-Path $_ }
+if ($existing.Count -gt 0) {
 	Write-Host "`nConflict(s) detected. The following file(s) already exist:" -ForegroundColor Yellow
-	foreach ($path in $Existing) {
+	foreach ($path in $existing) {
 		Write-Host " - $(Split-Path $path -Leaf)"
 	}
 	$choice = Read-Host "`nDo you want to overwrite these files? (y/n)"
-	if ($choice -notmatch "^y$") {
+	if ($choice -notmatch '^y$') {
 		Write-Host "`nOperation cancelled by user. Temporary files remain in destination folder." -ForegroundColor Red
 		return
 	}
 }
 
-# Perform Moves
-foreach ($file in $GeneratedWebPs) {
+# MOVE FILES
+
+foreach ($file in $generatedWebPs) {
 	Move-Item -Path $file.TempPath -Destination $file.FinalPath -Force
 }
 
-foreach ($file in $GeneratedFallbacks) {
+foreach ($file in $generatedFallbacks) {
 	if ($file.IsLast) {
-		# Default file
-		$finalPath = Join-Path $DestinationFolder $MainFileName
+		$finalPath = Join-Path $DestinationFolder $mainFileName
 	}
-	else {
-		# Variants
-		$finalName = "${BaseName}__$($file.Width)-$($file.Height).$FallbackExt"
+ else {
+		$finalName = "${baseName}__$($file.Width)-$($file.Height).$fallbackExt"
 		$finalPath = Join-Path $DestinationFolder $finalName
 	}
 	Move-Item -Path $file.TempPath -Destination $finalPath -Force
 }
 
-# Format the output string for Markdown (force forward slashes)
-$MarkdownPath = "$MarkdownDestFolder/$MainFileName".Replace('\', '/')
+# RETURN MARKDOWN STRING
+
+$markdownPath = "$markdownDestFolder/$mainFileName".Replace('\', '/')
 
 Write-Host "`nSuccess! Add the following to your Markdown:`n" -ForegroundColor Green
-Write-Host "![Your Alt Text]($MarkdownPath)`n" -ForegroundColor Cyan
+Write-Host "![Your Alt Text]($markdownPath)`n" -ForegroundColor Cyan

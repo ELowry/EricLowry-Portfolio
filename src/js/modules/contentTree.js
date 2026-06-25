@@ -57,6 +57,14 @@ const category = (id, title, mapLoader, children = []) => ({
 });
 
 /**
+ * Factory helper to create a visual separator node.
+ * @returns {ContentNode} a standardized separator node object.
+ */
+const separator = () => ({
+	type: 'separator',
+});
+
+/**
  * The static definition of the application's content hierarchy.
  * This constant serves as the single source of truth for routing, game level layout, and navigation menus. It is built using factory functions to ensure structural consistency.
  * @type {ContentNode}
@@ -73,20 +81,6 @@ export const ContentTree = category(
 		content('index', 'Welcome', 'index.md'),
 		content('cv', 'Curriculum Vitae', 'cv.md'),
 		content('about', 'Personal Philosophy', 'about.md'),
-		content('blog', 'Blog', 'blog-index.json'),
-
-		// ARCHITECTURE
-		category(
-			'architecture',
-			'Architecture Studies',
-			() => import('../../maps/architecture.config.js'),
-			[
-				content('architecture', 'ENSA-V & ENSP-V', 'architecture/architecture.md', true),
-				content('projects', 'Architecture Projects', 'architecture/projects/projects.md'),
-				content('3Dgallery', 'About my 3D work', 'architecture/3Dgallery/3Dgallery.md'),
-				content('Unstant', 'Unstant', 'gaming/Unstant.md'),
-			]
-		),
 
 		// COACHING & BUSINESS
 		category(
@@ -122,7 +116,7 @@ export const ContentTree = category(
 			content('Unstant', 'Unstant', 'gaming/Unstant.md'),
 		]),
 
-		// OpenSource
+		// OPEN SOURCE
 		category('osd', 'Open Source Development', () => import('../../maps/osd.config.js'), [
 			content('osd', 'Open Source Projects', 'osd/osd.md', true),
 			content('InputLayers', 'InputLayers', 'gaming/InputLayers.md'),
@@ -141,7 +135,7 @@ export const ContentTree = category(
 			content('StadiaIcons', 'StadiaIcons', 'osd/StadiaIcons.md'),
 		]),
 
-		// Websites
+		// WEBSITES
 		category(
 			'websites',
 			'Web Development & Design',
@@ -178,5 +172,47 @@ export const ContentTree = category(
 				content('archive', 'Archive of Defunct Websites', 'websites/archive.md'),
 			]
 		),
+
+		// ARCHITECTURE
+		category(
+			'architecture',
+			'Architecture Studies',
+			() => import('../../maps/architecture.config.js'),
+			[
+				content('architecture', 'ENSA-V & ENSP-V', 'architecture/architecture.md', true),
+				category(
+					'projects',
+					'Architecture Projects',
+					() => import('../../maps/architecture/projects.config.js'),
+					[
+						content(
+							'projects',
+							'Architecture Projects',
+							'architecture/projects/projects.md',
+							true
+						),
+						content('Unstant', 'Unstant', 'gaming/Unstant.md'),
+						content(
+							'BASELAND',
+							'BASELAND – Virtual Lanscape',
+							'architecture/projects/BASELAND.md'
+						),
+						content(
+							'student-housing',
+							'Student Housing',
+							'architecture/projects/student-housing.md'
+						),
+						content('pavilion', 'Expo Pavilion', 'architecture/projects/pavilion.md'),
+						content('station', 'Train Station', 'architecture/projects/station.md'),
+					]
+				),
+				content('3Dgallery', 'About my 3D work', 'architecture/3Dgallery.md'),
+			]
+		),
+
+		separator(),
+
+		// BLOG
+		content('blog', 'Blog', 'blog-index.json'),
 	]
 );

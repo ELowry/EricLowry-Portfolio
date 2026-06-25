@@ -16,7 +16,7 @@
 
 ### Context
 
-I created this page for a business partner working with us as a coach and data consultant on [CinQ](content/en_US/gaming/CinQ.md). He wanted an online portfolio to showcase his extensive 25+ years of experience across leadership, data, and psychology, and to start growing his consultancy business.
+I created this page for a business partner working with us as a coach and data consultant on [CinQ](/content/en_US/gaming/CinQ.md). He wanted an online portfolio to showcase his extensive 25+ years of experience across leadership, data, and psychology, and to start growing his consultancy business.
 
 The site's primary goal is to outline his skillsets, while providing a streamlined way for potential clients to get in touch.
 

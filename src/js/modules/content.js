@@ -25,6 +25,10 @@ class ContentController {
 		const nodesToHydrate = [];
 
 		const traverse = (node, pathSegments = []) => {
+			if (node.type === 'separator') {
+				return;
+			}
+
 			const currentId = node.id === 'root' ? '' : node.id;
 			const newPathSegments = currentId ? [...pathSegments, currentId] : pathSegments;
 			const currentPath = newPathSegments.join('/');
@@ -84,7 +88,7 @@ class ContentController {
 			}
 
 			const partLower = part.toLowerCase();
-			const found = current.children.find((c) => c.id.toLowerCase() === partLower);
+			const found = current.children.find((c) => c.id && c.id.toLowerCase() === partLower);
 			if (!found) {
 				return null;
 			}
@@ -153,6 +157,10 @@ class ContentController {
 		const positions = mapNode.mapData.positions || {};
 
 		for (const child of mapNode.children) {
+			if (child.type === 'separator') {
+				continue;
+			}
+
 			const posData = positions[child.id];
 			if (!posData) {
 				continue;
