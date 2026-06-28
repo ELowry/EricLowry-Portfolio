@@ -40,7 +40,7 @@ However, because immersive digital mediums can easily create false expectations,
 
 ### Explore My Work
 
-- **[Projects](projects.md):** _(Pending)_  
+- **[Projects](/content/en_US/architecture/projects/projects.md):**  
   A curated selection of architectural and landscape design projects I worked on.
-- **[Gallery](gallery.md):** _(Pending)_  
-  A visual archive of 3D renders, architectural diagrams, maps, and cross-sections demonstrating my visual communication toolkit.
+- **[Gallery](/content/en_US/architecture/3Dgallery.md):**  
+  A visual archive of various other 3D renders and projects.

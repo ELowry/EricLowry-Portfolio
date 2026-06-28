@@ -571,6 +571,12 @@
 			font-family: var(--font-symbols);
 		}
 	}
+
+	.nav-separator {
+		background-color: var(--color-border);
+		width: clamp(33%, 8rem, 100%);
+		height: var(--border-width);
+	}
 }
 
 /* Back-to-top link */

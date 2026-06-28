@@ -42,6 +42,8 @@ Instead of fighting the flooded terrain, our team's approach was to embrace the 
 | -- | -- |
 | ![3D view of the semi-public shared spaces](/assets/images/architecture/student-housing/3D1__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![3D view of the public outdoor restaurant and activity center](/assets/images/architecture/student-housing/3D5__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
 
+<!-- prettier-ignore end -->
+
 - **Materiality:**  
   The prefabricated buildings were designed with a wood and cloth cladding, heavily utilizing recycled materials, including free retired ship sails we found a source of for the project.
 
