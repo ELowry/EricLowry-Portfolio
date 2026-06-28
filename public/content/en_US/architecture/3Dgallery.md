@@ -1,6 +1,6 @@
 # Gallery of other 3D works
 
-Over the course of my years studying architecture at the ENSA-V and landscape design at the ENSP-V, I chose to make 3D modeling and rendering somewhat of a specialty. This continued since, with my work on CinQ, and a handful of personal projects.
+Over the course of my years studying architecture at the ENSA-V and landscape design at the ENSP-V, I chose to make 3D modeling and rendering somewhat of a specialty. This continued since, with my work on [CinQ](/content/en_US/gaming/cinq.md), and a handful of personal projects. More Architecture projects, including 3D work, are available on the [projects](/content/en_US/architecture/projects/projects.md) page.
 
 This page contains a variety of 3D images and projects I have worked on using 3DS Max, V-Ray, Unity3D, and more recently Blender. I have chosen to present these in an order that felt natural and cohesive, more than in any chronological or hierarchical order.
 
