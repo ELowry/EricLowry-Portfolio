@@ -870,6 +870,15 @@ export class UIManager {
 		}
 
 		this.elements.gameModalContent.focus({ focusVisible: false });
+
+		const hash = window.location.hash;
+		if (hash) {
+			const id = decodeURIComponent(hash.substring(1));
+			const targetEl = document.getElementById(id);
+			if (targetEl && this.elements.gameModalContent.contains(targetEl)) {
+				targetEl.scrollIntoView({ block: 'start' });
+			}
+		}
 	}
 
 	/**
@@ -895,6 +904,15 @@ export class UIManager {
 		const headingsTree = this.#getHeadingsTree(this.elements.textContent);
 		if (headingsTree.complexity > UIManager.TABLE_OF_CONTENTS_COMPLEXITY_THRESHOLD) {
 			this.#displayTableOfContents(headingsTree.headings);
+		}
+
+		const hash = window.location.hash;
+		if (hash) {
+			const id = decodeURIComponent(hash.substring(1));
+			const targetEl = document.getElementById(id);
+			if (targetEl && this.elements.textContent.contains(targetEl)) {
+				targetEl.scrollIntoView({ block: 'start' });
+			}
 		}
 	}
 

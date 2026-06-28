@@ -80,7 +80,7 @@ export const ContentTree = category(
 		// ROOT
 		content('index', 'Welcome', 'index.md'),
 		content('cv', 'Curriculum Vitae', 'cv.md'),
-		content('about', 'Personal Philosophy', 'about.md'),
+		content('about', 'About Me', 'about.md'),
 
 		// COACHING & BUSINESS
 		category(

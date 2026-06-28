@@ -17,9 +17,23 @@ class RouterController {
 	constructor() {
 		window.addEventListener('popstate', (e) => {
 			if (e.state) {
+				if (e.state.mode === this.state.mode && e.state.path === this.state.path) {
+					return;
+				}
 				this.applyState(e.state);
 			} else {
 				this.readURL();
+			}
+		});
+
+		window.addEventListener('hashchange', () => {
+			const hash = window.location.hash;
+			if (hash) {
+				const id = decodeURIComponent(hash.substring(1));
+				const targetEl = document.getElementById(id);
+				if (targetEl) {
+					targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}
 			}
 		});
 	}
@@ -121,9 +135,10 @@ class RouterController {
 	 * Pushes a new history entry and updates the URL.
 	 * @param {string} mode - `game` or `text`
 	 * @param {string} path - Content path (e.g., `about/bio`)
+	 * @param {string} [hash=''] - Optional anchor hash fragment (e.g., `#my-anchor`)
 	 * @returns {Promise<void>}
 	 */
-	async go(mode, path) {
+	async go(mode, path, hash = '') {
 		const cleanPath = this.sanitizePath(path);
 
 		let targetMode = mode;
@@ -143,10 +158,6 @@ class RouterController {
 		const validMode = ['game', 'text'].includes(targetMode) ? targetMode : 'game';
 		const newState = { mode: validMode, path: cleanPath };
 
-		if (newState.mode === this.state.mode && newState.path === this.state.path) {
-			return;
-		}
-
 		let newUrl;
 		if (cleanPath.startsWith('blog')) {
 			newUrl = `/${cleanPath}`;
@@ -156,7 +167,22 @@ class RouterController {
 			newUrl = `/${validMode}${cleanPath ? '/' + cleanPath : ''}`;
 		}
 
-		window.history.pushState(newState, '', newUrl);
+		if (newState.mode === this.state.mode && newState.path === this.state.path) {
+			if (hash) {
+				const currentHash = window.location.hash;
+				if (currentHash !== hash) {
+					window.history.pushState(newState, '', newUrl + hash);
+				}
+				const id = decodeURIComponent(hash.substring(1));
+				const targetEl = document.getElementById(id);
+				if (targetEl) {
+					targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}
+			}
+			return;
+		}
+
+		window.history.pushState(newState, '', newUrl + hash);
 		await this.applyState(newState);
 	}
 

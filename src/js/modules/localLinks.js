@@ -34,7 +34,11 @@ export class LocalLinkParser {
 						return false;
 					}
 
-					const match = href.match(LocalLinkParser.CONTENT_LINK_REGEX);
+					const hashIndex = href.indexOf('#');
+					const cleanHref = hashIndex !== -1 ? href.substring(0, hashIndex) : href;
+					const hash = hashIndex !== -1 ? href.substring(hashIndex) : '';
+
+					const match = cleanHref.match(LocalLinkParser.CONTENT_LINK_REGEX);
 
 					if (match) {
 						const file = match[1] + '.md';
@@ -65,9 +69,11 @@ export class LocalLinkParser {
 						}
 
 						const titleAttr = title ? ` title="${title}"` : '';
-						const hrefPath = urlPath ? `/${App.mode}/${urlPath}` : `/${App.mode}/`;
+						const hrefPath = urlPath
+							? `/${App.mode}/${urlPath}${hash}`
+							: `/${App.mode}/${hash}`;
 
-						return `<a href="${hrefPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}');">${text}</a>`;
+						return `<a href="${hrefPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${text}</a>`;
 					}
 
 					// External links

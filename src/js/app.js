@@ -499,7 +499,15 @@ class AppController {
 	 * @param {string} path - The relative path to navigate to.
 	 */
 	navigate(path) {
-		Router.go(Router.currentMode, path);
+		let hash = '';
+		let targetPath = path;
+		const hashIndex = path.indexOf('#');
+		if (hashIndex !== -1) {
+			hash = path.substring(hashIndex);
+			targetPath = path.substring(0, hashIndex);
+		}
+
+		Router.go(Router.currentMode, targetPath, hash);
 	}
 
 	/**

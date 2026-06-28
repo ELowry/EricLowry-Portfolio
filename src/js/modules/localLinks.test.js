@@ -51,6 +51,21 @@ describe('LocalLinkParser Marked Extension', () => {
 		expect(result).toContain('title="My CV"');
 	});
 
+	it('should parse internal content paths with hash fragments and preserve the anchor', () => {
+		Content.findPathsByFile.mockReturnValue(['about/cv']);
+		const token = {
+			href: '/content/en_US/about/cv.md#my-anchor',
+			text: 'Curriculum Vitae with Anchor',
+		};
+
+		const result = linkRenderer(token);
+
+		expect(result).toContain('href="/text/about/cv#my-anchor"');
+		expect(result).toContain(
+			'onclick="event.preventDefault(); App.navigate(\'about/cv#my-anchor\');"'
+		);
+	});
+
 	it('should resolve and clean index files to point to their parent folder', () => {
 		Content.findPathsByFile.mockReturnValue(['about/about']);
 		const token = {
