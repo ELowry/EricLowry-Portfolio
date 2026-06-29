@@ -873,7 +873,12 @@ export class UIManager {
 
 		const hash = window.location.hash;
 		if (hash) {
-			const id = decodeURIComponent(hash.substring(1));
+			let id = hash.substring(1);
+			try {
+				id = decodeURIComponent(id);
+			} catch (err) {
+				// Fallback if decode fails
+			}
 			const targetEl = document.getElementById(id);
 			if (targetEl && this.elements.gameModalContent.contains(targetEl)) {
 				targetEl.scrollIntoView({ block: 'start' });
@@ -908,7 +913,12 @@ export class UIManager {
 
 		const hash = window.location.hash;
 		if (hash) {
-			const id = decodeURIComponent(hash.substring(1));
+			let id = hash.substring(1);
+			try {
+				id = decodeURIComponent(id);
+			} catch (err) {
+				// Fallback if decode fails
+			}
 			const targetEl = document.getElementById(id);
 			if (targetEl && this.elements.textContent.contains(targetEl)) {
 				targetEl.scrollIntoView({ block: 'start' });

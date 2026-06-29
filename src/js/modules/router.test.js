@@ -94,5 +94,34 @@ describe('RouterController', () => {
 				'/blog/2026-05-30'
 			);
 		});
+
+		it('should handle same-page anchor navigation smoothly without full transition', async () => {
+			const pushStateSpy = vi.spyOn(window.history, 'pushState');
+			const scrollIntoViewMock = vi.fn();
+			const elem = { scrollIntoView: scrollIntoViewMock };
+			vi.spyOn(document, 'getElementById').mockReturnValue(elem);
+
+			Router.state = { mode: 'text', path: 'about/cv' };
+			const callback = vi.fn();
+			Router.onStateChange = callback;
+
+			await Router.go('text', 'about/cv', '#my-anchor');
+
+			expect(pushStateSpy).toHaveBeenCalledWith(
+				{ mode: 'text', path: 'about/cv' },
+				'',
+				'/text/about/cv#my-anchor'
+			);
+			expect(scrollIntoViewMock).toHaveBeenCalled();
+			expect(callback).not.toHaveBeenCalled();
+		});
+
+		it('should handle malformed hashes gracefully without throwing URIError', async () => {
+			Router.state = { mode: 'text', path: 'about/cv' };
+			const callback = vi.fn();
+			Router.onStateChange = callback;
+
+			await expect(Router.go('text', 'about/cv', '#invalid%2Ghash')).resolves.not.toThrow();
+		});
 	});
 });

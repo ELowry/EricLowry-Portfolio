@@ -55,7 +55,9 @@ export class Obfuscator {
 			if (/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(string)) {
 				return true;
 			}
-		} catch (e) {}
+		} catch (e) {
+			// Invalid base64 string
+		}
 		return false;
 	}
 
@@ -179,7 +181,9 @@ export class Obfuscator {
 					try {
 						const { obfuscated } = Obfuscator.obfuscateUnlessBase64(value);
 						value = obfuscated;
-					} catch (e) {}
+					} catch (e) {
+						// Invalid base64 string
+					}
 
 					const hasEmail = decodedText.includes('@');
 					const hasPhone = /[\d\s+\-()]{7,}/.test(decodedText);

@@ -22,14 +22,23 @@ class RouterController {
 				}
 				this.applyState(e.state);
 			} else {
-				this.readURL();
+				const parsed = this.#parsePathname(window.location.pathname);
+				if (parsed.mode === this.state.mode && parsed.path === this.state.path) {
+					return;
+				}
+				this.applyState(parsed);
 			}
 		});
 
 		window.addEventListener('hashchange', () => {
 			const hash = window.location.hash;
 			if (hash) {
-				const id = decodeURIComponent(hash.substring(1));
+				let id = hash.substring(1);
+				try {
+					id = decodeURIComponent(id);
+				} catch (err) {
+					// Fallback if decode fails
+				}
 				const targetEl = document.getElementById(id);
 				if (targetEl) {
 					targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -73,6 +82,42 @@ class RouterController {
 	}
 
 	/**
+	 * Parses a window pathname into mode and path.
+	 * @param {string} rawPathname - The pathname to parse.
+	 * @returns {Object} the parsed state containing `{ mode, path }`.
+	 * @private
+	 */
+	#parsePathname(rawPathname) {
+		const pathName = this.sanitizePath(rawPathname);
+
+		let mode = 'game';
+		let path = '';
+
+		if (pathName !== '' && pathName !== 'index.html') {
+			const segments = pathName.split('/');
+
+			if (segments[0] === 'blog') {
+				mode = 'text';
+				path = pathName;
+			} else if (segments[0] === 'game' || segments[0] === 'text') {
+				mode = segments[0];
+				path = this.sanitizePath(segments.slice(1).join('/'));
+			} else {
+				mode = 'game';
+				path = pathName;
+			}
+		}
+
+		// TEMP TEXT-ONLY START
+		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+			mode = 'text';
+		}
+		// TEMP TEXT-ONLY END
+
+		return { mode, path };
+	}
+
+	/**
 	 * Sanitizes a URL path.
 	 * @param {string} path - Raw path to sanitize
 	 * @returns {string} a clean path
@@ -101,33 +146,8 @@ class RouterController {
 	 * @returns {Promise<void>}
 	 */
 	async readURL() {
-		const pathName = this.sanitizePath(window.location.pathname);
-
-		let mode = 'game';
-		let path = '';
-
-		if (pathName !== '' && pathName !== 'index.html') {
-			const segments = pathName.split('/');
-
-			if (segments[0] === 'blog') {
-				mode = 'text';
-				path = pathName;
-			} else if (segments[0] === 'game' || segments[0] === 'text') {
-				mode = segments[0];
-				path = this.sanitizePath(segments.slice(1).join('/'));
-			} else {
-				mode = 'game';
-				path = pathName;
-			}
-		}
-
-		// TEMP TEXT-ONLY START
-		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-			mode = 'text';
-		}
-		// TEMP TEXT-ONLY END
-
-		await this.applyState({ mode, path }, true);
+		const parsed = this.#parsePathname(window.location.pathname);
+		await this.applyState(parsed, true);
 	}
 
 	/**
@@ -168,15 +188,29 @@ class RouterController {
 		}
 
 		if (newState.mode === this.state.mode && newState.path === this.state.path) {
+			const currentHash = window.location.hash;
+			if (currentHash !== hash) {
+				window.history.pushState(newState, '', newUrl + hash);
+			}
+
 			if (hash) {
-				const currentHash = window.location.hash;
-				if (currentHash !== hash) {
-					window.history.pushState(newState, '', newUrl + hash);
+				let id = hash.substring(1);
+				try {
+					id = decodeURIComponent(id);
+				} catch (e) {
+					// Malformed URI
 				}
-				const id = decodeURIComponent(hash.substring(1));
 				const targetEl = document.getElementById(id);
 				if (targetEl) {
 					targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}
+			} else {
+				if (newState.mode === 'text') {
+					const textLayer = document.getElementById('text-layer');
+					if (textLayer) textLayer.scrollTop = 0;
+				} else {
+					const modalContent = document.getElementById('game-modal-content');
+					if (modalContent) modalContent.scrollTop = 0;
 				}
 			}
 			return;
