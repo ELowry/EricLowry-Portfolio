@@ -10,6 +10,7 @@ describe('RouterController', () => {
 			href: 'http://localhost/',
 			pathname: '/',
 			hostname: 'localhost',
+			hash: '',
 		});
 
 		Router.state = { mode: 'game', path: '' };

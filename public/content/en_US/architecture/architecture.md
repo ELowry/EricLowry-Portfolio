@@ -1,4 +1,4 @@
-# Architecture & Landscape Design
+# Architecture & Landscape Design
 
 ## The physical foundations of virtual spaces
 
@@ -23,7 +23,7 @@ My Master's thesis, _« L’Apport du Jeu Vidéo à l’Architecture et à l’A
 In it, I explored how digital spaces offer entirely new ways of thinking about human movement and interaction, while designing credible, immersive virtual environments often requires a strict understanding of real-world architectural principles.  
 This notion actively shifted my focus during my final years of study toward digital design and what we would now call "augmented reality". Whether designing a physical structure or a virtual space, my work is directly informed by years of studying how spaces fit together, how they affect our ways of life, and the restrictions of real-world construction.
 
-### Ecological Design & Landscape Architecture
+### Ecological Design & Landscape Architecture
 
 Growing up with a botanist father and a grandfather who studied the interactions between climate and urbanism, I quickly discovered that mindful design across all domains (architecture, landscaping, or urbanism) must account for the ecosystems it affects. This belief was reinforced when I worked on the [SAGE Classroom](https://sageclassroom.com/) project and helped the Volcji Potok National Arboretum in Slovenia revitalize historic sites and design landscapes that would promote the country's ecosystems.
 

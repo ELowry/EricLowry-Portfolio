@@ -25,7 +25,7 @@ The web presence for CinQ operates as a two-sided ecosystem.
 Over the years, I have built over a dozen sites and dedicated landing pages for Disruptive Learning Solutions. All have since been replaced by one central site at [playcinq.com](https://playcinq.com). Early versions were built using a mix of static HTML and WordPress, but I have since transitioned it over to a stable and highly automated infrastructure built using Statamic and modern PHP. This shift has granted me absolute control over the codebase, resulting in exponential improvements in page speed, security, and developer experience.  
 While I recognize the value of WordPress; I think I have fallen in love with de the development freedom that Statamic affords me.
 
-### UX & Visual Design: Bridging Two Worlds
+### UX & Visual Design: Bridging Two Worlds
 
 The primary design challenge around CinQ has always been creating a visual identity that fits within the comfort zone of HR professionals and L&D executives, while still reflecting the modern, interactive nature of our gaming technology.
 
@@ -44,7 +44,7 @@ The primary design challenge around CinQ has always been creating a visual ident
 - **The Application Dashboard:**  
   Aiming for familiarity and ease-of-use, the user portal was constructed to function as typical a minimalist, mobile-friendly corporate backend. However, to prevent it from being just another rigid backend, I made its visuals lean more into the design language of CinQ itself, and picked a striking red-pink-and-orange background with dark gray content boxes. This contrast makes it visually exciting and intriguing while prioritizing obvious controls and direct information hierarchies in its UX to ensure it would be a good fit for non-technical users.
 
-### The Marketing Workflow (Statamic & automation)
+### The Marketing Workflow (Statamic & automation)
 
 Transitioning to Statamic (powered by Laravel) allowed me to move past a simple static corporate site and instead create a highly automated digital storefront.
 
@@ -55,7 +55,7 @@ Transitioning to Statamic (powered by Laravel) allowed me to move past a simple 
 
 <!-- prettier-ignore end -->
 
-- **Data Scraping & Live Workshops Catalog:**  
+- **Data Scraping & Live Workshops Catalog:**  
   Instead of manually updating workshops or relying on heavy client-side JavaScript, I made use of Laravel's capabilities and task scheduling to have the server routinely scrapes the Eventbrite API, Medium RSS feeds, YouTube, etc., automatically parsing relevant data into native Statamic collections.  
   This enables the whole site to serve as a central repository for all of our marketing content, articles, podcast, and workshops calendar, without needing to build dedicated systems where we already had existing workflows and platforms in use.
 - **Discord Integration:**  
@@ -94,6 +94,6 @@ Because the portal interfaces directly with the Unity3D game, the major architec
 
 I opted to write this site by hand both to re-train my PHP backend coding skills, and to maximize control over the portal's systems and security. I actively avoided heavy third-party libraries, opting to build the authentication, session management, and routing structures from scratch.
 
-### Outcomes & The Bigger Picture
+### Outcomes & The Bigger Picture
 
 Ultimately, building these two sites was an invaluable learning experience. It allowed me to explore the use of Statamic, flex my front-end design muscles, work on backend PHP and Laravel automation, and become deeply familiar with web server automation and management.

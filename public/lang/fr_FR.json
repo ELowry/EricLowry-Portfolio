@@ -59,11 +59,11 @@
 				"label": "Business & coaching"
 			},
 			"multimedia": {
-				"title": "Stratégie de contenu & multimédia",
-				"label": "Contenu & Multimédia"
+				"title": "Stratégie de contenu & multimédia",
+				"label": "Contenu & Multimédia"
 			},
 			"CinQ": {
-				"title": "CinQ – Opérations & Coaching",
+				"title": "CinQ – Opérations & Coaching",
 				"label": "CinQ",
 				"CinQ-game": {
 					"title": "Développement du jeu CinQ",
@@ -128,8 +128,8 @@
 			}
 		},
 		"websites": {
-			"title": "Développement & Design Web",
-			"label": "Développement & Design Web",
+			"title": "Développement & Design Web",
+			"label": "Développement & Design Web",
 			"websites": {
 				"title": "À propos de mon travail de développement web",
 				"label": "Mon travail de dev web"

@@ -188,7 +188,7 @@ class RouterController {
 		}
 
 		if (newState.mode === this.state.mode && newState.path === this.state.path) {
-			const currentHash = window.location.hash;
+			const currentHash = window.location.hash || '';
 			if (currentHash !== hash) {
 				window.history.pushState(newState, '', newUrl + hash);
 			}

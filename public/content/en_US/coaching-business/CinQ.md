@@ -1,4 +1,4 @@
-# CinQ – Operations & Coaching
+# CinQ – Operations & Coaching
 
 > [!SUMMARY]
 >
@@ -6,7 +6,7 @@
 > | ----------------- | ----------------------------------------------------------------- |
 > | **Leadership**    | Co-Founder, Product Owner, Tech Project Management                |
 > | **Coaching**      | Executive Facilitation, Behavioral Diagnostics, Train-the-Trainer |
-> | **Sales & Brand** | Pre-sales Engineering, B2B Marketing, Art Direction               |
+> | **Sales & Brand** | Pre-sales Engineering, B2B Marketing, Art Direction               |
 >
 > 🌐 [playcinq.com](https://playcinq.com)  
 > 🌐 [disruptive-learning-solutions.com](https://disruptive-learning-solutions.com)
@@ -17,13 +17,13 @@ As a co-founder of Disruptive Learning Solutions (DLS), my role evolved organica
 
 Over nearly a decade, I worked closely with my colleagues on prospecting, key account onboarding, B2B sales support, and served as the main bridge between our technical product and enterprise clients, including pre-sales engineering to conduct technical demonstrations and successfully navigate strict corporate IT and security audits.
 
-### Agile Operations & Brand Strategy
+### Agile Operations & Brand Strategy
 
 To technological development on track, I piloted our SCRUM process with the rest of the team, overseeing the agile execution of several major technical pivots. This included managing the timelines and resources required to take CinQ from a local network to a fully online infrastructure, porting it to Android, and building compliance with the Microsoft and Google Play stores' publishing requirements.
 
 Simultaneously, I served as the company's art director and brand strategist. I designed hundreds of highly polished pitch decks, document templates, and assorted sales material. The overarching visual challenge was establishing a brand identity that felt professional enough for the corporate boardroom, while utilizing colors and textures that subtly evoked the cutting-edge gaming technology powering our workshops. I dive deeper into this challenge when [discussing the CinQ website](/content/en_US/websites/CinQ.md).
 
-### Executive Coaching & Facilitation
+### Executive Coaching & Facilitation
 
 Beyond the business operations, I became a certified CinQ facilitator, coaching corporate executives, managers, and professional esports rosters. This took the form of a structured methodology aimed at revealing and improving team behavior:
 
@@ -31,7 +31,7 @@ Beyond the business operations, I became a certified CinQ facilitator, coaching 
   Prior to any workshop, I would collaborate with clients to adapt our learning frameworks, and customizing the session's structure to focus on their specific team dynamics and skills gaps.
 - **Live Facilitation:**  
   During the simulation, I would observe team behaviors and utilize the Socratic method (asking pointed, situational questions) to guide the participants' learning processes without directly intervening in the team's execution.
-- **Feedback & Diagnostics:**  
+- **Feedback & Diagnostics:**  
   Following a session, I would lead full behavioral debrief centered around team self-evaluations using a custom scorecard, and bring in established behavioral frameworks, such as De Bono's Six Thinking Hats or Chris Argyris' Left-Hand/Right-Hand Column method.
 - **Long-Term Analytics:**  
   For sustained coaching programs, I would compile comprehensive performance reports, utilizing aggregated data and behavioral analytics to chart a team's ongoing skills gaps and improvements.

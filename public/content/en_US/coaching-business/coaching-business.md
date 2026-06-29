@@ -1,4 +1,4 @@
-# Coaching, Business & Operations
+# Coaching, Business & Operations
 
 My path into business operations and executive coaching is not the result of attending business school or following dedicated courses.  
 Instead, I was trained by colleagues and business partners throughout my work at Disruptive Learning Solutions (DLS).
@@ -14,7 +14,7 @@ This hands-on, multidisciplinary journey has given me a rich, practical understa
 
 Explore my work in business operations, coaching, and marketing below:
 
-- **[CinQ – Operations & Coaching](/content/en_US/coaching-business/CinQ.md):**  
+- **[CinQ – Operations & Coaching](/content/en_US/coaching-business/CinQ.md):**  
   A deep dive into my role scaling the Disruptive Learning Solutions business, managing agile product cycles, and facilitating executive team workshops.
-- **[Content & Multimedia Strategy](content.md):**  
+- **[Content & Multimedia Strategy](content.md):**  
   An overview of my work editing podcasts, publishing articles, and driving B2B content strategy.

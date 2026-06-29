@@ -31,13 +31,13 @@ On the other hand, I believe that the cost of large scale LLMs is currently too 
 
 If I had to draw a line; I think I would say that until there is a real system in place for remunerating artists; AI should not be used for direct creative work; we should also be more mindful of how much we rely on LLMs for simple tasks. Yet, I cannot deny the value they bring to specific tasks, like acting as a coding assistant.
 
-## Hobbies & Interests
+## Hobbies & Interests
 
 I am an avid **gamer**, with a penchant for immersive single player indie titles, CRPGs, and Souls-likes. However, I also strive to regularly step out of my comfort zone to explore all types of games; from obscure niche experimental titles to competitive shooters, and AAA "everything" games.
 
 I am well known among friends for my **cooking**. I try to cook every meal fresh using seasonal ingredients whenever possible, and am quite proud of the wide variety of cooking styles and cuisines I can handle.
 
-I have long enjoyed **tabletop gaming**, and the occasional board game; and have been working a pen & paper role playing game system on and off for the past few years. Currently, it lives in an Obsidian vault, with a fully functional game system and most of an introductory campaign. I built this for the benefit of my friends, but it may one day grow into something more.
+I have long enjoyed **tabletop gaming**, and the occasional board game; and have been working a pen & paper role playing game system on and off for the past few years. Currently, it lives in an Obsidian vault, with a fully functional game system and most of an introductory campaign. I built this for the benefit of my friends, but it may one day grow into something more.
 
 I am also an avid **fiction reader**; especially of science fiction and fantasy of all types.
 

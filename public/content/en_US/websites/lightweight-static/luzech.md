@@ -38,7 +38,7 @@ To clearly delineate the content, each major section dynamically shifts the enti
 <!-- prettier-ignore -->
 | Gallery |  |  |
 | -- | -- | -- |
-| ![Screenshot of the "Leadership & Future of Work" section of the site](/assets/images/websites/luzech/future__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the "Immmersive simulation" section of the site](/assets/images/websites/luzech/immersive__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the "Data & Tech" section of the site](/assets/images/websites/luzech/data__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of the "Leadership & Future of Work" section of the site](/assets/images/websites/luzech/future__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the "Immmersive simulation" section of the site](/assets/images/websites/luzech/immersive__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the "Data & Tech" section of the site](/assets/images/websites/luzech/data__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
 
 <!-- prettier-ignore end -->
 

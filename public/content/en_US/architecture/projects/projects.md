@@ -1,4 +1,4 @@
-# Architectural & Landscape Design Projects
+# Architectural & Landscape Design Projects
 
 The following is a curated selection of architecture and landscape design projects from my studies at ENSA-V and ENSP-V:
 
