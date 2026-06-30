@@ -51,6 +51,6 @@ At the client's request, the site was built using WordPress to ensure it could b
 - **Core Build:**  
   I picked a base theme that used the Elementor site-builder to speed up the initial setup.
 - **Custom Child-Theme:**  
-   I then wrote a custom WordPress child-theme to handle the customization that is difficult or impossible with site-builders. This custom code ensures that branding remains strictly consistent across every component, applies specific graphical styling (like custom CSS gradient separators), and allows me to create detailed UI/UX components, such as complex sets of "show more" content togglers.
+  I then wrote a custom WordPress child-theme to handle the customization that is difficult or impossible with site-builders. This custom code ensures that branding remains strictly consistent across every component, applies specific graphical styling (like custom CSS gradient separators), and allows me to create detailed UI/UX components, such as complex sets of "show more" content togglers.
 - **Localization:**  
   I implemented and configured Polylang to make the site English-French bilingual, and personally proofread the client's rough English translations to ensure a natural, professional tone.
