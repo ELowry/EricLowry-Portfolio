@@ -41,7 +41,16 @@ export class LocalLinkParser {
 					const match = cleanHref.match(LocalLinkParser.CONTENT_LINK_REGEX);
 
 					if (match) {
-						const file = match[1] + '.md';
+						const logicalPath = match[1];
+						const file = logicalPath + '.md';
+
+						if (logicalPath.startsWith('blog/')) {
+							const titleAttr = title ? ` title="${title}"` : '';
+							const hrefPath = `/${App.mode}/${logicalPath}${hash}`;
+
+							return `<a href="${hrefPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${text}</a>`;
+						}
+
 						const paths = Content.findPathsByFile(file);
 
 						if (paths.length === 0) {
