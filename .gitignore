@@ -42,3 +42,7 @@ yarn-error.log*
 /public/content/blog-index.json
 /public/blog/
 /public/assets/images/blog/*/poster.png
+
+# Obsidian
+/public/.obsidian/
+/public/obsidian/
