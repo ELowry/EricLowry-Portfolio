@@ -212,9 +212,18 @@ export class UIManager {
 		});
 
 		this.elements.gameMenu.addEventListener('open', () => {
-			// const items = Array.from(this.elements.gameMenu.querySelectorAll('[role^="menuitem"]'));
-			// const firstItem = items.find((el) => !el.disabled);
-			// firstItem?.focus({ focusVisible: true });
+			requestAnimationFrame(() => {
+				const items = Array.from(
+					this.elements.gameMenu.querySelectorAll('[role^="menuitem"], a[href], button')
+				);
+				const firstItem = items.find((el) => !el.disabled && el.offsetParent !== null);
+
+				if (firstItem) {
+					firstItem.tabIndex = 0;
+					firstItem.focus({ focusVisible: true });
+				}
+			});
+
 			this.elements.gameMenuButton?.setAttribute('aria-expanded', 'true');
 		});
 
@@ -386,6 +395,7 @@ export class UIManager {
 			!Navigation.activeContainer
 			|| !Navigation.activeContainer.contains(container)
 			|| !Navigation.options.axis
+			|| Navigation.options.axis === axis
 		) {
 			if ((axis === 'y' || axis === 'both') && e.key === 'ArrowDown') {
 				nextIndex = (currentIndex + 1) % items.length;

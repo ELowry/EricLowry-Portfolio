@@ -837,7 +837,7 @@ button.switch-btn {
 
 /* --- MISCELANEOUS --- */
 
-:is([role='menu'], [role='menubar']):focus-within {
+:is([role='menu'], [role='menubar']):has(button:focus-visible) {
 	button:not(:focus-visible, :disabled) {
 		outline: dotted var(--border-width) var(--color-border);
 		outline-offset: var(--border-width);
