@@ -89,8 +89,7 @@ img {
 	height: auto;
 }
 
-nav:not(.classic-nav) button:not(.no-arrow),
-nav:not(.classic-nav) a.button:not(.no-arrow) {
+nav:not(.classic-nav) :is(button, a.button):not(.no-arrow) {
 	border: none;
 	background: none;
 	padding: 0;

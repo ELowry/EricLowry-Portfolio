@@ -69,6 +69,7 @@
 }
 
 /* --- WELCOME SCREEN --- */
+
 #welcome-screen nav.classic-nav {
 	display: flex;
 	justify-content: space-evenly;
@@ -78,6 +79,7 @@
 }
 
 /* --- GAME CONTAINER --- */
+
 #game-layer {
 	display: block;
 	position: absolute;
@@ -305,6 +307,7 @@
 }
 
 /* --- TEXT CONTAINER --- */
+
 /* Menu Button */
 #menu-button {
 	display: flex;
@@ -830,4 +833,13 @@ button.switch-btn {
 	display: flex;
 	flex-direction: column;
 	gap: 0.25em;
+}
+
+/* --- MISCELANEOUS --- */
+
+:is([role='menu'], [role='menubar']):focus-within {
+	button:not(:focus-visible, :disabled) {
+		outline: dotted var(--border-width) var(--color-border);
+		outline-offset: var(--border-width);
+	}
 }

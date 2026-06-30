@@ -30,13 +30,15 @@
 				background: var(--hex-highlight);
 			}
 
-			&.hljs.language-javascript,
-			&.hljs.language-js,
-			&.hljs.language-css,
-			&.hljs.language-html,
-			&.hljs.language-xml,
-			&.hljs.language-md,
-			&.hljs.language-markdown {
+			&.hljs:is(
+					.language-javascript,
+					.language-js,
+					.language-css,
+					.language-html,
+					.language-xml,
+					.language-md,
+					.language-markdown
+				) {
 				padding-top: 1.4em;
 			}
 		}
@@ -61,8 +63,7 @@
 			text-transform: uppercase;
 		}
 
-		&:has(code.hljs.language-javascript)::before,
-		&:has(code.hljs.language-js)::before {
+		&:has(code.hljs:is(.language-javascript, .language-js))::before {
 			content: 'JavaScript';
 		}
 		&:has(code.hljs.language-css)::before {
@@ -74,8 +75,7 @@
 		&:has(code.hljs.language-xml)::before {
 			content: 'XML';
 		}
-		&:has(code.hljs.language-md)::before,
-		&:has(code.hljs.language-markdown)::before {
+		&:has(code.hljs:is(.language-md, .language-markdown))::before {
 			content: 'Markdown';
 		}
 	}
