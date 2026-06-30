@@ -360,36 +360,39 @@ class LangController {
 
 		for (let i = 0; i < elements.length; i++) {
 			const el = elements[i];
-			const attrName = el.dataset.langattr;
-			if (!attrName) {
-				continue;
-			}
-			const langAttrTag =
-				'lang'
-				+ attrName
-					.substring(attrName.lastIndexOf('.') + 1)
-					.toLowerCase()
-					.replace('-', '_');
-			const path = el.dataset[langAttrTag];
-
-			if (!path) {
+			const attrNames = el.dataset.langattr.split(' ');
+			if (!attrNames || attrNames.length === 0) {
 				continue;
 			}
 
-			const target = this.getString(path, data);
+			for (const attrName of attrNames) {
+				const langAttrTag =
+					'lang'
+					+ attrName
+						.substring(attrName.lastIndexOf('.') + 1)
+						.toLowerCase()
+						.replace('-', '_');
+				const path = el.dataset[langAttrTag];
 
-			if (target === 'notFound') {
-				el.classList.add('langHide');
-			} else {
-				el.classList.remove('langHide');
+				if (!path) {
+					continue;
+				}
 
-				const rawValue = el.getAttribute(attrName) || '';
-				const placeholders = rawValue.match(/\u200B([^\u200B]+)\u200B/g);
+				const target = this.getString(path, data);
 
-				if (placeholders && placeholders.length > 0) {
-					el.setAttribute(attrName, this.#formatString(target, placeholders));
+				if (target === 'notFound') {
+					el.classList.add('langHide');
 				} else {
-					el.setAttribute(attrName, target);
+					el.classList.remove('langHide');
+
+					const rawValue = el.getAttribute(attrName) || '';
+					const placeholders = rawValue.match(/\u200B([^\u200B]+)\u200B/g);
+
+					if (placeholders && placeholders.length > 0) {
+						el.setAttribute(attrName, this.#formatString(target, placeholders));
+					} else {
+						el.setAttribute(attrName, target);
+					}
 				}
 			}
 		}
@@ -485,7 +488,8 @@ class LangController {
 						localStorage.setItem('userLang', code);
 						const url = new URL(window.location);
 						url.searchParams.delete('lang');
-						window.location.href = url.toString();
+						history.replaceState(null, '', url);
+						window.location.reload();
 					});
 
 					container.appendChild(button);

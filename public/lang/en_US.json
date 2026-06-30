@@ -212,6 +212,8 @@
 			"btnBlog": "Blog",
 			"btnGameMode": "Switch to Exploration Mode",
 			"skipLink": "Skip to content",
+			"backToTopHint": " Back to Top",
+			"backToTopLabel": "Scroll back to top of page",
 			"404": {
 				"title": "Page Not Found",
 				"text": "The path you've entered doesn't seem to lead anywhere.",

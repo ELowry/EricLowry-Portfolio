@@ -587,7 +587,6 @@
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
-		visibility: hidden;
 		z-index: 2000;
 		animation: back-to-top-show both step-end;
 		animation-timeline: scroll();
@@ -612,13 +611,19 @@
 		&:focus-visible {
 			outline: var(--border-width) solid var(--color-accent);
 			outline-offset: 4px;
+			border-width: var(--border-width);
+			padding: 0.8em 1.2em;
+			height: auto;
+
+			&::after {
+				content: attr(data-hint, ' Back to Top');
+			}
 		}
 	}
 }
 
 @keyframes back-to-top-show {
 	to {
-		visibility: visible;
 		border-width: var(--border-width);
 		padding: 0.8em 1.2em;
 		height: auto;
