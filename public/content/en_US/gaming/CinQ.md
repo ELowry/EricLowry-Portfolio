@@ -23,7 +23,7 @@ CinQ is the core technology behind a decade-long applied R&D effort to bring the
 
 <!-- prettier-ignore end -->
 
-When I first joined the team around 2014, the project (then known as "The Heist") was a conference-room experience built largely from Unity Asset Store components, designed to run locally on dedicated hardware. We quickly realized that to scale effectively, we needed to pivot. Instead of building bespoke projects, we envisioned a single, leaner game that could act as a versatile sandbox for remote and hybrid teamwork training.
+When I first joined the team in 2014, the project (then known as "The Heist") was a conference-room experience built largely from Unity Asset Store components, designed to run locally on dedicated hardware. We quickly realized that to scale effectively, we needed to pivot. Instead of building bespoke projects, we envisioned a single, leaner game that could act as a versatile sandbox for remote and hybrid teamwork training.
 
 ![Photos of in-person The Heist events with people using physical maps to navigate ](/assets/images/gaming/cinq/heist__240-190-webp_240-190_400-317-webp_400-317_600-476-webp_600-476.jpg)
 
@@ -46,7 +46,7 @@ The resulting game is a large 5-player structured mission that brings together d
 
 ### Engineering & The Development Journey
 
-Executing this pivot as a tight-knit team of just two developers and one infrastructure engineer was a massive, multi-year learning curve. Building upon the foundational 3D modeling and environment design skills I first developed while building [Unstant](/content/en_US/gaming/Unstant.md), I transitioned from an inexperienced UI developer into a full-stack technical designer.
+Executing this pivot as a tight-knit team of just two developers and one infrastructure engineer meant a massive, multi-year learning curve. Building upon the foundational 3D modeling and environment design skills, that I first developed while building [Unstant](/content/en_US/gaming/Unstant.md), I transitioned from an inexperienced UI developer into a full-stack technical designer.
 
 As the project evolved, I took hands-on ownership of nearly every facet of the game's frontend, UX, and client-side architecture:
 
@@ -55,7 +55,7 @@ As the project evolved, I took hands-on ownership of nearly every facet of the g
 - **Input Architecture:**  
   I engineered a custom, layer-based input stack to elegantly handle complex UI states (which I later published as the open-source package [InputLayers](/content/en_US/gaming/InputLayers.md)).
 - **Tech Art & Environments:**  
-  I collaborated heavily on environment design, actively modifying, optimizing, and building a significant portion of the 3D assets, textures, and materials to ensure they ran smoothly on low-end integrated graphics.
+  I collaborated heavily on environment design, actively modifying, optimizing, and building a significant portion of the 3D assets, textures, and materials to ensure they would run smoothly on low-end integrated graphics.
 - **Audio & Localization:**  
   I implemented the audio stack and engineered a robust, scalable translation system to support international clients across English, French, and German.
 
@@ -72,4 +72,4 @@ Scaling CinQ for the enterprise required overcoming significant technical and ne
 
 > [!NOTE]
 >
-> Beyond the game client itself, I also directed the platform's marketing strategies, podcast editing, and actively facilitated corporate coaching workshops. You can read more about those specific roles in the [Coaching & Business](/content/en_US/coaching-business/coaching-business.md) section of this portfolio.
+> Beyond the game client itself, I also directed the platform's marketing strategies and podcast editing, and I actively facilitated corporate coaching workshops. You can read more about those specific roles in the [Coaching & Business](/content/en_US/coaching-business/coaching-business.md) section of this portfolio.

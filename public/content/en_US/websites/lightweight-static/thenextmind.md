@@ -18,7 +18,7 @@
 
 I developed this landing page for Stéphane Amarsy when he started developing his consultancy business for artificial intelligence and organizational transformation.
 
-Because the company's offerings are designed to be immersive, disruptive experiences that force leaders to confront their impending future, we decided that the website should look and feel unfamiliar and futuristic. The site is meant to be somewhat of an exciting, intriguing digital experience rather than a traditional corporate brochure.
+Because the company's offerings are designed to be immersive, disruptive experiences that force leaders to confront their impending future, we decided that the website should look and feel unfamiliar and futuristic. The site is meant to be an exciting, intriguing digital experience rather than a traditional corporate brochure.
 
 ### UX & Visual Design
 

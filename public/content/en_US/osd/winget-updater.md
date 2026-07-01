@@ -15,11 +15,11 @@
 
 ## Automating Updates for Windows Apps
 
-Like most devs using Windows, over time, my desktop started accumulating quite a few apps, frameworks, and dependencies. This is fine; but for projects I only touched every few months, or years, things could go way out of date over time. That and some desktop apps have pretty terrible update UX, meaning you have to go and download the executable when prompted on launch, or worse, manually stay informed of updates.
+Like most devs using Windows, over time, my desktop started accumulating quite a few apps, frameworks, and dependencies. This is fine; but for projects I only touched every few months, or even years, things could become out of date over time. Moreover, some desktop apps have terrible update UX, meaning that you have to go and download the executable when prompted on launch, or worse, manually stay informed of updates.
 
-There _is_ a solution to this in the form of package managers; but for **_some_** things; you just want updates to happen in the background without having to monitor everything or remember to run manual updates. So I built myself a little script that runs automatic updates using the native Windows Package Manager (WinGet) on device/session start.
+There _is_ a solution to this in the form of package managers; but for **_some_** things, you just want updates to happen in the background without having to monitor everything or remember to run manual updates. So I built myself a short script that runs automatic updates using the native Windows Package Manager (WinGet) on device/session start.
 
-What started as a single PowerShell script evolved into a fun side project, and eventually into a complete, lightweight tool that I now use to reliably maintain friends and family devices. While there are other apps with advanced UIs that do similar things, [WinGet Updater](https://github.com/ELowry/WinGet-Updater) is intentionally simple, with a codebase I fully understand, can easily maintain, and can fix or extend in minutes.
+What started as a single PowerShell script evolved into a fun side project, and eventually into a complete lightweight tool that I now use to reliably maintain friends and family devices. While there are other apps with advanced UIs that do similar things, [WinGet Updater](https://github.com/ELowry/WinGet-Updater) is intentionally simple, with a codebase that I fully understand, can easily maintain, fix, or extend in minutes.
 
 ## How it Works
 
@@ -27,7 +27,7 @@ What started as a single PowerShell script evolved into a fun side project, and 
 
 WinGet Updater is built as a tool that lets you automatically or manually use WinGet to update apps, including the option to define which apps get updated automatically, and which get ignored. It can be configured as a "set-and-forget" task that runs daily on startup and/or logon.
 
-When it runs it only shows a Terminal window if it encounters an application update that hasn't been assigned an update preference yet. A silent mode is also available to prevent it from displaying a UI when it runs automatically.
+When it runs, it only shows a Terminal window if it encounters an application update that has not been assigned an update preference yet. A silent mode is also available to prevent it from displaying a UI when it runs automatically.
 A simple interactive menu allows the user to decide whether apps should update automatically in the future, require manual approval, or be blocked entirely (editable after the fact through a sub-menu).
 
 ![A screenshot of the WinGet Updater configuration screen ](/assets/images/osd/winget-updater/config__240-182-webp_240-182_400-303-webp_400-303_600-454-webp_600-454_754-571-webp_754-571.jpg)

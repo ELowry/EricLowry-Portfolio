@@ -42,7 +42,7 @@ The primary design challenge around CinQ has always been creating a visual ident
 <!-- prettier-ignore end -->
 
 - **The Application Dashboard:**  
-  Aiming for familiarity and ease-of-use, the user portal was constructed to function as typical a minimalist, mobile-friendly corporate backend. However, to prevent it from being just another rigid backend, I made its visuals lean more into the design language of CinQ itself, and picked a striking red-pink-and-orange background with dark gray content boxes. This contrast makes it visually exciting and intriguing while prioritizing obvious controls and direct information hierarchies in its UX to ensure it would be a good fit for non-technical users.
+  Aiming for familiarity and ease-of-use, the user portal was constructed to function as a typical minimalist, mobile-friendly corporate backend. However, to prevent it from being just another rigid backend, I made its visuals lean more toward the design language of CinQ itself, and picked a striking red-pink-and-orange background with dark gray content boxes. This contrast makes it visually exciting and intriguing while prioritizing obvious controls and direct information hierarchies in its UX to ensure it would be a good fit for non-technical users.
 
 ### The Marketing Workflow (Statamic & automation)
 
@@ -59,15 +59,15 @@ Transitioning to Statamic (powered by Laravel) allowed me to move past a simple 
   Instead of manually updating workshops or relying on heavy client-side JavaScript, I made use of Laravel's capabilities and task scheduling to have the server routinely scrapes the Eventbrite API, Medium RSS feeds, YouTube, etc., automatically parsing relevant data into native Statamic collections.  
   This enables the whole site to serve as a central repository for all of our marketing content, articles, podcast, and workshops calendar, without needing to build dedicated systems where we already had existing workflows and platforms in use.
 - **Discord Integration:**  
-  Our team used Discord as our internal communication tool; which was a great opportunity to integrate webhooks deeply into the site's logic:  
-  The team receives automated Discord alerts for contact form submissions, new workshop sign-ups, and whenever content is updated in the CMS. All sorted and set up to specifically target the right team member(s).  
+  Our team used Discord as our internal communication tool; which was a great opportunity to integrate webhooks deeply into the site's logic.  
+  The team receives automated Discord alerts for contact form submissions, new workshop sign-ups, and whenever content is updated in the CMS, all sorted and set up to specifically target the right team member(s).  
   This has also been a great tool for monitoring the site's git flow, overall health, and sending myself alerts regarding outstanding actions that result from the automated content updates.
 
 ### CI/CD Multilingual Architecture
 
 To manage a fully bilingual site (English/French) without relying on paid multi-site plugins, I engineered a decoupled multi-repository Git architecture that best fit the site's specific needs.
 
-Effectively, I have split the site into a shared "core" repository (framework, config, theme), and dedicated content repositories for each language. This is then automated and managed by a custom suite of automated tools I developed from scratch:
+Effectively, I have split the site into a shared "core" repository (framework, config, theme), and dedicated content repositories for each language. This is then automated and managed by a custom suite of automated tools that I developed from scratch:
 
 ![Screenshot of the CinQ website local development tool ](/assets/images/websites/CinQ/script__240-186-webp_240-186_400-311-webp_400-311_600-466-webp_600-466_637-495-webp_637-495.jpg)
 

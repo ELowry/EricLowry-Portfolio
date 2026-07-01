@@ -1,8 +1,8 @@
 # Web Development & Design
 
-I started getting interested in building my own websites in the 2000s, working on Myspace, Blogspot, and phpBB themes; eventually getting quite familiar with front-end work, and some light backend code using PHP.
+I started getting interested in building my own websites in the 2000s, working on Myspace, Blogspot, and phpBB themes; eventually becoming quite familiar with front-end work, and some light backend code using PHP.
 
-Through this early work, I started to pay particular attention to the design of user interfaces and user experiences; which resonated in interesting ways with my architecture experience, and has remained an underlying consideration in almost everything I do. As more of our daily lives interface through technology, I believe that understanding how users navigate digital spaces is essential to ensuring the success of almost any project.
+Through this early work, I started to pay particular attention to the design of user interfaces and user experiences, which resonated in interesting ways with my architectural experience, and has remained an underlying consideration in almost everything I do. As more of our daily lives interface through technology, I believe that understanding how users navigate digital spaces is essential to ensuring the success of almost any project.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
@@ -11,12 +11,12 @@ Through this early work, I started to pay particular attention to the design of 
 
 <!-- prettier-ignore end -->
 
-Throughout the years, I have built and maintained numerous sites for personal projects and freelance clients, historically relying heavily on WordPress and hand-coded static pages. Recently, however, I have focused my web development efforts on mastering modern frameworks and systems-driven workflows. This has resulted in two major shifts in my process:
+Over the years, I have built and maintained numerous sites for personal projects and freelance clients, historically relying heavily on WordPress and hand-coded static pages. Recently, however, I have focused my web development efforts on mastering modern frameworks and systems-driven workflows. This has resulted in two major shifts in my process:
 
 - **Reusable static architecture:**  
   For small static sites, I slowly built my own set of lightweight modules and structural tools. In fact, a significant portion of this very portfolio is an exercise in bringing together code and concepts from those smaller projects into a [cohesive, lightweight framework](/content/en_US/websites/lightweight-static/lightweight-static.md).
 - **A more modern CMS:**  
-  For larger, dynamic sites, I migrated away from WordPress in favor of [Statamic](https://statamic.com/). This gives me significantly better control over the entire development and design stack, eliminating the need to rely on bloated third-party themes. The result is a much tighter design and a vastly improved experience for both the user and the maintainer. It has also bee a great opportunity to deepen my understanding of systems administration and backend maintenance.
+  For larger, dynamic sites, I migrated away from WordPress in favor of [Statamic](https://statamic.com/). This gives me significantly better control over the entire development and design stack, eliminating the need to rely on bloated third-party themes. The result is a much tighter design and a vastly improved experience for both the user and the maintainer. It has also been a great opportunity to deepen my understanding of systems administration and backend maintenance.
 
 A major advantage of these shifts is the ability to guarantee that the websites I create strictly conform to modern best practices for both performance and accessibility. As I hope this portfolio demonstrates, I have a strong belief in ensuring technology remains reliable, fast, and accessible to everyone.
 

@@ -1,12 +1,12 @@
 # Open Source Development
 
-Like I suspect is the case for many developers, most of my open-source work resulted from questions like _"Why isn't this easier?"_, or _"Can I automate this?"_.
+As I suspect is the case for many developers, most of my open-source work resulted from questions like _"Why isn't this easier?"_, or _"Can I automate this?"_.
 
 All these projects began as personal projects, tools, or simple scripts meant for my own use, usually to remove friction from my workflows, or because I was frustrated by the lack of existing solutions to a problem.
 
-I fully believe that a good solution to a problem is meant to be shared; so when I have had time, or have been particularly motivated, I took the time to polish their user experience, write documentation, and make them available.
+I fully believe that a good solution to a problem is meant to be shared; so when I had time, or when I was particularly motivated, I took the time to polish their user experience, write documentation, and make them available.
 
-Over the years, I've written dozens of similar tools (most of which are proprietary), but this selection of open source and source-available projects should serve as a good window into my work as a developer.
+Over the years, I have written dozens of similar tools (most of which are proprietary), but this selection of open source and source-available projects should serve as a good window into my work as a developer.
 
 You can explore more of my work on [my GitHub page](https://github.com/ELowry).
 

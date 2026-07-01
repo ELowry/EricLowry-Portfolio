@@ -17,7 +17,7 @@
 
 After over a decade of building UIs in Unity3D, there has been one thing that has kept feeling off about how it handles inputs. When they introduced the "new" Input System and Action Maps, it felt closer to something fully realized, but not quite _right_ either.
 
-So for a couple of projects I was working on, I decided to try and fix my biggest peeve with the whole thing: implementing a simple, straightforward, way to determine which UI, popup, or character controller, should receive inputs at any given time. I started building InputLayers as a system for my own games, but quickly realized it could be useful for other developers, giving me an excuse to play around with publishing a package to the Unity Asset Store.
+So for some projects on which I was working, I decided to try and fix my biggest peeve with the whole thing: implementing a simple, straightforward, way to determine which UI, popup, or character controller should receive inputs at any given time. I started building InputLayers as a system for my own games, but quickly realized it could be useful for other developers, giving me an excuse to play around with publishing a package to the Unity Asset Store.
 
 [Watch a short video overview](https://spectra.video/videos/embed/6jCbpjPbEnjos8prnqi93Z?p2p=0&aspect=56.25%)
 
@@ -29,13 +29,13 @@ InputLayers is a layer-based filtering system built atop Unity's Input System, a
 
 It achieves this by replacing default `InputActions` with custom `LayeredActions`. These actions still map to standard Unity inputs, but act as a filtered pass-through: they will only register an input if their specifically assigned Layer is currently active.
 
-The system relies on a stack-based hierarchy:
+The system relies on the following stack-based hierarchy:
 
 ### The Stack
 
 When a UI element or game system comes to the forefront, its layer can be "activated" and pushed to the top of the stack, instantly hijacking input exclusivity. When closed, the layer is deactivated (popped), and the previous layer in the stack seamlessly regains control.
 
-### Priorities:
+### Priorities
 
 To handle complex games, layers are organized into Priorities. This ensures that critical systems always take precedence over lower-priority ones, regardless of the order in which they were activated.
 
@@ -45,7 +45,7 @@ In order to publish this for others to use; I felt it was important to ensure it
 
 ![A screenshot of a Unity editor window with the InputLayers configuration menu open](/assets/images/osd/inputlayers/menu__240-130-webp_240-130_400-216-webp_400-216_600-324-webp_600-324_820-443-webp_820-443_1400-756-webp_1400-756_1920-1037-webp_1920-1037.jpg)
 
-Using a `SignletonScriptableObject` pattern as the backbone for all the state management, hierarchy validation, and event broadcasting lets the asset easily be used simultaneously with two workflows:
+Using a `SignletonScriptableObject` pattern as the backbone for all the state management, hierarchy validation, and event broadcasting makes it easy for the asset to be easily used simultaneously with two workflows:
 
 ![A graphic design indicating that InputLayers is fully functional using both the Unity Editor, or through code](/assets/images/osd/inputlayers/usability__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
 

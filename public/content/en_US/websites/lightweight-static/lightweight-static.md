@@ -21,7 +21,7 @@ While the base architecture is deliberately minimal, multiple projects have requ
 
 - Localization is handled combining JSON data files and HTML data attributes with JavaScript to dynamically apply localization on the fly.
 - The script handles automatically swapping embedded iFrames (such as localized Google Forms or YouTube videos) and updating header elements.
-- Browser settings are used to detect the user's browser language preferences upon arrival, which gets saved to their local storage for future sessions, including when using manual language override events.
+- Browser settings are used to detect the user's browser language preferences upon arrival, which is then saved to their local storage for future sessions, including when using manual language override events.
 
 This framework has served as the reliable technical foundation for several of my web projects, allowing me to focus entirely on custom visual design and user experience for each specific client:
 

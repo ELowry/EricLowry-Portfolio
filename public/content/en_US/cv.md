@@ -128,7 +128,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
     - [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 'Open InputLayers Unity Asset Store page') (Unity GUI extension).
     - [Marked Responsive Images](https://github.com/ELowry/MarkedResponsiveImages 'Open Marked Responsive Images GitHub project') (Marked.js extension adding srcset support)
     - [Obsidian Replace Commands](https://github.com/ELowry/obsidian-replace-commands 'Open Obsidian Replace Commands GitHub project') (Obsidian plugin to configure and execute search-replace patterns)
-	- [DNS Toggle](https://github.com/ELowry/DNSToggle 'Open DNS Toggle GitHub project') (Android application to easily toggle Private DNS settings)
+    - [DNS Toggle](https://github.com/ELowry/DNSToggle 'Open DNS Toggle GitHub project') (Android application to easily toggle Private DNS settings)
 
 ---
 

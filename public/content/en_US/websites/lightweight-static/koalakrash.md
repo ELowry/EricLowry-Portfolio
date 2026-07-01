@@ -23,7 +23,7 @@ Additionally, both the site and the integrated forms needed to be fully bilingua
 
 ### UX & Visual Design
 
-The artist already had a distinct visual identity and color palette in place, but commissioned me a new logo to anchor the site's branding.
+The artist already had a distinct visual identity and color palette in place, but commissioned me for a new logo to anchor the site's branding.
 
 I designed the interface to be as clean and minimalist as possible; by keeping the UI unobtrusive, the focus remains entirely on the artist's brand and message, ensuring the logo and photos of their work remain the main visual element of each page.
 

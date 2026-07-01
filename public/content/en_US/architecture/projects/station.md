@@ -12,7 +12,7 @@
 
 ### Context
 
-Anticipating the arrival of a new metro line, university campus, and an entirely new town planned for the Plateau de Saclay (south of Paris), our studio was tasked with conceptualizing the area's main train station and accompanying commercial/business center.
+Anticipating the arrival of a new metro line, a new university campus, and an entirely new town planned for the Plateau de Saclay (south of Paris), our studio was tasked with conceptualizing the area's main train station and accompanying commercial/business center.
 
 Because this station would be among the very first major pieces of infrastructure built in the area, our focus was on envisioning the transit hub not just as a utilitarian stop, but as the foundational "seed" from which the surrounding urban life would grow.
 
@@ -25,7 +25,7 @@ Because this station would be among the very first major pieces of infrastructur
 
 ### Spatial Concept & Urban Flow
 
-Traditional elevated train stations often act as physical and visual barriers within a city. Our goal was to dismantle that barrier, creating a natural, seamless flow between the train quays and the upcoming city.
+Traditional elevated train stations often act as physical and visual barriers within a city. Our goal was to dismantle that barrier, creating a natural, seamless flow between the train platforms and the upcoming city.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |
@@ -35,7 +35,7 @@ Traditional elevated train stations often act as physical and visual barriers wi
 <!-- prettier-ignore end -->
 
 - **Breaking the Barrier:**  
-  We designed the quays to feel like an integrated part of an open public plaza, similar to how modern tramways seamlessly blend into pedestrian spaces.
+  We designed the platforms to feel like an integrated part of an open public plaza, similar to how modern tramways seamlessly blend in with pedestrian spaces.
 - **Balancing Open and Enclosed Spaces:**  
   We intertwined these open, transit-focused areas with more private shopping and work zones. These commercial spaces were structurally sheltered from wind, rain, and noise, yet remained visually connected to the bustling open plaza.
 

@@ -11,15 +11,15 @@
 
 ### Context
 
-Beyond the operational and technical development of Disruptive Learning Solutions (DLS), I have served as the primary force behind our public-facing media and communications for nearly a decade. This encompasses everything from designing the foundational brand identity to directing video podcasts and managing a multilingual editorial pipeline.
+Beyond the operational and technical development of Disruptive Learning Solutions (DLS), I have served as the primary force behind our public-facing media and communications for nearly a decade. This encompasses everything from designing our foundational brand identity to directing video podcasts and managing a multilingual editorial pipeline.
 
 My goal has always been to ensure that our messaging remains clear, professional, and engaging, translating complex pedagogical and technological concepts into accessible content targeted at B2B executives and L&D professionals.
 
 ### Brand Identity & Art Direction
 
-I designed most logos, and established the core brand identities for DLS, our flagship product CinQ, and various projects we have established with partners.
+I designed most logos, and established the core brand identities for DLS, our flagship product CinQ, and various projects that we have established with partners.
 
-As both projects and online marketing evolved, I maintained and updated the brand designs, visual identities, and media content production for DLS and CinQ. Throughout this evolution, the principal challenge has been maintaining a delicate balance between establishing a brand identity that carried the professional weight required for the corporate boardroom, and utilizing aesthetic choices that evoked the cutting-edge gaming technology powering our solutions.
+As both projects and online marketing evolved, I maintained and updated the brand designs, visual identities, and media content production for DLS and CinQ. Throughout this evolution, the principal challenge has been to maintain a delicate balance between establishing a brand identity that carried the professional weight required for the corporate boardroom, and utilizing aesthetic choices that evoked the cutting-edge gaming technology powering our solutions.
 
 ### Video Production & Podcasting
 
@@ -33,11 +33,11 @@ These were recorded entirely remotely using a flexible mix of Google Meet, Disco
 
 #### Short-Form Content
 
-I have edited 30+ vertical shorts/reels tailored for social media engagement and quick-burst concept delivery. For a majority of these, I was in charge of assigning "questions" that team members, partners, and clients would answer as a means of creating interest in CinQ and increasing brand recognition.
+I have edited 30+ vertical shorts/reels tailored for social media engagement and quick-burst concept delivery. For a majority of these, I was in charge of assigning "questions" that team members, partners, and clients would answer as a means of creating interest in CinQ and of increasing brand recognition.
 
 #### Marketing, Informational Content & Interviews
 
-I directed and produced all official CinQ game teasers, cinematic trailers, as well as a various high-level concept explainer videos and game walkthroughs for prospective clients.
+I directed and produced all official CinQ game teasers and cinematic trailers, as well as a various high-level concept explainer videos and game walkthroughs for prospective clients.
 
 I was also in charge of conducting, recording, and editing both online and offline client video interviews.
 
@@ -66,4 +66,4 @@ Each published article was illustrated and visually enhanced using a mix of our 
 
 #### Knowledge Architecture
 
-Finally, to ensure this massive volume of writing retained its long-term value, I architected a dedicated shared Obsidian vault containing every published article. Each entry was tagged and connected using the "Smart Connections" plugin to methodically group content by topic, tone, and subject. This was done with the objective of eventually collating these articles into published books.
+Finally, to ensure that this massive volume of writing retained its long-term value, I architected a dedicated shared Obsidian vault containing every published article. Each entry was tagged and connected using the "Smart Connections" plugin to methodically group content by topic, tone, and subject. This was done with the objective of eventually collating these articles into published books.

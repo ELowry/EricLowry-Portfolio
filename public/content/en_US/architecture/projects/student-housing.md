@@ -12,7 +12,7 @@
 
 ### Context
 
-In 2014, the prestigious Solar Decathlon competition was hosted in Versailles. Because ENSA-V was helping to host the event, our cohort was tasked a year in advance with designing affordable, eco-friendly temporary student housing for the international contestants.
+In 2014, the prestigious Solar Decathlon competition was hosted in Versailles. Because my alma mater, ENSA-V, was helping to host the event, our cohort was tasked a year in advance with designing affordable, eco-friendly temporary student housing for the international contestants.
 
 The designated site for this housing was a partially flooded grassland on the outskirts of the city, presenting an immediate environmental and structural challenge.
 
@@ -45,7 +45,7 @@ Instead of fighting the flooded terrain, our team's approach was to embrace the 
 <!-- prettier-ignore end -->
 
 - **Materiality:**  
-  The prefabricated buildings were designed with a wood and cloth cladding, heavily utilizing recycled materials, including free retired ship sails we found a source of for the project.
+  The prefabricated buildings were designed with a wood and cloth cladding, heavily utilizing recycled materials, including free retired ship sails we found as a source of for the project.
 
 ### My Role & Visual Communication
 

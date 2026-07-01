@@ -17,11 +17,11 @@
 > **License:** MIT
 
 Since Android 9, it has been possible to use the _private DNS_ setting on devices to set a custom DNS server; coupled with services like [NextDNS](https://nextdns.io/), it is one of the easiest ways of enabling system-wide tracking protection and malware/content blocking.  
-This is a great security baseline across the Android ecosystem, but can interfere with some networks (public access points or Hotel wireless networks), which can make it impractical to use as it is buried in the system settings.
+This is a great security baseline across the Android ecosystem, but it can interfere with some networks (public access points or Hotel wireless networks), which can make it impractical to use as it is buried in the system settings.
 
 ![DNS Toggle app logo](/assets/images/osd/dns-toggle/logo__240-117-webp_240-117_400-196-webp_400-196_600-294-webp_600-294_820-401-webp_820-401_1024-501-webp_1024-501.png)
 
-Though this is not the first attempt to make toggling the option more practical, and likely not the most advanced, I wanted to set up an extremely lightweight toggle for _private DNS_ in the Android quick settings menu myself as a means to learn the basics of Android app development.
+Though this is not the first attempt to make toggling the option more practical, and likely not the most advanced, my aim was to set up an extremely lightweight toggle for _private DNS_ in the Android quick settings menu myself as a means to learn the basics of Android app development.
 
 <!-- prettier-ignore -->
 | Gallery |  |  |  |
@@ -30,7 +30,7 @@ Though this is not the first attempt to make toggling the option more practical,
 
 <!-- prettier-ignore end -->
 
-Over the course of a couple of days, I coded the app, designed its logo, and submitted it to F-Droid to make it more easily available.
+Over the course of a few days, I coded the app, designed its logo, and submitted it to F-Droid to make it more easily available.
 
 ### UX & Requirements
 

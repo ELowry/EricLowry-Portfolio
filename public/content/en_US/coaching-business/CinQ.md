@@ -15,11 +15,11 @@
 
 As a co-founder of Disruptive Learning Solutions (DLS), my role evolved organically as the company scaled. While my early focus was rooted in game development and communication, it progressively grew to include nearly all aspects of the company.
 
-Over nearly a decade, I worked closely with my colleagues on prospecting, key account onboarding, B2B sales support, and served as the main bridge between our technical product and enterprise clients, including pre-sales engineering to conduct technical demonstrations and successfully navigate strict corporate IT and security audits.
+Over nearly a decade, I worked closely with my colleagues on prospecting, key account onboarding, B2B sales support, and served as the main bridge between our technical product and enterprise clients, including pre-sales engineering for conducting technical demonstrations and navigating strict corporate IT and security audits.
 
 ### Agile Operations & Brand Strategy
 
-To technological development on track, I piloted our SCRUM process with the rest of the team, overseeing the agile execution of several major technical pivots. This included managing the timelines and resources required to take CinQ from a local network to a fully online infrastructure, porting it to Android, and building compliance with the Microsoft and Google Play stores' publishing requirements.
+To keep technological development on track, I piloted our SCRUM process with the rest of the team, overseeing the agile execution of several major technical pivots. This included managing the timelines and resources required to take CinQ from a local network to a fully online infrastructure, porting it to Android, and building compliance with the Microsoft and Google Play stores' publishing requirements.
 
 Simultaneously, I served as the company's art director and brand strategist. I designed hundreds of highly polished pitch decks, document templates, and assorted sales material. The overarching visual challenge was establishing a brand identity that felt professional enough for the corporate boardroom, while utilizing colors and textures that subtly evoked the cutting-edge gaming technology powering our workshops. I dive deeper into this challenge when [discussing the CinQ website](/content/en_US/websites/CinQ.md).
 
@@ -28,7 +28,7 @@ Simultaneously, I served as the company's art director and brand strategist. I d
 Beyond the business operations, I became a certified CinQ facilitator, coaching corporate executives, managers, and professional esports rosters. This took the form of a structured methodology aimed at revealing and improving team behavior:
 
 - **Pedagogical Planning:**  
-  Prior to any workshop, I would collaborate with clients to adapt our learning frameworks, and customizing the session's structure to focus on their specific team dynamics and skills gaps.
+  Prior to any workshop, I would collaborate with clients to adapt our learning frameworks, and customize the session's structure to focus on their specific team dynamics and skills gaps.
 - **Live Facilitation:**  
   During the simulation, I would observe team behaviors and utilize the Socratic method (asking pointed, situational questions) to guide the participants' learning processes without directly intervening in the team's execution.
 - **Feedback & Diagnostics:**  

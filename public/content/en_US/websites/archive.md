@@ -37,7 +37,7 @@ While I no longer maintain the site (resulting in some out-of-date APIs and lack
 >
 > 🌐 [View on the Internet Archive](https://web.archive.org/web/20180103153941/http://pennsardinpdx.com/)
 
-Penn Sardin was a long-running conceptual pop-up restaurant focused on the historical and culinary fusion of the US West Coast and Brittany, France. I collaborated closely with their graphic designer to build a simple, elegant website that put the focus entirely on their visual identity and messaging.
+Penn Sardin was a long-running conceptual American pop-up restaurant and wine bar focused on the historical and culinary fusion of the US West Coast and Brittany, France. I collaborated closely with their graphic designer to build a simple, elegant website that put the focus entirely on their visual identity and messaging.
 
 Using a barebones WordPress theme, I applied minimal styling to match their branding, and tried to bring the custom paper-first iconography and branding elements to the web.
 
@@ -54,6 +54,6 @@ Using a barebones WordPress theme, I applied minimal styling to match their bran
 >
 > 🌐 [oobpdx.com](https://oobpdx.com/)
 
-A streamlined, rapid-deployment project for a Portland-based oyster bar.  
+A streamlined, rapid-deployment project for a Portland-based oyster bar in Oregon.  
 This was a purely functional exercise in getting a local business online quickly and cleanly. I handled the WordPress installation, applied a simple theme, and executed minimal customization work to establish their digital footprint.  
 Though the venue has since closed, the site remains live as a legacy placeholder.

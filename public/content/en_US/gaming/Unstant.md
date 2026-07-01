@@ -11,7 +11,7 @@
 
 ![Artistically rendered view of a yellow desert with a red buoy](/assets/images/gaming/unstant/header__240-135-webp_240-135_400-225-webp_400-225_600-337-webp_600-337_820-461-webp_820-461_1400-787-webp_1400-787_1875-1054-webp_1875-1054.jpg)
 
-To this day, I am convinced that the creative aspects of game design and architecture share significantly more than people tend to think; both are about wrestling with a somewhat rigid set of rules and constraints to create spaces, environments, that will be experienced, explored, lived-in.
+To this day, I am convinced that the creative aspects of game design and architecture share significantly more than is usually acknowledged; both are about wrestling with a somewhat rigid set of rules and constraints to create spaces and environments, that will be experienced, explored, lived-in.
 
 This idea was the central thesis of my master’s thesis about what video games bring to the table for architecture and architects. So naturally, for my final Master’s degree project, I joined forces with a fellow student to try and put theory into practice: we built a video game from scratch.
 
@@ -21,7 +21,7 @@ Half architecture essay, half game design/dev exercise, Unstant was our attempt 
 
 ## The Concept
 
-2015 was well into the societal shift towards social media and the hyper-connected camera-in-hand perception of spaces and everyday life (Instagram, Vine, vlogging, etc.). Unstant was meant as a visceral exploration of how our minds set aside mundane routines, liminal spaces, and instead compress time into unreal and hyper-condensed highlights of memorable places and experiences. How can we create spaces and experiences that bring attention to the missed "Unstants" (the moments in life that will not be kept in memory)?
+In 2015 the societal shift towards social media and the hyper-connected camera-in-hand perception of spaces and everyday life (Instagram, Vine, vlogging, etc.) was well under way. Unstant was meant as a visceral exploration of how our minds set aside mundane routines and liminal spaces, and instead compress time into unreal and hyper-condensed highlights of memorable places and experiences. How can we create spaces and experiences that bring attention to the missed "Unstants" (the moments in life that will not be kept in memory)?
 
 So we made a first person "walking simulator" that explored incredibly banal, everyday spaces (a bedroom, a basement, a train station) and transformed them into exceptional, surreal virtual experiences. By toying with the flow of time, and the contiguousness of space, the game forces you to confront how our minds stitch together isolated memories to make sense of reality.
 
@@ -34,7 +34,7 @@ So we made a first person "walking simulator" that explored incredibly banal, ev
 
 ## The Work
 
-Building a full video game from the ground up, with barely any experience of game development, was a true exercise in multidisciplinarity, and gave me valuable experience in nearly all fields of the games production pipeline:
+Building a full video game from the ground up, with barely any experience of game development, was a true exercise in multidisciplinarity, and gave me valuable experience in nearly all fields of game production pipeline:
 
 > [!INFO]
 > Other than the default tools and utilities shipped with Unreal Engine 4, no external tools or assets were used for this project.
@@ -66,11 +66,11 @@ Particular effort was put into blending the screen-space "sketch" shading and pe
 
 ### Sound design & voice acting
 
-While my project partner was in charge of composing and recording the gam's music, I recorded, mastered, and implemented all the sound design, foley and sound effects into the game. I also recorded, edited, and implemented the English voiceover monologues (with French subtitles) that help the environmental storytelling and narrative come together throughout the game.
+While my project partner was in charge of composing and recording the game's music, I recorded, mastered, and implemented all the sound design, foley and sound effects into the game. I also recorded, edited, and implemented the English voiceover monologues (with French subtitles) that help the environmental storytelling and narrative come together throughout the game.
 
 ### Architectural diagrams and models
 
-As a project for a masters thesis in Architecture, a significant portion of the work on this project went into producing multiple architectural plans and diagrams and a massive physical scale model of all the virtual spaces.
+As a project for a master's thesis in Architecture, a significant portion of the work on this project went into producing multiple architectural plans and diagrams and a massive physical scale model of all the virtual spaces.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |  |
@@ -79,7 +79,7 @@ As a project for a masters thesis in Architecture, a significant portion of the 
 
 <!-- prettier-ignore end -->
 
-These documents took specific effort in order to adapt the language of architectural diagrams to the quirks of 3D environment design, such as overlapping spaces, player teleportation, etc.
+Specific effort was needed in order to adapt the language of architectural diagrams to the quirks of 3D environment design, such as overlapping spaces, player teleportation, etc.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
