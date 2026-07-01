@@ -46,7 +46,7 @@ This was part of a short conceptual Architecture exercise around the study of ry
 
 ### Building Upon Existing Assets
 
-While working on [CinQ](/content/en_US/gaming/cinq.md), which was initially built using existing assets, I created quite a few custom assets that had to seamlessly mesh into the existing environment. Good examples include the sewer and ventilation systems; both of which included work on custom shaders and various rendering tricks to ensure a well optimized scene.
+While working on [CinQ](/content/en_US/gaming/CinQ.md), which was initially built using existing assets, I created quite a few custom assets that had to seamlessly mesh into the existing environment. Good examples include the sewer and ventilation systems; both of which included work on custom shaders and various rendering tricks to ensure a well optimized scene.
 
 <!-- prettier-ignore -->
 | Gallery |  |

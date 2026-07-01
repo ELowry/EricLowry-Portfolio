@@ -44,8 +44,8 @@ export class Gallery {
 		return {
 			'Gallery:': { accordion: true },
 			Gallery: { accordion: false },
-			'Gallerie:': { accordion: true },
-			Gallerie: { accordion: false },
+			'Galerie:': { accordion: true },
+			Galerie: { accordion: false },
 		};
 	}
 
