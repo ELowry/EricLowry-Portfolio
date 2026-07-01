@@ -12,8 +12,10 @@ No tracking cookies are used on this site.
 
 Embedded videos are hosted on [Spectra Video](https://spectra.video), an independent PeerTube platform. When you load a page containing one of these videos:
 
-- **Data Transmitted:** Your IP address and basic browser information (User-Agent) are sent to Spectra Video's servers.
-- **Purpose:** This data transfer is strictly necessary to load and stream the video to your device.
+- **Data Transmitted:**  
+  Your IP address and basic browser information (User-Agent) are sent to Spectra Video's servers.
+- **Purpose:**  
+  This data transfer is strictly necessary to load and stream the video to your device.
 
 ## Data Rights
 

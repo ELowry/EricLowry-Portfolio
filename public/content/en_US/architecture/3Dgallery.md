@@ -24,8 +24,11 @@ This project was from about mid-way through my Architecture studies, and our goa
 | -- | -- | -- |
 | ![3D-rendered top-view of a skatepark, housing and public infrastructure project](/assets/images/architecture/3Dgallery/skate-3D1__240-240-webp_240-240_400-400-webp_400-400_600-600-webp_600-600_820-820-webp_820-820_1400-1400-webp_1400-1400.jpg) | ![3D-rendered top-view of a skatepark, housing and public infrastructure project with the 2D plan overlaid on top of it](/assets/images/architecture/3Dgallery/skate-3D2__240-240-webp_240-240_400-400-webp_400-400_600-600-webp_600-600_820-820-webp_820-820_1400-1400-webp_1400-1400_1920-1920-webp_1920-1920.jpg) | ![3D-rendered view of the project's skatepark](/assets/images/architecture/3Dgallery/skate-3D3__240-192-webp_240-192_400-320-webp_400-320_600-480-webp_600-480_820-656-webp_820-656_1000-800-webp_1000-800.jpg) |
 
-| Gallery                                                                                                                                                                                                                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore end -->
+
+<!-- prettier-ignore -->
+| Gallery |
+| -- |
 | ![2D façade elevation of the public housing part of the project](/assets/images/architecture/3Dgallery/skate-3D4__240-48-webp_240-48_400-80-webp_400-80_600-120-webp_600-120_820-164-webp_820-164_1400-280-webp_1400-280_1920-384-webp_1920-384.jpg) |
 
 <!-- prettier-ignore end -->

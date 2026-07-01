@@ -44,4 +44,4 @@ To clearly delineate the content, each major section dynamically shifts the enti
 
 ### Technical Architecture
 
-This site was built upon my [Lightweight Static Framework](./index.md) with some additional modern CSS and JavaScript to handle the dynamic scrolling effects and visual design.
+This site was built upon my [Lightweight Static Framework](/content/en_US/websites/lightweight-static/lightweight-static.md) with some additional modern CSS and JavaScript to handle the dynamic scrolling effects and visual design.

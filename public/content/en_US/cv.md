@@ -16,7 +16,7 @@
 
 ## Professional Summary
 
-Systems-driven designer and entrepreneur with 10+ years of experience bridging spatial logic, human behavior, and interactive technology. Founding Partner at CinQ, specializing in the development of Unity3D-based immersive training environments for advanced soft skills. Expertise in UX/UI design, technical project management, and team-building facilitation. Proven ability to translate complex pedagogical goals into intuitive digital systems and functional architectural spaces.
+Systems-driven designer and entrepreneur with 10+ years experience bridging spatial logic, human behavior, and interactive technology. Founding Partner at CinQ, specializing in the development of Unity3D-based immersive training environments for advanced soft skills. Expertise in UX/UI design, technical project management, and team-building facilitation. Proven ability to translate complex pedagogical goals into intuitive digital systems and functional architectural spaces.
 
 ---
 
@@ -134,7 +134,7 @@ Systems-driven designer and entrepreneur with 10+ years of experience bridging s
 ## Research & Publications
 
 - **Article**:  
-  _« Architecture et Game Design, une nouvelle manière de penser la conception spatiale »_ in fabricA 8 (2014).
+  _« Architecture et Game Design, une nouvelle manière de penser la conception spatiale »_ in _fabricA_ 8 (2014).
 - **Research**:  
   Extensive study on spatial logic in virtual worlds and its feedback loop into physical architectural design.
 

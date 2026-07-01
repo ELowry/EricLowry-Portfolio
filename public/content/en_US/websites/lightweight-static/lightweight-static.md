@@ -25,11 +25,11 @@ While the base architecture is deliberately minimal, multiple projects have requ
 
 This framework has served as the reliable technical foundation for several of my web projects, allowing me to focus entirely on custom visual design and user experience for each specific client:
 
-**[The Next Mind](/content/en_US/websites/lightweight-static/thenextmind.md)**:  
+**[The Next Mind](/content/en_US/websites/lightweight-static/thenextmind.md):**  
 The front page of a small French coaching and consulting company that focuses on AI and helping companies be future-ready.
 
-**[Luzech](/content/en_US/websites/lightweight-static/luzech.md)**:  
+**[Luzech](/content/en_US/websites/lightweight-static/luzech.md):**  
 A graphically unique personal front page for a professional data expert and consultant based in the UK.
 
-**[KoalaKrash](/content/en_US/websites/lightweight-static/koalakrash.md)**:  
+**[KoalaKrash](/content/en_US/websites/lightweight-static/koalakrash.md):**  
 The minimalist online portfolio and commissioning platform for an independent artist.

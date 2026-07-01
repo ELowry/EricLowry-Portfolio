@@ -227,7 +227,10 @@
 			"sides": "Touchez le côté gauche ou droit pour vous déplacer dans cette direction.",
 			"center": "Touchez la zone centrale pour interagir avec les objets.",
 			"dontShow": "Ne plus afficher ce message",
-			"btnClose": "J'ai compris!"
+			"btnClose": "J'ai compris!",
+			"left": "Gauche",
+			"right": "Droite",
+			"interact": "Interagir"
 		},
 		"contact": {
 			"emailPlaceholder": "[afficher l'email]",

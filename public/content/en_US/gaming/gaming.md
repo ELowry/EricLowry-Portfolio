@@ -19,9 +19,9 @@ Though a majority of my work is closed-source in the form of [CinQ](/content/en_
 
 ## Projects
 
-- **[CinQ](/content/en_US/gaming/CinQ.md)**:  
+- **[CinQ](/content/en_US/gaming/CinQ.md):**  
   A cross-platform multiplayer sandbox built in Unity3D for corporate teamwork and communication training.
-- **[Unstant](/content/en_US/gaming/Unstant.md)**:  
+- **[Unstant](/content/en_US/gaming/Unstant.md):**  
   A short, atmospheric first-person exploration game built in Unreal Engine 4, exploring the intersection of architectural space and memory.
-- **[InputLayers](/content/en_US/gaming/InputLayers.md)**:  
+- **[InputLayers](/content/en_US/gaming/InputLayers.md):**  
   An free custom input management architecture engineered for Unity3D.
