@@ -24,7 +24,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 
 ### CinQ (Disruptive Learning Solutions)
 
-**Founding Partner / UX/UI Director** (2016 – Present)  
+**Founding Partner / UX/UI Director** (2016 – Present)  
 **[playcinq.com](https://playcinq.com)**
 
 - **Product Strategy**:  
@@ -49,9 +49,10 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 
 ### Digital Skin
 
-**Partner / Digital Designer** (2015–2016)
+**Partner / Digital Designer** (2015–2016)
 
 - Developed early-stage prototypes for immersive digital learning experiences and interactive architectural visualizations.
+- Social media manager.
 
 ### Volcji Potok (National Arboretum, Slovenia)
 
@@ -81,7 +82,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 
 - **Master of Architecture** (2012–2015)
     - Graduated with Honors
-    - Thesis: _« L’Apport du Jeu Vidéo à l’Architecture et à l’Architecte »_ (Video Games' Contributions to Architects and Architecture).
+    - Thesis: _[L’Apport du Jeu Vidéo à l’Architecture et à l’Architecte](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing)_ (Video Games' Contributions to Architects and Architecture).
 - **Bachelor of Architecture** (2009–2012)
 
 ---
@@ -91,7 +92,8 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 ### Game Development & Design (Core)
 
 - **Engines**:  
-  Unity3D (UX/UI focus, C# mechanics, InputLayers, puzzle design).
+  Unity3D (UX/UI focus, C# mechanics, InputLayers, level/puzzle design).
+- LittleJS
 - **Design Systems**:  
   UX Research, Wireframing, UI Layouts, Interaction Prototyping.
 - **Soft Skill Pedagogies**:  
@@ -100,16 +102,16 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 ### Software & Modeling
 
 - **3D/CAD**:  
-  Rhino 3D, Autocad, 3D StudioMax (Vray/Mental Ray).
+  Rhino 3D, Autocad, 3D StudioMax (Vray/Mental Ray), Blender.
 - **Creative Suite**:  
-  Adobe Photoshop, Illustrator, InDesign (CS2–6/CC).
+  Affinity, Adobe Photoshop, Illustrator, InDesign (CS2–6/CC).
 - **Video/Audio**:  
-  Premiere Pro, Audition (Podcast production).
+  Premiere Pro, Audition (Podcast production), ClipChamp.
 
 ### Web Development & Infrastructure
 
 - **Languages/Frameworks**:  
-  HTML, CSS, PHP, JavaScript, WordPress (Theme/Plugin dev).
+  HTML, CSS, PHP, JavaScript, Statamic, WordPress (Theme/Plugin dev).
 - **Web Projects**:
     - [playcinq.com](https://playcinq.com)
     - [altoe.net](https://altoe.net/)
@@ -125,7 +127,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 - **GitHub Projects**:
     - [WinGet-Updater](https://github.com/ELowry/WinGet-Updater 'Open WinGet-Updater GitHub project') (Utility tool).
     - [StadiaIcons](https://elowry.github.io/StadiaIcons/ 'Open StadiaIcons landing page') (Design asset automation).
-    - [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 'Open InputLayers Unity Asset Store page') (Unity GUI extension).
+    - [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 'Open InputLayers Unity Asset Store page') (Unity input extension).
     - [Marked Responsive Images](https://github.com/ELowry/MarkedResponsiveImages 'Open Marked Responsive Images GitHub project') (Marked.js extension adding srcset support)
     - [Obsidian Replace Commands](https://github.com/ELowry/obsidian-replace-commands 'Open Obsidian Replace Commands GitHub project') (Obsidian plugin to configure and execute search-replace patterns)
     - [DNS Toggle](https://github.com/ELowry/DNSToggle 'Open DNS Toggle GitHub project') (Android application to easily toggle Private DNS settings)
@@ -148,4 +150,4 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 - **Volunteer Work**:  
   Field assistance at the Muséum d'Histoire Naturelle (Paris) and Missouri Botanical Garden (Madagascar/USA).
 - **Global Mobility**:  
-  Extensive experience in Zimbabwe, Chile, Japan, and Mexico.
+  Extensive traveling, including Japan, Germany, the United Kingdom, Italy, Mexico, Spain, the Netherlands, Poland, Chile, Portugal, Hungary, Slovenia, Zimbabwe.

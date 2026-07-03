@@ -39,7 +39,7 @@ Building a full video game from the ground up, with barely any experience of gam
 > [!INFO]
 > Other than the default tools and utilities shipped with Unreal Engine 4, no external tools or assets were used for this project.
 
-### Game development / programming
+### Game development / programming
 
 As the duo's developer I handled building Unstant in Unreal Engine 4, using the blueprint visual scripting system to code:
 
