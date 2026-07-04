@@ -46,3 +46,4 @@ yarn-error.log*
 # Obsidian
 /public/.obsidian/
 /public/obsidian/
+/public/.vault-nickname

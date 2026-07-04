@@ -10,6 +10,9 @@ dist/
 # IDE and Environment
 .vscode/
 
+# Assets
+public/assets/
+
 # Third-party Obsidian plugins/settings
 public/.obsidian/
 public/obsidian/
