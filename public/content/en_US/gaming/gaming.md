@@ -1,8 +1,8 @@
 # Gaming Work Overview
 
-Like many people of my generation, I have been an avid gamer, and fascinated by all aspects of game design. Around 2012, following the wave of indie games and the rise of "walking simulators" and other exploration-focused games, my passion for gaming started to blend into my work as an Architecture student. After years of playing, and learning as much as I could about the inner workings of video game creation, it felt only natural to put hands-to-keyboard and make a video game as my Masters thesis project… in architecture.
+Like many people of my generation, I have been an avid gamer and am fascinated by all aspects of game design. Around 2012, following the wave of indie games and the rise of "walking simulators" and other exploration-focused games, my passion for gaming started to blend into my work as an Architecture student. After years of playing and learning as much as I could about the inner workings of video game creation, it felt only natural to put hands-to-keyboard and create a video game as my Masters thesis project… in architecture.
 
-I already had significant experience with 3D modeling, web development, and even a good bit in narrative and game design through homebrew tabletop gaming; so [Unstant](/content/en_US/gaming/Unstant.md), the resulting game built in Unreal Engine 4, was more of a natural progression than a hard pivot.
+I already had significant experience with 3D modeling, web development, and even a good bit in narrative and game design through homebrew tabletop gaming. [Unstant](/content/en_US/gaming/Unstant.md), the resulting game built in Unreal Engine 4, was thus more of a natural progression than a hard pivot.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |
@@ -11,17 +11,17 @@ I already had significant experience with 3D modeling, web development, and even
 
 <!-- prettier-ignore end -->
 
-At the very same time, I had already started working with the team that I would later join to found Disruptive Learning Solutions; a startup dedicated to building video games for business skills training.
+At precisely the same time, I had already started working with the team that I would later join to found Disruptive Learning Solutions; a startup dedicated to building video games for business skills training.
 
 Over the next decade, I dived deep into Unity3D and C# development, with a focus on UI, UX, environment design, prototyping game mechanics, and navigating complex multiplayer infrastructure. Scaling these projects also required building extensive automation tooling and CI/CD deployment pipelines, which directly shaped the systems-driven mindset I now apply across my [web](/content/en_US/websites/websites.md) and [open-source](/content/en_US/osd/osd.md) work.
 
-Though a majority of my work is closed-source in the form of [CinQ](/content/en_US/gaming/CinQ.md) and various off-shoot projects, I did spin out [InputLayers](/content/en_US/gaming/InputLayers.md) as a source-available Unity asset, which serves as a good showcase of my Unity3D coding work.
+Though a majority of my work is closed-source in the form of [CinQ](/content/en_US/gaming/CinQ.md) and various off-shoot projects, [InputLayers](/content/en_US/gaming/InputLayers.md) was spun out as a source-available Unity asset, which serves as a good showcase of my Unity3D coding work.
 
 ## Projects
 
 - **[CinQ](/content/en_US/gaming/CinQ.md):**  
   A cross-platform multiplayer sandbox built in Unity3D for corporate teamwork and communication training.
 - **[Unstant](/content/en_US/gaming/Unstant.md):**  
-  A short, atmospheric first-person exploration game built in Unreal Engine 4, exploring the intersection of architectural space and memory.
+  A short, atmospheric first-person exploration game, built in Unreal Engine 4, exploring the intersection of architectural space and memory.
 - **[InputLayers](/content/en_US/gaming/InputLayers.md):**  
   An free custom input management architecture engineered for Unity3D.
