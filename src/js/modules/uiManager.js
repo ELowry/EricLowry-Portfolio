@@ -421,7 +421,7 @@ export class UIManager {
 
 	/**
 	 * Resets the tab index of items in a container (First item 0, others -1).
-	 * @param {HTMLElement} container
+	 * @param {HTMLElement} container - The DOM container holding the items to reset.
 	 * @private
 	 */
 	#resetTabFocus(container) {

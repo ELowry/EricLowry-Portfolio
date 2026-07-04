@@ -186,7 +186,7 @@ export class GalleryDisplay {
 
 	/**
 	 * Handle global click events to intercept gallery item clicks.
-	 * @param {MouseEvent} event
+	 * @param {MouseEvent} event - The triggered click event.
 	 * @private
 	 */
 	#handleClick(event) {
@@ -201,7 +201,7 @@ export class GalleryDisplay {
 	/**
 	 * Handle global keydown events for keyboard accessibility.
 	 * Enter/Space to open.
-	 * @param {KeyboardEvent} event
+	 * @param {KeyboardEvent} event - The triggered keyboard event.
 	 * @private
 	 */
 	#handleKeyDown(event) {

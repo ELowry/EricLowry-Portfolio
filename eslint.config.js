@@ -1,17 +1,30 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import jsdoc from 'eslint-plugin-jsdoc';
+import json from '@eslint/json';
+import markdown from '@eslint/markdown';
 import prettier from 'eslint-config-prettier';
 
 export default [
 	{
-		ignores: ['dist/**', 'node_modules/**', 'public/**'],
+		ignores: [
+			'dist/**',
+			'node_modules/**',
+			'public/.obsidian/**',
+			'public/obsidian/**',
+			'public/assets/**',
+			'package-lock.json',
+		],
+	},
+	// JAVASCRIPT
+	{
+		files: ['**/*.js', '**/*.mjs', '**/*.md/*.js', '**/*.md/*.mjs'],
+		...js.configs.recommended,
 	},
 	{
-		files: ['public/content/blog-index.json'],
+		files: ['**/*.js', '**/*.mjs', '**/*.md/*.js', '**/*.md/*.mjs'],
+		...jsdoc.configs['flat/recommended'],
 	},
-	js.configs.recommended,
-	jsdoc.configs['flat/recommended'],
 	{
 		files: ['**/*.js', '**/*.mjs'],
 		languageOptions: {
@@ -58,17 +71,46 @@ export default [
 					checkSetters: false,
 				},
 			],
-			'jsdoc/require-description': 'off',
-			'jsdoc/require-param-description': 'off',
 			'jsdoc/require-returns': 'warn',
 			'jsdoc/require-returns-description': 'warn',
 		},
 	},
+	{
+		files: ['**/*.json'],
+		language: 'json/json',
+		...json.configs.recommended,
+	},
+	// MARKDOWN
+	...markdown.configs.recommended,
+	{
+		files: ['**/*.md'],
+		language: 'markdown/gfm',
+		rules: {
+			'markdown/heading-increment': 'off',
+			'markdown/no-html': 'off',
+			'markdown/no-bare-urls': 'warn',
+			'markdown/no-duplicate-headings': 'warn',
+			'markdown/no-missing-label-refs': 'off',
+			'markdown/fenced-code-language': 'off',
+		},
+	},
+	// Scripts inside Markdown files
+	{
+		files: ['**/*.md/*.js', '**/*.md/*.mjs'],
+		rules: {
+			'no-undef': 'off',
+			'no-unused-vars': 'off',
+			'no-console': 'off',
+			'jsdoc/require-jsdoc': 'off',
+		},
+	},
+	// TEST FILES
 	{
 		files: ['**/*.test.js'],
 		rules: {
 			'jsdoc/require-jsdoc': 'off',
 		},
 	},
+	// PRETTIER
 	prettier,
 ];

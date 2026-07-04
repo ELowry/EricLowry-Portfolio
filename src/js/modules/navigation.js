@@ -204,8 +204,8 @@ class NavigationController {
 	/**
 	 * Pushes a new navigation context onto the stack.
 	 * Useful for opening submenus (trapping focus).
-	 * @param {HTMLElement} containerElement
-	 * @param {Object} options
+	 * @param {HTMLElement} containerElement - The container to push onto the navigation stack.
+	 * @param {Object} options - Navigation behavior settings for the new context.
 	 */
 	pushContext(containerElement, options = {}) {
 		if (this.activeContainer) {
@@ -256,7 +256,7 @@ class NavigationController {
 	/**
 	 * Resets tabindex for all elements in a container to the default roving state.
 	 * (First item 0, all others -1).
-	 * @param {HTMLElement} container
+	 * @param {HTMLElement} container - The container whose elements will be reset.
 	 * @private
 	 */
 	#resetRovingTabindex(container) {

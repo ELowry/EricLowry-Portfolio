@@ -8,7 +8,7 @@ const BASE_URL = 'https://eric-lowry.com';
 
 /**
  * Generates the llms.txt content with categorized links.
- * @param {Object<string, Array<{title: string, file: string, language?: string}>>} categorizedLinks
+ * @param {Object<string, Array<{title: string, file: string, language?: string}>>} categorizedLinks - The sorted links to include in the file.
  * @returns {string} The formatted llms.txt content.
  */
 const generateLlmsContent = (categorizedLinks) => {
@@ -82,9 +82,9 @@ const llmLinks = {}; // Keyed by category title
 
 /**
  * Traverses the content tree to collect sitemap URLs and categorized LLM links.
- * @param {import('../src/js/modules/contentTree.js').ContentNode} node
- * @param {string[]} pathSegments
- * @param {string} currentCategory
+ * @param {import('../src/js/modules/contentTree.js').ContentNode} node - The current node being processed.
+ * @param {string[]} pathSegments - The accumulated URL path segments.
+ * @param {string} currentCategory - The active category for the current branch.
  */
 const traverseTree = (node, pathSegments = [], currentCategory = 'General') => {
 	const currentId = node.id === 'root' ? '' : node.id;

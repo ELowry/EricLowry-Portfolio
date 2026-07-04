@@ -219,7 +219,7 @@ export class Obfuscator {
 
 	/**
 	 * Extracts the decoding logic to be reusable.
-	 * @param {HTMLAnchorElement} link
+	 * @param {HTMLAnchorElement} link - The anchor element containing the obfuscated data.
 	 * @private
 	 */
 	static #decodeLink(link) {

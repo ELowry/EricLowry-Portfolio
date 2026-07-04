@@ -21,6 +21,6 @@ Embedded videos are hosted on [Spectra Video](https://spectra.video), an indepen
 
 Your access and deletion rights for data processed by my external service providers (Firebase/Google and Spectra Video) can be handled directly through their respective privacy portals.
 
-# LLM Disclaimer
+## LLM Disclaimer
 
 This website has been hand-written and hand-coded. I did however make use of LLMs to help with code documentation, debugging, and some rare boilerplate code generation. For more information on my stance on the ethics of LLM usage, you can read more in the [About Me page](/content/en_US/about.md#_my-stance-on-ai).
