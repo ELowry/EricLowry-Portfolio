@@ -1,12 +1,12 @@
 # Gallery of other 3D works
 
-Over the course of my years studying architecture at ENSA-V and landscape design at ENSP-V, I chose to make 3D modeling and rendering somewhat of a specialty. This has continued since, with my work on [CinQ](/content/en_US/gaming/cinq.md), and a handful of personal projects. More Architectural projects, including 3D work, are available on the [projects](/content/en_US/architecture/projects/projects.md) page.
+Over the course of my years studying architecture at ENSA-V and landscape design at ENSP-V, I chose to make 3D modeling and rendering somewhat of a specialty. This has continued since with my work on [CinQ](/content/en_US/gaming/cinq.md) and a handful of personal projects. More Architectural projects, including 3D work, are available on the [projects](/content/en_US/architecture/projects/projects.md) page.
 
-This page contains a variety of 3D images and projects I have worked on using 3DS Max, V-Ray, Unity3D, and more recently Blender. I have chosen to present these in an order that felt natural and cohesive, more than in any chronological or hierarchical order.
+This page contains a variety of 3D images and projects I have worked on using 3DS Max, V-Ray, Unity3D, and more recently Blender. I have chosen to present these in an order that felt natural and cohesive, rather than in a chronological or hierarchical order.
 
 ### Park Project
 
-These renders are a part of a larger landscape design porject I worked on while styudying at ENS-P; during which I reused some of the work I did on [BASELAND](/content/en_US/architecture/projects/BASELAND.md), but with higher fidelity lighting and texture work.
+These renders are part of a larger landscape design project I worked on while studying at ENS-P; during which I reused some of the work I did on [BASELAND](/content/en_US/architecture/projects/BASELAND.md), but with higher fidelity lighting and texture work.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |
@@ -17,7 +17,7 @@ These renders are a part of a larger landscape design porject I worked on while 
 
 ### 3D-Rendered Plan & Perspectives
 
-This project occurred mid-way through my architectural studies, and our goal was to fit together a skatepark, public housing, and various public infrastructure.
+This project was undertaken mid-way through my architectural studies. Our goal was to fit together a skatepark, public housing, and various public infrastructure.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |
@@ -46,7 +46,7 @@ This was part of a short conceptual Architecture exercise around the study of rh
 
 ### Building Upon Existing Assets
 
-While working on [CinQ](/content/en_US/gaming/CinQ.md), which was initially built using existing assets, I created a sizable number of custom assets that had to seamlessly mesh into the existing environment. Pertinent examples include the sewer and ventilation systems, both of which included work on custom shaders and various rendering tricks to ensure a well-optimized scene.
+While working on [CinQ](/content/en_US/gaming/CinQ.md), which was initially built using existing assets, I created a sizable number of custom assets that had to mesh seamlessly into the existing environment. Pertinent examples include the sewer and ventilation systems, both of which included work on custom shaders and various rendering tricks to ensure a well-optimized scene.
 
 <!-- prettier-ignore -->
 | Gallery |  |

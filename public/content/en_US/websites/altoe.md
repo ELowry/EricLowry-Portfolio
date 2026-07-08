@@ -26,14 +26,14 @@ Because the vast majority of Daniel's business is generated through networking a
 
 ![Logo design ideas  for Alto´e  ](/assets/images/websites/altoe/logos__240-202-webp_240-202_266-224-webp_266-224.jpg)
 
-The first step, designing the logo and broad brand identity. The client requested they be anchored around four specific colors that represent his core coaching philosophy. After an extensive, iterative design process, a logo and specific color palette were picked.
+The first step involved designing the logo and broad brand identity. The client requested they be anchored around four specific colors that represent his core coaching philosophy. After an extensive, iterative design process, a logo and specific color palette were selected.
 
 ### UX Design
 
-In terms of user experience, the main challenge was structuring Daniel's extensive list of services without overwhelming the visitor:
+The main challenge regarding user experience was structuring Daniel's extensive list of services without overwhelming the visitor:
 
 - **Progressive Drill-Down:**  
-  I constructed the sire to first introduce broad concepts, and slowly allow users to drill down into more detail as they explore sub-pages and menus.
+  I constructed the site so that it first introduces broad concepts and slowly allows users to drill down into more detail as they explore sub-pages and menus.
 - **Targeted Landing Pages:**  
   Over time, we adapted the flow so that specific sub-pages now act as landing pages of sorts. Daniel can send these specific links when initiating contact with prospects, utilizing contact forms specifically configured for each seminar or offering.
 
@@ -46,7 +46,7 @@ In terms of user experience, the main challenge was structuring Daniel's extensi
 
 ### Technical Architecture
 
-At the client's request, the site was built using WordPress to ensure it could be easily maintained in the future. I had quite a lot of experience with the platform (both for personal and professional projects), and decided to find a good middle-ground between custom code and existing themes/plugins for good performance and easy maintenance:
+At the client's request, the site was built using WordPress to ensure it could be easily maintained in the future. Having a lot of experience with the platform (both for personal and professional projects), I decided to find a good middle-ground between custom code and existing themes/plugins for good performance and easy maintenance:
 
 - **Core Build:**  
   I picked a base theme that used the Elementor site-builder to speed up the initial setup.

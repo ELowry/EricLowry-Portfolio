@@ -16,8 +16,7 @@
 
 ### Context
 
-I built this website for an artist who needed an extremely simple and low-maintenance front page for their commission services.  
-They wanted a streamlined way to link out to their social media accounts, outline their pricing and terms of service, and provide a structured contact form.
+This website was built for an artist who needed an extremely simple and low-maintenance front page for their commission services. They wanted a streamlined way to link out to their social media accounts as well as outline their pricing and terms of service, and to provide a structured contact form.
 
 Additionally, both the site and the integrated forms needed to be fully bilingual (English and French).
 
@@ -25,7 +24,7 @@ Additionally, both the site and the integrated forms needed to be fully bilingua
 
 The artist already had a distinct visual identity and color palette in place, but commissioned me for a new logo to anchor the site's branding.
 
-I designed the interface to be as clean and minimalist as possible; by keeping the UI unobtrusive, the focus remains entirely on the artist's brand and message, ensuring the logo and photos of their work remain the main visual element of each page.
+I designed the interface to be as clean and minimalist as possible; by keeping the UI unobtrusive, the focus remains entirely on the artist's brand and message, ensuring that the logo and photos of their work remain the main visual element of each page.
 
 ### Technical Architecture
 

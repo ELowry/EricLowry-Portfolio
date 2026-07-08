@@ -16,17 +16,17 @@
 
 ### Context
 
-I developed this landing page for Stéphane Amarsy when he started developing his consultancy business for artificial intelligence and organizational transformation.
+I developed this landing page for Stéphane Amarsy when he started building his consultancy business for artificial intelligence and organizational transformation.
 
-Because the company's offerings are designed to be immersive, disruptive experiences that force leaders to confront their impending future, we decided that the website should look and feel unfamiliar and futuristic. The site is meant to be an exciting, intriguing digital experience rather than a traditional corporate brochure.
+Because the company's offerings are designed to be immersive, disruptive experiences that force leaders to confront their impending future, we decided that the website should look and feel unfamiliar and futuristic. The site is intentionally meant to be an exciting, intriguing digital experience rather than a traditional corporate brochure.
 
 ### UX & Visual Design
 
 ![A collage of inspiration images  ](/assets/images/websites/thenextmind/inspiration__240-270-webp_240-270_400-450-webp_400-450_480-540-webp_480-540.jpg)
 
-To capture the consultancy's brand identity, I designed the interface using a subtle blend of terminal-like graphics and sleek, colorful modern UI, drawing heavy inspiration from Sci-Fi and retrofuturist media.
+To capture the consultancy's brand identity, I designed the interface using a subtle blend of terminal-like graphics and sleek and colorful modern UI, drawing heavy inspiration from Sci-Fi and retrofuturist media.
 
-The user journey begins with a simulated, interactive terminal chat that asks if the user is "ready for the future" and prompts them for their name. This name is then dynamically injected into the copy throughout the entire site to create a highly personalized, conversational tone.
+The user journey begins with a simulated, interactive terminal chat that asks if they are "ready for the future" and prompts them for their name. This name is then dynamically injected into the copy throughout the entire site to create a highly personalized, conversational tone.
 
 To add visual flair without overwhelming the content, I implemented a semi-transparent terminal log that acts as the page's background, and used animated, colorful decoration throughout the page, all using ASCII art techniques animated through JavaScript.
 

@@ -25,7 +25,7 @@ Because this station would be among the very first major pieces of infrastructur
 
 ### Spatial Concept & Urban Flow
 
-Traditional elevated train stations often act as physical and visual barriers within a city. Our goal was to dismantle that barrier, creating a natural, seamless flow between the train platforms and the upcoming city.
+Traditional elevated train stations often act as physical and visual barriers within a city. Our goal was to dismantle that barrier, creating a natural, seamless flow between the train platforms and the soon-to-be city.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |

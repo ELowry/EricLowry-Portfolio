@@ -14,7 +14,7 @@
 
 I studied architecture and landscape design at the École Nationale Supérieure d'Architecture de Versailles (ENSA-V) from 2009 to 2015 and Landscape Design at the École Nationale Supérieure du Paysage de Versailles (ENSP) in 2015–16.
 
-While I chose not to pursue a career as an architect, this rigorous academic background fundamentally shaped my approach to designing spaces and building for human experiences. I developed a solid ability to plan and execute the conceptual, early-stage, phases of project development, and I specialized in translating abstract requirements into coherent, functional spaces, balancing aesthetic ambitions and practical usability concerns.
+While I chose not to pursue a career as an architect, this rigorous academic background fundamentally shaped my approach to designing spaces and building for human experiences. I developed a solid ability to plan and execute the conceptual, early-stage phases of project development, and I specialized in translating abstract requirements into coherent, functional spaces, balancing aesthetic ambitions and practical usability concerns.
 
 ### Between Physical and Digital
 
@@ -27,14 +27,14 @@ This notion actively shifted my focus during my final years of study toward digi
 
 Growing up with a botanist father and a grandfather who studied the interactions between climate and urbanism, I quickly discovered that mindful design across all domains (architecture, landscaping, or urbanism) must account for the ecosystems it affects. This belief was reinforced when I worked on the [SAGE Classroom](https://sageclassroom.com/) project in Oregon and helped the Volcji Potok National Arboretum in Slovenia revitalize historic sites and design landscapes that would promote the country's ecosystems.
 
-While most of my work since then has been focused on digital spaces and experiences, I believe the messages and practice of ecologically-minded design should remain important across virtual space in order to promote and educate the practice and ideas.
+While most of my work since then has been focused on digital spaces and experiences, I believe the messages and practice of ecologically-minded design should remain important across virtual space in order to promote and educate both practice and ideas.
 
 ### Visual Communication
 
-A significant part of what I learned during my studies is the early stage of architecture and landscape design: project management and presentation. In essence, these are about effectively "selling" a concept to clients and stakeholders.
+A significant part of what I learned during my studies concerns the early stage of architecture and landscape design: project management and presentation. In essence, these are about effectively "selling" a concept to clients and stakeholders.
 
 Through my studies and early professional work, I realized that the most effective way to communicate a concept is through immersion. By adopting modern tools such as 3D rendering and 1st-person video game engines, I was able to create a visceral, emotional experience that had a more direct impact than traditional drawings and static images.  
-However, because immersive digital mediums can easily create false expectations, I always ground my 3D work in traditional representation techniques (plans, sections, and elevations). Having a baseline understanding of actual construction methods ensures that the spaces I conceptualize remain tethered to technical reality.
+However, because immersive digital media can easily create false expectations, I always ground my 3D work in traditional representation techniques (plans, sections, and elevations). Having a baseline understanding of actual construction methods ensures that the spaces I conceptualize remain tethered to technical reality.
 
 ---
 

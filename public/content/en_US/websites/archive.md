@@ -4,7 +4,7 @@
 
 While my current focus is on highly customized frameworks and immersive experiences, my experience with web development and design reaches back over a decade.
 
-This archive is a collection of legacy projects, early freelance work, and sites for businesses that have since closed their doors. Though some are no longer actively maintained or are only accessible via the Wayback Machine, they represent some of my earlier efforts that built the foundation of my current skill set.
+This archive is a collection of legacy projects, early freelance work, and sites for businesses that have since closed their doors. Though some are no longer actively maintained or are only accessible via the Wayback Machine, they represent some earlier efforts that built the foundation of my current skill set.
 
 ---
 
@@ -39,11 +39,11 @@ While I no longer maintain the site (resulting in some out-of-date APIs and lack
 
 Penn Sardin was a long-running conceptual American pop-up restaurant and wine bar focused on the historical and culinary fusion of the US West Coast and Brittany, France. I collaborated closely with their graphic designer to build a simple, elegant website that put the focus entirely on their visual identity and messaging.
 
-Using a barebones WordPress theme, I applied minimal styling to match their branding, and tried to bring the custom paper-first iconography and branding elements to the web.
+Using a barebones WordPress theme, I applied minimal styling to match their branding, bringing the custom paper-first iconography and branding elements to the web.
 
 ---
 
-### OOB Oyster Bar
+### Olympia Oyster Bar
 
 > [!SUMMARY]
 >

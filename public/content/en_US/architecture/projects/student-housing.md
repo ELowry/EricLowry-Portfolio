@@ -30,7 +30,7 @@ Instead of fighting the flooded terrain, our team's approach was to embrace the 
 ![Cross-section with elevation of the main shared living quarters](/assets/images/architecture/student-housing/section__240-53-webp_240-53_400-89-webp_400-89_600-133-webp_600-133_820-182-webp_820-182_1400-311-webp_1400-311_1920-427-webp_1920-427.jpg)
 
 - **Passive Climate Control:**  
-  To optimize the site for summer temperatures, we actively integrated the existing water into our thermal strategy. We planned small excavated ponds and rivers to bring water closer to the structures, and positioned the buildings to maximize natural shade and create cooling ventilation corridors.
+  To optimize the site for summer temperatures, we actively integrated the existing water into our thermal strategy. We planned small, excavated ponds and rivers to bring water closer to the structures, and positioned the buildings to maximize natural shade and create cooling ventilation corridors.
 
 ![Overall project layout plan](/assets/images/architecture/student-housing/plan__240-339-webp_240-339_400-566-webp_400-566_600-849-webp_600-849_820-1160-webp_820-1160_1357-1920-webp_1357-1920.jpg)
 

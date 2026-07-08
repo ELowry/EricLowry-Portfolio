@@ -18,7 +18,7 @@
 
 I created this page for a business partner working with us as a coach and data consultant on [CinQ](/content/en_US/gaming/CinQ.md). He wanted an online portfolio to showcase his extensive 25+ years of experience across leadership, data, and psychology, and to start growing his consultancy business.
 
-The site's primary goal is to outline his skillsets, while providing a streamlined way for potential clients to get in touch.
+The site's primary goal is to outline his skillsets, while also providing a streamlined way for potential clients to get in touch.
 
 ### UX & Visual Design
 
@@ -33,7 +33,7 @@ To accomplish this, I designed the site to feel like a fusion of physical paper 
 - **Digital feel:**  
   This analog feel is contrasted with subtle, terminal-like text decorations, sharp geometric vector patterns, and subtle animations that trigger on scroll.
 
-To clearly delineate the content, each major section dynamically shifts the entire page's background color, anchoring the multiple disciplines that Phil Yeoman embodies.
+To delineate the content clearly, each major section dynamically shifts the entire page's background color, anchoring the multiple disciplines that Phil Yeoman embodies.
 
 <!-- prettier-ignore -->
 | Gallery |  |  |
@@ -44,4 +44,4 @@ To clearly delineate the content, each major section dynamically shifts the enti
 
 ### Technical Architecture
 
-This site was built upon my [Lightweight Static Framework](/content/en_US/websites/lightweight-static/lightweight-static.md) with some additional modern CSS and JavaScript to handle the dynamic scrolling effects and visual design.
+This site was built upon my [Lightweight Static Framework](/content/en_US/websites/lightweight-static/lightweight-static.md), with some additional modern CSS and JavaScript to handle the dynamic scrolling effects and visual design.

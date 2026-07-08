@@ -12,7 +12,7 @@
 
 ### Context
 
-During my internship at the BASE landscape design and architecture firm, the leadership took an interest in my background bridging 3D visualization and video game design. They tasked me with overhauling the visual identity and workflow of "BASELAND 2050", a massive collaborative digital landscape project:
+During my internship at the BASE landscape design and architecture firm, the leadership took an interest in my background bridging 3D visualization and video game design. They tasked me with overhauling the visual identity and workflow of "BASELAND 2050", a massive, collaborative digital landscape project:
 
 ![The initial state of the BASELAND project](/assets/images/architecture/BASELAND/initial__240-104-webp_240-104_400-173-webp_400-173_600-260-webp_600-260_820-355-webp_820-355_1400-607-webp_1400-607_1920-832-webp_1920-832.png)
 
@@ -22,7 +22,7 @@ My primary objective was to transform this chaotic, crowdsourced model into a un
 ### Realism Test
 
 My initial approach was to establish an automated rendering pipeline using Vue xStream to convert the raw SketchUp scenes into high-quality, photorealistic 3D landscapes.  
-After running initial tests, however, I quickly realized this was the wrong path. The computational resources and time required to render a collaborative project of this immense, ever-growing scale in photorealism were entirely unsustainable, and the models being contributed to the project were difficult to properly convert to high-fidelity rendering software.
+After running initial tests, however, I quickly realized this was the wrong path. The computational resources and time required to render a collaborative project of this immense, ever-growing scale in photorealism were entirely unsustainable, and the models being contributed to the project were difficult to convert properly to high-fidelity rendering software.
 
 <!-- prettier-ignore -->
 | Gallery: |  |
@@ -55,9 +55,9 @@ Once the new art direction was approved, I executed a complete overhaul of the p
 ![A 3D view of the upgraded landscape](/assets/images/architecture/BASELAND/model__240-81-webp_240-81_400-135-webp_400-135_600-202-webp_600-202_820-276-webp_820-276_1002-337-webp_1002-337.png)
 
 - **Workflow:**  
-  To ensure that the project would not degrade back to flat colors and sticks for trees, I engineered an automated import system. Whenever a team member imported a new contribution, the system would automatically apply the correct stylized materials and assets.
+  To ensure that the project would not degrade back to using flat colors and sticks for trees, I engineered an automated import system. Whenever a team member imported a new contribution, the system would automatically apply the correct stylized materials and assets.
 - **Asset Library:**  
-  I compiled the assets into a structured library complete with usage instructions, allowing the entire firm to utilize this optimized design system both inside and outside of the BASELAND project.
+  I compiled the assets into a structured library, complete with usage instructions, allowing the entire firm to utilize this optimized design system both inside and outside of the BASELAND project.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
