@@ -10,9 +10,9 @@
 > | **Languages** | Kotlin                        |
 > | **Skillset**  | App Development, UI/UX Design |
 >
-> - ⏱ Pending availability on F-Droid  
-> - 📥 [Download from IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.ericlowry.dnstoggle)  
-> - 📦 [Download from GitHub](https://github.com/ELowry/DNSToggle/releases/latest)  
+> - ⏱ Pending availability on F-Droid
+> - 📥 [Download from IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.ericlowry.dnstoggle)
+> - 📦 [Download from GitHub](https://github.com/ELowry/DNSToggle/releases/latest)
 > - 🗎 [Source code on GitHub](https://github.com/ELowry/DNSToggle)
 >
 > **License:** MIT
@@ -27,7 +27,7 @@ Though this is not the first attempt to make toggling the option more practical,
 <!-- prettier-ignore -->
 | Gallery |  |  |  |
 | -- | -- | -- | -- |
-| ![Screenshot of Private DNS being toggled on in the Quick Settings menu](/assets/images/osd/dns-toggle/screen1__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_1220-2712-webp_1220-2712.jpg) | ![Screenshot of Private DNS being toggled off in the Quick Settings menu](/assets/images/osd/dns-toggle/screen2__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_1220-2712-webp_1220-2712.jpg) | ![Screenshot of the DNS Toggle configuration menu](/assets/images/osd/dns-toggle/screen3__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_1220-2712-webp_1220-2712.jpg) | ![Screenshot of the DNS Toggle configuration menu's rename popup](/assets/images/osd/dns-toggle/screen4__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_1220-2712-webp_1220-2712.jpg) |
+| ![Screenshot of Private DNS being toggled on in the Quick Settings menu](/assets/images/osd/dns-toggle/screen1__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_864-1921-webp_864-1921.jpg) | ![Screenshot of the Private DNS hostname quick-switch popup](/assets/images/osd/dns-toggle/screen2__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_864-1921-webp_864-1921.jpg) | ![Screenshot of the DNS Toggle configuration menu](/assets/images/osd/dns-toggle/screen3__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_864-1921-webp_864-1921.jpg) | ![Screenshot of the second half of the DNS Toggle configuration menu](/assets/images/osd/dns-toggle/screen4__240-534-webp_240-534_400-889-webp_400-889_600-1334-webp_600-1334_820-1823-webp_820-1823_864-1921-webp_864-1921.jpg) |
 
 <!-- prettier-ignore end -->
 

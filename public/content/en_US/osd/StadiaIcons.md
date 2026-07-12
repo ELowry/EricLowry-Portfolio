@@ -10,7 +10,7 @@
 > | **Tools**     | Firebase Hosting, Firebase Functions, PWA |
 > | **Skillset**  | Graphic Design, Web Dev, Web Design       |
 >
-> - 🗄 [Website archive available](https://elowry.github.io/StadiaIcons/)  
+> - 🗄 [Website archive available](https://elowry.github.io/StadiaIcons/)
 > - 🗎 [Source code on GitHuib](https://github.com/ELowry/StadiaIcons)
 >
 > **License:** MIT

@@ -8,7 +8,7 @@
 > | **Tools**     | WinGet, Inno Setup                           |
 > | **Skillset**  | Graphic Design, Console Tools, UX, Packaging |
 >
-> - 📦 [Download from GitHub](https://github.com/ELowry/WinGet-Updater/releases/latest)  
+> - 📦 [Download from GitHub](https://github.com/ELowry/WinGet-Updater/releases/latest)
 > - 🗎 [Source code on GitHub](https://github.com/ELowry/WinGet-Updater)
 >
 > **License:** MIT

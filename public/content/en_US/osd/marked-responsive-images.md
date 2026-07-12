@@ -8,7 +8,7 @@
 > | **Tools**     | [Marked.js](https://github.com/markedjs/marked), NPM |
 > | **Skillset**  | Web Dev, Packaging                                   |
 >
-> - 📦 [NPM package for easy installation](https://www.npmjs.com/package/marked-responsive-images)  
+> - 📦 [NPM package for easy installation](https://www.npmjs.com/package/marked-responsive-images)
 > - 🗎 [Source code on GitHuib](https://github.com/ELowry/MarkedResponsiveImages)
 >
 > **License:** GNU AGPL 3.0
