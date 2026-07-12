@@ -10,7 +10,7 @@
 > | **Tools**     | Unity3D, UI Toolkit, Input System |
 > | **Skillset**  | Game Dev, UI, UX                  |
 >
-> - 📦 [Download on the Unity Asset Store](https://assetstore.unity.com/packages/slug/259582)
+> - 📦 [Download from the Unity Asset Store](https://assetstore.unity.com/packages/slug/259582)
 > - 🗎 [Documentation on GitHuib](https://github.com/ELowry/Unity_InputLayers_Documentation)
 >
 > **License:** Unity Asset Store Extension Asset (source available)
