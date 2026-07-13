@@ -17,7 +17,8 @@
 	"content": {
 		"privacy": {
 			"title": "Privacy Policy",
-			"label": "Privacy Policy"
+			"label": "Privacy Policy",
+			"description": "Review details regarding this website's data storage, cookies, embedded video handling, etc."
 		},
 		"index": {
 			"title": "Welcome",
@@ -29,146 +30,212 @@
 		},
 		"about": {
 			"title": "About Me",
-			"label": "About Me"
+			"label": "About Me",
+			"description": "Open-source enthusiast, explorer, and rapid problem solver bridging the gap between game design, architecture, and technology."
 		},
 		"architecture": {
 			"title": "Architecture Studies",
-			"label": "Architecture Studies",
-			"architecture": {
-				"title": "About my Architecture Studies",
-				"label": "Architecture Overview"
-			},
-			"3Dgallery": {
-				"title": "Gallery of other 3D work",
-				"label": "3D Works Gallery"
-			},
+			"label": "Architecture Overview",
+			"description": "Discover my background in architecture and landscape design, focusing on spatial conceptualization, ecological design, and bridging physical and virtual spaces.",
+			"imageAlt": "3D view of public park infrastructure integrated into the shopping and cultural center",
+
 			"projects": {
 				"title": "Selection of Architecture Projects",
-				"label": "Architecture Projects"
+				"label": "Architecture Projects",
+				"description": "Browse a curated selection of architectural and landscape design projects, ranging from ecological student housing to complex urban transit hubs.",
+				"imageAlt": "3D view of public park infrastructure integrated into the shopping and cultural center",
+
+				"Unstant": {
+					"title": "Unstant",
+					"label": "Unstant",
+					"description": "Explore an atmospheric first-person walking simulator built in Unreal Engine 4 that bridges architectural design and virtual space.",
+					"imageAlt": "A screenshot from the game Unstant showing an artistically rendered view of a yellow desert with a red buoy"
+				},
+				"BASELAND": {
+					"title": "'BASELAND – Virtual Lanscape",
+					"label": "BASELAND",
+					"description": "Learn how I overhauled a massive, collaborative digital landscape model by engineering a stylized visual identity and an automated 3D asset workflow.",
+					"imageAlt": "A stylized 3D render of a plaza with trees growing out of a large pool"
+				},
+				"student-housing": {
+					"title": "Eco-Friendly Student Housing",
+					"label": "Student Housing",
+					"description": "A 2014 Solar Decathlon architectural project focusing on eco-friendly, passive-climate student housing integrated into a challenging wetland environment.",
+					"imageAlt": "3D view of temporary wooden student housing on stilts built over wetlands"
+				},
+				"pavilion": {
+					"title": "\"La Mariée Japonaise\" Pavilion",
+					"label": "Expo Pavilion",
+					"description": "From complex 3D modeling to physical fabrication, explore the technical design and construction of an art pavilion for the 2014 Solar Decathlon.",
+					"imageAlt": "A view of a wooden pavilion constructed by a team of students"
+				},
+				"station": {
+					"title": "Plateau de Saclay Train Station",
+					"label": "Train Station",
+					"description": "An architectural concept for an urban transit hub on the Plateau de Saclay, designed to dismantle physical barriers and integrate seamlessly into a new city.",
+					"imageAlt": "3D view of public park infrastructure integrated into the shopping and cultural center"
+				}
 			},
-			"Unstant": {
-				"title": "Unstant",
-				"label": "Unstant"
+			"3Dgallery": {
+				"title": "Gallery of other 3D Works",
+				"label": "3D Works Gallery",
+				"description": "Explore a gallery of 3D modeling and rendering works, featuring architectural concepts, landscape designs, and custom 3D-printed projects.",
+				"imageAlt": "3D view of a public park project"
 			}
 		},
 		"coaching-business": {
 			"title": "Coaching & Business",
-			"label": "Coaching & Business",
-			"coaching-business": {
-				"title": "About my Coaching & Business Work",
-				"label": "Coaching Business Overview"
-			},
-			"multimedia": {
-				"title": "Content & Multimedia Strategy",
-				"label": "Content & Multimedia"
-			},
+			"label": "Coaching Business Overview",
+			"description": "Learn about my hands-on experience in business operations, brand strategy, and executive facilitation for top-tier esports teams and Fortune 500 leaders.",
+			"imageAlt": "Photos of in-person The Heist events with people using physical maps to navigate",
+
 			"CinQ": {
 				"title": "CinQ – Operations & Coaching",
-				"label": "CinQ",
+				"label": "CinQ Business",
+				"description": "An overview of my role as co-founder of Disruptive Learning Solutions, managing agile product cycles, B2B sales, and executive team coaching.",
+				"imageAlt": "Photos of in-person The Heist events with people using physical maps to navigate",
+
 				"CinQ-game": {
 					"title": "CinQ Game Development",
-					"label": "CinQ Game Development"
+					"label": "CinQ Game Development",
+					"description": "A 5-player multiplayer sandbox built in Unity3D for corporate soft-skills, leadership, and remote teamwork training.",
+					"imageAlt": "A screenshot of the CinQ characters planning their mission inside a van"
 				},
 				"website": {
 					"title": "The CinQ Website",
-					"label": "CinQ Website"
+					"label": "CinQ Website",
+					"description": "Discover the architecture behind CinQ's dual web ecosystem: a Statamic-powered marketing platform and a custom PHP application portal.",
+					"imageAlt": "Screenshot of the CinQ website website designed and coded by Eric Lowry"
 				}
+			},
+			"multimedia": {
+				"title": "Content & Multimedia Strategy",
+				"label": "Content & Multimedia",
+				"description": "Discover the brand strategy, multilingual editorial pipeline, and video podcast production behind Disruptive Learning Solutions' B2B content.",
+				"imageAlt": "A screenshot from the CinQ web page listing articles and podcast episodes"
 			}
 		},
 		"gaming": {
-			"title": "Video Games",
-			"label": "Video Games",
-			"gaming": {
-				"title": "About my Game Development Work",
-				"label": "Game Development Overview"
-			},
+			"title": "Game Development",
+			"label": "Game Development Overview",
+			"description": "An overview of a decade in game development, from architecture thesis to scaling multiplayer Unity3D titles and automation tooling.",
+			"imageAlt": "A screenshot of the cemetery level from thhe game Unstant",
+
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",
-				"label": "CinQ"
+				"label": "CinQ",
+				"description": "A 5-player multiplayer sandbox built in Unity3D for corporate soft-skills, leadership, and remote teamwork training.",
+				"imageAlt": "A screenshot of the CinQ characters planning their mission inside a van"
 			},
 			"InputLayers": {
 				"title": "InputLayers",
-				"label": "InputLayers"
+				"label": "InputLayers",
+				"description": "A layer-based input filtering system for Unity3D that simplifies UI and gameplay input management without manual configuration.",
+				"imageAlt": "The InputLayers logo over a colorful gradient background"
 			},
 			"Unstant": {
 				"title": "Unstant",
-				"label": "Unstant"
+				"label": "Unstant",
+				"description": "Explore an atmospheric first-person walking simulator built in Unreal Engine 4 that bridges architectural design and virtual space.",
+				"imageAlt": "A screenshot from the game Unstant showing an artistically rendered view of a yellow desert with a red buoy"
 			}
 		},
 		"osd": {
 			"title": "Open Source Development",
-			"label": "Open Source Development",
-			"osd": {
-				"title": "About my Open Source Work",
-				"label": "OSD Overview"
-			},
+			"label": "OSD Overview",
+			"description": "Explore a portfolio of open-source projects and developer tools, including Unity assets, Obsidian plugins, and PowerShell scripts, built to remove friction.",
+			"imageAlt": "A screenshot of Eric Lowry's GitHub profile",
+
 			"InputLayers": {
 				"title": "InputLayers",
-				"label": "InputLayers"
+				"label": "InputLayers",
+				"description": "A layer-based input filtering system for Unity3D that simplifies UI and gameplay input management without manual configuration.",
+				"imageAlt": "The InputLayers logo over a colorful gradient background"
 			},
 			"winget-updater": {
 				"title": "WinGet Updater",
-				"label": "WinGet Updater"
+				"label": "WinGet Updater",
+				"description": "A lightweight, portable PowerShell tool that automates Windows application updates in the background using the native WinGet package manager.",
+				"imageAlt": "A screenshot of a WinGet Updater terminal window"
 			},
 			"marked-responsive-images": {
 				"title": "Marked Responsive Images",
-				"label": "Marked Responsive Images"
+				"label": "Marked Responsive Images",
+				"description": "An NPM extension for Marked.js that automatically generates responsive HTML <picture> elements by parsing standard Markdown image filenames."
 			},
 			"obsidian-replace-commands": {
 				"title": "Obsidian Replace Commands",
-				"label": "Obsidian Replace Commands"
+				"label": "Obsidian Replace Commands",
+				"description": "An Obsidian community plugin that streamlines document editing by allowing users to build and execute sequential chains of regex search-and-replace rules.",
+				"imageAlt": "The Obsidian logo with the text Replace Commands and three boxes that read plug-in, plugin and amazing plugin"
 			},
 			"dns-toggle": {
 				"title": "DNS Toggle",
-				"label": "DNS Toggle"
+				"label": "DNS Toggle",
+				"description": "A minimal Android Quick Settings app built in Kotlin that lets you easily toggle your device's Private DNS setting on and off.",
+				"imageAlt": "DNS Toggle app logo"
 			},
 			"StadiaIcons": {
 				"title": "StadiaIcons",
-				"label": "StadiaIcons"
+				"label": "StadiaIcons",
+				"description": "A dynamic PWA and Firebase Cloud Function system generating native desktop shortcuts and unified icons for over 280 Google Stadia cloud games.",
+				"imageAlt": "StadiaIcons 2022 banner image with the StadiaIcons logo and icons for various games"
 			}
 		},
 		"websites": {
-			"title": "Web Development & Design",
-			"label": "Web Development & Design",
-			"websites": {
-				"title": "About my Web Development Work",
-				"label": "Web Development Overview"
-			},
+			"title": "Web Development",
+			"label": "Web Development Overview",
+			"description": "An overview of my web development and UI/UX design journey, highlighting a shift toward modern frameworks and reusable static architectures.",
+			"imageAlt": "Screenshot of a website designed and coded by Eric Lowry",
+
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",
-				"label": "CinQ"
+				"label": "CinQ",
+				"description": "Discover the architecture behind CinQ's dual web ecosystem: a Statamic-powered marketing platform and a custom PHP application portal.",
+				"imageAlt": "Screenshot of the CinQ website website designed and coded by Eric Lowry"
 			},
 			"altoe": {
 				"title": "Alto´e",
-				"label": "Alto´e"
+				"label": "Alto´e",
+				"description": "Explore the brand identity and custom WordPress web design built for a corporate coaching and organizational transformation consultancy.",
+				"imageAlt": "Screenshot of the Alto´e website designed and coded by Eric Lowry"
 			},
 			"lightweight-static": {
 				"title": "Lightweight Static Framework",
 				"label": "Lightweight Static Framework",
-				"lightweight-static": {
-					"title": "Lightweight Static Framework",
-					"label": "Lightweight Static Framework"
-				},
+				"description": "A custom, zero-dependency static frontend architecture hosted on Firebase, featuring a native JSON-based translation system.",
+				"imageAlt": "Screenshot of a lightweight static website designed and coded by Eric Lowry",
+
 				"thenextmind": {
 					"title": "The Next Mind",
-					"label": "The Next Mind"
+					"label": "The Next Mind",
+					"description": "A retrofuturistic, interactive landing page built with custom HTML and JavaScript for an AI and strategic consultancy.",
+					"imageAlt": "Screenshot of the The Next Mind website designed and coded by Eric Lowry"
 				},
 				"luzech": {
 					"title": "Luzech",
-					"label": "Luzech"
+					"label": "Luzech",
+					"description": "A bold, analog-meets-digital portfolio website designed for a data, leadership, and psychology consultant in the UK.",
+					"imageAlt": "Screenshot of the luzech.co.uk website designed and coded by Eric Lowry"
 				},
 				"koalakrash": {
 					"title": "Koala Krash",
-					"label": "Koala Krash"
+					"label": "Koala Krash",
+					"description": "A minimalist, bilingual online portfolio and commissioning platform built for an independent artist using a lightweight static framework.",
+					"imageAlt": "Screenshot of the Koala Krash website designed and coded by Eric Lowry"
 				}
 			},
 			"StadiaIcons": {
 				"title": "StadiaIcons",
-				"label": "StadiaIcons"
+				"label": "StadiaIcons",
+				"description": "A dynamic PWA and Firebase Cloud Function system generating native desktop shortcuts and unified icons for over 280 Google Stadia cloud games.",
+				"imageAlt": "StadiaIcons 2022 banner image with the StadiaIcons logo and icons for various games"
 			},
 			"archive": {
 				"title": "Archive of Legacy Projects",
-				"label": "Project Archive"
+				"label": "Project Archive",
+				"description": "Explore a curated archive of early and legacy web projects, including custom WordPress sites for architecture firms and restaurants.",
+				"imageAlt": "Screenshot of the Maia Architectes website designed and coded by Eric Lowry"
 			}
 		},
 		"blog": {

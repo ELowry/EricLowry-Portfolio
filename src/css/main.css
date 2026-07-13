@@ -569,9 +569,19 @@
 		gap: var(--nav-spacing);
 		padding-left: calc(var(--nav-spacing) * 2);
 
-		a.category::before {
-			content: '🗁 ';
-			font-family: var(--font-symbols);
+		a {
+			&::before {
+				content: '🗅 ';
+				font-family: var(--font-symbols);
+			}
+
+			&.category::before {
+				content: '🗁 ';
+			}
+
+			&[href="/text/blog"]::before {
+				content: '🗩 ';
+			}
 		}
 	}
 

@@ -25,7 +25,7 @@ So for some projects on which I was working, I decided to try to fix my biggest 
 
 InputLayers is a layer-based filtering system built atop Unity's Input System, which eliminates the need to enable or disable input handling manually every time a new menu or mechanic gets enabled/added.
 
-![A graphhic design representing how InputLayers filters inputs so only the systems and UIs you want react to incoming inputs](/assets/images/osd/inputlayers/concept__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
+![A graphic design representing how InputLayers filters inputs so only the systems and UIs you want react to incoming inputs](/assets/images/osd/inputlayers/concept__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
 
 It achieves this by replacing default `InputActions` with custom `LayeredActions`. These actions still map to standard Unity inputs, but act as a filtered pass-through: they will only register an input if their specifically assigned Layer is currently active.
 
