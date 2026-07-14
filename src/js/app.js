@@ -14,6 +14,8 @@ import { TutorialManager } from './modules/tutorialManager.js';
 import { MarkedExtensions } from './modules/markedExtensions.js';
 import { GalleryDisplay } from './modules/gallery.js';
 import { Meta } from './modules/meta.js';
+import { PreviewManager } from './modules/previewManager.js';
+import { ExternalLinks } from './modules/externalLinks.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -33,6 +35,8 @@ class AppController {
 	 * @property {GalleryDisplay|null} galleryDisplay - Manages the gallery display, initialized after core setup.
 	 * @property {Input} Input - Centralized input controller instance, initialized immediately.
 	 * @property {MetaController} Meta - Centralized metadata manager, initialized immediately.
+	 * @property {PreviewManager} PreviewManager - Centralized preview manager, initialized immediately.
+	 * @property {ExternalLinks} ExternalLinks - Centralized external links preview manager, initialized immediately.
 	 * @property {boolean} isLocal - Indicates whether the app is running in a local development environment.
 	 */
 	constructor() {
@@ -56,6 +60,9 @@ class AppController {
 
 		// Meta manager
 		this.Meta = Meta;
+
+		// Preview manager
+		this.PreviewManager = new PreviewManager(this);
 
 		this.isLocal =
 			window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -110,6 +117,8 @@ class AppController {
 		try {
 			const langPromise = Lang.init();
 			const contentPromise = Content.init();
+
+			const externalLinksPromise = ExternalLinks.getData();
 
 			const [
 				littleModule,
@@ -169,7 +178,7 @@ class AppController {
 
 			// Ensure all scripts are loaded
 			this.Lang = Lang;
-			await Promise.all([langPromise, contentPromise]);
+			await Promise.all([langPromise, contentPromise, externalLinksPromise]);
 
 			// Listen for route changes
 			Events.on('route:changed', async (payload) => {

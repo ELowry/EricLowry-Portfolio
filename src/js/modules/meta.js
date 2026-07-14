@@ -2,9 +2,11 @@ import { Events } from './events.js';
 import { Router } from './router.js';
 import { Lang } from './lang.js';
 import { Blog } from './blog.js';
+import { Content } from './content.js';
 
 /**
  * MetaController manages page metadata, updating document title, descriptions, and Open Graph tags.
+ * Also provides metadata retrieval for UI preview cards.
  */
 class MetaController {
 	/** @type {Node[]} */
@@ -36,9 +38,31 @@ class MetaController {
 	 * @returns {Promise<void>}
 	 */
 	async update({ path, node }) {
+		const metaData = await this.getMetadataForPath(path, node);
+		if (!metaData) return;
+
+		this.#updateTitle(metaData.pageTitle);
+		this.#updateDescription(metaData.pageDescription);
+		this.#updateImage(
+			metaData.pageImage,
+			metaData.pageImageAlt,
+			metaData.imgWidth,
+			metaData.imgHeight
+		);
+	}
+
+	/**
+	 * Retrieves formatted metadata for a given content path.
+	 *
+	 * @param {string} path - The route path to look up.
+	 * @param {Object|null} [node=null] - Optional node to skip the tree lookup if already known.
+	 * @returns {Promise<Object>} An object containing the page title, description, and image data.
+	 */
+	async getMetadataForPath(path, node = null) {
 		let pageTitle = '';
 		let pageDescription = null;
 		let pageImage = '';
+		let previewImage = '';
 		let pageImageAlt = '';
 		let imgWidth = '1200';
 		let imgHeight = '630';
@@ -51,12 +75,13 @@ class MetaController {
 
 				if (entry) {
 					pageTitle = entry.title;
-					pageImageAlt = entry.title; // Blog images are generated using the title
+					pageImageAlt = entry.title;
 					if (entry.description) {
 						pageDescription = entry.description;
 					}
 					const datePath = entry.date.replace(/-/g, '');
 					pageImage = `/assets/images/blog/${datePath}/poster.png`;
+					previewImage = pageImage;
 				}
 			} catch (error) {
 				console.error('Failed to get blog entry title:', error);
@@ -70,10 +95,16 @@ class MetaController {
 			const descKey = `content.${pathKey}.description`;
 			const altKey = `content.${pathKey}.imageAlt`;
 
-			let effectiveNode =
-				node.type == 'content'
-					? node
-					: node.children?.find((child) => child.id === node.id) || node;
+			let targetNode = node || Content.findNodeByPath(path);
+
+			let effectiveNode = null;
+			if (targetNode) {
+				effectiveNode =
+					targetNode.type === 'content'
+						? targetNode
+						: targetNode.children?.find((child) => child.id === targetNode.id)
+							|| targetNode;
+			}
 
 			pageTitle = Lang.getString(
 				titleKey,
@@ -85,9 +116,12 @@ class MetaController {
 
 			if (effectiveNode && effectiveNode.image) {
 				pageImage = `/assets/images/${effectiveNode.image}`;
+				previewImage = pageImage; // Default fallback
 
 				if (effectiveNode.image.includes('__')) {
 					const extensionIndex = effectiveNode.image.lastIndexOf('.');
+					const originalExt =
+						extensionIndex !== -1 ? effectiveNode.image.substring(extensionIndex) : '';
 					const withoutExtension =
 						extensionIndex !== -1
 							? effectiveNode.image.substring(0, extensionIndex)
@@ -95,27 +129,51 @@ class MetaController {
 
 					const parts = withoutExtension.split('__');
 					if (parts.length > 1) {
+						const base = parts[0];
 						const variantSizes = parts.slice(1).join('__');
-						const lastUnderscoreIndex = variantSizes.lastIndexOf('_');
+						const tokens = variantSizes.split('_');
 
-						const fullSize =
-							lastUnderscoreIndex !== -1
-								? variantSizes.substring(lastUnderscoreIndex + 1)
-								: variantSizes;
-
-						const dimensions = fullSize.split('-');
-						if (dimensions.length >= 2) {
-							imgWidth = dimensions[0];
-							imgHeight = dimensions[1];
+						// Largest Variant
+						const lastToken = tokens[tokens.length - 1];
+						const lastDimensions = lastToken.split('-');
+						if (lastDimensions.length >= 2) {
+							imgWidth = lastDimensions[0];
+							imgHeight = lastDimensions[1];
 						}
+
+						// Smallest Variant
+						const firstParts = tokens[0].split('-');
+						const sWidth = firstParts[0];
+						const sHeight = firstParts[1];
+
+						// Prioritize webp for smallest variant
+						const smallestTokens = tokens.filter((t) =>
+							t.startsWith(`${sWidth}-${sHeight}`)
+						);
+						const webpToken = smallestTokens.find((t) => t.includes('-webp'));
+						const bestToken = webpToken || smallestTokens[0];
+						const bestParts = bestToken.split('-');
+
+						let sExt = originalExt;
+						if (bestParts.length > 2) {
+							sExt = `.${bestParts[2]}`;
+						}
+
+						previewImage = `/assets/images/${base}__${sWidth}-${sHeight}${sExt}`;
 					}
 				}
 			}
 		}
 
-		this.#updateTitle(pageTitle);
-		this.#updateDescription(pageDescription);
-		this.#updateImage(pageImage, pageImageAlt, imgWidth, imgHeight);
+		return {
+			pageTitle,
+			pageDescription,
+			pageImage,
+			previewImage,
+			pageImageAlt,
+			imgWidth,
+			imgHeight,
+		};
 	}
 
 	/**

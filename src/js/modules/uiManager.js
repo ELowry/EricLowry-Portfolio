@@ -208,7 +208,9 @@ export class UIManager {
 			this.elements.gameMenuButton?.setAttribute('aria-expanded', 'false');
 			this.elements.gameMenuButton?.focus({ focusVisible: false });
 
-			Navigation.setContext(null);
+			if (this.app.mode === 'game') {
+				Navigation.setContext(null);
+			}
 		});
 
 		this.elements.gameMenu.addEventListener('open', () => {
@@ -694,6 +696,14 @@ export class UIManager {
 		// Text Layer
 		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT)) {
 			Navigation.update(inputState);
+
+			// Browser History Navigation
+			if (inputState.bumperLeft) {
+				window.history.back();
+			} else if (inputState.bumperRight) {
+				window.history.forward();
+			}
+
 			return true;
 		}
 

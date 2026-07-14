@@ -13,13 +13,11 @@ export class TextRenderer {
 	/**
 	 * @param {AppController} app - Main application instance.
 	 * @param {HTMLTemplateElement|null} breadcrumbTemplate - Template for breadcrumb list items.
-	 * @param {HTMLTemplateElement|null} navLinkTemplate - Template for navigation links.
 	 */
-	constructor(app, breadcrumbTemplate, navLinkTemplate) {
+	constructor(app, breadcrumbTemplate) {
 		this.app = app;
 		this.breadcrumbTemplate =
 			breadcrumbTemplate || document.getElementById('template-breadcrumb-item');
-		this.navLinkTemplate = navLinkTemplate || document.getElementById('template-nav-link');
 
 		Events.on('route:changed', (payload) => this.#handleTextContent(payload));
 	}
@@ -137,11 +135,13 @@ export class TextRenderer {
 			const langKey = `content.${childPath.replace(/\//g, '.')}.title`;
 			const label = Lang.getString(langKey, null, child.title);
 
-			// Clone Template
-			const clone = this.navLinkTemplate.content.cloneNode(true);
-			const link = clone.querySelector('a');
-
+			// Create Element
+			const link = document.createElement('a');
+			link.href = '#';
+			link.className = 'nav-btn';
+			link.setAttribute('role', 'menuitem');
 			link.textContent = label;
+			link.setAttribute('data-preview-path', childPath);
 
 			if (child.type === 'category') {
 				link.classList.add('category');
@@ -155,7 +155,7 @@ export class TextRenderer {
 				this.app.navigate(childPath);
 			});
 
-			navContainer.appendChild(clone);
+			navContainer.appendChild(link);
 		});
 
 		this.app.uiManager.elements.textNav.appendChild(navContainer);

@@ -177,9 +177,9 @@
 			background-size: contain;
 			background-repeat: no-repeat;
 			width: 100%;
-			max-width: calc(100dvw - var(--gallery-padding));
+			max-width: calc(100dvw - var(--narrow-padding));
 			height: 100%;
-			max-height: calc(100dvh - var(--gallery-padding));
+			max-height: calc(100dvh - var(--narrow-padding));
 
 			img {
 				opacity: 0;

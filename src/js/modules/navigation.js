@@ -35,6 +35,14 @@ class NavigationController {
 	static get SCROLL_SPEED() {
 		return 15;
 	}
+
+	/**
+	 * @returns {number} the speed multiplier for the analog triggers, measured in pixels per animation frame.
+	 * @constant
+	 */
+	static get FAST_SCROLL_MULTIPLIER() {
+		return 4;
+	}
 	/**
 	 * @returns {number} the debounce interval for navigation-related event handlers, in milliseconds.
 	 * @constant
@@ -86,7 +94,22 @@ class NavigationController {
 		const frameRateMultiplier = dt / (1000 / 60);
 
 		// Handle Scrolling
-		if (this.options.scroll && Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
+		let manualScrollY = 0;
+
+		if (inputState.lastInputType === 'gamepad') {
+			// Standard Stick Scrolling
+			if (Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
+				manualScrollY = -axis.y;
+			}
+
+			if (inputState.triggerLeft > 0.05) {
+				manualScrollY = -inputState.triggerLeft * NavigationController.FAST_SCROLL_MULTIPLIER;
+			} else if (inputState.triggerRight > 0.05) {
+				manualScrollY = inputState.triggerRight * NavigationController.FAST_SCROLL_MULTIPLIER;
+			}
+		}
+
+		if (this.options.scroll && manualScrollY !== 0) {
 			let scrollTarget = this.activeContainer;
 			if (
 				this.activeContainer.classList.contains('modal-box')
@@ -107,7 +130,7 @@ class NavigationController {
 
 			if (scrollTarget) {
 				scrollTarget.scrollBy({
-					top: -axis.y * NavigationController.SCROLL_SPEED * frameRateMultiplier,
+					top: manualScrollY * NavigationController.SCROLL_SPEED * frameRateMultiplier,
 					behavior: 'instant',
 				});
 			}

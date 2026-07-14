@@ -15,21 +15,25 @@
 
 /**
  * @typedef {Object} ContentNode
- * @property {string} id - Unique identifier within current level
- * @property {string} title - Fallback literal title
- * @property {'category'|'content'} type - Whether the node is a category of content or a content node itself.
- * @property {string} [file] - Markdown file path (required if `type === content`)
- * @property {MapConfig} [mapLoader] - Game map settings (used if `type === category`)
- * @property {Array<ContentNode>} [children] - Child nodes (used if `type === category`)
+ * @property {string} [id] - Unique identifier within current level
+ * @property {string} [title] - Fallback literal title
+ * @property {'category'|'content'|'separator'} type - Whether the node is a category, content, or visual separator.
+ * @property {string} [file] - Markdown file path (used if `type === 'content'`)
+ * @property {boolean} [hidden] - Hides the node from text-mode navigation menus if `true`.
+ * @property {string|null} [image] - Path to the header image inside the `assets/images/` directory.
+ * @property {() => Promise<any>} [mapLoader] - Function that imports the map's configuration (used if `type === 'category'`)
+ * @property {MapConfig} [mapData] - Game map settings populated during initialization.
+ * @property {Array<ContentNode>} [children] - Child nodes (used if `type === 'category'`)
  */
 
 /**
  * Factory helper to create a content node (markdown file).
- * @param {string} id - Unique identifier for the node (URL segment).
- * @param {string} title - Fallback human-readable title.
- * @param {string} file - Path to the markdown file relative to the content root.
- * @param {boolean} hidden - Hides the node from text-mode navigation menus if `true`.
- * @param {string} image - Path to the header image inside the the `assets/images/` directory.
+ * @param {Object} options - The content configuration properties.
+ * @param {string} options.id - Unique identifier for the node (URL segment).
+ * @param {string} options.title - Fallback human-readable title.
+ * @param {string} options.file - Path to the markdown file relative to the content root.
+ * @param {boolean} [options.hidden=false] - Hides the node from text-mode navigation menus if `true`.
+ * @param {string|null} [options.image=null] - Path to the header image inside the `assets/images/` directory.
  * @returns {ContentNode} a standardized content node object.
  */
 const content = ({ id, title, file, hidden = false, image = null }) => ({
@@ -43,10 +47,11 @@ const content = ({ id, title, file, hidden = false, image = null }) => ({
 
 /**
  * Factory helper to create a category node.
- * @param {string} id - Unique identifier for the node (URL segment).
- * @param {string} title - Fallback human-readable title.
- * @param {() => Promise<any>} mapLoader - Function that imports the map's configuration.
- * @param {Array<ContentNode>} children - Child nodes (used if `type === category`)
+ * @param {Object} options - The category configuration properties.
+ * @param {string} options.id - Unique identifier for the node (URL segment).
+ * @param {string} options.title - Fallback human-readable title.
+ * @param {() => Promise<any>} options.mapLoader - Function that imports the map's configuration.
+ * @param {Array<ContentNode>} [options.children=[]] - Child nodes (used if `type === category`)
  * @returns {ContentNode} a standardized content node object.
  */
 const category = ({ id, title, mapLoader, children = [] }) => ({

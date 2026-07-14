@@ -7,10 +7,6 @@ import { VirtualCursor } from './virtualCursor.js';
  * It translates raw hardware signals into game-specific actions (axis, interact, menu).
  */
 class InputController {
-	/** @type {HTMLTemplateElement|null} */
-	#tapDirectionTemplate = null;
-	/** @type {HTMLTemplateElement|null} */
-	#tapRippleTemplate = null;
 	/** @type {{x: number, y: number}|null} Screen position of the last interact touch */
 	#lastInteractPos = null;
 
@@ -187,6 +183,36 @@ class InputController {
 	}
 
 	/**
+	 * @returns {boolean} `true` if the left bumper (LB) was pressed this frame.
+	 */
+	get bumperLeft() {
+		return App.LJS.gamepadWasPressed(4);
+	}
+
+	/**
+	 * @returns {boolean} `true` if the right bumper (RB) was pressed this frame.
+	 */
+	get bumperRight() {
+		return App.LJS.gamepadWasPressed(5);
+	}
+
+	/**
+	 * @returns {number} The raw analog value (0.0 to 1.0) of the left trigger (LT).
+	 */
+	get triggerLeft() {
+		const gp = navigator.getGamepads()[0];
+		return gp && gp.buttons[6] ? gp.buttons[6].value : 0;
+	}
+
+	/**
+	 * @returns {number} The raw analog value (0.0 to 1.0) of the right trigger (RT).
+	 */
+	get triggerRight() {
+		const gp = navigator.getGamepads()[0];
+		return gp && gp.buttons[7] ? gp.buttons[7].value : 0;
+	}
+
+	/**
 	 * Initializes touch event listeners on a container.
 	 * Uses a 'Swipe Guard' to distinguish between intentional taps and browser gestures.
 	 * @param {HTMLElement} container - The element to attach listeners to.
@@ -195,9 +221,6 @@ class InputController {
 		if (!container) {
 			return;
 		}
-
-		this.#tapDirectionTemplate = document.getElementById('template-touch-half-circle');
-		this.#tapRippleTemplate = document.getElementById('template-touch-tap-ripple');
 
 		const handlePointer = (e) => {
 			if (e.pointerType !== 'touch') {
@@ -379,10 +402,6 @@ class InputController {
 	 * @private
 	 */
 	#handleDirectionPulse(data, now) {
-		if (!this.#tapDirectionTemplate) {
-			return;
-		}
-
 		if (now - data.lastPulseTime >= InputController.TOUCH_PULSE_INTERVAL_MS) {
 			this.#spawnDirectionRing(data);
 			data.lastPulseTime = now;
@@ -395,7 +414,10 @@ class InputController {
 	 * @private
 	 */
 	#spawnDirectionRing(data) {
-		const element = this.#tapDirectionTemplate.content.firstElementChild.cloneNode(true);
+		const element = document.createElement('div');
+		element.className = 'touch-feedback touch-half-circle';
+		element.setAttribute('aria-hidden', 'true');
+
 		if (data.zoneId === 'touch-right') {
 			element.classList.add('facing-right');
 		}
@@ -410,11 +432,14 @@ class InputController {
 	 * Should be called externally when a touch-based interaction actually succeeds.
 	 */
 	spawnTapRipple() {
-		if (!this.#tapRippleTemplate || !this.#lastInteractPos) {
+		if (!this.#lastInteractPos) {
 			return;
 		}
 
-		const element = this.#tapRippleTemplate.content.firstElementChild.cloneNode(true);
+		const element = document.createElement('div');
+		element.className = 'touch-feedback touch-tap-ripple';
+		element.setAttribute('aria-hidden', 'true');
+
 		element.style.left = `${this.#lastInteractPos.x}px`;
 		element.style.top = `${this.#lastInteractPos.y}px`;
 		document.body.appendChild(element);

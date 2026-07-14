@@ -82,6 +82,25 @@ class InputPromptsController {
 				gamepad: '[▷]',
 				touch: null,
 			},
+			galleryClose: {
+				mnk: 'x',
+				gamepad: {
+					default: '(B)',
+					ps: '(○)',
+					switch: '(A)',
+				},
+				touch: 'x',
+			},
+			galleryPrev: {
+				mnk: '‹',
+				gamepad: '[◁]',
+				touch: '‹',
+			},
+			galleryNext: {
+				mnk: '›',
+				gamepad: '[▷]',
+				touch: '›',
+			},
 		};
 	}
 

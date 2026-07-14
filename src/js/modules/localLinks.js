@@ -48,7 +48,7 @@ export class LocalLinkParser {
 							const titleAttr = title ? ` title="${title}"` : '';
 							const hrefPath = `/${App.mode}/${logicalPath}${hash}`;
 
-							return `<a href="${hrefPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${text}</a>`;
+							return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${text}</a>`;
 						}
 
 						const paths = Content.findPathsByFile(file);
@@ -82,7 +82,7 @@ export class LocalLinkParser {
 							? `/${App.mode}/${urlPath}${hash}`
 							: `/${App.mode}/${hash}`;
 
-						return `<a href="${hrefPath}"${titleAttr} onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${text}</a>`;
+						return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${text}</a>`;
 					}
 
 					// External links

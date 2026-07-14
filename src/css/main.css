@@ -34,6 +34,10 @@
 
 @import url('./gallery.css');
 
+/* --- PREVIEWS --- */
+
+@import url('./preview.css');
+
 /* --- MAIN --- */
 
 /* Accessibility */
@@ -579,7 +583,7 @@
 				content: '🗁 ';
 			}
 
-			&[href="/text/blog"]::before {
+			&[href='/text/blog']::before {
 				content: '🗩 ';
 			}
 		}

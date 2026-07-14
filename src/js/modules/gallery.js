@@ -2,6 +2,7 @@ import { Lang } from './lang.js';
 import { Events } from './events.js';
 import { Navigation } from './navigation.js';
 import { LayeredInput } from './layeredInputs.js';
+import { InputPrompts } from './inputPrompts.js';
 
 /**
  * Converts marked.js markdown tables into HTML galleries.
@@ -260,6 +261,8 @@ export class GalleryDisplay {
 		this.#activeModal = clone.querySelector('dialog');
 		document.body.appendChild(clone);
 
+		InputPrompts.refresh(this.#activeModal);
+
 		const prevBtn = this.#activeModal.querySelector('.gallery-modal-prev');
 		const nextBtn = this.#activeModal.querySelector('.gallery-modal-next');
 
@@ -294,7 +297,7 @@ export class GalleryDisplay {
 
 		requestAnimationFrame(() => {
 			if (this.#activeModal) {
-				Navigation.pushContext(this.#activeModal, { scroll: true, axis: 'x' });
+				Navigation.pushContext(this.#activeModal, { scroll: true, axis: null });
 				this.#activeModal.showModal();
 				document.body.style.overflow = 'hidden';
 
@@ -492,7 +495,7 @@ export class GalleryDisplay {
 	 * @param {number} direction - 1 for next, -1 for previous.
 	 * @private
 	 */
-	#navigate(direction) {
+	#navigate(direction, behavior = 'smooth') {
 		if (!this.#currentGalleryItems.length) return;
 
 		const newIndex = this.#currentIndex + direction;
@@ -507,7 +510,7 @@ export class GalleryDisplay {
 		if (contentContainer) {
 			contentContainer.scrollTo({
 				left: contentContainer.clientWidth * newIndex,
-				behavior: 'smooth',
+				behavior: behavior,
 			});
 		}
 	}
@@ -535,11 +538,7 @@ export class GalleryDisplay {
 			const now = performance.now();
 			if (!this.lastGalleryNavTime || now - this.lastGalleryNavTime > 300) {
 				this.lastGalleryNavTime = now;
-				document.dispatchEvent(
-					new KeyboardEvent('keydown', {
-						key: inputState.axis.x > 0 ? 'ArrowRight' : 'ArrowLeft',
-					})
-				);
+				this.#navigate(inputState.axis.x > 0 ? 1 : -1, 'smooth');
 			}
 		} else {
 			this.lastGalleryNavTime = 0;

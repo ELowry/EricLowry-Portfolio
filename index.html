@@ -519,22 +519,10 @@
 			</div>
 		</div>
 
-		<template id="template-touch-half-circle">
-			<div class="touch-feedback touch-half-circle" aria-hidden="true"></div>
-		</template>
-
-		<template id="template-touch-tap-ripple">
-			<div class="touch-feedback touch-tap-ripple" aria-hidden="true"></div>
-		</template>
-
 		<template id="template-breadcrumb-item">
 			<li>
 				<a href="#"></a>
 			</li>
-		</template>
-
-		<template id="template-nav-link">
-			<a href="#" role="menuitem" class="nav-btn"></a>
 		</template>
 
 		<template id="template-gallery-modal">
@@ -549,6 +537,7 @@
 					data-langAttr="aria-label"
 					data-langAria_label="ui.gallery.modalClose"
 					aria-label="Close modal"
+					data-prompt="galleryClose"
 					>x</button
 				>
 				<button
@@ -556,6 +545,7 @@
 					data-langAttr="aria-label"
 					data-langAria_label="ui.gallery.prev"
 					aria-label="Previous image"
+					data-prompt="galleryPrev"
 					>‹</button
 				>
 				<button
@@ -563,11 +553,22 @@
 					data-langAttr="aria-label"
 					data-langAria_label="ui.gallery.next"
 					aria-label="Next image"
+					data-prompt="galleryNext"
 					>›</button
 				>
 				<div class="gallery-modal-announcer sr-only" aria-live="polite"></div>
 				<div class="gallery-modal-content"></div>
 			</dialog>
+		</template>
+
+		<template id="template-preview-card">
+			<div class="preview-card" aria-hidden="true">
+				<img class="preview-img" src="" alt="" />
+				<div class="preview-content">
+					<h4 class="preview-title"></h4>
+					<p class="preview-desc"></p>
+				</div>
+			</div>
 		</template>
 
 		<template id="template-virtual-cursor">
@@ -626,6 +627,42 @@
 					>
 				</div>
 			</section>
+		</template>
+
+		<template id="template-giscus-consent">
+			<div
+				class="giscus-consent-box"
+				style="display: flex; flex-direction: column; margin-bottom: 2rem"
+			>
+				<h2 id="Comments" class="lang" data-lang="blog.commentsTitle">Comments</h2>
+				<div class="markdown-alert markdown-alert-warning">
+					<p class="markdown-alert-title">
+						<svg
+							class="octicon octicon-alert mr-2"
+							viewBox="0 0 16 16"
+							width="16"
+							height="16"
+							aria-hidden="true"
+						>
+							<path
+								d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+							></path>
+						</svg>
+						Warning
+					</p>
+					<p class="lang" data-lang="blog.commentsConsent"
+						>This site uses Giscus (powered by GitHub Discussions) to host comments.
+						Loading comments will connect to GitHub.</p
+					>
+				</div>
+				<button
+					id="load-comments-btn"
+					class="lang"
+					data-lang="blog.loadComments"
+					style="--color-accent: var(--color-alert-warning)"
+					>Load Comments</button
+				>
+			</div>
 		</template>
 
 		<script type="module" src="/src/js/main.js"></script>
