@@ -118,7 +118,12 @@ export class PreviewManager {
 		} else {
 			const path = link.getAttribute('data-preview-path');
 			if (path) {
-				metaData = await Meta.getMetadataForPath(path);
+				const result = await Meta.getMetadataForPath(path);
+				if (result.previewImage || result.pageDescription) {
+					metaData = result;
+				} else {
+					console.warn(`No preview data available for ${path}`);
+				}
 			}
 		}
 

@@ -87,8 +87,8 @@ class MetaController {
 				console.error('Failed to get blog entry title:', error);
 			}
 		} else if (path === 'blog') {
-			pageTitle = Lang.getString('blog.title', null, 'Blog');
-			pageImageAlt = pageTitle;
+			pageTitle = Lang.getString('content.blog.title', null, null);
+			pageDescription = Lang.getString('content.blog.description', null, null);
 		} else if (path !== '' && path !== 'index.html') {
 			const pathKey = path.replace(/\//g, '.');
 			const titleKey = `content.${pathKey}.title`;
@@ -112,9 +112,9 @@ class MetaController {
 				effectiveNode ? effectiveNode.title : path.split('/').pop()
 			);
 			pageDescription = Lang.getString(descKey, null, null);
-			pageImageAlt = Lang.getString(altKey, null, pageTitle);
 
 			if (effectiveNode && effectiveNode.image) {
+				pageImageAlt = Lang.getString(altKey, null, pageTitle);
 				pageImage = `/assets/images/${effectiveNode.image}`;
 				previewImage = pageImage; // Default fallback
 

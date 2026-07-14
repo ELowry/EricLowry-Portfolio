@@ -26,7 +26,8 @@
 		},
 		"cv": {
 			"title": "Curriculum Vitae",
-			"label": "Curriculum Vitae"
+			"label": "Curriculum Vitae",
+			"description": "Review my professional background, technical skills, and professional projects."
 		},
 		"about": {
 			"title": "About Me",
@@ -240,7 +241,8 @@
 		},
 		"blog": {
 			"title": "Blog",
-			"label": "Blog"
+			"label": "Blog",
+			"description": "I post about what I'm working on, designing, developing, or contributing to open-source projects."
 		}
 	},
 	"ui": {
