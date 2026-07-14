@@ -7,6 +7,16 @@ import { ContentTree } from '../src/js/modules/contentTree.js';
 const BASE_URL = 'https://eric-lowry.com';
 
 /**
+ * Simple logger using native ANSI color codes.
+ */
+const Log = {
+	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
+	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
+	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
+	error: (msg) => console.error(`\x1b[31m${msg}\x1b[0m`),
+};
+
+/**
  * Generates the llms.txt content with categorized links.
  * @param {Object<string, Array<{title: string, file: string, language?: string}>>} categorizedLinks - The sorted links to include in the file.
  * @returns {string} The formatted llms.txt content.
@@ -132,6 +142,8 @@ const traverseTree = (node, pathSegments = [], currentCategory = 'General') => {
 	}
 };
 
+console.log('\n');
+
 traverseTree(ContentTree);
 
 // ADD BLOG ITEMS TO SITEMAP AND LLMS.TXT
@@ -194,11 +206,11 @@ ${sitemapUrls
 
 // GENERATE SITEMAP.XML
 fs.writeFileSync(sitemapPath, sitemapContent, 'utf-8');
-console.log(`Generated sitemap.xml with ${sitemapUrls.length} URLs`);
+Log.success(`Generated sitemap.xml with ${sitemapUrls.length} URLs`);
 
 // GENERATE LLMS.TXT
 fs.writeFileSync(llmsPath, generateLlmsContent(llmLinks), 'utf-8');
-console.log(`Generated llms.txt`);
+Log.success(`Generated llms.txt`);
 
 // GENERATE ROBOTS.TXT
 const robotsPath = path.join(publicDirectory, 'robots.txt');
@@ -215,4 +227,4 @@ Sitemap: ${BASE_URL}/sitemap.xml
 `;
 
 fs.writeFileSync(robotsPath, robotsContent, 'utf-8');
-console.log('Generated robots.txt');
+Log.success('Generated robots.txt\n');

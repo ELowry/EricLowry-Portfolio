@@ -103,9 +103,11 @@ class NavigationController {
 			}
 
 			if (inputState.triggerLeft > 0.05) {
-				manualScrollY = -inputState.triggerLeft * NavigationController.FAST_SCROLL_MULTIPLIER;
+				manualScrollY =
+					-inputState.triggerLeft * NavigationController.FAST_SCROLL_MULTIPLIER;
 			} else if (inputState.triggerRight > 0.05) {
-				manualScrollY = inputState.triggerRight * NavigationController.FAST_SCROLL_MULTIPLIER;
+				manualScrollY =
+					inputState.triggerRight * NavigationController.FAST_SCROLL_MULTIPLIER;
 			}
 		}
 

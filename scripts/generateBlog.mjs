@@ -9,13 +9,24 @@ const BASE_URL = 'https://eric-lowry.com';
 const IMAGE_BASE_DIR = 'public/assets/images/blog';
 
 /**
+ * Simple logger using native ANSI color codes.
+ */
+const Log = {
+	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
+	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
+	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
+	error: (msg) => console.error(`\x1b[31m${msg}\x1b[0m`),
+};
+
+/**
  * Generates the blog-index.json index file and feed-{lang_code}.xml files by parsing markdown files in the `public/content/{languageCode}/blog` directories.
  * Looks for files matching YYYY-MM-DD.md and extracts the highest-order heading as the title.
  * @returns {void} Nothing
  */
 function generateBlog() {
+	console.log('\n');
 	if (!fs.existsSync(CONTENT_DIR)) {
-		console.error(`Content directory ${CONTENT_DIR} not found.`);
+		Log.warn(`Content directory ${CONTENT_DIR} not found.`);
 		process.exit(1);
 	}
 
@@ -73,7 +84,7 @@ function generateBlog() {
 			}
 
 			if (!bestTitle) {
-				console.error(`Error: No heading found in blog post ${filePath}`);
+				Log.error(`Error: No heading found in blog post ${filePath}`);
 				process.exit(1);
 			}
 
@@ -107,7 +118,7 @@ function generateBlog() {
 	});
 
 	fs.writeFileSync(OUTPUT_FILE, JSON.stringify(blogEntries, null, 2));
-	console.log(`Generated ${OUTPUT_FILE} with ${blogEntries.length} entries.`);
+	Log.success(`Generated ${OUTPUT_FILE} with ${blogEntries.length} entries.`);
 
 	// GENERATE RSS FEEDS
 	const buildDate = new Date().toUTCString();
@@ -178,7 +189,7 @@ ${rssItems}
 </rss>`;
 
 		fs.writeFileSync(feedFile, rssContent, 'utf-8');
-		console.log(
+		Log.success(
 			`Generated RSS feed for ${lang} at ${feedFile} with ${entries.length} entries.`
 		);
 	}
@@ -227,7 +238,7 @@ function generateStaticImage(title, date) {
 	if (fs.existsSync(targetImagePath) && fs.existsSync(metaFilePath)) {
 		const cachedTitle = fs.readFileSync(metaFilePath, 'utf-8');
 		if (cachedTitle === title) {
-			console.log(`SKIPPED existing poster image: ${date}`);
+			Log.info(`SKIPPED existing poster image: ${date}`);
 			return;
 		}
 	}
@@ -314,7 +325,7 @@ function generateStaticImage(title, date) {
 	fs.writeFileSync(path.join(dirPath, `poster.png`), buffer);
 
 	fs.writeFileSync(metaFilePath, title, 'utf-8');
-	console.log(`Generated new poster image for ${date}`);
+	Log.info(`Generated new poster image for ${date}`);
 }
 
 /**

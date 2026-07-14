@@ -493,6 +493,7 @@ export class GalleryDisplay {
 	/**
 	 * Navigates to the next or previous image in the gallery context.
 	 * @param {number} direction - 1 for next, -1 for previous.
+	 * @param {ScrollBehavior} [behavior='smooth'] - The scroll behavior to use when transitioning.
 	 * @private
 	 */
 	#navigate(direction, behavior = 'smooth') {

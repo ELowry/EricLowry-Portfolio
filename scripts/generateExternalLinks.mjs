@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
+import util from 'util';
+
+const execAsync = util.promisify(exec);
+const CONCURRENCY_LIMIT = 14;
 
 const CONTENT_DIR = 'public/content';
 const OUTPUT_JSON = 'public/assets/external-links.json';
@@ -9,7 +13,18 @@ const IMAGE_DIR = 'public/assets/images/external-links';
 const IGNORED_DOMAINS = ['eric-lowry.com', 'localhost', '127.0.0.1', 'web.archive.org'];
 
 /**
+ * Simple logger using native ANSI color codes.
+ */
+const Log = {
+	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
+	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
+	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
+};
+
+/**
  * Recursively fetches all markdown files in a directory.
+ * @param {string} dir - The directory path to search.
+ * @returns {string[]} An array of absolute file paths to all `.md` files found.
  */
 function getMarkdownFiles(dir) {
 	let results = [];
@@ -28,6 +43,8 @@ function getMarkdownFiles(dir) {
 
 /**
  * Extracts all remote HTTP/HTTPS links from a markdown string.
+ * @param {string} markdown - The raw markdown content to scan.
+ * @returns {string[]} An array of unique HTTP/HTTPS URLs found in the content.
  */
 function extractLinks(markdown) {
 	const links = new Set();
@@ -47,6 +64,8 @@ function extractLinks(markdown) {
 
 /**
  * Decodes basic HTML entities.
+ * @param {string} str - The string containing HTML entities to decode.
+ * @returns {string} The decoded string.
  */
 function decodeHtml(str) {
 	return str
@@ -59,6 +78,8 @@ function decodeHtml(str) {
 
 /**
  * Parses HTML via Regex to extract specific OpenGraph content.
+ * @param {string} html - The raw HTML string of the fetched page.
+ * @returns {{title: string|null, description: string|null, siteName: string|null, imageAltRaw: string|null, imageNodes: string[]}} The extracted OpenGraph metadata.
  */
 function extractOgData(html) {
 	const getAttr = (regexes) => {
@@ -112,6 +133,8 @@ function extractOgData(html) {
  * Main execution function
  */
 async function generateExternalLinks() {
+	console.log('\n');
+
 	if (!fs.existsSync(IMAGE_DIR)) {
 		fs.mkdirSync(IMAGE_DIR, { recursive: true });
 	}
@@ -155,161 +178,172 @@ async function generateExternalLinks() {
 		}
 	}
 
-	console.log(`Found ${allUrls.size} external links in content.`);
+	Log.info(`Found ${allUrls.size} external links in content.`);
 
 	let newCount = 0;
 	let updateCount = 0;
 	let skipCount = 0;
 
-	for (const url of allUrls) {
-		const cached = linkCache[url];
+	const urlArray = Array.from(allUrls);
+	const executing = new Set();
 
-		try {
-			// Spoof a standard browser headers
-			const headers = {
-				'User-Agent':
-					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-				Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-				'Accept-Language': 'en-US,en;q=0.5',
-			};
+	for (const url of urlArray) {
+		const promise = processUrl(url, linkCache).then((res) => {
+			executing.delete(promise);
+			if (res.status === 'added') newCount++;
+			if (res.status === 'updated') updateCount++;
+			if (res.status === 'skipped') skipCount++;
+		});
 
-			// HTTP Caching
-			if (cached?.etag) headers['If-None-Match'] = cached.etag;
-			if (cached?.lastModified) headers['If-Modified-Since'] = cached.lastModified;
+		executing.add(promise);
 
-			const response = await fetch(url, {
-				headers,
-				signal: AbortSignal.timeout(10000),
-			});
+		if (executing.size >= CONCURRENCY_LIMIT) {
+			await Promise.race(executing);
+		}
+	}
 
-			if (response.status === 304) {
-				skipCount++;
-				continue;
-			}
+	await Promise.all(executing);
 
-			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+	fs.writeFileSync(OUTPUT_JSON, JSON.stringify(linkCache, null, 2));
+	Log.success(
+		`\nExternal Links Sync Complete:\n- Added: ${newCount}\n- Updated: ${updateCount}\n- Skipped (cached): ${skipCount}\n`
+	);
+}
 
-			const html = await response.text();
+/**
+ * Processes a single URL to extract and cache OG data.
+ * @param {string} url - The URL to process.
+ * @param {Object} linkCache - The global cache object.
+ * @returns {Promise<Object>} An object containing the result status.
+ */
+async function processUrl(url, linkCache) {
+	const cached = linkCache[url];
+	let status = 'failed';
 
-			// Extract data
-			let { title, description, siteName, imageAltRaw, imageNodes } = extractOgData(html);
+	try {
+		const headers = {
+			'User-Agent':
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+			Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+			'Accept-Language': 'en-US,en;q=0.5',
+		};
 
-			// Clean up GitHub's redundant OG data for repositories
-			if (siteName === 'GitHub' && title?.includes(': ')) {
-				const parts = title.split(': ');
-				title = parts[0].replace(/^GitHub\s*-\s*/i, '');
-				description = parts.slice(1).join(': ');
-				imageAltRaw = `GitHub Repository: ${title}`;
-			}
+		if (cached?.etag) headers['If-None-Match'] = cached.etag;
+		if (cached?.lastModified) headers['If-Modified-Since'] = cached.lastModified;
 
-			const imageUrlsStr = imageNodes
-				.map((imgUrl) => new URL(imgUrl, url).toString())
-				.join('|');
+		const response = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
 
-			let finalImageAlt = imageAltRaw;
-			if (!finalImageAlt) {
-				finalImageAlt = siteName
-					? `Preview image for ${siteName}`
-					: `Preview image for ${title || 'external link'}`;
-			}
+		if (response.status === 304) {
+			return { status: 'skipped' };
+		}
 
-			// Data Hash
-			const dataToHash = `${title || ''}|${description || ''}|${imageUrlsStr}|${finalImageAlt}|${siteName || ''}`;
-			const currentHash = crypto.createHash('md5').update(dataToHash).digest('hex');
+		if (!response.ok) {
+			throw new Error(`HTTP ${response.status}`);
+		}
 
-			if (cached && cached.hash === currentHash) {
-				cached.etag = response.headers.get('etag');
-				cached.lastModified = response.headers.get('last-modified');
-				skipCount++;
-				continue;
-			}
+		const html = await response.text();
+		let { title, description, siteName, imageAltRaw, imageNodes } = extractOgData(html);
 
-			console.log(`Processing metadata and image for: ${url}`);
+		if (siteName === 'GitHub' && title?.includes(': ')) {
+			const parts = title.split(': ');
+			title = parts[0].replace(/^GitHub\s*-\s*/i, '');
+			description = parts.slice(1).join(': ');
+			imageAltRaw = `GitHub Repository: ${title}`;
+		}
 
-			let localImagePath = cached?.image || null;
+		const imageUrlsStr = imageNodes.map((imgUrl) => new URL(imgUrl, url).toString()).join('|');
 
-			// Process images via ImageMagick fallback loop
-			if (imageNodes.length > 0) {
-				for (const node of imageNodes) {
-					if (!node) continue;
+		let finalImageAlt = imageAltRaw;
+		if (!finalImageAlt) {
+			finalImageAlt = siteName
+				? `Preview image for ${siteName}`
+				: `Preview image for ${title || 'external link'}`;
+		}
 
-					const imgUrl = new URL(node, url).toString();
+		const dataToHash = `${title || ''}|${description || ''}|${imageUrlsStr}|${finalImageAlt}|${siteName || ''}`;
+		const currentHash = crypto.createHash('md5').update(dataToHash).digest('hex');
 
+		if (cached && cached.hash === currentHash) {
+			cached.etag = response.headers.get('etag');
+			cached.lastModified = response.headers.get('last-modified');
+			return { status: 'skipped' };
+		}
+
+		Log.info(`Processing metadata and image for: ${url}`);
+		let localImagePath = cached?.image || null;
+
+		if (imageNodes.length > 0) {
+			for (const node of imageNodes) {
+				if (!node) continue;
+				const imgUrl = new URL(node, url).toString();
+
+				try {
+					const imgResponse = await fetch(imgUrl, {
+						headers,
+						signal: AbortSignal.timeout(10000),
+					});
+					if (!imgResponse.ok) {
+						continue;
+					}
+
+					const arrayBuffer = await imgResponse.arrayBuffer();
+					const buffer = Buffer.from(arrayBuffer);
+
+					// Use a unique temp file name to avoid parallel collision
+					const tempHash = crypto.randomBytes(8).toString('hex');
+					const tempInputPath = path.join(IMAGE_DIR, `temp_og_${tempHash}.tmp`);
 					try {
-						const imgResponse = await fetch(imgUrl, {
-							// Inherit the spoofed headers for image
-							headers,
-							signal: AbortSignal.timeout(10000),
-						});
-						if (!imgResponse.ok) continue;
-
-						const arrayBuffer = await imgResponse.arrayBuffer();
-						const buffer = Buffer.from(arrayBuffer);
-
-						// Save image in a temporary file
-						const tempInputPath = path.join(IMAGE_DIR, 'temp_og_download.tmp');
 						fs.writeFileSync(tempInputPath, buffer);
 
 						const imgHash = crypto.createHash('md5').update(imgUrl).digest('hex');
 						const filename = `${imgHash}.jpg`;
 						const finalOutputPath = path.join(IMAGE_DIR, filename);
 
-						// Process the temp file using PowerShell
 						const psScript = path.join(
 							process.cwd(),
 							'scripts',
 							'process-og-images.ps1'
 						);
-						execSync(
+
+						await execAsync(
 							`powershell -ExecutionPolicy Bypass -File "${psScript}" -InputFile "${tempInputPath}" -OutputFile "${finalOutputPath}"`
 						);
 
-						// Clean up temp file
+						localImagePath = `/assets/images/external-links/${filename}`;
+						break;
+					} catch (imgError) {
+						Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
+					} finally {
 						if (fs.existsSync(tempInputPath)) {
 							fs.unlinkSync(tempInputPath);
 						}
-
-						localImagePath = `/assets/images/external-links/${filename}`;
-
-						// Success! Break out of the fallback loop
-						break;
-					} catch (imgError) {
-						console.warn(
-							`    -> Skipping unsupported or broken image format: ${imgUrl}`
-						);
 					}
+					break;
+				} catch (imgError) {
+					Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
 				}
 			}
+		}
 
-			// Save to cache
-			linkCache[url] = {
-				title: title?.trim() || null,
-				description: description?.trim() || null,
-				image: localImagePath,
-				imageAlt: finalImageAlt?.trim() || null,
-				hash: currentHash,
-				etag: response.headers.get('etag') || null,
-				lastModified: response.headers.get('last-modified') || null,
-			};
+		linkCache[url] = {
+			title: title?.trim() || null,
+			description: description?.trim() || null,
+			image: localImagePath,
+			imageAlt: finalImageAlt?.trim() || null,
+			hash: currentHash,
+			etag: response.headers.get('etag') || null,
+			lastModified: response.headers.get('last-modified') || null,
+		};
 
-			if (cached) {
-				updateCount++;
-			} else {
-				newCount++;
-			}
-		} catch (error) {
-			console.warn(`Failed to process ${url}: ${error.message}`);
-			if (!cached) {
-				linkCache[url] = { title: null, description: null, image: null, hash: null };
-			}
+		status = cached ? 'updated' : 'added';
+	} catch (error) {
+		Log.warn(`Failed to process ${url}: ${error.message}`);
+		if (!cached) {
+			linkCache[url] = { title: null, description: null, image: null, hash: null };
 		}
 	}
 
-	fs.writeFileSync(OUTPUT_JSON, JSON.stringify(linkCache, null, 2));
-	console.log(`\nExternal Links Sync Complete:`);
-	console.log(`- Added: ${newCount}`);
-	console.log(`- Updated: ${updateCount}`);
-	console.log(`- Skipped (Cached): ${skipCount}`);
+	return { status };
 }
 
 generateExternalLinks();

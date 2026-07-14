@@ -3,6 +3,16 @@ import * as readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 
 /**
+ * Simple logger using native ANSI color codes.
+ */
+const Log = {
+	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
+	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
+	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
+	error: (msg) => console.error(`\x1b[31m${msg}\x1b[0m`),
+};
+
+/**
  * Handles the interactive synchronization of blog posts to Lemmy communities.
  */
 class LemmySynchronizer {
@@ -107,20 +117,20 @@ class LemmySynchronizer {
 	async init() {
 		try {
 			if (this.#isDryRun) {
-				console.log('==================================================');
-				console.log('🏃 DRY RUN MODE ACTIVATED - NO DATA WILL BE SAVED');
-				console.log('==================================================');
+				Log.info(
+					'\n=================================================\n DRY RUN MODE ACTIVATED - NO DATA WILL BE SAVED\n================================================='
+				);
 			}
 
 			if (!process.env.LEMMY_JWT) {
-				console.error('Error: LEMMY_JWT environment variable is missing.');
+				Log.error('Error: LEMMY_JWT environment variable is missing.');
 				return;
 			}
 
 			const history = this.#loadHistory();
 
 			if (!fs.existsSync(LemmySynchronizer.BLOG_INDEX_FILE)) {
-				console.error('Error: Blog index not found. Run generateBlog.mjs first.');
+				Log.error('Error: Blog index not found. Run generateBlog.mjs first.');
 				return;
 			}
 
@@ -132,7 +142,7 @@ class LemmySynchronizer {
 			});
 
 			if (newPosts.length === 0) {
-				console.log('No new posts to sync to Lemmy.');
+				Log.info('\nNo new posts to sync to Lemmy.\n');
 				this.#readlineInterface.close();
 				return;
 			}
@@ -142,7 +152,7 @@ class LemmySynchronizer {
 			}
 
 			this.#readlineInterface.close();
-			console.log('\nSynchronization session complete.');
+			Log.success('\nSynchronization session complete.\n');
 		} finally {
 			// This guarantees readline closes, preventing the Windows crash
 			this.#readlineInterface.close();
@@ -159,10 +169,9 @@ class LemmySynchronizer {
 	async #processPost(post, history) {
 		const availableCommunities = LemmySynchronizer.COMMUNITIES[post.language];
 
-		console.log('\n==================================================');
-		console.log(`NEW POST: ${post.title}`);
-		console.log(`Language: ${post.language}`);
-		console.log('==================================================');
+		Log.info(
+			`\n==================================================\nNEW POST: ${post.title}\nLanguage: ${post.language}\n==================================================`
+		);
 
 		if (!availableCommunities || availableCommunities.length === 0) {
 			console.log(`No communities configured for language '${post.language}'. Skipping.`);
@@ -172,7 +181,7 @@ class LemmySynchronizer {
 		availableCommunities.forEach((community, index) => {
 			console.log(`${index + 1}. ${community.name}`);
 		});
-		console.log('0. Skip this post completely');
+		Log.info('0. Skip this post completely');
 
 		const primaryInput = await this.#readlineInterface.question(
 			`\nSelect PRIMARY community (0-${availableCommunities.length}): `
@@ -185,7 +194,7 @@ class LemmySynchronizer {
 			|| primaryIndex < 0
 			|| primaryIndex >= availableCommunities.length
 		) {
-			console.log('Skipping post...');
+			Log.info('Skipping post...');
 			return;
 		}
 
@@ -221,7 +230,7 @@ class LemmySynchronizer {
 		const languageId = await this.#getLanguageId(post.language);
 
 		try {
-			console.log(`\nPosting to primary: ${primaryCommunity.name}...`);
+			Log.info(`\nPosting to primary: ${primaryCommunity.name}...`);
 			await this.#postToCommunity(
 				primaryCommunity.id,
 				post.title,
@@ -230,13 +239,13 @@ class LemmySynchronizer {
 				languageId,
 				customThumbnail
 			);
-			console.log('Success!');
+			Log.success('Success!');
 
 			for (const crossCommunity of crossCommunities) {
-				console.log('Waiting 3 seconds to avoid rate limits...');
+				Log.info('Waiting 3 seconds to avoid rate limits...');
 				await this.#sleep(3000);
 
-				console.log(`Crossposting to: ${crossCommunity.name}...`);
+				Log.info(`Crossposting to: ${crossCommunity.name}...`);
 				await this.#postToCommunity(
 					crossCommunity.id,
 					post.title,
@@ -245,13 +254,13 @@ class LemmySynchronizer {
 					languageId,
 					customThumbnail
 				);
-				console.log('Success!');
+				Log.success('Success!');
 			}
 
 			history.push(post.date);
 			this.#saveHistory(history);
 		} catch (error) {
-			console.error(`Failed to post ${post.title}:`, error.message);
+			Log.error(`Failed to post ${post.title}:`, error.message);
 			console.log('Stopping synchronization to prevent duplicate errors.');
 			throw error;
 		}
@@ -276,7 +285,7 @@ class LemmySynchronizer {
 
 			return langMatch ? langMatch.id : null;
 		} catch (error) {
-			console.warn(`\nWarning: Could not fetch language ID for ${shortCode}:`, error.message);
+			Log.warn(`\nWarning: Could not fetch language ID for ${shortCode}:`, error.message);
 			return null;
 		}
 	}
@@ -326,7 +335,7 @@ class LemmySynchronizer {
 	 */
 	#saveHistory(history) {
 		if (this.#isDryRun) {
-			console.log(
+			Log.warn(
 				`[DRY RUN] Skipped saving ${history.length} records to ${LemmySynchronizer.HISTORY_FILE}`
 			);
 			return;
@@ -366,8 +375,8 @@ class LemmySynchronizer {
 		}
 
 		if (this.#isDryRun) {
-			console.log(`[DRY RUN] Would send POST to ${LemmySynchronizer.LEMMY_API_URL}`);
-			console.log(
+			Log.info(`[DRY RUN] Would send POST to ${LemmySynchronizer.LEMMY_API_URL}`);
+			Log.info(
 				'[DRY RUN] Payload:',
 				JSON.stringify({ ...payload, auth: '[REDACTED]' }, null, 2)
 			);
@@ -410,6 +419,6 @@ class LemmySynchronizer {
 
 const synchronizer = new LemmySynchronizer();
 synchronizer.init().catch((error) => {
-	console.error('Fatal synchronization error:', error);
+	Log.error('Fatal synchronization error:', error);
 	process.exit(1);
 });

@@ -1,4 +1,3 @@
-import { App } from '../app.js';
 import { Meta } from './meta.js';
 import { ExternalLinks } from './externalLinks.js';
 
