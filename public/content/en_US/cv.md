@@ -36,7 +36,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 - **Coaching & Facilitation**:  
   Trained executive coaches and esports managers in soft-skill diagnostics; served as a lead facilitator for team-building sessions.
 - **Multimedia Production**:  
-  Managed comprehensive production cycles for video marketing, podcast editing, and the company’s Medium publication.
+  Managed comprehensive production cycles for video marketing, podcast editing, and the company's Medium publication.
 
 ### Freelance Developer and Digital Designer
 
@@ -82,7 +82,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 
 - **Master of Architecture** (2012–2015)
     - Graduated with Honors
-    - Thesis: _[L’Apport du Jeu Vidéo à l’Architecture et à l’Architecte](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing)_ (Video Games' Contributions to Architects and Architecture).
+    - Thesis: _[L'Apport du Jeu Vidéo à l'Architecture et à l'Architecte](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing)_ (Video Games' Contributions to Architects and Architecture).
 - **Bachelor of Architecture** (2009–2012)
 
 ---

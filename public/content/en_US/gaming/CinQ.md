@@ -51,7 +51,7 @@ Executing this pivot as a tight-knit team of just two developers and one infrast
 As the project evolved, I took hands-on ownership of nearly every facet of the game's frontend, UX, and client-side architecture:
 
 - **UI & UX Systems:**  
-  I built the game’s entire user interface from scratch, ensuring clarity for non-gamer corporate audiences.
+  I built the game's entire user interface from scratch, ensuring clarity for non-gamer corporate audiences.
 - **Input Architecture:**  
   I engineered a custom, layer-based input stack to handle complex UI states in an elegant manner (which I later published as the open-source package [InputLayers](/content/en_US/gaming/InputLayers.md)).
 - **Tech Art & Environments:**  

@@ -18,7 +18,7 @@ While I chose not to pursue a career as an architect, this rigorous academic bac
 
 ### Between Physical and Digital
 
-My Master's thesis, _[L’Apport du Jeu Vidéo à l’Architecture et à l’Architecte](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing)_ (Video Games' Contributions to Architects and Architecture), explored the intersection of physical constraints and virtual freedom.
+My Master's thesis, _[L'Apport du Jeu Vidéo à l'Architecture et à l'Architecte](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing)_ (Video Games' Contributions to Architects and Architecture), explored the intersection of physical constraints and virtual freedom.
 
 In it, I explored how digital spaces offer entirely new ways of thinking about human movement and interaction, while designing credible, immersive virtual environments often requires a strict understanding of real-world architectural principles.  
 This notion actively shifted my focus during my final years of study toward digital design and what would now be called "augmented reality". Whether designing a physical structure or a virtual space, my work is directly informed by years of studying how spaces fit together, how they affect our ways of life, and the restrictions of real-world construction.

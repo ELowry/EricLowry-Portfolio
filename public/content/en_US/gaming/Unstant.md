@@ -13,7 +13,7 @@
 
 I am convinced that the creative aspects of game design and architecture share significantly more than is usually acknowledged; both are about wrestling with a somewhat rigid set of rules and constraints to create spaces and environments that will be experienced, explored, lived-in.
 
-This idea was the central tenet of my master’s thesis, which explored what video games bring to the table for architecture and architects. For my final Master’s degree project, I quite naturally joined forces with a fellow student in an effort to put theory into practice: we built a video game from scratch.
+This idea was the central tenet of my master's thesis, which explored what video games bring to the table for architecture and architects. For my final Master's degree project, I quite naturally joined forces with a fellow student in an effort to put theory into practice: we built a video game from scratch.
 
 Half architecture essay, half game design/dev exercise, Unstant was our attempt to take the methods and design concepts we had studied for architecture and apply them to the virtual world.
 
