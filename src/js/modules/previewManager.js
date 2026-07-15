@@ -107,7 +107,7 @@ export class PreviewManager {
 			const externalData = await ExternalLinks.getData();
 			const match = externalData[url];
 
-			if (match && (match.title || match.description || match.image)) {
+			if (match && match.title && (match.description || match.image)) {
 				metaData = {
 					pageTitle: match.title,
 					pageDescription: match.description,
@@ -155,6 +155,8 @@ export class PreviewManager {
 		}
 
 		if (imgEl) {
+			imgEl.removeAttribute('src');
+
 			if (metaData.previewImage) {
 				imgEl.src = metaData.previewImage;
 				imgEl.alt = metaData.pageImageAlt || '';

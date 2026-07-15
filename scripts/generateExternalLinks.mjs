@@ -77,7 +77,7 @@ function decodeHtml(str) {
 }
 
 /**
- * Parses HTML via Regex to extract specific OpenGraph content.
+ * Parses HTML via Regex to extract specific OpenGraph content safely without catastrophic backtracking.
  * @param {string} html - The raw HTML string of the fetched page.
  * @returns {{title: string|null, description: string|null, siteName: string|null, imageAltRaw: string|null, imageNodes: string[]}} The extracted OpenGraph metadata.
  */
@@ -85,45 +85,55 @@ function extractOgData(html) {
 	const getAttr = (regexes) => {
 		for (const r of regexes) {
 			const match = html.match(r);
-			if (match) return decodeHtml(match[1].trim());
+			if (match) {
+				const content =
+					match[1] !== undefined
+						? match[1]
+						: match[2] !== undefined
+							? match[2]
+							: match[3];
+				if (content) {
+					return decodeHtml(content.trim());
+				}
+			}
 		}
 		return null;
 	};
 
-	const title =
-		getAttr([
-			/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i,
-			/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:title["']/i,
-		]) || getAttr([/<title[^>]*>([^<]+)<\/title>/i]);
+	const title = getAttr([
+		/<meta[^>]+property=["']og:title["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i,
+		/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:title["']/i,
+		/<title[^>]*>([^<]*)<\/title>/i,
+	]);
 
 	const description = getAttr([
-		/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i,
-		/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:description["']/i,
-		/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i,
-		/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']description["']/i,
+		/<meta[^>]+property=["']og:description["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i,
+		/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:description["']/i,
+		/<meta[^>]+name=["']description["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i,
+		/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+name=["']description["']/i,
 	]);
 
 	const siteName = getAttr([
-		/<meta[^>]+property=["']og:site_name["'][^>]+content=["']([^"']+)["']/i,
-		/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:site_name["']/i,
+		/<meta[^>]+property=["']og:site_name["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i,
+		/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:site_name["']/i,
 	]);
 
 	const imageAltRaw = getAttr([
-		/<meta[^>]+property=["']og:image:alt["'][^>]+content=["']([^"']+)["']/i,
-		/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image:alt["']/i,
+		/<meta[^>]+property=["']og:image:alt["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i,
+		/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:image:alt["']/i,
 	]);
 
 	// Extract all available og:image fallback tags
 	const imageNodes = [];
-	const imgRegex1 = /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/gi;
-	const imgRegex2 = /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/gi;
+	const imgRegex1 = /<meta[^>]+property=["']og:image["'][^>]+content=(?:"([^"]*)"|'([^']*)')/gi;
+	const imgRegex2 = /<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:image["']/gi;
 
 	let match;
 	while ((match = imgRegex1.exec(html)) !== null) {
-		imageNodes.push(decodeHtml(match[1]));
+		imageNodes.push(decodeHtml((match[1] || match[2] || '').trim()));
 	}
 	while ((match = imgRegex2.exec(html)) !== null) {
-		imageNodes.push(decodeHtml(match[1]));
+		imageNodes.push(decodeHtml((match[1] || match[2] || '').trim()));
 	}
 
 	return { title, description, siteName, imageAltRaw, imageNodes };
