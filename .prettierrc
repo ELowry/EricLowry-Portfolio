@@ -1,10 +1,18 @@
 {
-	"plugins": ["prettier-plugin-css-order"],
+	"plugins": ["@prettier/plugin-xml", "prettier-plugin-css-order"],
 	"experimentalOperatorPosition": "start",
 	"singleQuote": true,
 	"useTabs": true,
 	"tabWidth": 4,
 	"printWidth": 100,
 	"htmlWhitespaceSensitivity": "strict",
-	"trailingComma": "es5"
+	"trailingComma": "es5",
+	"overrides": [
+		{
+			"files": "llms.txt",
+			"options": {
+				"parser": "markdown"
+			}
+		}
+	]
 }

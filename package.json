@@ -1,6 +1,7 @@
 {
 	"type": "module",
 	"dependencies": {
+		"@prettier/plugin-xml": "^3.4.2",
 		"giscus": "^1.6.0",
 		"highlight.js": "^11.11.1",
 		"littlejsengine": "^1.18.21",
@@ -11,21 +12,21 @@
 		"marked-responsive-images": "^2.1.3"
 	},
 	"scripts": {
-		"postinstall": "npx prettier --write package.json package-lock.json",
-		"generate-blog": "node scripts/generateBlog.mjs && prettier --write public/content/blog-index.json public/feed-*.xml public/blog/**/index.html && eslint --no-ignore public/content/blog-index.json",
-		"generate-sitemaps": "node scripts/generateSitemaps.mjs && prettier --write public/sitemap.xml public/llms.txt public/robots.txt",
-		"generate-links": "node scripts/generateExternalLinks.mjs && prettier --write public/assets/external-links.json",
+		"postinstall": "prettier --ignore-path .prettierignore --write package.json package-lock.json",
+		"generate-blog": "node scripts/generateBlog.mjs && prettier --ignore-path .prettierignore --write public/content/blog-index.json public/feed-*.xml public/blog/**/index.html && eslint --no-ignore public/content/blog-index.json",
+		"generate-sitemaps": "node scripts/generateSitemaps.mjs && prettier --ignore-path .prettierignore --write public/sitemap.xml public/llms.txt",
+		"generate-links": "node scripts/generateExternalLinks.mjs && prettier --ignore-path .prettierignore --write public/assets/external-links.json",
 		"dev": "npm run generate-blog && npm run generate-sitemaps && npm run generate-links && npm run test && vite",
 		"dev:basic": "npm run test && vite",
 		"build": "npm run generate-blog && npm run generate-sitemaps && npm run generate-links && npm run lint && npm run test && vite build",
 		"build:basic": "npm run lint && npm run test && vite build",
 		"deploy": "npm run build && firebase deploy",
 		"deploy:basic": "npm run build:basic && firebase deploy",
-		"lint": "eslint . && prettier --check .",
-		"lint:fix": "eslint --fix . && prettier --write .",
+		"lint": "eslint . && prettier --ignore-path .prettierignore --check .",
+		"lint:fix": "eslint --fix . && prettier --ignore-path .prettierignore --write .",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"blog:post": "node scripts/postToLemmy.mjs && prettier --write lemmy-history.json",
+		"blog:post": "node scripts/postToLemmy.mjs && prettier --ignore-path .prettierignore --write lemmy-history.json",
 		"blog:test": "node scripts/postToLemmy.mjs --dry-run"
 	},
 	"devDependencies": {

@@ -13,6 +13,7 @@ export default [
 			'public/.obsidian/**',
 			'public/obsidian/**',
 			'public/assets/**',
+			'!public/assets/external-links.json',
 			'package-lock.json',
 		],
 	},
