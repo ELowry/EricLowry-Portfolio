@@ -35,7 +35,7 @@ export class PreviewManager {
 
 	/**
 	 * The duration of the CSS fade-out transition in milliseconds.
-	 * @returns {number}
+	 * @returns {number} The duration of the CSS fade-out transition in milliseconds.
 	 * @constant
 	 */
 	static get TRANSITION_DURATION() {
@@ -44,7 +44,7 @@ export class PreviewManager {
 
 	/**
 	 * The baseline delay in milliseconds before a preview is shown.
-	 * @returns {number}
+	 * @returns {number} The baseline delay in milliseconds before a preview is shown.
 	 * @constant
 	 */
 	static get HOVER_DELAY() {
