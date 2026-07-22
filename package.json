@@ -4,7 +4,7 @@
 		"@prettier/plugin-xml": "^3.4.2",
 		"giscus": "^1.6.0",
 		"highlight.js": "^11.11.1",
-		"littlejsengine": "^1.18.21",
+		"littlejsengine": "^1.18.24",
 		"marked": "^18.0.7",
 		"marked-alert": "^2.1.2",
 		"marked-gfm-heading-id": "^4.1.4",
