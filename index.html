@@ -8,7 +8,6 @@
 
 		<!-- OG_META_START -->
 		<title>Eric Lowry – Portfolio</title>
-		<link rel="canonical" href="https://eric-lowry.com/" />
 
 		<meta
 			name="description"
@@ -123,17 +122,43 @@
 		<script type="application/ld+json">
 			{
 				"@context": "https://schema.org",
-				"@type": "WebPage",
-				"name": "Eric Lowry – Portfolio",
-				"description": "Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech.",
-				"url": "https://eric-lowry.com/",
-				"subjectOf": {
-					"@type": "CreativeWork",
-					"name": "Machine-readable index (llms.txt)",
-					"description": "A comprehensive index of portfolio content optimized for Large Language Models.",
-					"encodingFormat": "text/markdown",
-					"url": "https://eric-lowry.com/llms.txt"
-				}
+				"@graph": [
+					{
+						"@type": "Person",
+						"@id": "https://eric-lowry.com/#person",
+						"name": "Eric Lowry",
+						"jobTitle": "Systems-driven UX/UI Designer & Entrepreneur",
+						"url": "https://eric-lowry.com/",
+						"image": "https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240.webp",
+						"sameAs": ["https://github.com/ELowry"]
+					},
+					{
+						"@type": "WebPage",
+						"@id": "https://eric-lowry.com/#webpage",
+						"name": "Eric Lowry – Portfolio",
+						"description": "Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech.",
+						"url": "https://eric-lowry.com/",
+						"author": {
+							"@id": "https://eric-lowry.com/#person"
+						},
+						"subjectOf": [
+							{
+								"@type": "CreativeWork",
+								"name": "Machine-readable index (llms.txt)",
+								"description": "A comprehensive index of portfolio content optimized for Large Language Models.",
+								"encodingFormat": "text/markdown",
+								"url": "https://eric-lowry.com/llms.txt"
+							},
+							{
+								"@type": "CreativeWork",
+								"name": "Raw Markdown source",
+								"description": "The raw markdown content source for this page.",
+								"encodingFormat": "text/markdown",
+								"url": "https://eric-lowry.com/content/en_US/index.md"
+							}
+						]
+					}
+				]
 			}
 		</script>
 

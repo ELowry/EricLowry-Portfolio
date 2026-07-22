@@ -120,6 +120,7 @@ const traverseTree = (node, pathSegments = [], currentCategory = 'General') => {
 
 		sitemapUrls.push({
 			url: `${BASE_URL}${textModeUrl}`,
+			title: `${node.title} – Eric Lowry`,
 			lastmod,
 			changefreq: 'monthly',
 			priority,
