@@ -43,6 +43,7 @@ class MetaController {
 
 		this.#updateTitle(metaData.pageTitle);
 		this.#updateDescription(metaData.pageDescription);
+		this.#updateCanonical();
 		this.#updateImage(
 			metaData.pageImage,
 			metaData.pageImageAlt,
@@ -225,6 +226,27 @@ class MetaController {
 		const ogDescMeta = document.querySelector('meta[property="og:description"]');
 		if (ogDescMeta) {
 			ogDescMeta.setAttribute('content', finalDesc);
+		}
+	}
+
+	/**
+	 * Updates the canonical link tag and Open Graph URL tag to reflect the current page URL.
+	 * @private
+	 */
+	#updateCanonical() {
+		const currentUrl = `${window.location.origin}${window.location.pathname}`;
+
+		let canonicalLink = document.querySelector('link[rel="canonical"]');
+		if (!canonicalLink) {
+			canonicalLink = document.createElement('link');
+			canonicalLink.setAttribute('rel', 'canonical');
+			document.head.appendChild(canonicalLink);
+		}
+		canonicalLink.setAttribute('href', currentUrl);
+
+		const ogUrlMeta = document.querySelector('meta[property="og:url"]');
+		if (ogUrlMeta) {
+			ogUrlMeta.setAttribute('content', currentUrl);
 		}
 	}
 

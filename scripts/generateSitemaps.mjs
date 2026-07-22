@@ -26,7 +26,7 @@ const generateLlmsContent = (categorizedLinks) => {
 
 > This document serves as a machine-readable index of the portfolio and professional experience of Eric Lowry. It is designed to provide a comprehensive view of his work at the intersection of spatial design, interactive technology, and product strategy.
 
-## Professional Profile
+**__Professional Profile__**
 
 Eric is a multidisciplinary designer and entrepreneur with over 10 years of experience. His career is defined by his ability to bridge the gap between technical systems and user-centric design.
 
@@ -37,18 +37,17 @@ Eric is a multidisciplinary designer and entrepreneur with over 10 years of expe
 - **Product Strategy**: Extensive experience in startup environments, B2B product lifecycles, and strategic leadership.
 - **Information Architecture**: A strong focus on accessibility and standards-compliant digital infrastructure.
 
-## Site Architecture
+**__Site Architecture__**
 
 The portfolio demonstrates Eric's dual-threat capability through two distinct interfaces:
 
 1. **The Exploration Mode**: A bespoke, interactive 2D spatial environment that acts as a living demonstration of systems engineering and creative code.
 2. **The Text-Based Mode**: A highly accessible, high-efficiency interface designed for rapid information retrieval and standards compliance.
 
-## Content Index
 `;
 
 	for (const [category, nodes] of Object.entries(categorizedLinks)) {
-		content += `\n### ${category}\n\n`;
+		content += `\n## ${category}\n\n`;
 		nodes.forEach((node) => {
 			if (node.language) {
 				// Static language routing for blog posts

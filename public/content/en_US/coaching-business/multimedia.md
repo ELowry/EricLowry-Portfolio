@@ -25,7 +25,7 @@ As both projects and online marketing evolved, I maintained and updated the bran
 
 ### Video Production & Podcasting
 
-I have recorded, directed, and edited all DLS video content using professional editing software such as Adobe Premiere Pro, After Effects, and Adobe Audition, alongside agile tools like Microsoft Clipchamp for short-form content. The following is a selection of the video content I have produced for DLS:
+I have recorded, directed, and edited all DLS video content using professional editing software such as Adobe Premiere Pro, After Effects, and Adobe Audition, alongside agile tools like Microsoft ClipChamp for short-form content. The following is a selection of the video content I have produced for DLS:
 
 ![A screenshot from the CinQ web page listing articles and podcast episodes](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
 

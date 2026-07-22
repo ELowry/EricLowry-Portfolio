@@ -13,6 +13,13 @@
 			"options": {
 				"parser": "markdown"
 			}
+		},
+		{
+			"files": ["*.md", "*.mdx"],
+			"options": {
+				"proseWrap": "preserve",
+				"printWidth": 9999
+			}
 		}
 	]
 }

@@ -15,6 +15,8 @@ export class PreviewManager {
 	previewElement;
 	/** @type {boolean} */
 	supportsAnchor;
+	/** @type {number} */
+	lastHideTime;
 
 	/**
 	 * @param {AppController} app - Reference to the App instance.
@@ -26,8 +28,27 @@ export class PreviewManager {
 		this.previewElement = null;
 		this.supportsAnchor =
 			CSS.supports('position-anchor', '--foo') || CSS.supports('anchor-name', '--foo');
+		this.lastHideTime = 0;
 
 		this.#init();
+	}
+
+	/**
+	 * The duration of the CSS fade-out transition in milliseconds.
+	 * @returns {number}
+	 * @constant
+	 */
+	static get TRANSITION_DURATION() {
+		return 300;
+	}
+
+	/**
+	 * The baseline delay in milliseconds before a preview is shown.
+	 * @returns {number}
+	 * @constant
+	 */
+	static get HOVER_DELAY() {
+		return 140;
 	}
 
 	/**
@@ -66,8 +87,12 @@ export class PreviewManager {
 
 		this.activeLink = link;
 
+		const timeSinceHide = Date.now() - this.lastHideTime;
+		const remainingFade = Math.max(0, PreviewManager.TRANSITION_DURATION - timeSinceHide);
+		const delay = Math.max(PreviewManager.HOVER_DELAY, remainingFade);
+
 		clearTimeout(this.hoverTimer);
-		this.hoverTimer = setTimeout(() => this.#showPreview(link), 300);
+		this.hoverTimer = setTimeout(() => this.#showPreview(link), delay);
 	}
 
 	/**
@@ -143,26 +168,33 @@ export class PreviewManager {
 
 		const titleEl = this.previewElement.querySelector('.preview-title');
 		const descEl = this.previewElement.querySelector('.preview-desc');
+		const imgWrapper = this.previewElement.querySelector('.preview-img-wrapper');
 		const imgEl = this.previewElement.querySelector('.preview-img');
 
 		if (titleEl) {
-			titleEl.textContent = metaData.pageTitle || '';
+			titleEl.textContent = this.#decodeEntities(metaData.pageTitle || '');
 		}
 
 		if (descEl) {
-			descEl.textContent = metaData.pageDescription || '';
+			descEl.textContent = this.#decodeEntities(metaData.pageDescription || '');
 			descEl.style.display = metaData.pageDescription ? '-webkit-box' : 'none';
 		}
 
-		if (imgEl) {
+		if (imgEl && imgWrapper) {
 			imgEl.removeAttribute('src');
 
 			if (metaData.previewImage) {
 				imgEl.src = metaData.previewImage;
 				imgEl.alt = metaData.pageImageAlt || '';
-				imgEl.style.display = 'block';
+
+				imgWrapper.style.display = 'block';
+				imgWrapper.style.setProperty(
+					'--preview-bg-image',
+					`url('${metaData.previewImage}')`
+				);
 			} else {
-				imgEl.style.display = 'none';
+				imgWrapper.style.display = 'none';
+				imgWrapper.style.removeProperty('--preview-bg-image');
 			}
 		}
 
@@ -182,6 +214,7 @@ export class PreviewManager {
 	#hidePreview() {
 		if (this.previewElement) {
 			this.previewElement.classList.remove('visible');
+			this.lastHideTime = Date.now();
 
 			if (this.activeLink && this.supportsAnchor) {
 				const linkToUnanchor = this.activeLink;
@@ -190,8 +223,23 @@ export class PreviewManager {
 					if (this.activeLink !== linkToUnanchor) {
 						linkToUnanchor.style.removeProperty('anchor-name');
 					}
-				}, 200);
+				}, PreviewManager.TRANSITION_DURATION);
 			}
 		}
+	}
+
+	/**
+	 * Safely decodes HTML entities from a string.
+	 * @param {string} text - The encoded string.
+	 * @returns {string} The decoded string.
+	 * @private
+	 */
+	#decodeEntities(text) {
+		if (!text) {
+			return '';
+		}
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(text, 'text/html');
+		return doc.documentElement.textContent;
 	}
 }
