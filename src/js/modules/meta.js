@@ -109,10 +109,7 @@ class MetaController {
 						pageDescription = project.description;
 					}
 
-					const cacheHash = project.updatedAt ? new Date(project.updatedAt).getTime() : 1;
-					const defaultOgImage = `https://opengraph.githubassets.com/${cacheHash}/ELowry/${project.id}`;
-
-					pageImage = project.ogImage || defaultOgImage;
+					pageImage = `/assets/images/projects/${project.id}/poster.jpg`;
 					previewImage = pageImage;
 
 					const lang = Lang.langCode || 'en_US';
@@ -155,7 +152,7 @@ class MetaController {
 			if (effectiveNode && effectiveNode.image) {
 				pageImageAlt = Lang.getString(altKey, null, pageTitle);
 				pageImage = `/assets/images/${effectiveNode.image}`;
-				previewImage = pageImage; // Default fallback
+				previewImage = pageImage;
 
 				if (effectiveNode.image.includes('__')) {
 					const extensionIndex = effectiveNode.image.lastIndexOf('.');
