@@ -456,7 +456,7 @@ class AppController {
 
 		const node = Content.findNodeByPath(path);
 
-		if (!node && path !== '' && !Router.isBlogRoute) {
+		if (!node && path !== '' && !Router.isBlogRoute && !Router.isProjectRoute) {
 			if (mode === 'game') {
 				Router.go('game', '');
 				return;
@@ -495,7 +495,7 @@ class AppController {
 		this.setPause(false);
 		this.setLock(false);
 
-		if (mode === 'game' && Router.isBlogRoute) {
+		if (mode === 'game' && (Router.isBlogRoute || Router.isProjectRoute)) {
 			Router.go('game', '');
 			return;
 		}

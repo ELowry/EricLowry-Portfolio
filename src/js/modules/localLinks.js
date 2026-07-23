@@ -28,10 +28,15 @@ export class LocalLinkParser {
 				 * @returns {string|boolean} the rendered HTML for the link, or false to fall back to default rendering.
 				 */
 				link(token) {
-					const { href, title, text } = token;
+					const { href, title, text, tokens } = token;
 
 					if (!href) {
 						return false;
+					}
+
+					let innerHtml = text;
+					if (this?.parser && typeof this.parser.parseInline === 'function' && tokens) {
+						innerHtml = this.parser.parseInline(tokens);
 					}
 
 					const hashIndex = href.indexOf('#');
@@ -44,11 +49,14 @@ export class LocalLinkParser {
 						const logicalPath = match[1];
 						const file = logicalPath + '.md';
 
-						if (logicalPath.startsWith('blog/')) {
+						if (
+							logicalPath.startsWith('blog/')
+							|| logicalPath.startsWith('projects/')
+						) {
 							const titleAttr = title ? ` title="${title}"` : '';
 							const hrefPath = `/${App.mode}/${logicalPath}${hash}`;
 
-							return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${text}</a>`;
+							return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${innerHtml}</a>`;
 						}
 
 						const paths = Content.findPathsByFile(file);
@@ -82,13 +90,16 @@ export class LocalLinkParser {
 							? `/${App.mode}/${urlPath}${hash}`
 							: `/${App.mode}/${hash}`;
 
-						return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${text}</a>`;
+						return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${innerHtml}</a>`;
 					}
 
 					// External links
 					if (href.startsWith('http') || href.startsWith('//')) {
 						const titleAttr = title ? ` title="${title}"` : '';
-						return `<a href="${href}"${titleAttr} class="md-external-link" target="_blank" rel="noopener noreferrer">${text}</a>`;
+						const classAttr = innerHtml.includes('<img')
+							? ''
+							: ' class="md-external-link"';
+						return `<a href="${href}"${titleAttr}${classAttr} target="_blank" rel="noopener noreferrer">${innerHtml}</a>`;
 					}
 
 					return false;

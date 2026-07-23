@@ -2,6 +2,7 @@ import { Events } from './events.js';
 import { Router } from './router.js';
 import { Lang } from './lang.js';
 import { Blog } from './blog.js';
+import { Projects } from './projects.js';
 import { Content } from './content.js';
 
 /**
@@ -95,6 +96,34 @@ class MetaController {
 		} else if (path === 'blog') {
 			pageTitle = Lang.getString('content.blog.title', null, null);
 			pageDescription = Lang.getString('content.blog.description', null, null);
+		} else if (Router.isProjectRoute && path.startsWith('projects/')) {
+			const repoName = path.substring(9);
+			try {
+				const projectIndex = await Projects.getIndex();
+				const project = projectIndex.find((p) => p.id === repoName);
+
+				if (project) {
+					pageTitle = project.title;
+					pageImageAlt = project.title;
+					if (project.description) {
+						pageDescription = project.description;
+					}
+
+					const cacheHash = project.updatedAt ? new Date(project.updatedAt).getTime() : 1;
+					const defaultOgImage = `https://opengraph.githubassets.com/${cacheHash}/ELowry/${project.id}`;
+
+					pageImage = project.ogImage || defaultOgImage;
+					previewImage = pageImage;
+
+					const lang = Lang.langCode || 'en_US';
+					markdownUrl = `/content/${lang}/projects/${project.id}.md`;
+				}
+			} catch (error) {
+				console.error('Failed to get project title:', error);
+			}
+		} else if (path === 'projects') {
+			pageTitle = Lang.getString('content.projects.title', null, 'Projects');
+			pageDescription = Lang.getString('content.projects.description', null, null);
 		} else if (path !== '' && path !== 'index.html') {
 			const pathKey = path.replace(/\//g, '.');
 			const titleKey = `content.${pathKey}.title`;

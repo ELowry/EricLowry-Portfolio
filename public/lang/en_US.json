@@ -243,6 +243,11 @@
 			"title": "Blog",
 			"label": "Blog",
 			"description": "I post about what I'm working on, designing, developing, or contributing to open-source projects."
+		},
+		"projects": {
+			"title": "GitHub Projects",
+			"label": "GitHub Projects",
+			"description": "A collection of my GitHub project README files."
 		}
 	},
 	"ui": {

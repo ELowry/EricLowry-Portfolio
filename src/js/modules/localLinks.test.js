@@ -51,6 +51,20 @@ describe('LocalLinkParser Marked Extension', () => {
 		expect(result).toContain('title="My CV"');
 	});
 
+	it('should parse project routes directly without looking up in ContentTree', () => {
+		const token = {
+			href: '/content/en_US/projects/DNSToggle.md',
+			text: 'DNS Toggle',
+		};
+
+		const result = linkRenderer(token);
+
+		expect(result).toContain('href="/text/projects/DNSToggle"');
+		expect(result).toContain(
+			'onclick="event.preventDefault(); App.navigate(\'projects/DNSToggle\');"'
+		);
+	});
+
 	it('should parse internal content paths with hash fragments and preserve the anchor', () => {
 		Content.findPathsByFile.mockReturnValue(['about/cv']);
 		const token = {
@@ -104,6 +118,36 @@ describe('LocalLinkParser Marked Extension', () => {
 		expect(result).toContain('target="_blank"');
 		expect(result).toContain('rel="noopener noreferrer"');
 		expect(result).toContain('class="md-external-link"');
+	});
+
+	it('should omit external link indicator if inner content contains an image tag', () => {
+		const token = {
+			href: 'https://github.com/ELowry/DNSToggle',
+			text: '<img src="badge.svg" alt="Badge">',
+		};
+
+		const result = linkRenderer(token);
+
+		expect(result).not.toContain('class="md-external-link"');
+	});
+
+	it('should support inline parser when called within marked context', () => {
+		const mockContext = {
+			parser: {
+				parseInline: vi.fn().mockReturnValue('Parsed Inline Text'),
+			},
+		};
+
+		const token = {
+			href: 'https://github.com',
+			tokens: [{ type: 'text', text: 'Raw Text' }],
+			text: 'Raw Text',
+		};
+
+		const result = linkRenderer.call(mockContext, token);
+
+		expect(mockContext.parser.parseInline).toHaveBeenCalledWith(token.tokens);
+		expect(result).toContain('Parsed Inline Text');
 	});
 
 	it('should fallback to default rendering for unrecognized internal files', () => {

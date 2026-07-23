@@ -297,19 +297,20 @@
 
 	/* Blog List */
 	.blog-list {
-		display: flex;
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(40ch - 0.5rem)), 1fr));
 		gap: 1rem;
 		padding: 0;
 		list-style: none;
 
-		li {
-			container-type: inline-size;
-			width: min(100%, calc(40ch - 0.5rem));
+		@media (width < calc(80ch + 8em)) {
+			grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
+		}
 
-			@media (width < calc(80ch + 8em)) {
-				width: min(100%, 34rem);
-			}
+		li {
+			display: flex;
+			align-items: stretch;
+			container-type: inline-size;
 
 			a {
 				display: flex;
@@ -319,6 +320,7 @@
 				transition: var(--transition-base);
 				background-color: var(--color-overlay-dark);
 				padding-block: 6cqw;
+				width: 100%;
 				height: 56.25cqw;
 				color: var(--color-text);
 
@@ -355,6 +357,90 @@
 				}
 			}
 		}
+	}
+
+	/* Projects List */
+	.projects-list {
+		display: grid;
+		/* Note: If you want 2 items to stretch to 50% each instead of leaving an empty 3rd column, change 'auto-fill' to 'auto-fit' below */
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(40ch - 0.5rem)), 1fr));
+		gap: 1rem;
+		padding: 0;
+		list-style: none;
+
+		@media (width < calc(80ch + 8em)) {
+			grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
+		}
+
+		li {
+			display: flex;
+			align-items: stretch;
+			container-type: inline-size;
+
+			a {
+				display: flex;
+				flex-direction: column;
+				transition: var(--transition-base);
+				background-color: var(--color-overlay-dark);
+				padding: 6cqw;
+				width: 100%; /* <--- ADD THIS TO FIX THE WIDTH DIFFERENCE */
+				color: var(--color-text);
+
+				&:hover,
+				&:active {
+					background-color: var(--color-overlay);
+					text-decoration: none;
+
+					.project-title {
+						color: var(--color-accent);
+					}
+				}
+
+				&:focus-visible {
+					--border-width: 0.2rem;
+				}
+
+				.project-header {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: space-between;
+					align-items: baseline;
+					gap: 1rem;
+					margin-bottom: 1rem;
+
+					.project-title {
+						transition: var(--transition-base);
+						font-size: clamp(1.2rem, 6cqw, 2rem);
+						font-family: var(--font-mono);
+					}
+
+					.project-stars {
+						color: var(--color-accent);
+						font-family: var(--font-mono);
+					}
+				}
+
+				.project-desc {
+					flex-grow: 1;
+					margin: 0 0 1.2rem 0;
+					line-height: 1.5;
+				}
+
+				.project-tech {
+					align-self: flex-start;
+					background-color: var(--color-background);
+					padding: 0.2em 0.6em;
+					color: var(--color-text);
+					font-size: 0.9em;
+					font-family: var(--font-mono);
+				}
+			}
+		}
+	}
+
+	.projects-empty {
+		opacity: 0.7;
+		font-style: italic;
 	}
 }
 

@@ -93,6 +93,7 @@ export default [
 			'markdown/no-duplicate-headings': 'warn',
 			'markdown/no-missing-label-refs': 'off',
 			'markdown/fenced-code-language': 'off',
+			'markdown/no-empty-links': 'off',
 		},
 	},
 	// Scripts inside Markdown files

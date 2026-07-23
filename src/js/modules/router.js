@@ -72,6 +72,14 @@ class RouterController {
 	}
 
 	/**
+	 * Determines if the current path belongs to the dynamic project system.
+	 * @returns {boolean} true if the path starts with `projects`.
+	 */
+	get isProjectRoute() {
+		return this.state.path.startsWith('projects');
+	}
+
+	/**
 	 * Initializes the router and reads the initial URL.
 	 * @param {Function} onStateChangeCallback - Called when state changes
 	 * @returns {Promise<void>}
@@ -96,7 +104,7 @@ class RouterController {
 		if (pathName !== '' && pathName !== 'index.html') {
 			const segments = pathName.split('/');
 
-			if (segments[0] === 'blog') {
+			if (segments[0] === 'blog' || segments[0] === 'projects') {
 				mode = 'text';
 				path = pathName;
 			} else if (segments[0] === 'game' || segments[0] === 'text') {
@@ -163,7 +171,7 @@ class RouterController {
 
 		let targetMode = mode;
 
-		if (cleanPath.startsWith('blog')) {
+		if (cleanPath.startsWith('blog') || cleanPath.startsWith('projects')) {
 			targetMode = 'text';
 		}
 
@@ -179,7 +187,7 @@ class RouterController {
 		const newState = { mode: validMode, path: cleanPath };
 
 		let newUrl;
-		if (cleanPath.startsWith('blog')) {
+		if (cleanPath.startsWith('blog') || cleanPath.startsWith('projects')) {
 			newUrl = `/${cleanPath}`;
 		} else if (validMode === 'game' && !cleanPath) {
 			newUrl = '/';

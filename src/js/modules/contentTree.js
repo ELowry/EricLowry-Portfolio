@@ -359,5 +359,6 @@ export const ContentTree = category({
 
 		// BLOG
 		content({ id: 'blog', title: 'Blog', file: 'blog-index.json' }),
+		content({ id: 'projects', title: 'Projects', file: 'projects-index.json' }),
 	],
 });

@@ -3,6 +3,7 @@ import { Lang } from './lang.js';
 import { Content as AppContent } from './content.js';
 import { Events } from './events.js';
 import { Blog } from './blog.js';
+import { Projects } from './projects.js';
 
 /**
  * Responsible for composing and injecting the text-mode UI (breadcrumbs and navigation) into the App's text view.
@@ -57,9 +58,10 @@ export class TextRenderer {
 				const link = clone.querySelector('a');
 				link.textContent = label;
 
-				link.href = Router.isBlogRoute
-					? `/${targetPath}`
-					: `/${this.app.mode}/${targetPath}`;
+				link.href =
+					Router.isBlogRoute || Router.isProjectRoute
+						? `/${targetPath}`
+						: `/${this.app.mode}/${targetPath}`;
 
 				link.addEventListener('click', (e) => {
 					e.preventDefault();
@@ -89,6 +91,8 @@ export class TextRenderer {
 				label = Lang.getString(langKey, null, currNode.title);
 			} else if (part === 'blog') {
 				label = Lang.getString('blog.title', null, 'Blog');
+			} else if (part === 'projects') {
+				label = Lang.getString('projects.title', null, 'Projects');
 			}
 
 			createCrumb(label, currentPath, index === pathParts.length - 1);
@@ -179,6 +183,8 @@ export class TextRenderer {
 		// Show relevant content if found
 		if (path === 'blog') {
 			await this.#renderBlogIndex();
+		} else if (path === 'projects') {
+			await this.#renderProjectsIndex();
 		} else if (node && node.type === 'content' && node.file) {
 			await this.app.loadContentIntoText(node.file);
 		} else if (node && node.type === 'category') {
@@ -207,6 +213,9 @@ export class TextRenderer {
 				const term = `${entry.date} - ${entry.title}`;
 				Blog.injectComments(this.app.uiManager.elements.textContent, term, entry.language);
 			}
+		} else if (path.startsWith('projects/')) {
+			const projectId = path.substring(9);
+			await this.app.loadContentIntoText(`projects/${projectId}.md`, 'article');
 		} else {
 			this.app.uiManager.elements.textContent.innerHTML = '';
 		}
@@ -306,6 +315,72 @@ export class TextRenderer {
 	 */
 	#hydrateBlogLinks(container) {
 		const links = container.querySelectorAll('.blog-list a[data-route]');
+		links.forEach((link) => {
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				this.app.navigate(link.dataset.route);
+			});
+		});
+	}
+
+	/**
+	 * Fetches the projects index JSON, generates HTML, and renders the list of projects.
+	 * @private
+	 */
+	async #renderProjectsIndex() {
+		try {
+			this.app.uiManager.showLoading(true);
+
+			const projects = await Projects.getIndex();
+
+			let finalHtml = '<div class="projects-index">';
+
+			if (projects.length > 0) {
+				finalHtml += '<ul class="projects-list">';
+				projects.forEach((project) => {
+					finalHtml += `
+						<li>
+							<a href="/projects/${project.id}" data-route="projects/${project.id}">
+								<div class="project-header">
+									<span class="project-title">${project.title}</span>
+									<span class="project-stars">★ ${project.stars}</span>
+								</div>
+								<p class="project-desc">${project.description}</p>
+								<span class="project-tech">${project.tech}</span>
+							</a>
+						</li>
+					`;
+				});
+				finalHtml += '</ul>';
+			} else {
+				const noProjectsText = Lang.getString('projects.empty', null, 'No projects found.');
+				finalHtml += `<p class="projects-empty">${noProjectsText}</p>`;
+			}
+
+			finalHtml += '</div>';
+
+			this.app.uiManager.displayContentInTextView(finalHtml);
+			this.#hydrateProjectLinks(this.app.uiManager.elements.textContent);
+		} catch (error) {
+			console.error('Failed to load projects index:', error);
+			const errorText = Lang.getString(
+				'projects.errorLoading',
+				null,
+				'Failed to load projects index.'
+			);
+			this.app.uiManager.displayContentInTextView(`<p class="error">${errorText}</p>`);
+		} finally {
+			this.app.uiManager.hideLoading(true);
+		}
+	}
+
+	/**
+	 * Attaches router navigation events to the rendered project links.
+	 * @param {HTMLElement} container - The container holding the project list.
+	 * @private
+	 */
+	#hydrateProjectLinks(container) {
+		const links = container.querySelectorAll('.projects-list a[data-route]');
 		links.forEach((link) => {
 			link.addEventListener('click', (e) => {
 				e.preventDefault();

@@ -586,6 +586,10 @@
 			&[href='/text/blog']::before {
 				content: '🗩 ';
 			}
+
+			&[href='/text/projects']::before {
+				content: '⛖ ';
+			}
 		}
 	}
 

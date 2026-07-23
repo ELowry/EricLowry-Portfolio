@@ -41,6 +41,8 @@ yarn-error.log*
 /public/feed-*.xml
 /public/content/blog-index.json
 /public/blog/
+/public/content/projects-index.json
+/public/content/en_US/projects/
 /public/assets/images/blog/*/poster.png
 /public/assets/external-links.json
 /public/assets/images/external-links/

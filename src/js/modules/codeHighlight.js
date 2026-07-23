@@ -59,6 +59,9 @@ export async function codeHighlight(code, lang) {
 		}
 	}
 
-	const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-	return hljs.highlight(code, { language }).value;
+	if (hljs.getLanguage(lang)) {
+		return hljs.highlight(code, { language: lang }).value;
+	}
+
+	return code;
 }
