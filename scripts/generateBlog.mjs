@@ -345,8 +345,6 @@ function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 	const imagePath = `/assets/images/blog/${datePath}/poster.png`;
 	const imageUrl = `${BASE_URL}${imagePath}`;
 
-	let updatedHtml = baseHtmlContent;
-
 	const replacementMeta = `<!-- OG_META_START -->
 		<title>${entry.title} – Eric Lowry</title>
 		<link rel="canonical" href="https://eric-lowry.com/blog/${entry.date}" />
@@ -367,9 +365,17 @@ function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 		<meta name="twitter:image" content="${imageUrl}" />
 	<!-- OG_META_END -->`;
 
-	updatedHtml = updatedHtml
-		.replace(/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/, () => replacementMeta)
-		.replace(/(<main[^!>]+>)[\s\S]*?(<\/main>)/, `$1${marked.parse(content)}$2`);
+	const parsedMarkdown = marked.parse(content);
+	let updatedHtml = baseHtmlContent.replace(
+		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
+		() => replacementMeta
+	);
+	const mainMatch = updatedHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
+	if (mainMatch) {
+		const prefix = updatedHtml.substring(0, mainMatch.index) + mainMatch[1];
+		const suffix = mainMatch[2] + updatedHtml.substring(mainMatch.index + mainMatch[0].length);
+		updatedHtml = prefix + parsedMarkdown + suffix;
+	}
 
 	fs.writeFileSync(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
 }

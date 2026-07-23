@@ -112,6 +112,9 @@ class MetaController {
 					pageImage = `/assets/images/projects/${project.id}/poster.jpg`;
 					previewImage = pageImage;
 
+					imgWidth = project.ogImageWidth || '1200';
+					imgHeight = project.ogImageHeight || '630';
+
 					const lang = Lang.langCode || 'en_US';
 					markdownUrl = `/content/${lang}/projects/${project.id}.md`;
 				}

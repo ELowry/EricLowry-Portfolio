@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { marked } from 'marked';
 import crypto from 'crypto';
 import { exec } from 'child_process';
 import util from 'util';
@@ -182,8 +183,8 @@ class ProjectGenerator {
 		<meta property="og:description" content="${data.description}" />
 		<meta property="og:image" content="${imageUrl}" />
 		<meta property="og:image:type" content="image/jpeg" />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
+		<meta property="og:image:width" content="${data.ogImageWidth}" />
+		<meta property="og:image:height" content="${data.ogImageHeight}" />
 		<meta property="og:image:alt" content="${data.title}" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="${data.title}" />
@@ -191,10 +192,18 @@ class ProjectGenerator {
 		<!-- OG_META_END -->`;
 
 		// Dynamically import marked so it parses the HTML correctly
-		const { marked } = await import('marked');
-		const updatedHtml = baseHtmlContent
-			.replace(/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/, () => replacementMeta)
-			.replace(/(<main[^!>]+>)[\s\S]*?(<\/main>)/, `$1${marked.parse(data.readme)}$2`);
+		const parsedMarkdown = marked.parse(data.readme);
+		let updatedHtml = baseHtmlContent.replace(
+			/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
+			() => replacementMeta
+		);
+		const mainMatch = updatedHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
+		if (mainMatch) {
+			const prefix = updatedHtml.substring(0, mainMatch.index) + mainMatch[1];
+			const suffix =
+				mainMatch[2] + updatedHtml.substring(mainMatch.index + mainMatch[0].length);
+			updatedHtml = prefix + parsedMarkdown + suffix;
+		}
 
 		await fs.writeFile(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
 	}
@@ -246,7 +255,8 @@ class ProjectGenerator {
 
 		// Get Open Graph image from GitHub
 		const htmlRes = await fetch(`https://github.com/${ProjectGenerator.GITHUB_USER}/${repo}`);
-		let ogImageUrl = `https://opengraph.githubassets.com/1/${ProjectGenerator.GITHUB_USER}/${repo}`; // Fallback to GitHub's auto-generator
+		// Fallback to GitHub's auto-generator
+		let ogImageUrl = `https://opengraph.githubassets.com/1/${ProjectGenerator.GITHUB_USER}/${repo}`;
 
 		if (htmlRes.ok) {
 			const htmlText = await htmlRes.text();
@@ -257,6 +267,8 @@ class ProjectGenerator {
 		}
 
 		let localImagePath = null;
+		let imgWidth = 1200;
+		let imgHeight = 630;
 		try {
 			const imgRes = await fetch(ogImageUrl);
 			if (imgRes.ok) {
@@ -266,23 +278,31 @@ class ProjectGenerator {
 				const repoImgDir = path.join(ProjectGenerator.IMAGE_BASE_DIR, repo);
 				await fs.mkdir(repoImgDir, { recursive: true });
 
-				// Use temp hash to prevent collisions if async execution is added later
 				const tempHash = crypto.randomBytes(4).toString('hex');
 				const tempInputPath = path.join(repoImgDir, `temp_${tempHash}.tmp`);
 				const finalOutputPath = path.join(repoImgDir, `poster.jpg`);
 
 				await fs.writeFile(tempInputPath, buffer);
 
-				// Process via ImageMagick
 				await execAsync(
-					`powershell -Command "magick '${tempInputPath}' -resize '1200x630>' -quality 85 '${finalOutputPath}'"`
+					`powershell -Command "magick '${tempInputPath}' -resize '1200x630^' -gravity center -extent '1200x630' -quality 85 '${finalOutputPath}'"`
 				);
+
+				const { stdout } = await execAsync(
+					`powershell -Command "magick identify -format '%w,%h' '${finalOutputPath}'"`
+				);
+
+				const [w, h] = stdout.trim().split(',');
+				if (w && h) {
+					imgWidth = parseInt(w, 10);
+					imgHeight = parseInt(h, 10);
+				}
 
 				await fs.unlink(tempInputPath);
 				localImagePath = `/assets/images/projects/${repo}/poster.jpg`;
 			}
 		} catch (imgError) {
-			Log.warn(`Failed to process OG image for ${repo}: ${imgError.message}`);
+			Log.warn(`   -> Failed to process OG image for ${repo}: ${imgError.message}`);
 		}
 
 		return {
@@ -296,6 +316,8 @@ class ProjectGenerator {
 			date: meta.updated_at.split('T')[0],
 			readme: readmeText,
 			ogImage: localImagePath || ogImageUrl,
+			ogImageWidth: imgWidth,
+			ogImageHeight: imgHeight,
 			skipWrite: false,
 		};
 	}
@@ -347,6 +369,8 @@ class ProjectGenerator {
 					tech: data.tech,
 					githubUrl: data.githubUrl || data.url,
 					ogImage: data.ogImage,
+					ogImageWidth: data.ogImageWidth,
+					ogImageHeight: data.ogImageHeight,
 				});
 			} catch (error) {
 				Log.error(`Error processing ${repo}: ${error.message}`);
