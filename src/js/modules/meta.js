@@ -378,7 +378,12 @@ class MetaController {
 	 */
 	#updateImage(pageImage, pageImageAlt, width, height) {
 		if (pageImage) {
-			const imageUrl = `${window.location.origin}${pageImage}`;
+			const imageUrl =
+				pageImage.startsWith('http://')
+				|| pageImage.startsWith('https://')
+				|| pageImage.startsWith('//')
+					? pageImage
+					: `${window.location.origin}${pageImage}`;
 
 			const currentOgTags = document.querySelectorAll('meta[property^="og:image"]');
 			currentOgTags.forEach((el) => {
@@ -394,10 +399,32 @@ class MetaController {
 			};
 
 			let mimeType = 'image/jpeg';
-			if (pageImage.endsWith('.png')) {
+			if (pageImage.includes('opengraph.githubassets.com')) {
 				mimeType = 'image/png';
-			} else if (pageImage.endsWith('.gif')) {
-				mimeType = 'image/gif';
+			} else {
+				const cleanUrl = pageImage.split('?')[0].split('#')[0];
+				const lastDotIndex = cleanUrl.lastIndexOf('.');
+
+				if (lastDotIndex !== -1) {
+					const ext = cleanUrl.substring(lastDotIndex + 1).toLowerCase();
+					switch (ext) {
+						case 'png':
+							mimeType = 'image/png';
+							break;
+						case 'gif':
+							mimeType = 'image/gif';
+							break;
+						case 'webp':
+							mimeType = 'image/webp';
+							break;
+						case 'svg':
+							mimeType = 'image/svg+xml';
+							break;
+						default:
+							mimeType = 'image/jpeg';
+							break;
+					}
+				}
 			}
 
 			head.appendChild(createMeta('og:image', imageUrl));
