@@ -244,19 +244,6 @@ class LangController {
 	}
 
 	/**
-	 * Formats a string by replacing indexed placeholders like {0}, {1}.
-	 * @param {string} str - The target string containing placeholders.
-	 * @param {string[]} args - Values to inject into placeholders.
-	 * @returns {string} the formatted string.
-	 * @private
-	 */
-	#formatString(str, args) {
-		return str.replace(/{(\d+)}/g, (match, number) => {
-			return typeof args[number] !== 'undefined' ? args[number] : match;
-		});
-	}
-
-	/**
 	 * Handles newline processing for elements that require preserved line breaks.
 	 * @param {string} str - The string to process.
 	 * @param {boolean} isPre - Whether the target element is a <pre> block.
@@ -265,6 +252,18 @@ class LangController {
 	 */
 	#processPreFormatting(str, isPre) {
 		return isPre ? str.replace(/<br\s?\/?>/gm, '\n') : str;
+	}
+
+	/**
+	 * Formats a string by replacing indexed placeholders like {0}, {1}.
+	 * @param {string} str - The target string containing placeholders.
+	 * @param {string[]} args - Values to inject into placeholders.
+	 * @returns {string} the formatted string.
+	 */
+	formatString(str, args) {
+		return str.replace(/{(\d+)}/g, (match, number) => {
+			return typeof args[number] !== 'undefined' ? args[number] : match;
+		});
 	}
 
 	/**
@@ -295,7 +294,7 @@ class LangController {
 				}
 
 				const translated = config.props
-					? this.#formatString(
+					? this.formatString(
 							target,
 							config.props.map((p) => {
 								return typeof p === 'object' ? this.getString(p.path, data) : p;
@@ -341,7 +340,7 @@ class LangController {
 
 				let translated = target;
 				if (placeholders && placeholders.length > 0) {
-					translated = this.#formatString(target, placeholders);
+					translated = this.formatString(target, placeholders);
 				}
 
 				el.innerHTML = this.#processPreFormatting(translated, isPre);
@@ -389,7 +388,7 @@ class LangController {
 					const placeholders = rawValue.match(/\u200B([^\u200B]+)\u200B/g);
 
 					if (placeholders && placeholders.length > 0) {
-						el.setAttribute(attrName, this.#formatString(target, placeholders));
+						el.setAttribute(attrName, this.formatString(target, placeholders));
 					} else {
 						el.setAttribute(attrName, target);
 					}

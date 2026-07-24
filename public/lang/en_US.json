@@ -333,5 +333,9 @@
 		"commentsConsent": "This site uses Giscus (powered by GitHub Discussions) to host comments. Loading comments will connect to GitHub.",
 		"loadingComments": "Loading comments…",
 		"loadComments": "Load Comments"
+	},
+	"projects": {
+		"intro": "This is a slection of repositories from my {0}GitHub page{1} that I have mirrored, providing convenient clutter-free pages.",
+		"errorLoading": "Failed to load projects index."
 	}
 }

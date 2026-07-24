@@ -333,7 +333,12 @@ export class TextRenderer {
 
 			const projects = await Projects.getIndex();
 
-			let finalHtml = '<div class="projects-index">';
+			const projectsIntro = Lang.formatString(Lang.getString('projects.intro', null, null), [
+				'<a href="https://github.com/ELowry" class="md-external-link" target="_blank" rel="noopener noreferrer">',
+				'</a>',
+			]);
+			let finalHtml =
+				(projectsIntro ? `<p>${projectsIntro}</p>` : '') + '<div class="projects-index">';
 
 			if (projects.length > 0) {
 				finalHtml += '<ul class="projects-list">';
