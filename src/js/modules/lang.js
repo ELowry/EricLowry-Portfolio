@@ -1,4 +1,5 @@
 import { InputPrompts } from './inputPrompts.js';
+import { resolveDotPath } from './sharedUtils.js';
 
 /**
  * LangController manages multi-language support, translation logic, and persistence.
@@ -427,21 +428,16 @@ class LangController {
 	 */
 	getString(pathString, data = this.data, fallback = 'notFound') {
 		const searchData = data || this.data;
-		if (!searchData) {
+
+		const failSymbol = Symbol('fail');
+		const result = resolveDotPath(pathString, searchData, failSymbol);
+
+		if (result === failSymbol) {
+			console.warn(`Translation: no translation for "${pathString}"`);
 			return fallback;
 		}
-		const path = pathString.split('.');
-		let target = searchData;
 
-		for (let i = 0; i < path.length; i++) {
-			const key = path[i];
-			if (!target || !Object.prototype.hasOwnProperty.call(target, key)) {
-				console.warn(`Translation: no translation for "${pathString}"`);
-				return fallback;
-			}
-			target = target[key];
-		}
-		return target;
+		return result;
 	}
 
 	/**

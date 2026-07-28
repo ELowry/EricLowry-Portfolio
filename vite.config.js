@@ -70,43 +70,107 @@ function firebaseRewritesPlugin() {
 }
 
 /**
- * A Vite plugin to fix the static HTML wrappers generated for blog posts.
- * It extracts the Open Graph meta blocks from the raw HTML files and injects them into the final built `dist/index.html` with correct hashed asset links.
+ * A Vite plugin to fix the static HTML wrappers generated for Open Graph and SEO crawlers.
+ * It recursively finds all generated index.html files in the build output.
+ * It extracts the Open Graph meta blocks and statically injected <main> content,
+ * then injects them into the final built `dist/index.html` (which has the correct hashed asset links).
+ *
  * @returns {import('vite').Plugin} the vite plugin instance.
  */
-function blogStaticHtmlPlugin() {
+function staticHtmlPlugin() {
 	return {
-		name: 'fix-blog-static-html',
+		name: 'fix-static-html-og',
 		apply: 'build',
 		closeBundle() {
-			const distIndexPath = path.resolve('dist', 'index.html');
-			const blogDir = path.resolve('dist', 'blog');
+			const distDir = path.resolve('dist');
+			const distIndexPath = path.join(distDir, 'index.html');
+			const stagingDir = path.resolve('.static-html');
 
-			if (!fs.existsSync(distIndexPath) || !fs.existsSync(blogDir)) {
+			if (!fs.existsSync(distIndexPath) || !fs.existsSync(stagingDir)) {
 				return;
 			}
 
-			const distIndexHtml = fs.readFileSync(distIndexPath, 'utf-8');
-			const dates = fs.readdirSync(blogDir).filter((dir) => {
-				return fs.statSync(path.join(blogDir, dir)).isDirectory();
+			const dirsToCopy = ['blog', 'projects'];
+			dirsToCopy.forEach((dir) => {
+				const srcPath = path.join(stagingDir, dir);
+				const destPath = path.join(distDir, dir);
+				if (fs.existsSync(srcPath)) {
+					fs.cpSync(srcPath, destPath, { recursive: true });
+				}
 			});
 
-			dates.forEach((date) => {
-				const postIndexPath = path.join(blogDir, date, 'index.html');
-				if (fs.existsSync(postIndexPath)) {
-					const rawPostHtml = fs.readFileSync(postIndexPath, 'utf-8');
-					const ogMatch = rawPostHtml.match(
-						/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/
+			const contentSrc = path.join(stagingDir, 'content');
+			if (fs.existsSync(contentSrc)) {
+				const modes = ['text', 'game'];
+				modes.forEach((mode) => {
+					const destPath = path.join(distDir, mode);
+					fs.cpSync(contentSrc, destPath, { recursive: true });
+				});
+			}
+
+			const distIndexHtml = fs.readFileSync(distIndexPath, 'utf-8');
+
+			/**
+			 * Recursively traverses a directory to find all nested `index.html` files, excluding the root index.
+			 * @param {string} currentDir - The current directory path being scanned.
+			 * @param {string[]} [fileList=[]] - The accumulated array of file paths (used during recursion).
+			 * @returns {string[]} An array of absolute file paths pointing to `index.html` files.
+			 */
+			function walkDir(currentDir, fileList = []) {
+				const files = fs.readdirSync(currentDir);
+				for (const file of files) {
+					const filePath = path.join(currentDir, file);
+					if (fs.statSync(filePath).isDirectory()) {
+						walkDir(filePath, fileList);
+					} else if (file === 'index.html' && filePath !== distIndexPath) {
+						fileList.push(filePath);
+					}
+				}
+				return fileList;
+			}
+
+			const allIndexFiles = walkDir(distDir);
+
+			allIndexFiles.forEach((postIndexPath) => {
+				const rawPostHtml = fs.readFileSync(postIndexPath, 'utf-8');
+
+				const ogMatch = rawPostHtml.match(
+					/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/
+				);
+				const mainMatch = rawPostHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
+
+				if (ogMatch) {
+					let metaBlock = ogMatch[0];
+
+					const relativePath = path.relative(distDir, postIndexPath);
+					let mode = '';
+					if (relativePath.startsWith(`text${path.sep}`)) {
+						mode = 'text';
+					} else if (relativePath.startsWith(`game${path.sep}`)) {
+						mode = 'game';
+					}
+
+					if (mode) {
+						metaBlock = metaBlock.replace(/__MODE__/g, mode);
+					}
+
+					let updatedHtml = distIndexHtml.replace(
+						/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
+						() => {
+							return metaBlock;
+						}
 					);
 
-					if (ogMatch) {
-						// Overwrite the raw scaffolding with the fully bundled Vite scaffolding
-						const updatedHtml = distIndexHtml.replace(
-							/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
-							() => ogMatch[0]
+					if (mainMatch) {
+						updatedHtml = updatedHtml.replace(
+							/(<main[^!>]+>)[\s\S]*?(<\/main>)/,
+							() => {
+								return mainMatch[0];
+							}
 						);
-						fs.writeFileSync(postIndexPath, updatedHtml, 'utf-8');
 					}
+
+					fs.writeFileSync(postIndexPath, updatedHtml, 'utf-8');
 				}
 			});
 		},
@@ -143,6 +207,13 @@ function allowPrivateNetworkAccess() {
 	};
 }
 
+/**
+ * The main Vite configuration object.
+ * Configures module aliases, custom build plugins, development server restrictions, and CSS transformation.
+ * @param {Object} env - The Vite environment configuration object.
+ * @param {string} env.mode - The current build mode (e.g., 'development' or 'production').
+ * @returns {import('vite').UserConfig} The resolved Vite configuration.
+ */
 export default defineConfig(({ mode }) => {
 	return {
 		resolve: {
@@ -160,7 +231,7 @@ export default defineConfig(({ mode }) => {
 			excludePublicFolders(['obsidian', '.obsidian']),
 			watchPublicMarkdown(),
 			firebaseRewritesPlugin(),
-			blogStaticHtmlPlugin(),
+			staticHtmlPlugin(),
 			allowPrivateNetworkAccess(),
 		],
 		server: {

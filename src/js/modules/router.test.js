@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Router } from './router.js';
+import { sanitizePath } from './sharedUtils.js';
 
 describe('RouterController', () => {
 	beforeEach(() => {
@@ -23,20 +24,20 @@ describe('RouterController', () => {
 
 	describe('sanitizePath', () => {
 		it('should clean leading and trailing slashes', () => {
-			expect(Router.sanitizePath('/about/cv/')).toBe('about/cv');
-			expect(Router.sanitizePath('about/cv')).toBe('about/cv');
+			expect(sanitizePath('/about/cv/')).toBe('about/cv');
+			expect(sanitizePath('about/cv')).toBe('about/cv');
 		});
 
 		it('should collapse multiple duplicate slashes', () => {
-			expect(Router.sanitizePath('architecture///projects//unstant')).toBe(
+			expect(sanitizePath('architecture///projects//unstant')).toBe(
 				'architecture/projects/unstant'
 			);
 		});
 
 		it('should return empty string for null, undefined, or empty values', () => {
-			expect(Router.sanitizePath('')).toBe('');
-			expect(Router.sanitizePath(null)).toBe('');
-			expect(Router.sanitizePath(undefined)).toBe('');
+			expect(sanitizePath('')).toBe('');
+			expect(sanitizePath(null)).toBe('');
+			expect(sanitizePath(undefined)).toBe('');
 		});
 	});
 

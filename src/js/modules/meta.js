@@ -4,6 +4,7 @@ import { Lang } from './lang.js';
 import { Blog } from './blog.js';
 import { Projects } from './projects.js';
 import { Content } from './content.js';
+import { parseImageVariant } from './sharedUtils.js';
 
 /**
  * MetaController manages page metadata, updating document title, descriptions, and Open Graph tags.
@@ -29,6 +30,10 @@ class MetaController {
 		Events.on('route:changed', (payload) => {
 			this.update(payload);
 		});
+
+		Events.on('lang:changed', () => {
+			this.#updateLanguageTags();
+		});
 	}
 
 	/**
@@ -52,6 +57,7 @@ class MetaController {
 			metaData.imgWidth,
 			metaData.imgHeight
 		);
+		this.#updateLanguageTags();
 	}
 
 	/**
@@ -155,52 +161,11 @@ class MetaController {
 			if (effectiveNode && effectiveNode.image) {
 				pageImageAlt = Lang.getString(altKey, null, pageTitle);
 				pageImage = `/assets/images/${effectiveNode.image}`;
-				previewImage = pageImage;
 
-				if (effectiveNode.image.includes('__')) {
-					const extensionIndex = effectiveNode.image.lastIndexOf('.');
-					const originalExt =
-						extensionIndex !== -1 ? effectiveNode.image.substring(extensionIndex) : '';
-					const withoutExtension =
-						extensionIndex !== -1
-							? effectiveNode.image.substring(0, extensionIndex)
-							: effectiveNode.image;
-
-					const parts = withoutExtension.split('__');
-					if (parts.length > 1) {
-						const base = parts[0];
-						const variantSizes = parts.slice(1).join('__');
-						const tokens = variantSizes.split('_');
-
-						// Largest Variant
-						const lastToken = tokens[tokens.length - 1];
-						const lastDimensions = lastToken.split('-');
-						if (lastDimensions.length >= 2) {
-							imgWidth = lastDimensions[0];
-							imgHeight = lastDimensions[1];
-						}
-
-						// Smallest Variant
-						const firstParts = tokens[0].split('-');
-						const sWidth = firstParts[0];
-						const sHeight = firstParts[1];
-
-						// Prioritize webp for smallest variant
-						const smallestTokens = tokens.filter((t) =>
-							t.startsWith(`${sWidth}-${sHeight}`)
-						);
-						const webpToken = smallestTokens.find((t) => t.includes('-webp'));
-						const bestToken = webpToken || smallestTokens[0];
-						const bestParts = bestToken.split('-');
-
-						let sExt = originalExt;
-						if (bestParts.length > 2) {
-							sExt = `.${bestParts[2]}`;
-						}
-
-						previewImage = `/assets/images/${base}__${sWidth}-${sHeight}${sExt}`;
-					}
-				}
+				const parsedImg = parseImageVariant(effectiveNode.image);
+				previewImage = parsedImg.url;
+				imgWidth = parsedImg.width;
+				imgHeight = parsedImg.height;
 			}
 		} else {
 			markdownUrl = `/content/${Lang.langCode || 'en_US'}/index.md`;
@@ -446,6 +411,27 @@ class MetaController {
 			});
 
 			this.#hasOverriddenMeta = false;
+		}
+	}
+
+	/**
+	 * Updates the document's language attributes for accessibility and translation tools.
+	 * @private
+	 */
+	#updateLanguageTags() {
+		const currentLang = Lang.langCode || 'en_US';
+		const shortLang = currentLang.split('_')[0].toLowerCase(); // e.g., 'en' or 'fr'
+
+		document.documentElement.setAttribute('lang', shortLang);
+
+		const langMeta = document.querySelector('meta[name="language"]');
+		if (langMeta) {
+			langMeta.setAttribute('content', shortLang.toUpperCase());
+		}
+
+		const ogLocale = document.querySelector('meta[property="og:locale"]');
+		if (ogLocale) {
+			ogLocale.setAttribute('content', currentLang);
 		}
 	}
 }

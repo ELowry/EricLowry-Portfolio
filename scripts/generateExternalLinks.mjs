@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { Log } from './logger.mjs';
 import { exec } from 'child_process';
 import util from 'util';
 
@@ -10,16 +11,27 @@ const CONCURRENCY_LIMIT = 14;
 const CONTENT_DIR = 'public/content';
 const OUTPUT_JSON = 'public/assets/external-links.json';
 const IMAGE_DIR = 'public/assets/images/external-links';
-const IGNORED_DOMAINS = ['eric-lowry.com', 'localhost', '127.0.0.1', 'web.archive.org'];
-
-/**
- * Simple logger using native ANSI color codes.
- */
-const Log = {
-	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
-	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
-	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
-};
+const IGNORED_DOMAINS = [
+	'eric-lowry.com',
+	'localhost',
+	'127.0.0.1',
+	'web.archive.org',
+	'spectra.video',
+	'developer.android.com',
+];
+const IGNORED_EXTENSIONS = [
+	'.jpg',
+	'.jpeg',
+	'.png',
+	'.gif',
+	'.webp',
+	'.svg',
+	'.mp4',
+	'.webm',
+	'.pdf',
+	'.zip',
+	'.exe',
+];
 
 /**
  * Recursively fetches all markdown files in a directory.
@@ -48,7 +60,7 @@ function getMarkdownFiles(dir) {
  */
 function extractLinks(markdown) {
 	const links = new Set();
-	const mdRegex = /\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/g;
+	const mdRegex = /(?<!!)\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/g;
 	const htmlRegex = /href="(https?:\/\/[^"]+)"/g;
 
 	let match;
@@ -164,7 +176,13 @@ async function generateExternalLinks() {
 		links.forEach((url) => {
 			try {
 				const parsed = new URL(url);
-				if (!IGNORED_DOMAINS.includes(parsed.hostname)) {
+				const ext = path.extname(parsed.pathname).toLowerCase();
+
+				if (
+					!IGNORED_DOMAINS.includes(parsed.hostname)
+					&& !IGNORED_EXTENSIONS.includes(ext)
+					&& !parsed.pathname.includes('/embed/')
+				) {
 					parsed.hash = '';
 					allUrls.add(parsed.toString());
 				}
@@ -231,6 +249,9 @@ async function processUrl(url, linkCache) {
 	let status = 'failed';
 
 	try {
+		let title, description, siteName, imageAltRaw, responseEtag, responseLastModified;
+		let imageNodes = [];
+
 		const headers = {
 			'User-Agent':
 				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
@@ -241,18 +262,47 @@ async function processUrl(url, linkCache) {
 		if (cached?.etag) headers['If-None-Match'] = cached.etag;
 		if (cached?.lastModified) headers['If-Modified-Since'] = cached.lastModified;
 
-		const response = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
+		const parsedUrl = new URL(url);
 
-		if (response.status === 304) {
-			return { status: 'skipped' };
+		if (
+			parsedUrl.hostname.includes('npmjs.com')
+			&& parsedUrl.pathname.startsWith('/package/')
+		) {
+			const packageName = parsedUrl.pathname.split('/')[2];
+			const response = await fetch(`https://registry.npmjs.org/${packageName}`, {
+				headers,
+				signal: AbortSignal.timeout(10000),
+			});
+
+			if (response.status === 304) return { status: 'skipped' };
+			if (!response.ok) throw new Error(`NPM API HTTP ${response.status}`);
+
+			const pkgData = await response.json();
+			title = pkgData.name;
+			description = pkgData.description;
+			siteName = 'NPM';
+			imageAltRaw = `NPM Package: ${pkgData.name}`;
+
+			responseEtag = response.headers.get('etag');
+			responseLastModified = response.headers.get('last-modified');
+		} else {
+			const response = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
+
+			if (response.status === 304) return { status: 'skipped' };
+			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+			const html = await response.text();
+			const extracted = extractOgData(html);
+
+			title = extracted.title;
+			description = extracted.description;
+			siteName = extracted.siteName;
+			imageAltRaw = extracted.imageAltRaw;
+			imageNodes = extracted.imageNodes;
+
+			responseEtag = response.headers.get('etag');
+			responseLastModified = response.headers.get('last-modified');
 		}
-
-		if (!response.ok) {
-			throw new Error(`HTTP ${response.status}`);
-		}
-
-		const html = await response.text();
-		let { title, description, siteName, imageAltRaw, imageNodes } = extractOgData(html);
 
 		if (siteName === 'GitHub' && title?.includes(': ')) {
 			const parts = title.split(': ');
@@ -274,8 +324,8 @@ async function processUrl(url, linkCache) {
 		const currentHash = crypto.createHash('md5').update(dataToHash).digest('hex');
 
 		if (cached && cached.hash === currentHash) {
-			cached.etag = response.headers.get('etag');
-			cached.lastModified = response.headers.get('last-modified');
+			cached.etag = responseEtag;
+			cached.lastModified = responseLastModified;
 			return { status: 'skipped' };
 		}
 
@@ -299,7 +349,6 @@ async function processUrl(url, linkCache) {
 					const arrayBuffer = await imgResponse.arrayBuffer();
 					const buffer = Buffer.from(arrayBuffer);
 
-					// Use a unique temp file name to avoid parallel collision
 					const tempHash = crypto.randomBytes(8).toString('hex');
 					const tempInputPath = path.join(IMAGE_DIR, `temp_og_${tempHash}.tmp`);
 					try {
@@ -341,8 +390,8 @@ async function processUrl(url, linkCache) {
 			image: localImagePath,
 			imageAlt: finalImageAlt?.trim() || null,
 			hash: currentHash,
-			etag: response.headers.get('etag') || null,
-			lastModified: response.headers.get('last-modified') || null,
+			etag: responseEtag || null,
+			lastModified: responseLastModified || null,
 		};
 
 		status = cached ? 'updated' : 'added';

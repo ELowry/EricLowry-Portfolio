@@ -194,7 +194,7 @@ export const ContentTree = category({
 					id: 'winget-updater',
 					title: 'WinGet Updater',
 					file: 'osd/winget-updater.md',
-					image: 'osd/winget-updater/winget-updater__240-182-webp_240-182_400-303-webp_400-303_600-454-webp_600-454_754-571-webp_754-571.jpg',
+					image: 'osd/winget-updater/winget-updater__240-120-webp_240-120_400-200-webp_400-200_600-300-webp_600-300_820-410-webp_820-410_1280-640-webp_1280-640.jpg',
 				}),
 				content({
 					id: 'marked-responsive-images',

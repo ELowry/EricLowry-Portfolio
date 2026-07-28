@@ -1,3 +1,5 @@
+import { sanitizePath } from './sharedUtils.js';
+
 /**
  * RouterController handles application state via URL paths and the History API.
  * Manages clean path-based routing (e.g., `/game/about` instead of `?mode=game&path=about`).
@@ -96,7 +98,7 @@ class RouterController {
 	 * @private
 	 */
 	#parsePathname(rawPathname) {
-		const pathName = this.sanitizePath(rawPathname);
+		const pathName = sanitizePath(rawPathname);
 
 		let mode = 'game';
 		let path = '';
@@ -109,7 +111,7 @@ class RouterController {
 				path = pathName;
 			} else if (segments[0] === 'game' || segments[0] === 'text') {
 				mode = segments[0];
-				path = this.sanitizePath(segments.slice(1).join('/'));
+				path = sanitizePath(segments.slice(1).join('/'));
 			} else {
 				mode = 'game';
 				path = pathName;
@@ -123,30 +125,6 @@ class RouterController {
 		// TEMP TEXT-ONLY END
 
 		return { mode, path };
-	}
-
-	/**
-	 * Sanitizes a URL path.
-	 * @param {string} path - Raw path to sanitize
-	 * @returns {string} a clean path
-	 */
-	sanitizePath(path) {
-		if (!path) {
-			return '';
-		}
-
-		let cleanPath = path
-			.replace(/\/+/g, '/')
-			.replace(/^\/|\/$/g, '')
-			.trim();
-
-		if (cleanPath.endsWith('/index.html')) {
-			cleanPath = cleanPath.slice(0, -11);
-		} else if (cleanPath === 'index.html') {
-			cleanPath = '';
-		}
-
-		return cleanPath;
 	}
 
 	/**
@@ -167,7 +145,7 @@ class RouterController {
 	 * @returns {Promise<void>}
 	 */
 	async go(mode, path, hash = '') {
-		const cleanPath = this.sanitizePath(path);
+		const cleanPath = sanitizePath(path);
 
 		let targetMode = mode;
 

@@ -1,0 +1,174 @@
+import fs from 'fs';
+import path from 'path';
+import { marked } from 'marked';
+import { Log } from './logger.mjs';
+import { ContentTree } from '../src/js/modules/contentTree.js';
+import { parseImageVariant, resolveDotPath, escapeHtml } from '../src/js/modules/sharedUtils.js';
+
+const BASE_URL = 'https://eric-lowry.com';
+const LANG_DIR = path.resolve('public/lang');
+const CONTENT_DIR = path.resolve('public/content');
+
+const langsConfig = JSON.parse(fs.readFileSync(path.join(LANG_DIR, 'langs.json'), 'utf-8'));
+const availableLangs = Object.values(langsConfig).flat();
+const defaultLang = 'en_US';
+const enLangData = JSON.parse(fs.readFileSync(path.join(LANG_DIR, `${defaultLang}.json`), 'utf-8'));
+
+const baseHtmlContent = fs.readFileSync('index.html', 'utf-8');
+
+/**
+ * Fetches translated text from the loaded JSON data using dot notation.
+ * @param {string} pathString - The dot-separated path to the translation key.
+ * @param {string} fallback - The string to return if the key is not found.
+ * @returns {string} the resolved string.
+ */
+function getTranslation(pathString, fallback) {
+	return resolveDotPath(pathString, enLangData, fallback);
+}
+
+/**
+ * Generates the hreflang alternate links for SEO based on available languages.
+ * @param {string} routePath - The current route path.
+ * @returns {string} the formatted HTML link tags.
+ */
+function generateHrefLangs(routePath) {
+	return availableLangs
+		.map((lang) => {
+			const langCode = lang.replace('_', '-').toLowerCase();
+			return `<link rel="alternate" hreflang="${langCode}" href="${BASE_URL}/__MODE__/${routePath}?lang=${lang}" />`;
+		})
+		.join('\n\t\t');
+}
+
+/**
+ * Recursively walks the ContentTree to generate static pages.
+ * @param {Object} node - The current content node.
+ * @param {string} [currentPath=''] - The accumulated route path.
+ */
+function processNode(node, currentPath = '') {
+	if (node.type === 'separator') {
+		return;
+	}
+
+	let nodePath = '';
+	if (currentPath) {
+		nodePath = node.id === 'root' ? currentPath : `${currentPath}/${node.id}`;
+	} else {
+		nodePath = node.id === 'root' ? '' : node.id;
+	}
+
+	if (nodePath && nodePath !== 'blog' && nodePath !== 'projects') {
+		generateStaticPage(node, nodePath);
+	}
+
+	if (node.children) {
+		node.children.forEach((child) => {
+			processNode(child, nodePath);
+		});
+	}
+}
+
+/**
+ * Reads node metadata, injects it into the base HTML, and writes the static file.
+ * @param {Object} node - The current content node.
+ * @param {string} routePath - The resolved route path for the node.
+ */
+function generateStaticPage(node, routePath) {
+	let effectiveNode = node;
+
+	if (node.type === 'category' && node.children) {
+		const mainChild = node.children.find((c) => {
+			return c.id === node.id;
+		});
+		if (mainChild) {
+			effectiveNode = mainChild;
+		}
+	}
+
+	const pathKey = routePath.replace(/\//g, '.');
+	const titleKey = `content.${pathKey}.title`;
+	const descKey = `content.${pathKey}.description`;
+
+	const pageTitle = getTranslation(titleKey, effectiveNode.title || routePath.split('/').pop());
+	const pageDesc = getTranslation(descKey, getTranslation('meta.description', ''));
+	const hrefLangs = generateHrefLangs(routePath);
+
+	const safeTitle = escapeHtml(pageTitle);
+	const safeDesc = escapeHtml(pageDesc);
+
+	let ogImage = `${BASE_URL}/assets/images/eric_lowry_portrait__240-240-webp_240-240.jpg`;
+	let ogWidth = '1200';
+	let ogHeight = '630';
+
+	if (effectiveNode.image) {
+		const parsedImg = parseImageVariant(effectiveNode.image);
+		ogImage = `${BASE_URL}${parsedImg.url}`;
+		ogWidth = parsedImg.width;
+		ogHeight = parsedImg.height;
+	}
+
+	let markdownContent = '';
+	if (effectiveNode.file) {
+		const mdPath = path.join(CONTENT_DIR, defaultLang, effectiveNode.file);
+		if (fs.existsSync(mdPath)) {
+			markdownContent = marked.parse(fs.readFileSync(mdPath, 'utf-8'));
+		}
+	}
+
+	const replacementMeta = `<!-- OG_META_START -->
+		<title>${safeTitle} – Eric Lowry</title>
+		
+		<meta name="description" content="${safeDesc}" />
+		<meta name="author" content="Eric Lowry" />
+		<meta name="language" content="EN" />
+
+		<meta name="theme-color" content="#e29186" />
+		<meta name="theme-color" content="#6d0a1f" media="(prefers-color-scheme: light)" />
+
+		<link rel="canonical" href="${BASE_URL}/__MODE__/${routePath}" />
+		${hrefLangs}
+		<link rel="alternate" hreflang="x-default" href="${BASE_URL}/__MODE__/${routePath}" />
+
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:title" content="${safeTitle}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content="${BASE_URL}/__MODE__/${routePath}" />
+		<meta property="og:description" content="${safeDesc}" />
+		<meta property="og:image" content="${ogImage}" />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="${ogWidth}" />
+		<meta property="og:image:height" content="${ogHeight}" />
+		<meta property="og:image:alt" content="${safeTitle}" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+	<!-- OG_META_END -->`;
+
+	const outDir = path.join('.static-html', 'content', routePath);
+	if (!fs.existsSync(outDir)) {
+		fs.mkdirSync(outDir, { recursive: true });
+	}
+
+	let updatedHtml = baseHtmlContent.replace(
+		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
+		() => {
+			return replacementMeta;
+		}
+	);
+
+	if (markdownContent) {
+		const mainMatch = updatedHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
+		if (mainMatch) {
+			const prefix = updatedHtml.substring(0, mainMatch.index) + mainMatch[1];
+			const suffix =
+				mainMatch[2] + updatedHtml.substring(mainMatch.index + mainMatch[0].length);
+			updatedHtml = prefix + markdownContent + suffix;
+		}
+	}
+
+	fs.writeFileSync(path.join(outDir, 'index.html'), updatedHtml, 'utf-8');
+	Log.success(`Generated static wrapper for: /${routePath}`);
+}
+
+Log.info('\nGenerating Static Content Wrappers...');
+processNode(ContentTree);

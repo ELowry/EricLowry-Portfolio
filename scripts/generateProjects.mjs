@@ -1,21 +1,13 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { marked } from 'marked';
-import crypto from 'crypto';
-import { exec } from 'child_process';
 import util from 'util';
+import crypto from 'crypto';
+import { Log } from './logger.mjs';
+import { marked } from 'marked';
+import { exec } from 'child_process';
+import { escapeHtml } from '../src/js/modules/sharedUtils.js';
 
 const execAsync = util.promisify(exec);
-
-/**
- * Simple logger using native ANSI color codes.
- */
-const Log = {
-	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
-	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
-	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
-	error: (msg) => console.error(`\x1b[31m${msg}\x1b[0m`),
-};
 
 /**
  * Generates local markdown files and a JSON index for configured GitHub repositories.
@@ -166,30 +158,41 @@ class ProjectGenerator {
 	 */
 	static async #generateStaticProjectHtml(data) {
 		const baseHtmlContent = await fs.readFile('index.html', 'utf-8');
-		const postDirectory = path.join('public', 'projects', data.id);
+		const postDirectory = path.join('.static-html', 'projects', data.id);
 
 		await fs.mkdir(postDirectory, { recursive: true });
 
 		const imageUrl = `https://eric-lowry.com/assets/images/projects/${data.id}/poster.jpg`;
 
+		const safeTitle = escapeHtml(data.title);
+		const safeDesc = escapeHtml(data.description);
+
 		const replacementMeta = `<!-- OG_META_START -->
-		<title>${data.title} – Eric Lowry</title>
-		<link rel="canonical" href="https://eric-lowry.com/projects/${data.id}" />
-		<meta name="description" content="${data.description}" />
+		<title>${safeTitle} – Eric Lowry</title>
+		
+		<meta name="description" content="${safeDesc}" />
 		<meta name="author" content="Eric Lowry" />
-		<meta property="og:title" content="${data.title}" />
+		<meta name="language" content="EN" />
+
+		<meta name="theme-color" content="#e29186" />
+		<meta name="theme-color" content="#6d0a1f" media="(prefers-color-scheme: light)" />
+
+		<link rel="canonical" href="https://eric-lowry.com/projects/${data.id}" />
+
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:title" content="${safeTitle}" />
 		<meta property="og:type" content="article" />
 		<meta property="og:url" content="https://eric-lowry.com/projects/${data.id}" />
-		<meta property="og:description" content="${data.description}" />
+		<meta property="og:description" content="${safeDesc}" />
 		<meta property="og:image" content="${imageUrl}" />
 		<meta property="og:image:type" content="image/jpeg" />
 		<meta property="og:image:width" content="${data.ogImageWidth}" />
 		<meta property="og:image:height" content="${data.ogImageHeight}" />
-		<meta property="og:image:alt" content="${data.title}" />
+		<meta property="og:image:alt" content="${safeTitle}" />
+
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="${data.title}" />
-		<meta name="twitter:image" content="${imageUrl}" />
-		<!-- OG_META_END -->`;
+	<!-- OG_META_END -->`;
 
 		// Dynamically import marked so it parses the HTML correctly
 		const parsedMarkdown = marked.parse(data.readme);
@@ -356,6 +359,11 @@ class ProjectGenerator {
 					await ProjectGenerator.#generateStaticProjectHtml(data);
 					Log.success(`Downloaded and saved README and Image for ${repo}`);
 				} else {
+					const mdPath = path.join(ProjectGenerator.CONTENT_DIR, `${repo}.md`);
+					data.readme = await fs.readFile(mdPath, 'utf-8');
+
+					await ProjectGenerator.#generateStaticProjectHtml(data);
+
 					Log.info(`Skipped README download (no changes)`);
 				}
 

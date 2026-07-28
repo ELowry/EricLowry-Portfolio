@@ -40,13 +40,13 @@ yarn-error.log*
 /public/sitemap.xml
 /public/feed-*.xml
 
+/.static-html/
+
 /public/content/blog-index.json
-/public/blog/
 /public/assets/images/blog/*/poster.png
 /public/assets/images/blog/*/poster.meta
 
 /public/content/projects-index.json
-/public/projects/
 /public/content/en_US/projects/
 
 /public/assets/images/projects/

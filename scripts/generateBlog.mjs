@@ -1,22 +1,14 @@
 import fs from 'fs';
 import path from 'path';
+import { Log } from './logger.mjs';
 import { marked } from 'marked';
 import { createCanvas } from 'canvas';
+import { resolveDotPath, escapeHtml } from '../src/js/modules/sharedUtils.js';
 
 const CONTENT_DIR = 'public/content';
 const OUTPUT_FILE = 'public/content/blog-index.json';
 const BASE_URL = 'https://eric-lowry.com';
 const IMAGE_BASE_DIR = 'public/assets/images/blog';
-
-/**
- * Simple logger using native ANSI color codes.
- */
-const Log = {
-	info: (msg) => console.log(`\x1b[36m${msg}\x1b[0m`),
-	success: (msg) => console.log(`\x1b[32m${msg}\x1b[0m`),
-	warn: (msg) => console.warn(`\x1b[33m${msg}\x1b[0m`),
-	error: (msg) => console.error(`\x1b[31m${msg}\x1b[0m`),
-};
 
 /**
  * Generates the blog-index.json index file and feed-{lang_code}.xml files by parsing markdown files in the `public/content/{languageCode}/blog` directories.
@@ -210,17 +202,7 @@ function getTranslationNode(langCode, pathString, fallback) {
 	}
 
 	const langData = JSON.parse(fs.readFileSync(langFilePath, 'utf-8'));
-	const keys = pathString.split('.');
-	let target = langData;
-
-	for (const key of keys) {
-		if (!target || !Object.prototype.hasOwnProperty.call(target, key)) {
-			return fallback;
-		}
-		target = target[key];
-	}
-
-	return target;
+	return resolveDotPath(pathString, langData, fallback);
 }
 
 /**
@@ -335,7 +317,7 @@ function generateStaticImage(title, date) {
  * @param {string} content - The raw markdown content of the blog post.
  */
 function generateStaticBlogHtml(entry, baseHtmlContent, content) {
-	const postDirectory = path.join('public', 'blog', entry.date);
+	const postDirectory = path.join('.static-html', 'blog', entry.date);
 
 	if (!fs.existsSync(postDirectory)) {
 		fs.mkdirSync(postDirectory, { recursive: true });
@@ -345,24 +327,33 @@ function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 	const imagePath = `/assets/images/blog/${datePath}/poster.png`;
 	const imageUrl = `${BASE_URL}${imagePath}`;
 
+	const safeTitle = escapeHtml(entry.title);
+
 	const replacementMeta = `<!-- OG_META_START -->
-		<title>${entry.title} – Eric Lowry</title>
-		<link rel="canonical" href="https://eric-lowry.com/blog/${entry.date}" />
-		<meta name="description" content="${entry.title} – Published on ${entry.date}." />
+		<title>${safeTitle} – Eric Lowry</title>
+		
+		<meta name="description" content="${safeTitle} – Published on ${entry.date}." />
 		<meta name="author" content="Eric Lowry" />
 		<meta name="language" content="${entry.language === 'en_US' ? 'EN' : 'FR'}" />
-		<meta property="og:title" content="${entry.title}" />
+
+		<meta name="theme-color" content="#e29186" />
+		<meta name="theme-color" content="#6d0a1f" media="(prefers-color-scheme: light)" />
+
+		<link rel="canonical" href="https://eric-lowry.com/blog/${entry.date}" />
+
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:locale" content="${entry.language}" />
+		<meta property="og:title" content="${safeTitle}" />
 		<meta property="og:type" content="article" />
 		<meta property="og:url" content="https://eric-lowry.com/blog/${entry.date}" />
-		<meta property="og:description" content="${entry.title} – Published on ${entry.date}." />
+		<meta property="og:description" content="${safeTitle} – Published on ${entry.date}." />
 		<meta property="og:image" content="${imageUrl}" />
 		<meta property="og:image:type" content="image/png" />
-		<meta property="og:image:width" content="1200 " />
+		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content="${entry.title}" />
-		<meta name="twitter:card" content="summary" />
-		<meta name="twitter:title" content="${entry.title}" />
-		<meta name="twitter:image" content="${imageUrl}" />
+		<meta property="og:image:alt" content="${safeTitle}" />
+		
+		<meta name="twitter:card" content="summary_large_image" />
 	<!-- OG_META_END -->`;
 
 	const parsedMarkdown = marked.parse(content);
