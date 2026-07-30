@@ -334,12 +334,8 @@
 
 /* General Text Layout */
 #text-navbar {
-	display: flex;
 	position: sticky;
 	top: 0;
-	flex-wrap: wrap;
-	justify-content: right;
-	gap: 0.8em;
 	z-index: 900;
 	border-bottom: var(--border-width) solid var(--color-border);
 	background-color: var(--color-background);
@@ -348,6 +344,15 @@
 
 	@media print {
 		display: none;
+	}
+
+	.text-navbar-content {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: right;
+		gap: 0.8em;
+		margin-inline: auto;
+		max-width: var(--page-max-width);
 	}
 
 	button {
@@ -385,7 +390,9 @@
 	}
 
 	.text-layout {
+		margin-inline: auto;
 		padding: 4em;
+		max-width: var(--page-max-width);
 		@media (width <= 50em) {
 			padding: calc(1em + 2vw);
 		}

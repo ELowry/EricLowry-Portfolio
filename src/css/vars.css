@@ -61,6 +61,7 @@
 	--topbar-padding: 4rem;
 	--narrow-padding: 1rem;
 
+	--page-max-width: 116em;
 	--content-max-width: 80ch;
 	--table-of-contents-max-width: 80ch;
 
