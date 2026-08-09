@@ -32,6 +32,7 @@ class ProjectGenerator {
 			'WinGet-Updater',
 			'obsidian-replace-commands',
 			'obsidian-format-with-prettier',
+			'EricLowry-Portfolio',
 		];
 	}
 
