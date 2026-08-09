@@ -34,6 +34,7 @@ export default [
 			globals: {
 				...globals.browser,
 				...globals.node,
+				__BUILD_HASH__: 'readonly',
 			},
 		},
 		rules: {

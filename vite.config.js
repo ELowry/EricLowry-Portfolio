@@ -1,6 +1,15 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
+
+// Generate a hash to use for cache busting
+const timestamp = Date.now().toString();
+const salt = crypto.randomBytes(16).toString('hex');
+const buildHash = crypto
+	.createHash('sha256')
+	.update(timestamp + salt)
+	.digest('hex');
 
 /**
  * A simple Vite plugin to exclude specific folders from the final build output.
@@ -233,6 +242,12 @@ export default defineConfig(({ mode }) => {
 			firebaseRewritesPlugin(),
 			staticHtmlPlugin(),
 			allowPrivateNetworkAccess(),
+			{
+				name: 'html-hash-injector',
+				transformIndexHtml(html) {
+					return html.replace(/%BUILD_HASH%/g, buildHash);
+				},
+			},
 		],
 		server: {
 			fs: {
@@ -245,6 +260,9 @@ export default defineConfig(({ mode }) => {
 					'.vault-nickname',
 				],
 			},
+		},
+		define: {
+			__BUILD_HASH__: JSON.stringify(buildHash),
 		},
 		css: {
 			transformer: 'lightningcss',

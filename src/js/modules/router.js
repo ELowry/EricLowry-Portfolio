@@ -119,7 +119,7 @@ class RouterController {
 		}
 
 		// TEMP TEXT-ONLY START
-		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+		if (import.meta.env.DEV) {
 			mode = 'text';
 		}
 		// TEMP TEXT-ONLY END
@@ -154,7 +154,7 @@ class RouterController {
 		}
 
 		// TEMP TEXT-ONLY START
-		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+		if (import.meta.env.DEV) {
 			// TEMP TEXT-ONLY END
 			targetMode = 'text';
 			// TEMP TEXT-ONLY START

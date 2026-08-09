@@ -1,3 +1,5 @@
+import { getCacheBuster } from './sharedUtils.js';
+
 /**
  * ProjectsController manages the fetching and caching of GitHub project data.
  * It provides a centralized way to access the projects index.
@@ -36,8 +38,7 @@ class ProjectsController {
 	 */
 	async #fetchIndexData() {
 		try {
-			const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
-			const response = await fetch(`/content/projects-index.json?v=${cacheBuster}`);
+			const response = await fetch(`/content/projects-index.json?v=${getCacheBuster()}`);
 
 			if (!response.ok) {
 				throw new Error(`Failed to load projects index: ${response.statusText}`);

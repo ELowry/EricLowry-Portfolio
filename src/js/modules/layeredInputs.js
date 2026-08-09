@@ -26,8 +26,7 @@ class LayeredInputController {
 		this.#currentActiveLayer = null;
 
 		// Detect local environment for debug logging
-		this.#debug =
-			window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+		this.#debug = import.meta.env.DEV;
 
 		if (this.#debug) {
 			console.log('[LayeredInput] Initializing controller...');

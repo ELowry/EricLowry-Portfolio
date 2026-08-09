@@ -1,5 +1,6 @@
 import { InputPrompts } from './inputPrompts.js';
 import { resolveDotPath } from './sharedUtils.js';
+import { getCacheBuster } from './sharedUtils.js';
 
 /**
  * LangController manages multi-language support, translation logic, and persistence.
@@ -92,9 +93,10 @@ class LangController {
 	 */
 	async init() {
 		try {
+			const cacheBuster = `?v=${getCacheBuster()}`;
 			const browserLangs = this.#getBrowserLanguages();
 
-			const response = await fetch(`${this.dir}langs.json`);
+			const response = await fetch(`${this.dir}langs.json${cacheBuster}`);
 			if (!response.ok) {
 				throw new Error('Could not load langs.json');
 			}
@@ -109,7 +111,7 @@ class LangController {
 				region: splitLang[1] || '',
 			};
 
-			const dataResponse = await fetch(`${this.dir}${this.code.code}.json`);
+			const dataResponse = await fetch(`${this.dir}${this.code.code}.json${cacheBuster}`);
 			if (!dataResponse.ok) {
 				throw new Error(`Could not load language file: ${this.code.code}.json`);
 			}

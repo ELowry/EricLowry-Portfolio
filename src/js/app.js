@@ -16,6 +16,7 @@ import { GalleryDisplay } from './modules/gallery.js';
 import { Meta } from './modules/meta.js';
 import { PreviewManager } from './modules/previewManager.js';
 import { ExternalLinks } from './modules/externalLinks.js';
+import { getCacheBuster } from './modules/sharedUtils.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -64,8 +65,7 @@ class AppController {
 		// Preview manager
 		this.PreviewManager = new PreviewManager(this);
 
-		this.isLocal =
-			window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+		this.isLocal = import.meta.env.DEV;
 	}
 
 	/**
@@ -201,10 +201,7 @@ class AppController {
 			const searchParams = new URLSearchParams(window.location.search);
 			if ((pathName === '' || pathName === 'index.html') && !searchParams.has('mode')) {
 				// TEMP TEXT-ONLY START
-				if (
-					window.location.hostname === 'localhost'
-					|| window.location.hostname === '127.0.0.1'
-				) {
+				if (import.meta.env.DEV) {
 					// TEMP TEXT-ONLY END
 					this.openGameWelcome();
 					// TEMP TEXT-ONLY START
@@ -213,10 +210,7 @@ class AppController {
 			}
 
 			// TEMP TEXT-ONLY START
-			if (
-				window.location.hostname === 'localhost'
-				|| window.location.hostname === '127.0.0.1'
-			) {
+			if (import.meta.env.DEV) {
 				document.body.classList.add('isLocal');
 			}
 			// TEMP TEXT-ONLY END
@@ -260,7 +254,7 @@ class AppController {
 			 * @returns {Promise<Response|null>} the response if valid, null otherwise.
 			 */
 			const getValidResponse = async (url) => {
-				const cacheBuster = `?v=${window.__CACHE_BUSTER__ || Date.now()}`;
+				const cacheBuster = `?v=${getCacheBuster()}`;
 				const fullUrl = url + cacheBuster;
 
 				// Check if this URL was preloaded

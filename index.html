@@ -91,7 +91,17 @@
 
 			// Predictive Content Preload
 			(() => {
-				window.__CACHE_BUSTER__ = Date.now();
+				const isLocal =
+					window.location.hostname === 'localhost'
+					|| window.location.hostname === '127.0.0.1';
+				const injectedHash = '%BUILD_HASH%';
+				const hash = isLocal
+					? Date.now()
+					: injectedHash.startsWith('%')
+						? ''
+						: injectedHash;
+				const cacheBuster = hash ? hash : '';
+
 				const pathName = window.location.pathname
 					.replace(/\/+/g, '/')
 					.replace(/^\/|\/$/g, '')
@@ -111,7 +121,7 @@
 				}
 
 				const lang = localStorage.getItem('portfolio-lang') || 'en_US';
-				const mdUrl = `/content/${lang}/${contentPath}.md?v=${window.__CACHE_BUSTER__}`;
+				const mdUrl = `/content/${lang}/${contentPath}.md?v=${cacheBuster}`;
 
 				window.__PRELOADED_CONTENT__ = {
 					url: mdUrl,

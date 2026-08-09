@@ -1,4 +1,5 @@
 import { Lang } from './lang.js';
+import { getCacheBuster } from './sharedUtils.js';
 
 import giscusThemePath from '../../css/giscus.css?url';
 
@@ -119,8 +120,7 @@ class BlogController {
 	 */
 	async #fetchIndexData() {
 		try {
-			const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
-			const response = await fetch(`/content/blog-index.json?v=${cacheBuster}`);
+			const response = await fetch(`/content/blog-index.json?v=${getCacheBuster()}`);
 
 			if (!response.ok) {
 				throw new Error(`Failed to load blog index: ${response.statusText}`);

@@ -140,3 +140,23 @@ export function escapeHtml(str) {
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#039;');
 }
+
+/**
+ * Returns a centralized cache-busting query string.
+ * Uses a static build hash in production, or Date.now() for local development.
+ * @returns {string} The cache buster string (e.g., "?v=1a2b3c" or "?v=1710923019230")
+ */
+export function getCacheBuster() {
+	if (import.meta.env.DEV) {
+		if (!window.__CACHE_BUSTER__) {
+			window.__CACHE_BUSTER__ = Date.now();
+		}
+		return window.__CACHE_BUSTER__;
+	}
+
+	if (typeof __BUILD_HASH__ !== 'undefined') {
+		return __BUILD_HASH__;
+	}
+
+	return '';
+}

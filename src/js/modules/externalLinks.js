@@ -1,3 +1,5 @@
+import { getCacheBuster } from './sharedUtils.js';
+
 /**
  * ExternalLinksController manages the fetching and caching of external link metadata.
  */
@@ -34,8 +36,7 @@ class ExternalLinksController {
 	 */
 	async #fetchData() {
 		try {
-			const cacheBuster = window.__CACHE_BUSTER__ || Date.now();
-			const response = await fetch(`/assets/external-links.json?v=${cacheBuster}`);
+			const response = await fetch(`/assets/external-links.json?v=${getCacheBuster()}`);
 
 			if (!response.ok) {
 				throw new Error(`Failed to load external links: ${response.statusText}`);
