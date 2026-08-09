@@ -9,6 +9,9 @@ vi.mock('./lang.js', () => {
 			getString: vi.fn((key, data, fallback) => {
 				return fallback;
 			}),
+			getHtmlString: vi.fn((key, data, fallback) => {
+				return fallback;
+			}),
 		},
 	};
 });
