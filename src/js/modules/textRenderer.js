@@ -73,7 +73,7 @@ export class TextRenderer {
 		};
 
 		// Root Crumb
-		const rootLabel = Lang.getString('portfolio.rootTitle', null, 'Welcome');
+		const rootLabel = Lang.getHtmlString('portfolio.rootTitle', null, 'Welcome');
 		createCrumb(rootLabel, '', currentNode ? currentNode.id === 'root' : false);
 
 		// Path Crumbs
@@ -88,11 +88,11 @@ export class TextRenderer {
 
 			if (currNode) {
 				const langKey = `content.${currentPath.replace(/\//g, '.')}.title`;
-				label = Lang.getString(langKey, null, currNode.title);
+				label = Lang.getHtmlString(langKey, null, currNode.title);
 			} else if (part === 'blog') {
-				label = Lang.getString('blog.title', null, 'Blog');
+				label = Lang.getHtmlString('blog.title', null, 'Blog');
 			} else if (part === 'projects') {
-				label = Lang.getString('projects.title', null, 'Projects');
+				label = Lang.getHtmlString('projects.title', null, 'Projects');
 			}
 
 			createCrumb(label, currentPath, index === pathParts.length - 1);
@@ -137,7 +137,7 @@ export class TextRenderer {
 
 			// Label Logic
 			const langKey = `content.${childPath.replace(/\//g, '.')}.title`;
-			const label = Lang.getString(langKey, null, child.title);
+			const label = Lang.getHtmlString(langKey, null, child.title);
 
 			// Create Element
 			const link = document.createElement('a');
@@ -249,7 +249,11 @@ export class TextRenderer {
 					finalHtml += renderListItems(enEntries);
 					finalHtml += '</ul>';
 				} else {
-					const noArticlesText = Lang.getString('blog.empty', null, 'No articles found.');
+					const noArticlesText = Lang.getHtmlString(
+						'blog.empty',
+						null,
+						'No articles found.'
+					);
 					finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
 				}
 			} else {
@@ -265,13 +269,13 @@ export class TextRenderer {
 				if (enEntries.length > 0) {
 					let separatorText;
 					if (localEntries.length > 0) {
-						separatorText = Lang.getString(
+						separatorText = Lang.getHtmlString(
 							'blog.englishArticles',
 							null,
 							'Articles in English'
 						);
 					} else {
-						separatorText = Lang.getString(
+						separatorText = Lang.getHtmlString(
 							'blog.englishArticlesOnly',
 							null,
 							'Articles only available in English'
@@ -284,7 +288,11 @@ export class TextRenderer {
 				}
 
 				if (localEntries.length === 0 && enEntries.length === 0) {
-					const noArticlesText = Lang.getString('blog.empty', null, 'No articles found.');
+					const noArticlesText = Lang.getHtmlString(
+						'blog.empty',
+						null,
+						'No articles found.'
+					);
 					finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
 				}
 			}
@@ -296,7 +304,7 @@ export class TextRenderer {
 		} catch (error) {
 			console.error('Failed to load blog index:', error);
 
-			const errorText = Lang.getString(
+			const errorText = Lang.getHtmlString(
 				'blog.errorLoading',
 				null,
 				'Failed to load blog index.'
@@ -333,10 +341,13 @@ export class TextRenderer {
 
 			const projects = await Projects.getIndex();
 
-			const projectsIntro = Lang.formatString(Lang.getString('projects.intro', null, null), [
-				'<a href="https://github.com/ELowry" class="md-external-link" target="_blank" rel="noopener noreferrer">',
-				'</a>',
-			]);
+			const projectsIntro = Lang.formatString(
+				Lang.getHtmlString('projects.intro', null, null),
+				[
+					'<a href="https://github.com/ELowry" class="md-external-link" target="_blank" rel="noopener noreferrer">',
+					'</a>',
+				]
+			);
 			let finalHtml =
 				(projectsIntro ? `<p>${projectsIntro}</p>` : '') + '<div class="projects-index">';
 
@@ -358,7 +369,11 @@ export class TextRenderer {
 				});
 				finalHtml += '</ul>';
 			} else {
-				const noProjectsText = Lang.getString('projects.empty', null, 'No projects found.');
+				const noProjectsText = Lang.getHtmlString(
+					'projects.empty',
+					null,
+					'No projects found.'
+				);
 				finalHtml += `<p class="projects-empty">${noProjectsText}</p>`;
 			}
 
@@ -368,7 +383,7 @@ export class TextRenderer {
 			this.#hydrateProjectLinks(this.app.uiManager.elements.textContent);
 		} catch (error) {
 			console.error('Failed to load projects index:', error);
-			const errorText = Lang.getString(
+			const errorText = Lang.getHtmlString(
 				'projects.errorLoading',
 				null,
 				'Failed to load projects index.'

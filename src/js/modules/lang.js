@@ -245,14 +245,20 @@ class LangController {
 	}
 
 	/**
-	 * Handles newline processing for elements that require preserved line breaks.
+	 * Formats a string for HTML insertion, ensuring line breaks and spacing render correctly.
 	 * @param {string} str - The string to process.
-	 * @param {boolean} isPre - Whether the target element is a <pre> block.
-	 * @returns {string} the processed string.
+	 * @param {boolean} [isPre=false] - Whether the target element is a <pre> block.
+	 * @returns {string} the formatted string.
 	 * @private
 	 */
-	#processPreFormatting(str, isPre) {
-		return isPre ? str.replace(/<br\s?\/?>/gm, '\n') : str;
+	#formatForHtml(str, isPre) {
+		if (isPre) {
+			return str.replace(/<br\s?\/?>/gi, '\n');
+		}
+		return str
+			.replace(/\r?\n/g, '<br/>')
+			.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+			.replace(/ (?= )/g, '&nbsp;');
 	}
 
 	/**
@@ -344,7 +350,7 @@ class LangController {
 					translated = this.formatString(target, placeholders);
 				}
 
-				el.innerHTML = this.#processPreFormatting(translated, isPre);
+				el.innerHTML = this.#formatForHtml(translated, isPre);
 			}
 		}
 	}
@@ -438,6 +444,24 @@ class LangController {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns a translated string processed and safe for HTML insertion.
+	 * @param {string} pathString - Dot-separated path to the target string.
+	 * @param {Object} [data] - Data object to search (defaults to current data).
+	 * @param {string} [fallback] - Optional fallback string if the target path is not found.
+	 * @param {boolean} [isPre=false] - Whether the target element is a <pre> block.
+	 * @returns {string} the translated and HTML-formatted string.
+	 */
+	getHtmlString(pathString, data = this.data, fallback = 'notFound', isPre = false) {
+		const rawString = this.getString(pathString, data, fallback);
+
+		if (rawString === 'notFound') {
+			return rawString;
+		}
+
+		return this.#formatForHtml(rawString, isPre);
 	}
 
 	/**

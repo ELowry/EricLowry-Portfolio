@@ -178,7 +178,7 @@ class InputPromptsController {
 
 			// Check if the string looks like a key or just try to translate it
 			if (content.includes('.')) {
-				content = Lang.getString(content, null, content);
+				content = Lang.getHtmlString(content, null, content);
 			}
 
 			prompt.innerHTML = content;

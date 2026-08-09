@@ -51,7 +51,7 @@ class BlogController {
 
 		const renderGiscus = async () => {
 			// Show a loading state while fetching Giscus
-			commentsContainer.innerHTML = `<p>${Lang.getString(
+			commentsContainer.innerHTML = `<p>${Lang.getHtmlString(
 				'blog.loadingComments',
 				null,
 				'Loading comments…'
@@ -64,7 +64,7 @@ class BlogController {
 
 			commentsContainer.innerHTML = `
 				<hr />
-				<h2 id="Comments">${Lang.getString('blog.commentsTitle', null, 'Comments')}</h2>
+				<h2 id="Comments">${Lang.getHtmlString('blog.commentsTitle', null, 'Comments')}</h2>
 				<div style="margin-bottom: 2rem">
 					<giscus-widget
 						repo="ELowry/EricLowry-Portfolio"

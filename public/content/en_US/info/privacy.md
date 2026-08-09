@@ -17,6 +17,15 @@ Embedded videos are hosted on [Spectra Video](https://spectra.video), an indepen
 - **Purpose:**  
   This data transfer is strictly necessary to load and stream the video to your device.
 
+## External Images and Badges
+
+[Project pages](/projects) may display external images hosted by third parties (such as GitHub, Shields.io, or Weblate). When you load a page containing these elements:
+
+- **Data Transmitted:**  
+  Your IP address and basic browser information (User-Agent) are sent to the respective third-party servers hosting these images.
+- **Purpose:**  
+  This data transfer is strictly necessary to retrieve and display the images within the project documentation.
+
 ## Data Rights
 
 Your access and deletion rights for data processed by my external service providers (Firebase/Google and Spectra Video) can be handled directly through their respective privacy portals.

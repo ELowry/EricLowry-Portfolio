@@ -104,7 +104,7 @@ export class Gallery {
 								renderedImg = `<img src="${img.href}" alt="${img.text}" title="${img.title || ''}" />`;
 							}
 
-							galleryHtml += `\t<figure class="${config.itemClass}" tabindex="0" role="button" aria-label="${Lang.getString('ui.gallery.imageOpenModal')}">\n\t\t${renderedImg}\n\t</figure>\n`;
+							galleryHtml += `\t<figure class="${config.itemClass}" tabindex="0" role="button" aria-label="${Lang.getHtmlString('ui.gallery.imageOpenModal')}">\n\t\t${renderedImg}\n\t</figure>\n`;
 						}
 					}
 				}
