@@ -10,6 +10,10 @@
 
 @import url('./utility.css');
 
+/* --- CORE --- */
+
+@import url('./core.css');
+
 /* --- CURSOR --- */
 
 @import url('./cursor.css');
@@ -22,9 +26,9 @@
 
 @import url('./md.css');
 
-/* --- CORE --- */
+/* --- TRANSITIONS --- */
 
-@import url('./core.css');
+@import url('./transitions.css');
 
 /* --- TOUCH --- */
 

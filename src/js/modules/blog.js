@@ -15,6 +15,33 @@ class BlogController {
 	#fetchPromise = null;
 
 	/**
+	 * @returns {boolean} Whether the index is currently cached.
+	 */
+	get isCached() {
+		return this.#indexCache !== null;
+	}
+
+	/**
+	 * Internal method to perform the fetch operation.
+	 * @returns {Promise<Object[]>} The blog index data.
+	 * @private
+	 */
+	async #fetchIndexData() {
+		try {
+			const response = await fetch(`/content/blog-index.json?v=${getCacheBuster()}`);
+
+			if (!response.ok) {
+				throw new Error(`Failed to load blog index: ${response.statusText}`);
+			}
+
+			return await response.json();
+		} catch (error) {
+			console.error('BlogController: Error fetching blog index:', error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Fetches the blog index JSON and caches it.
 	 * Concurrent calls will share the same promise to prevent multiple network requests.
 	 * @returns {Promise<Object[]>} The parsed blog index.
@@ -110,26 +137,6 @@ class BlogController {
 			} else {
 				console.error('Giscus consent template not found.');
 			}
-		}
-	}
-
-	/**
-	 * Internal method to perform the fetch operation.
-	 * @returns {Promise<Object[]>} The blog index data.
-	 * @private
-	 */
-	async #fetchIndexData() {
-		try {
-			const response = await fetch(`/content/blog-index.json?v=${getCacheBuster()}`);
-
-			if (!response.ok) {
-				throw new Error(`Failed to load blog index: ${response.statusText}`);
-			}
-
-			return await response.json();
-		} catch (error) {
-			console.error('BlogController: Error fetching blog index:', error);
-			throw error;
 		}
 	}
 }

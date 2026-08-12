@@ -19,8 +19,13 @@ export class TextRenderer {
 		this.app = app;
 		this.breadcrumbTemplate =
 			breadcrumbTemplate || document.getElementById('template-breadcrumb-item');
+		this.lastMode = null;
 
-		Events.on('route:changed', (payload) => this.#handleTextContent(payload));
+		Events.on('route:changed', (payload) => {
+			const isTextToText = this.lastMode === 'text' && payload.mode === 'text';
+			this.lastMode = payload.mode;
+			this.#handleTextContent(payload, isTextToText);
+		});
 	}
 
 	/**
@@ -171,63 +176,167 @@ export class TextRenderer {
 	 * @param {string} payload.mode - The content display mode.
 	 * @param {string} payload.path - The route's path.
 	 * @param {Object} payload.node - The route's node.
+	 * @param {boolean} isTextToText - True if navigating between text mode views.
 	 * @private
 	 */
-	async #handleTextContent({ mode, path, node }) {
+	async #handleTextContent({ mode, path, node }, isTextToText) {
 		if (mode !== 'text') {
 			return;
 		}
 
-		this.render(path, node);
+		const isCached = this.#isRouteCached(path, node);
 
-		// Show relevant content if found
-		if (path === 'blog') {
-			await this.#renderBlogIndex();
-		} else if (path === 'projects') {
-			await this.#renderProjectsIndex();
-		} else if (node && node.type === 'content' && node.file) {
-			await this.app.loadContentIntoText(node.file);
-		} else if (node && node.type === 'category') {
-			// Check if the category has a main file
-			let mainChild;
-			if (node.id === 'root') {
-				mainChild = node.children.find((c) => c.id === 'index');
-			} else {
-				mainChild = node.children.find((c) => c.id === node.id);
-			}
+		const executeFinalDOMUpdate = async (suppressLoading) => {
+			this.render(path, node);
 
-			if (mainChild && mainChild.file) {
-				await this.app.loadContentIntoText(mainChild.file);
+			if (path === 'blog') {
+				await this.#renderBlogIndex(suppressLoading);
+			} else if (path === 'projects') {
+				await this.#renderProjectsIndex(suppressLoading);
+			} else if (node && node.type === 'content' && node.file) {
+				await this.app.loadContentIntoText(node.file, null, suppressLoading);
+			} else if (node && node.type === 'category') {
+				let mainChild;
+				if (node.id === 'root') {
+					mainChild = node.children?.find((c) => c.id === 'index');
+				} else {
+					mainChild = node.children?.find((c) => c.id === node.id);
+				}
+
+				if (mainChild && mainChild.file) {
+					await this.app.loadContentIntoText(mainChild.file, null, suppressLoading);
+				} else {
+					this.app.uiManager.elements.textContent.innerHTML = '';
+				}
+			} else if (path.startsWith('blog/')) {
+				const date = path.substring(5);
+				await this.app.loadContentIntoText(`blog/${date}.md`, 'article', suppressLoading);
+
+				const entries = await Blog.getIndex();
+				const entry = entries.find((e) => e.date === date);
+				if (entry) {
+					const term = `${entry.date} - ${entry.title}`;
+					Blog.injectComments(
+						this.app.uiManager.elements.textContent,
+						term,
+						entry.language
+					);
+				}
+			} else if (path.startsWith('projects/')) {
+				const projectId = path.substring(9);
+				await this.app.loadContentIntoText(
+					`projects/${projectId}.md`,
+					'article',
+					suppressLoading
+				);
 			} else {
 				this.app.uiManager.elements.textContent.innerHTML = '';
 			}
-		} else if (path.startsWith('blog/')) {
-			const date = path.substring(5);
+		};
 
-			await this.app.loadContentIntoText(`blog/${date}.md`, 'article');
+		if (isTextToText && !isCached) {
+			// Timeout vs Fetch race
+			const timeoutId = setTimeout(() => {
+				this.app.executeViewTransition(() => {
+					this.render(path, node);
+					const loadingText = Lang.getHtmlString('ui.loading', null, 'Loading');
+					this.app.uiManager.elements.textContent.innerHTML = `
+						<div class="local-loading-indicator" role="status" aria-live="polite">
+							<div>
+								<span>${loadingText}</span>
+								<span aria-hidden="true">...</span>
+							</div>
+						</div>`;
+				}, false);
+			}, 150);
 
-			const entries = await Blog.getIndex();
-			const entry = entries.find((e) => e.date === date);
+			await this.#prefetchRouteData(path, node);
+			clearTimeout(timeoutId);
 
-			if (entry) {
-				const term = `${entry.date} - ${entry.title}`;
-				Blog.injectComments(this.app.uiManager.elements.textContent, term, entry.language);
-			}
-		} else if (path.startsWith('projects/')) {
-			const projectId = path.substring(9);
-			await this.app.loadContentIntoText(`projects/${projectId}.md`, 'article');
+			// Transition
+			await this.app.executeViewTransition(() => executeFinalDOMUpdate(true), false);
 		} else {
-			this.app.uiManager.elements.textContent.innerHTML = '';
+			// Game-to-text / initial load / cached content
+			const suppressLoading = isTextToText;
+			const skipTransition = !isTextToText;
+			await this.app.executeViewTransition(
+				() => executeFinalDOMUpdate(suppressLoading),
+				skipTransition
+			);
 		}
 	}
 
 	/**
-	 * Fetches the blog index JSON, generates HTML, and renders the list of articles.
+	 * Preloads required data for a route to avoid freezing the transition.
+	 * @param {string} path - The route's path.
+	 * @param {Object} node - The route's node.
+	 * @returns {Promise<void>}
 	 * @private
 	 */
-	async #renderBlogIndex() {
+	async #prefetchRouteData(path, node) {
+		const promises = [];
+		if (path === 'blog') {
+			promises.push(Blog.getIndex());
+		} else if (path === 'projects') {
+			promises.push(Projects.getIndex());
+		} else if (node && node.type === 'content' && node.file) {
+			promises.push(this.app.preloadContent(node.file));
+		} else if (node && node.type === 'category') {
+			let mainChild;
+			if (node.id === 'root') {
+				mainChild = node.children?.find((c) => c.id === 'index');
+			} else {
+				mainChild = node.children?.find((c) => c.id === node.id);
+			}
+			if (mainChild && mainChild.file) {
+				promises.push(this.app.preloadContent(mainChild.file));
+			}
+		} else if (path.startsWith('blog/')) {
+			promises.push(this.app.preloadContent(`blog/${path.substring(5)}.md`));
+			promises.push(Blog.getIndex());
+		} else if (path.startsWith('projects/')) {
+			promises.push(this.app.preloadContent(`projects/${path.substring(9)}.md`));
+			promises.push(Projects.getIndex());
+		}
+
+		await Promise.all(promises);
+	}
+
+	/**
+	 * Checks if the required content for a route is currently cached.
+	 * @param {string} path - The route path.
+	 * @param {Object} node - The route node.
+	 * @returns {boolean} True if the content is cached.
+	 * @private
+	 */
+	#isRouteCached(path, node) {
+		if (path === 'blog') {
+			return Blog.isCached;
+		} else if (path === 'projects') {
+			return Projects.isCached;
+		} else if (node && node.type === 'content' && node.file) {
+			return this.app.isContentCached(node.file);
+		} else if (path.startsWith('blog/')) {
+			return this.app.isContentCached(`blog/${path.substring(5)}.md`) && Blog.isCached;
+		} else if (path.startsWith('projects/')) {
+			return (
+				this.app.isContentCached(`projects/${path.substring(9)}.md`) && Projects.isCached
+			);
+		}
+		return true;
+	}
+
+	/**
+	 * Fetches the blog index JSON, generates HTML, and renders the list of articles.
+	 * @param {boolean} [suppressLoading=false] - If true, skips showing the loading overlay.
+	 * @private
+	 */
+	async #renderBlogIndex(suppressLoading = false) {
+		const needsLoading = !Blog.isCached;
 		try {
-			this.app.uiManager.showLoading(true);
+			if (needsLoading && !suppressLoading) {
+				this.app.uiManager.showLoading(true);
+			}
 
 			const blogEntries = await Blog.getIndex();
 			const currentLang = Lang.langCode || 'en_US';
@@ -303,16 +412,16 @@ export class TextRenderer {
 			this.#hydrateBlogLinks(this.app.uiManager.elements.textContent);
 		} catch (error) {
 			console.error('Failed to load blog index:', error);
-
 			const errorText = Lang.getHtmlString(
 				'blog.errorLoading',
 				null,
 				'Failed to load blog index.'
 			);
-
 			this.app.uiManager.displayContentInTextView(`<p class="error">${errorText}</p>`);
 		} finally {
-			this.app.uiManager.hideLoading(true);
+			if (needsLoading && !suppressLoading) {
+				this.app.uiManager.hideLoading(true);
+			}
 		}
 	}
 
@@ -333,11 +442,15 @@ export class TextRenderer {
 
 	/**
 	 * Fetches the projects index JSON, generates HTML, and renders the list of projects.
+	 * @param {boolean} [suppressLoading=false] - If true, skips showing the loading overlay.
 	 * @private
 	 */
-	async #renderProjectsIndex() {
+	async #renderProjectsIndex(suppressLoading = false) {
+		const needsLoading = !Projects.isCached;
 		try {
-			this.app.uiManager.showLoading(true);
+			if (needsLoading && !suppressLoading) {
+				this.app.uiManager.showLoading(true);
+			}
 
 			const projects = await Projects.getIndex();
 
@@ -390,7 +503,9 @@ export class TextRenderer {
 			);
 			this.app.uiManager.displayContentInTextView(`<p class="error">${errorText}</p>`);
 		} finally {
-			this.app.uiManager.hideLoading(true);
+			if (needsLoading && !suppressLoading) {
+				this.app.uiManager.hideLoading(true);
+			}
 		}
 	}
 

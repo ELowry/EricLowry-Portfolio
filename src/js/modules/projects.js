@@ -12,23 +12,10 @@ class ProjectsController {
 	#fetchPromise = null;
 
 	/**
-	 * Fetches the projects index JSON and caches it.
-	 * Concurrent calls will share the same promise to prevent multiple network requests.
-	 * @returns {Promise<Object[]>} The parsed projects index.
+	 * @returns {boolean} Whether the index is currently cached.
 	 */
-	async getIndex() {
-		if (this.#indexCache) {
-			return this.#indexCache;
-		}
-
-		if (!this.#fetchPromise) {
-			this.#fetchPromise = this.#fetchIndexData().then((data) => {
-				this.#indexCache = data;
-				return data;
-			});
-		}
-
-		return this.#fetchPromise;
+	get isCached() {
+		return this.#indexCache !== null;
 	}
 
 	/**
@@ -49,6 +36,26 @@ class ProjectsController {
 			console.error('ProjectsController: Error fetching projects index:', error);
 			throw error;
 		}
+	}
+
+	/**
+	 * Fetches the projects index JSON and caches it.
+	 * Concurrent calls will share the same promise to prevent multiple network requests.
+	 * @returns {Promise<Object[]>} The parsed projects index.
+	 */
+	async getIndex() {
+		if (this.#indexCache) {
+			return this.#indexCache;
+		}
+
+		if (!this.#fetchPromise) {
+			this.#fetchPromise = this.#fetchIndexData().then((data) => {
+				this.#indexCache = data;
+				return data;
+			});
+		}
+
+		return this.#fetchPromise;
 	}
 }
 

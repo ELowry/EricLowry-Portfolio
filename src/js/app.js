@@ -22,6 +22,9 @@ import { getCacheBuster } from './modules/sharedUtils.js';
  * Manages high-level application state, routing, and ecosystem orchestration.
  */
 class AppController {
+	/** @type {Map<string, Promise<string>>} Tracks ongoing fetch requests to prevent duplicates. */
+	#fetchPromises = new Map();
+
 	/**
 	 * @property {Object} LJS - The LittleJS engine namespace, set after dynamic import.
 	 * @property {boolean} isPaused - Whether the game engine is actively running and rendering.
@@ -43,6 +46,7 @@ class AppController {
 	constructor() {
 		this.isPaused = false;
 		this.isLocked = false;
+		this.isLocal = import.meta.env.DEV;
 
 		// Content Cache
 		this.contentCache = new Map();
@@ -64,8 +68,6 @@ class AppController {
 
 		// Preview manager
 		this.PreviewManager = new PreviewManager(this);
-
-		this.isLocal = import.meta.env.DEV;
 	}
 
 	/**
@@ -214,8 +216,6 @@ class AppController {
 				document.body.classList.add('isLocal');
 			}
 			// TEMP TEXT-ONLY END
-
-			// Finally hide loading with a fade
 		} catch (error) {
 			console.error('Core initialization failed:', error);
 		}
@@ -246,84 +246,97 @@ class AppController {
 			return this.contentCache.get(cacheKey);
 		}
 
-		try {
-			/**
-			 * Helper to check if a response is a valid markdown file.
-			 * We check status, content-type, and also peek at the body to avoid SPA HTML fallbacks.
-			 * @param {string} url - The URL to fetch.
-			 * @returns {Promise<Response|null>} the response if valid, null otherwise.
-			 */
-			const getValidResponse = async (url) => {
-				const cacheBuster = `?v=${getCacheBuster()}`;
-				const fullUrl = url + cacheBuster;
-
-				// Check if this URL was preloaded
-				let res;
-				if (window.__PRELOADED_CONTENT__ && window.__PRELOADED_CONTENT__.url === fullUrl) {
-					res = await window.__PRELOADED_CONTENT__.promise;
-					// Avoid reuse of preloaded response
-					window.__PRELOADED_CONTENT__ = null;
-				}
-
-				if (!res) {
-					res = await fetch(fullUrl);
-				}
-
-				if (!res) {
-					return null;
-				}
-
-				const contentType = res.headers.get('content-type') || '';
-
-				if (!res.ok) {
-					console.warn(`Content: Rejected ${url} - Status ${res.status}`);
-					return null;
-				}
-
-				if (contentType.includes('text/html') || contentType.includes('application/json')) {
-					console.warn(`Content: Rejected ${url} - Invalid Content-Type: ${contentType}`);
-					return null;
-				}
-
-				const clone = res.clone();
-				const text = await clone.text();
-				if (!text) {
-					console.warn(`Content: Rejected ${url} - Empty body`);
-					return null;
-				}
-
-				const trimmed = text.trim().toLowerCase();
-				if (
-					trimmed.startsWith('<!doctype')
-					|| trimmed.startsWith('<html')
-					|| trimmed.includes('id="game-layer"')
-				) {
-					console.warn(`Content: Rejected ${url} - Detected SPA HTML fallback.`);
-					return null;
-				}
-				return res;
-			};
-
-			let response = await getValidResponse(`/content/${langCode}/${filename}`);
-
-			if (!response && langCode !== 'en_US') {
-				response = await getValidResponse(`/content/en_US/${filename}`);
-			}
-
-			if (!response) {
-				throw new Error(`File "${filename}" not found or returned invalid content.`);
-			}
-
-			const rawMarkdown = await response.text();
-			const html = this.marked ? await this.marked.parse(rawMarkdown) : rawMarkdown;
-
-			this.contentCache.set(cacheKey, html);
-
-			return html;
-		} catch (error) {
-			console.error(`Content fetch failed for ${filename}:`, error);
-			return `<p class="error">Error loading "${filename}".</p>`;
+		if (this.#fetchPromises.has(cacheKey)) {
+			return this.#fetchPromises.get(cacheKey);
 		}
+
+		const promise = (async () => {
+			try {
+				/**
+				 * Helper to check if a response is a valid markdown file.
+				 * We check status, content-type, and also peek at the body to avoid SPA HTML fallbacks.
+				 * @param {string} url - The URL to fetch.
+				 * @returns {Promise<Response|null>} the response if valid, null otherwise.
+				 */
+				const getValidResponse = async (url) => {
+					const cacheBuster = `?v=${getCacheBuster()}`;
+					const fullUrl = url + cacheBuster;
+
+					// Check if this URL was preloaded
+					let result;
+					if (
+						window.__PRELOADED_CONTENT__
+						&& window.__PRELOADED_CONTENT__.url === fullUrl
+					) {
+						result = await window.__PRELOADED_CONTENT__.promise;
+						window.__PRELOADED_CONTENT__ = null;
+					}
+
+					if (!result) result = await fetch(fullUrl);
+					if (!result) return null;
+
+					const contentType = result.headers.get('content-type') || '';
+
+					if (!result.ok) {
+						console.warn(`Content: Rejected ${url} - Status ${result.status}`);
+						return null;
+					}
+
+					if (
+						contentType.includes('text/html')
+						|| contentType.includes('application/json')
+					) {
+						console.warn(
+							`Content: Rejected ${url} - Invalid Content-Type: ${contentType}`
+						);
+						return null;
+					}
+
+					const clone = result.clone();
+					const text = await clone.text();
+					if (!text) {
+						console.warn(`Content: Rejected ${url} - Empty body`);
+						return null;
+					}
+
+					const trimmed = text.trim().toLowerCase();
+					if (
+						trimmed.startsWith('<!doctype')
+						|| trimmed.startsWith('<html')
+						|| trimmed.includes('id="game-layer"')
+					) {
+						console.warn(`Content: Rejected ${url} - Detected SPA HTML fallback.`);
+						return null;
+					}
+					return result;
+				};
+
+				let response = await getValidResponse(`/content/${langCode}/${filename}`);
+
+				if (!response && langCode !== 'en_US') {
+					response = await getValidResponse(`/content/en_US/${filename}`);
+				}
+
+				if (!response) {
+					throw new Error(`File "${filename}" not found or returned invalid content.`);
+				}
+
+				const rawMarkdown = await response.text();
+				const html = this.marked ? await this.marked.parse(rawMarkdown) : rawMarkdown;
+
+				this.contentCache.set(cacheKey, html);
+
+				return html;
+			} catch (error) {
+				console.error(`Content fetch failed for ${filename}:`, error);
+				return `<p class="error">Error loading "${filename}".</p>`;
+			} finally {
+				this.#fetchPromises.delete(cacheKey);
+			}
+		})();
+
+		this.#fetchPromises.set(cacheKey, promise);
+		return promise;
 	}
 
 	/**
@@ -557,14 +570,15 @@ class AppController {
 	 * Loads and displays markdown content within the text-mode container.
 	 * @param {string} filename - The name of the file within the content directory.
 	 * @param {string|null} [wrapper=null] - Optional HTML element name to wrap the content in.
+	 * @param {boolean} [suppressLoading=false] - If true, skips showing the loading overlay during fetch.
 	 * @returns {Promise<void>} (resolves) when the text view has been updated.
 	 */
-	async loadContentIntoText(filename, wrapper = null) {
+	async loadContentIntoText(filename, wrapper = null, suppressLoading = false) {
 		const langCode = Lang.langCode;
 		const cacheKey = `${langCode}:${filename}`;
 
 		const needsLoading = !this.contentCache.has(cacheKey);
-		if (needsLoading) {
+		if (needsLoading && !suppressLoading) {
 			this.uiManager.showLoading(true);
 		}
 
@@ -576,9 +590,45 @@ class AppController {
 
 		this.uiManager.displayContentInTextView(html);
 
-		if (needsLoading) {
+		if (needsLoading && !suppressLoading) {
 			await this.uiManager.hideLoading(true);
 		}
+	}
+
+	/**
+	 * Preloads markdown content into the cache.
+	 * @param {string} filename - The relative path to the markdown file.
+	 * @returns {Promise<string>} the parsed HTML content.
+	 */
+	preloadContent(filename) {
+		return this.#fetchContent(filename);
+	}
+
+	/**
+	 * Safely executes a DOM update within a View Transition.
+	 * @param {Function} updateCallback - The async function that mutates the DOM.
+	 * @param {boolean} [skipTransition=false] - If true, bypasses the transition.
+	 * @returns {Promise<void>} resolves when the transition is complete.
+	 */
+	async executeViewTransition(updateCallback, skipTransition = false) {
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		if (skipTransition || !document.startViewTransition || prefersReducedMotion) {
+			await updateCallback();
+			return;
+		}
+
+		const transition = document.startViewTransition(() => updateCallback());
+		await transition.finished;
+	}
+
+	/**
+	 * Checks if a markdown file is already cached.
+	 * @param {string} filename - The relative path to the markdown file.
+	 * @returns {boolean} true if the content is cached, false otherwise.
+	 */
+	isContentCached(filename) {
+		return this.contentCache.has(`${Lang.langCode}:${filename}`);
 	}
 
 	/**

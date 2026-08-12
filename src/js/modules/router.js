@@ -119,7 +119,7 @@ class RouterController {
 		}
 
 		// TEMP TEXT-ONLY START
-		if (import.meta.env.DEV) {
+		if (import.meta.env.PROD) {
 			mode = 'text';
 		}
 		// TEMP TEXT-ONLY END
@@ -154,7 +154,7 @@ class RouterController {
 		}
 
 		// TEMP TEXT-ONLY START
-		if (import.meta.env.DEV) {
+		if (import.meta.env.PROD) {
 			// TEMP TEXT-ONLY END
 			targetMode = 'text';
 			// TEMP TEXT-ONLY START
