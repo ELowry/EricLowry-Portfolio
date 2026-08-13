@@ -387,7 +387,7 @@ class ProjectGenerator {
 		});
 
 		const results = await Promise.all(promises);
-		
+
 		// Filter out failed repositories
 		const indexData = results.filter((entry) => {
 			return entry !== null;

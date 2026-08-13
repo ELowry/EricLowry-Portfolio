@@ -75,6 +75,7 @@ class AppController {
 
 	/**
 	 * The maximum number of content items that can be cached.
+	 * @returns {number} The maximum number of content items that can be cached.
 	 * @constant
 	 */
 	static get CONTENT_CACHE_LIMIT() {

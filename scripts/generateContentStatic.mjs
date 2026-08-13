@@ -175,6 +175,9 @@ async function generateStaticPage(node, routePath) {
 	Log.success(`Generated static wrapper for: /${routePath}`);
 }
 
+/**
+ * Run static content generation process.
+ */
 async function run() {
 	Log.info('\nGenerating Static Content Wrappers...');
 	const tasks = collectGenerationTasks(ContentTree);
