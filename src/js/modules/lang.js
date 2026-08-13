@@ -1,6 +1,6 @@
+import { Events } from './events.js';
 import { InputPrompts } from './inputPrompts.js';
-import { resolveDotPath } from './sharedUtils.js';
-import { getCacheBuster } from './sharedUtils.js';
+import { resolveDotPath, getCacheBuster } from './sharedUtils.js';
 
 /**
  * LangController manages multi-language support, translation logic, and persistence.
@@ -11,12 +11,14 @@ class LangController {
 	 * @property {Object|null} code - Current language codes { code, lang, region }.
 	 * @property {string} dir - Directory where language JSON files are stored.
 	 * @property {boolean} isLoaded - Whether the language system has finished loading and translating.
+	 * @property {AbortController|null} abortController - Tracks the current route's abort signal to prevent overlapping network responses.
 	 */
 	constructor() {
 		this.data = null;
 		this.code = null;
 		this.dir = '/lang/';
 		this.isLoaded = false;
+		this.abortController = null;
 	}
 
 	/**
@@ -92,11 +94,19 @@ class LangController {
 	 * @returns {Promise<Object|null>} (resolves) with the loaded language data or null on failure.
 	 */
 	async init() {
+		if (this.abortController) {
+			this.abortController.abort();
+		}
+		this.abortController = new AbortController();
+		const abortSignal = this.abortController.signal;
+
 		try {
 			const cacheBuster = `?v=${getCacheBuster()}`;
 			const browserLangs = this.#getBrowserLanguages();
 
-			const response = await fetch(`${this.dir}langs.json${cacheBuster}`);
+			const response = await fetch(`${this.dir}langs.json${cacheBuster}`, {
+				signal: abortSignal,
+			});
 			if (!response.ok) {
 				throw new Error('Could not load langs.json');
 			}
@@ -111,7 +121,9 @@ class LangController {
 				region: splitLang[1] || '',
 			};
 
-			const dataResponse = await fetch(`${this.dir}${this.code.code}.json${cacheBuster}`);
+			const dataResponse = await fetch(`${this.dir}${this.code.code}.json${cacheBuster}`, {
+				signal: abortSignal,
+			});
 			if (!dataResponse.ok) {
 				throw new Error(`Could not load language file: ${this.code.code}.json`);
 			}
@@ -270,6 +282,9 @@ class LangController {
 	 * @returns {string} the formatted string.
 	 */
 	formatString(str, args) {
+		if (!str) {
+			return '';
+		}
 		return str.replace(/{(\d+)}/g, (match, number) => {
 			return typeof args[number] !== 'undefined' ? args[number] : match;
 		});
@@ -468,7 +483,7 @@ class LangController {
 
 	/**
 	 * Populates language switcher containers with buttons for each available language.
-	 * Each button (except the current language) triggers a page reload with the new language.
+	 * Each button triggers a soft navigation with the new language.
 	 * @param {Object} availableLangs - Map of languages from `langs.json`.
 	 * @param {string} currentLang - The active full language code.
 	 */
@@ -505,12 +520,14 @@ class LangController {
 						button.textContent = langName;
 					}
 
-					button.addEventListener('click', () => {
+					button.addEventListener('click', async () => {
 						localStorage.setItem('userLang', code);
 						const url = new URL(window.location);
 						url.searchParams.delete('lang');
 						history.replaceState(null, '', url);
-						window.location.reload();
+
+						await this.init();
+						Events.emit('lang:changed', code);
 					});
 
 					container.appendChild(button);

@@ -190,9 +190,11 @@ class InputPromptsController {
 	 */
 	#detectGamepadType() {
 		const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-		for (const gp of gamepads) {
-			if (!gp) continue;
-			const id = gp.id.toLowerCase();
+		for (const gamepad of gamepads) {
+			if (!gamepad) {
+				continue;
+			}
+			const id = gamepad.id.toLowerCase();
 
 			if (id.includes('playstation') || id.includes('dual') || id.includes('054c')) {
 				this.gamepadType = 'ps';

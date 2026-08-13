@@ -155,9 +155,7 @@ class RouterController {
 
 		// TEMP TEXT-ONLY START
 		if (import.meta.env.PROD) {
-			// TEMP TEXT-ONLY END
 			targetMode = 'text';
-			// TEMP TEXT-ONLY START
 		}
 		// TEMP TEXT-ONLY END
 
@@ -193,10 +191,14 @@ class RouterController {
 			} else {
 				if (newState.mode === 'text') {
 					const textLayer = document.getElementById('text-layer');
-					if (textLayer) textLayer.scrollTop = 0;
+					if (textLayer) {
+						textLayer.scrollTop = 0;
+					}
 				} else {
 					const modalContent = document.getElementById('game-modal-content');
-					if (modalContent) modalContent.scrollTop = 0;
+					if (modalContent) {
+						modalContent.scrollTop = 0;
+					}
 				}
 			}
 			return;

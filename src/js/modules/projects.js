@@ -20,12 +20,15 @@ class ProjectsController {
 
 	/**
 	 * Internal method to perform the fetch operation.
+	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
 	 * @returns {Promise<Object[]>} The projects index data.
 	 * @private
 	 */
-	async #fetchIndexData() {
+	async #fetchIndexData(abortSignal) {
 		try {
-			const response = await fetch(`/content/projects-index.json?v=${getCacheBuster()}`);
+			const response = await fetch(`/content/projects-index.json?v=${getCacheBuster()}`, {
+				signal: abortSignal,
+			});
 
 			if (!response.ok) {
 				throw new Error(`Failed to load projects index: ${response.statusText}`);
@@ -33,7 +36,9 @@ class ProjectsController {
 
 			return await response.json();
 		} catch (error) {
-			console.error('ProjectsController: Error fetching projects index:', error);
+			if (error.name !== 'AbortError') {
+				console.error('ProjectsController: Error fetching projects index:', error);
+			}
 			throw error;
 		}
 	}
@@ -41,18 +46,24 @@ class ProjectsController {
 	/**
 	 * Fetches the projects index JSON and caches it.
 	 * Concurrent calls will share the same promise to prevent multiple network requests.
+	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
 	 * @returns {Promise<Object[]>} The parsed projects index.
 	 */
-	async getIndex() {
+	async getIndex(abortSignal) {
 		if (this.#indexCache) {
 			return this.#indexCache;
 		}
 
 		if (!this.#fetchPromise) {
-			this.#fetchPromise = this.#fetchIndexData().then((data) => {
-				this.#indexCache = data;
-				return data;
-			});
+			this.#fetchPromise = this.#fetchIndexData(abortSignal)
+				.then((data) => {
+					this.#indexCache = data;
+					return data;
+				})
+				.catch((error) => {
+					this.#fetchPromise = null;
+					throw error;
+				});
 		}
 
 		return this.#fetchPromise;

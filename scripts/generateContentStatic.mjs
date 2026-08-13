@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { marked } from 'marked';
 import { Log } from './logger.mjs';
@@ -9,12 +9,14 @@ const BASE_URL = 'https://eric-lowry.com';
 const LANG_DIR = path.resolve('public/lang');
 const CONTENT_DIR = path.resolve('public/content');
 
-const langsConfig = JSON.parse(fs.readFileSync(path.join(LANG_DIR, 'langs.json'), 'utf-8'));
+const langsConfig = JSON.parse(await fs.readFile(path.join(LANG_DIR, 'langs.json'), 'utf-8'));
 const availableLangs = Object.values(langsConfig).flat();
 const defaultLang = 'en_US';
-const enLangData = JSON.parse(fs.readFileSync(path.join(LANG_DIR, `${defaultLang}.json`), 'utf-8'));
+const enLangData = JSON.parse(
+	await fs.readFile(path.join(LANG_DIR, `${defaultLang}.json`), 'utf-8')
+);
 
-const baseHtmlContent = fs.readFileSync('index.html', 'utf-8');
+const baseHtmlContent = await fs.readFile('index.html', 'utf-8');
 
 /**
  * Fetches translated text from the loaded JSON data using dot notation.
@@ -41,13 +43,15 @@ function generateHrefLangs(routePath) {
 }
 
 /**
- * Recursively walks the ContentTree to generate static pages.
+ * Recursively collects asynchronous page generation tasks.
  * @param {Object} node - The current content node.
  * @param {string} [currentPath=''] - The accumulated route path.
+ * @param {Array<Promise<void>>} [tasks=[]] - The accumulated array of async tasks.
+ * @returns {Array<Promise<void>>} The complete array of generation tasks.
  */
-function processNode(node, currentPath = '') {
+function collectGenerationTasks(node, currentPath = '', tasks = []) {
 	if (node.type === 'separator') {
-		return;
+		return tasks;
 	}
 
 	let nodePath = '';
@@ -58,22 +62,24 @@ function processNode(node, currentPath = '') {
 	}
 
 	if (nodePath && nodePath !== 'blog' && nodePath !== 'projects') {
-		generateStaticPage(node, nodePath);
+		tasks.push(generateStaticPage(node, nodePath));
 	}
 
 	if (node.children) {
 		node.children.forEach((child) => {
-			processNode(child, nodePath);
+			collectGenerationTasks(child, nodePath, tasks);
 		});
 	}
+
+	return tasks;
 }
 
 /**
- * Reads node metadata, injects it into the base HTML, and writes the static file.
+ * Reads node metadata, injects it into the base HTML, and writes the static file asynchronously.
  * @param {Object} node - The current content node.
  * @param {string} routePath - The resolved route path for the node.
  */
-function generateStaticPage(node, routePath) {
+async function generateStaticPage(node, routePath) {
 	let effectiveNode = node;
 
 	if (node.type === 'category' && node.children) {
@@ -110,9 +116,10 @@ function generateStaticPage(node, routePath) {
 	let markdownContent = '';
 	if (effectiveNode.file) {
 		const mdPath = path.join(CONTENT_DIR, defaultLang, effectiveNode.file);
-		if (fs.existsSync(mdPath)) {
-			markdownContent = marked.parse(fs.readFileSync(mdPath, 'utf-8'));
-		}
+		try {
+			const rawMd = await fs.readFile(mdPath, 'utf-8');
+			markdownContent = marked.parse(rawMd);
+		} catch (error) {}
 	}
 
 	const replacementMeta = `<!-- OG_META_START -->
@@ -145,9 +152,7 @@ function generateStaticPage(node, routePath) {
 	<!-- OG_META_END -->`;
 
 	const outDir = path.join('.static-html', 'content', routePath);
-	if (!fs.existsSync(outDir)) {
-		fs.mkdirSync(outDir, { recursive: true });
-	}
+	await fs.mkdir(outDir, { recursive: true });
 
 	let updatedHtml = baseHtmlContent.replace(
 		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
@@ -166,9 +171,14 @@ function generateStaticPage(node, routePath) {
 		}
 	}
 
-	fs.writeFileSync(path.join(outDir, 'index.html'), updatedHtml, 'utf-8');
+	await fs.writeFile(path.join(outDir, 'index.html'), updatedHtml, 'utf-8');
 	Log.success(`Generated static wrapper for: /${routePath}`);
 }
 
-Log.info('\nGenerating Static Content Wrappers...');
-processNode(ContentTree);
+async function run() {
+	Log.info('\nGenerating Static Content Wrappers...');
+	const tasks = collectGenerationTasks(ContentTree);
+	await Promise.all(tasks);
+}
+
+run();

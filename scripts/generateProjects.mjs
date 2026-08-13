@@ -342,9 +342,8 @@ class ProjectGenerator {
 			previousIndex = JSON.parse(rawIndex);
 		} catch (error) {}
 
-		const indexData = [];
-
-		for (const repo of ProjectGenerator.REPOSITORIES) {
+		// Map repositories to an array of concurrent promises
+		const promises = ProjectGenerator.REPOSITORIES.map(async (repo) => {
 			try {
 				Log.info(`Fetching data for ${repo}...`);
 
@@ -365,10 +364,10 @@ class ProjectGenerator {
 
 					await ProjectGenerator.#generateStaticProjectHtml(data);
 
-					Log.info(`Skipped README download (no changes)`);
+					Log.info(`Skipped README download (no changes) for ${repo}`);
 				}
 
-				indexData.push({
+				return {
 					id: data.id,
 					title: data.title,
 					description: data.description,
@@ -380,11 +379,19 @@ class ProjectGenerator {
 					ogImage: data.ogImage,
 					ogImageWidth: data.ogImageWidth,
 					ogImageHeight: data.ogImageHeight,
-				});
+				};
 			} catch (error) {
 				Log.error(`Error processing ${repo}: ${error.message}`);
+				return null;
 			}
-		}
+		});
+
+		const results = await Promise.all(promises);
+		
+		// Filter out failed repositories
+		const indexData = results.filter((entry) => {
+			return entry !== null;
+		});
 
 		await fs.writeFile(
 			ProjectGenerator.INDEX_PATH,

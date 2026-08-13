@@ -45,7 +45,9 @@ class MetaController {
 	 */
 	async update({ path, node }) {
 		const metaData = await this.getMetadataForPath(path, node);
-		if (!metaData) return;
+		if (!metaData) {
+			return;
+		}
 
 		this.#updateTitle(metaData.pageTitle);
 		this.#updateDescription(metaData.pageDescription);

@@ -497,7 +497,9 @@ export class GalleryDisplay {
 	 * @private
 	 */
 	#navigate(direction, behavior = 'smooth') {
-		if (!this.#currentGalleryItems.length) return;
+		if (!this.#currentGalleryItems.length) {
+			return;
+		}
 
 		const newIndex = this.#currentIndex + direction;
 		const maxIndex = this.#currentGalleryItems.length - 1;

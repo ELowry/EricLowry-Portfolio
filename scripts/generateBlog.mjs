@@ -10,6 +10,12 @@ const OUTPUT_FILE = 'public/content/blog-index.json';
 const BASE_URL = 'https://eric-lowry.com';
 const IMAGE_BASE_DIR = 'public/assets/images/blog';
 
+// Canvas configuration
+const CANVAS_WIDTH = 1200;
+const CANVAS_HEIGHT = 630;
+const sharedCanvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+const sharedContext = sharedCanvas.getContext('2d');
+
 /**
  * Generates the blog-index.json index file and feed-{lang_code}.xml files by parsing markdown files in the `public/content/{languageCode}/blog` directories.
  * Looks for files matching YYYY-MM-DD.md and extracts the highest-order heading as the title.
@@ -25,7 +31,6 @@ function generateBlog() {
 	const blogEntries = [];
 	const seenDates = new Set();
 	const dateRegex = /^(\d{4}-\d{2}-\d{2})\.md$/;
-	const headingRegex = /^(#{1,6})\s+(.+)$/m;
 
 	// Iterate over content language folders
 	const langFolders = fs.readdirSync(CONTENT_DIR).filter((item) => {
@@ -58,20 +63,17 @@ function generateBlog() {
 			const filePath = path.join(blogDir, file);
 			const content = fs.readFileSync(filePath, 'utf-8');
 
+			const tokens = marked.lexer(content);
 			let bestTitle = null;
-			let bestLevel = 7; // H1-H6
+			let bestLevel = 7;
 
-			let match;
-			const regexGlobal = new RegExp(headingRegex.source, 'gm');
-
-			while ((match = regexGlobal.exec(content)) !== null) {
-				const level = match[1].length; // number of '#' characters
-				if (level < bestLevel) {
-					bestLevel = level;
-					bestTitle = match[2].trim();
-				}
-				if (bestLevel === 1) {
-					break;
+			for (const token of tokens) {
+				if (token.type === 'heading' && token.depth < bestLevel) {
+					bestLevel = token.depth;
+					bestTitle = token.text;
+					if (bestLevel === 1) {
+						break;
+					}
 				}
 			}
 
@@ -104,8 +106,12 @@ function generateBlog() {
 
 	// Sort by date descending
 	blogEntries.sort((a, b) => {
-		if (a.date > b.date) return -1;
-		if (a.date < b.date) return 1;
+		if (a.date > b.date) {
+			return -1;
+		}
+		if (a.date < b.date) {
+			return 1;
+		}
 		return 0;
 	});
 
@@ -225,10 +231,12 @@ function generateStaticImage(title, date) {
 		}
 	}
 
-	const width = 1200;
-	const height = 630;
-	const canvas = createCanvas(width, height);
-	const context = canvas.getContext('2d');
+	const width = CANVAS_WIDTH;
+	const height = CANVAS_HEIGHT;
+	const context = sharedContext;
+
+	// Reset canvas state between draws
+	context.clearRect(0, 0, width, height);
 
 	// Background
 	context.fillStyle = '#0f0d0f';
@@ -298,7 +306,7 @@ function generateStaticImage(title, date) {
 	});
 
 	// Render
-	const buffer = canvas.toBuffer('image/png');
+	const buffer = sharedCanvas.toBuffer('image/png');
 
 	if (!fs.existsSync(dirPath)) {
 		fs.mkdirSync(dirPath, { recursive: true });

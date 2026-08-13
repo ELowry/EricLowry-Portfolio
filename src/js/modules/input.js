@@ -10,6 +10,9 @@ class InputController {
 	/** @type {{x: number, y: number}|null} Screen position of the last interact touch */
 	#lastInteractPos = null;
 
+	/** @type {Gamepad[]} Cached gamepads for the current frame */
+	#gamepads = [];
+
 	/**
 	 * @property {Object} virtualState - State of virtual buttons (mostly for touch)
 	 * @property {boolean} virtualState.left - Left virtual button state
@@ -39,12 +42,10 @@ class InputController {
 		this.cursorPos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
 		// Detect Mouse & Keyboard usage
+		const boundMouseInput = this.#handleMouseInput.bind(this);
 		window.addEventListener('keydown', () => this.#setInputType('mnk'));
-		window.addEventListener('pointerdown', (e) => {
-			if (e.pointerType === 'mouse') {
-				this.#setInputType('mnk');
-			}
-		});
+		window.addEventListener('pointermove', boundMouseInput);
+		window.addEventListener('pointerdown', boundMouseInput);
 	}
 
 	/**
@@ -200,7 +201,7 @@ class InputController {
 	 * @returns {number} The raw analog value (0.0 to 1.0) of the left trigger (LT).
 	 */
 	get triggerLeft() {
-		const gp = navigator.getGamepads()[0];
+		const gp = this.#gamepads[0];
 		return gp && gp.buttons[6] ? gp.buttons[6].value : 0;
 	}
 
@@ -208,7 +209,7 @@ class InputController {
 	 * @returns {number} The raw analog value (0.0 to 1.0) of the right trigger (RT).
 	 */
 	get triggerRight() {
-		const gp = navigator.getGamepads()[0];
+		const gp = this.#gamepads[0];
 		return gp && gp.buttons[7] ? gp.buttons[7].value : 0;
 	}
 
@@ -313,6 +314,10 @@ class InputController {
 			this.#updateVirtualState();
 		}
 
+		if (navigator.getGamepads) {
+			this.#gamepads = navigator.getGamepads();
+		}
+
 		// Detect Gamepad usage
 		if (
 			App.LJS.gamepadWasPressed(0) // A
@@ -326,6 +331,17 @@ class InputController {
 		}
 
 		VirtualCursor.update();
+	}
+
+	/**
+	 * Detects mouse pointer events to switch input type.
+	 * @param {PointerEvent} e - The pointer event.
+	 * @private
+	 */
+	#handleMouseInput(e) {
+		if (e.pointerType === 'mouse') {
+			this.#setInputType('mnk');
+		}
 	}
 
 	/**

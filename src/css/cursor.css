@@ -60,3 +60,9 @@
 		background-color: oklch(from var(--color-accent) l c h/ var(--percent-40));
 	}
 }
+
+/* Hide the OS cursor when using a gamepad */
+body[data-input-type='gamepad'],
+body[data-input-type='gamepad'] * {
+	cursor: none !important;
+}

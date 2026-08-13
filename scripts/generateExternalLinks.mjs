@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import util from 'util';
 import crypto from 'crypto';
 import { Log } from './logger.mjs';
 import { exec } from 'child_process';
-import util from 'util';
 
 const execAsync = util.promisify(exec);
 const CONCURRENCY_LIMIT = 14;
@@ -218,9 +218,15 @@ async function generateExternalLinks() {
 	for (const url of urlArray) {
 		const promise = processUrl(url, linkCache).then((res) => {
 			executing.delete(promise);
-			if (res.status === 'added') newCount++;
-			if (res.status === 'updated') updateCount++;
-			if (res.status === 'skipped') skipCount++;
+			if (res.status === 'added') {
+				newCount++;
+			}
+			if (res.status === 'updated') {
+				updateCount++;
+			}
+			if (res.status === 'skipped') {
+				skipCount++;
+			}
 		});
 
 		executing.add(promise);
@@ -259,8 +265,12 @@ async function processUrl(url, linkCache) {
 			'Accept-Language': 'en-US,en;q=0.5',
 		};
 
-		if (cached?.etag) headers['If-None-Match'] = cached.etag;
-		if (cached?.lastModified) headers['If-Modified-Since'] = cached.lastModified;
+		if (cached?.etag) {
+			headers['If-None-Match'] = cached.etag;
+		}
+		if (cached?.lastModified) {
+			headers['If-Modified-Since'] = cached.lastModified;
+		}
 
 		const parsedUrl = new URL(url);
 
@@ -274,8 +284,12 @@ async function processUrl(url, linkCache) {
 				signal: AbortSignal.timeout(10000),
 			});
 
-			if (response.status === 304) return { status: 'skipped' };
-			if (!response.ok) throw new Error(`NPM API HTTP ${response.status}`);
+			if (response.status === 304) {
+				return { status: 'skipped' };
+			}
+			if (!response.ok) {
+				throw new Error(`NPM API HTTP ${response.status}`);
+			}
 
 			const pkgData = await response.json();
 			title = pkgData.name;
@@ -288,8 +302,12 @@ async function processUrl(url, linkCache) {
 		} else {
 			const response = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
 
-			if (response.status === 304) return { status: 'skipped' };
-			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			if (response.status === 304) {
+				return { status: 'skipped' };
+			}
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status}`);
+			}
 
 			const html = await response.text();
 			const extracted = extractOgData(html);
@@ -334,7 +352,9 @@ async function processUrl(url, linkCache) {
 
 		if (imageNodes.length > 0) {
 			for (const node of imageNodes) {
-				if (!node) continue;
+				if (!node) {
+					continue;
+				}
 				const imgUrl = new URL(node, url).toString();
 
 				try {

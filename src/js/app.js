@@ -25,6 +25,9 @@ class AppController {
 	/** @type {Map<string, Promise<string>>} Tracks ongoing fetch requests to prevent duplicates. */
 	#fetchPromises = new Map();
 
+	/** @type {AbortController|null} Tracks the current modal fetch request to allow cancellation. */
+	#modalAbortController = null;
+
 	/**
 	 * @property {Object} LJS - The LittleJS engine namespace, set after dynamic import.
 	 * @property {boolean} isPaused - Whether the game engine is actively running and rendering.
@@ -68,6 +71,14 @@ class AppController {
 
 		// Preview manager
 		this.PreviewManager = new PreviewManager(this);
+	}
+
+	/**
+	 * The maximum number of content items that can be cached.
+	 * @constant
+	 */
+	static get CONTENT_CACHE_LIMIT() {
+		return 60;
 	}
 
 	/**
@@ -189,6 +200,16 @@ class AppController {
 				}
 			});
 
+			Events.on('lang:changed', () => {
+				this.contentCache.clear();
+				const node = Content.findNodeByPath(Router.currentPath);
+				Events.emit('route:changed', {
+					mode: Router.currentMode,
+					path: Router.currentPath,
+					node,
+				});
+			});
+
 			// Initialize Router which will trigger the first onStateChange
 			await Router.init(this.onStateChange.bind(this));
 
@@ -233,12 +254,24 @@ class AppController {
 	}
 
 	/**
+	 * Deletes the oldest cached items if the cache exceeds the content cache limit.
+	 * @private
+	 */
+	#enforceCacheLimit() {
+		if (this.contentCache.size > AppController.CONTENT_CACHE_LIMIT) {
+			const firstKey = this.contentCache.keys().next().value;
+			this.contentCache.delete(firstKey);
+		}
+	}
+
+	/**
 	 * Fetches markdown content from the server, handles localization fallbacks, and caches results as HTML.
 	 * @param {string} filename - The relative path (from `/content/`) to the markdown file.
+	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
 	 * @returns {Promise<string>} the parsed HTML content of the markdown file.
 	 * @private
 	 */
-	async #fetchContent(filename) {
+	async #fetchContent(filename, abortSignal) {
 		const langCode = Lang.langCode;
 		const cacheKey = `${langCode}:${filename}`;
 
@@ -272,8 +305,12 @@ class AppController {
 						window.__PRELOADED_CONTENT__ = null;
 					}
 
-					if (!result) result = await fetch(fullUrl);
-					if (!result) return null;
+					if (!result) {
+						result = await fetch(fullUrl, { signal: abortSignal });
+					}
+					if (!result) {
+						return null;
+					}
 
 					const contentType = result.headers.get('content-type') || '';
 
@@ -325,6 +362,7 @@ class AppController {
 				const html = this.marked ? await this.marked.parse(rawMarkdown) : rawMarkdown;
 
 				this.contentCache.set(cacheKey, html);
+				this.#enforceCacheLimit();
 
 				return html;
 			} catch (error) {
@@ -549,6 +587,12 @@ class AppController {
 	 * @returns {Promise<void>} (resolves) when the modal has been updated and displayed.
 	 */
 	async loadContentInModal(filename) {
+		if (this.#modalAbortController) {
+			this.#modalAbortController.abort();
+		}
+		this.#modalAbortController = new AbortController();
+		const abortSignal = this.#modalAbortController.signal;
+
 		const langCode = Lang.langCode;
 		const cacheKey = `${langCode}:${filename}`;
 
@@ -557,12 +601,22 @@ class AppController {
 			this.uiManager.showLoading(false, true);
 		}
 
-		const html = await this.#fetchContent(filename);
+		try {
+			const html = await this.#fetchContent(filename, abortSignal);
 
-		this.uiManager.displayContentInModal(html);
+			if (abortSignal.aborted) {
+				return;
+			}
 
-		if (needsLoading) {
-			await this.uiManager.hideLoading(false);
+			this.uiManager.displayContentInModal(html);
+		} catch (error) {
+			if (error.name !== 'AbortError') {
+				console.error(`Failed to load modal content:`, error);
+			}
+		} finally {
+			if (needsLoading && !abortSignal.aborted) {
+				await this.uiManager.hideLoading(false);
+			}
 		}
 	}
 
@@ -571,9 +625,10 @@ class AppController {
 	 * @param {string} filename - The name of the file within the content directory.
 	 * @param {string|null} [wrapper=null] - Optional HTML element name to wrap the content in.
 	 * @param {boolean} [suppressLoading=false] - If true, skips showing the loading overlay during fetch.
+	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
 	 * @returns {Promise<void>} (resolves) when the text view has been updated.
 	 */
-	async loadContentIntoText(filename, wrapper = null, suppressLoading = false) {
+	async loadContentIntoText(filename, wrapper = null, suppressLoading = false, abortSignal) {
 		const langCode = Lang.langCode;
 		const cacheKey = `${langCode}:${filename}`;
 
@@ -582,7 +637,7 @@ class AppController {
 			this.uiManager.showLoading(true);
 		}
 
-		let html = await this.#fetchContent(filename);
+		let html = await this.#fetchContent(filename, abortSignal);
 
 		if (wrapper) {
 			html = `<${wrapper}>${html}</${wrapper}>`;
@@ -598,10 +653,11 @@ class AppController {
 	/**
 	 * Preloads markdown content into the cache.
 	 * @param {string} filename - The relative path to the markdown file.
+	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
 	 * @returns {Promise<string>} the parsed HTML content.
 	 */
-	preloadContent(filename) {
-		return this.#fetchContent(filename);
+	preloadContent(filename, abortSignal) {
+		return this.#fetchContent(filename, abortSignal);
 	}
 
 	/**
@@ -710,6 +766,9 @@ class AppController {
 	 * Closes the active content modal.
 	 */
 	closeGameModal() {
+		if (this.#modalAbortController) {
+			this.#modalAbortController.abort();
+		}
 		this.uiManager.closeGameModal();
 	}
 

@@ -36,7 +36,12 @@ class EventBus {
 		if (!this.listeners.has(event)) {
 			return;
 		}
-		this.listeners.get(event).delete(handler);
+		const handlers = this.listeners.get(event);
+		for (const h of handlers) {
+			if (h === handler || h.original === handler) {
+				handlers.delete(h);
+			}
+		}
 	}
 
 	/**
@@ -63,6 +68,7 @@ class EventBus {
 			handler(...args);
 			this.off(event, wrapper);
 		};
+		wrapper.original = handler;
 		this.on(event, wrapper);
 	}
 }
