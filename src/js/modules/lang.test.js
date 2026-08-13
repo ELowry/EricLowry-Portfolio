@@ -48,8 +48,14 @@ describe('LangController', () => {
 		it('should load default language data and translate the document', async () => {
 			const data = await Lang.init();
 
-			expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/lang/langs.json'));
-			expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/lang/en_US.json'));
+			expect(fetch).toHaveBeenCalledWith(
+				expect.stringContaining('/lang/langs.json'),
+				expect.objectContaining({ signal: expect.any(AbortSignal) })
+			);
+			expect(fetch).toHaveBeenCalledWith(
+				expect.stringContaining('/lang/en_US.json'),
+				expect.objectContaining({ signal: expect.any(AbortSignal) })
+			);
 			expect(Lang.isLoaded).toBe(true);
 			expect(data).toEqual(mockEnUSData);
 			expect(document.documentElement.lang).toBe('en');
