@@ -37,6 +37,10 @@ yarn-error.log*
 # Environment files (local configs)
 /.env.*
 
+# Minified files or specific assets (optional but good practice)
+*.min.js
+*.min.css
+
 # Assets
 /public/assets/*
 !/public/assets/external-links.json
@@ -49,10 +53,6 @@ yarn-error.log*
 # Third-party vendor files
 /public/vendor/
 /vendor/
-
-# Minified files or specific assets (optional but good practice)
-*.min.js
-*.min.css
 
 # Robots.txt
 /public/robots.txt
