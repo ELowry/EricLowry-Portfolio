@@ -95,11 +95,20 @@ class NavigationController {
 
 		// Handle Scrolling
 		let manualScrollY = 0;
+		let manualScrollX = 0;
 
 		if (inputState.lastInputType === 'gamepad') {
 			// Standard Stick Scrolling
 			if (Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
 				manualScrollY = -axis.y;
+			}
+
+			// Add horizontal scrolling, ensuring it doesn't conflict with focus movement if axis is explicitly 'x'
+			if (
+				Math.abs(axis.x) > NavigationController.SCROLL_DEADZONE
+				&& this.options.axis !== 'x'
+			) {
+				manualScrollX = axis.x;
 			}
 
 			if (inputState.triggerLeft > 0.05) {
@@ -111,28 +120,13 @@ class NavigationController {
 			}
 		}
 
-		if (this.options.scroll && manualScrollY !== 0) {
-			let scrollTarget = this.activeContainer;
-			if (
-				this.activeContainer.classList.contains('modal-box')
-				|| this.activeContainer.classList.contains('gallery-modal-content')
-				|| this.activeContainer.id === 'text-layer'
-			) {
-				scrollTarget = this.activeContainer;
-			} else if (this.activeContainer.parentElement?.classList.contains('modal-box')) {
-				scrollTarget = this.activeContainer.parentElement;
-			} else {
-				const childBox = this.activeContainer.querySelector(
-					'.modal-box, .gallery-modal-content'
-				);
-				if (childBox) {
-					scrollTarget = childBox;
-				}
-			}
+		if (this.options.scroll && (manualScrollY !== 0 || manualScrollX !== 0)) {
+			let scrollTarget = this.#getScrollTarget(manualScrollY, manualScrollX);
 
 			if (scrollTarget) {
 				scrollTarget.scrollBy({
 					top: manualScrollY * NavigationController.SCROLL_SPEED * frameRateMultiplier,
+					left: manualScrollX * NavigationController.SCROLL_SPEED * frameRateMultiplier,
 					behavior: 'instant',
 				});
 			}
@@ -166,6 +160,170 @@ class NavigationController {
 			current.classList.add('active');
 			setTimeout(() => current.classList.remove('active'), 100);
 			current.click();
+		}
+	}
+
+	/**
+	 * Internal helper to find the most appropriate scroll target based on the active focus.
+	 * Allows nested scrollable areas to capture scroll events before falling back to the parent.
+	 * @param {number} manualScrollY - The requested vertical scroll amount.
+	 * @param {number} manualScrollX - The requested horizontal scroll amount.
+	 * @returns {HTMLElement|null} The DOM element to apply the scroll to.
+	 * @private
+	 */
+	#getScrollTarget(manualScrollY, manualScrollX) {
+		let el = document.activeElement;
+
+		// Traverse up from the active element to find a nested scrollable container
+		while (
+			el
+			&& el !== document.body
+			&& el !== document.documentElement
+			&& this.activeContainer?.contains(el)
+		) {
+			const hasVerticalScroll = el.scrollHeight > el.clientHeight;
+			const hasHorizontalScroll = el.scrollWidth > el.clientWidth;
+			const style = window.getComputedStyle(el);
+
+			const canScrollY =
+				hasVerticalScroll && (style.overflowY === 'auto' || style.overflowY === 'scroll');
+			const canScrollX =
+				hasHorizontalScroll && (style.overflowX === 'auto' || style.overflowX === 'scroll');
+
+			let isViableTarget = false;
+
+			if (manualScrollY !== 0 && canScrollY) {
+				if (manualScrollY < 0 && el.scrollTop > 0) {
+					isViableTarget = true;
+				}
+				if (
+					manualScrollY > 0
+					&& Math.ceil(el.scrollTop + el.clientHeight) < el.scrollHeight - 1
+				) {
+					isViableTarget = true;
+				}
+			}
+
+			if (manualScrollX !== 0 && canScrollX) {
+				if (manualScrollX < 0 && el.scrollLeft > 0) {
+					isViableTarget = true;
+				}
+				if (
+					manualScrollX > 0
+					&& Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
+				) {
+					isViableTarget = true;
+				}
+			}
+
+			if (isViableTarget) {
+				return el;
+			}
+
+			el = el.parentElement;
+		}
+
+		// Fallback to the main active container logic
+		let scrollTarget = this.activeContainer;
+		if (
+			this.activeContainer.classList.contains('modal-box')
+			|| this.activeContainer.classList.contains('gallery-modal-content')
+			|| this.activeContainer.id === 'text-layer'
+		) {
+			scrollTarget = this.activeContainer;
+		} else if (this.activeContainer.parentElement?.classList.contains('modal-box')) {
+			scrollTarget = this.activeContainer.parentElement;
+		} else {
+			const childBox = this.activeContainer.querySelector(
+				'.modal-box, .gallery-modal-content'
+			);
+			if (childBox) {
+				scrollTarget = childBox;
+			}
+		}
+		return scrollTarget;
+	}
+
+	/**
+	 * Internal helper to find focusable elements.
+	 * @param {HTMLElement|null} container - The container to search within.
+	 * @returns {Array<HTMLElement>} An array of focusable elements.
+	 * @private
+	 */
+	#getFocusables(container = this.activeContainer) {
+		if (!container) {
+			return [];
+		}
+
+		const selector = this.options.roving
+			? 'button, a[href], input, select, textarea, [tabindex]'
+			: 'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+		return Array.from(container.querySelectorAll(selector)).filter((el) => {
+			const isVisible = el.offsetParent !== null;
+			const isNotAriaHidden = !el.getAttribute('aria-hidden');
+			const isNotDisabled = !el.hasAttribute('disabled');
+
+			return isVisible && isNotAriaHidden && isNotDisabled;
+		});
+	}
+
+	/**
+	 * Resets tabindex for all elements in a container to the default roving state.
+	 * (First item 0, all others -1).
+	 * @param {HTMLElement} container - The container whose elements will be reset.
+	 * @private
+	 */
+	#resetRovingTabindex(container) {
+		const focusables = this.#getFocusables(container);
+		focusables.forEach((el, i) => {
+			el.tabIndex = i === 0 ? 0 : -1;
+		});
+	}
+
+	/**
+	 * Internal helper to calculate and set the next focus.
+	 * @private
+	 * @param {number} direction - Positive (`next`) or Negative (`prev`).
+	 */
+	#moveFocus(direction) {
+		const focusables = this.#getFocusables();
+		if (focusables.length === 0) {
+			return;
+		}
+
+		const currentFocused = document.activeElement;
+		let currentIndex = focusables.indexOf(currentFocused);
+
+		if (currentIndex === -1) {
+			// If focus was lost, reset to top
+			const nextItem = focusables[0];
+			if (this.options.roving) {
+				focusables.forEach((el) => (el.tabIndex = -1));
+				nextItem.tabIndex = 0;
+			}
+			nextItem.focus({ focusVisible: true });
+			nextItem.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+		} else {
+			let nextIndex;
+			if (direction > 0) {
+				nextIndex = (currentIndex + 1) % focusables.length;
+			} else {
+				nextIndex = (currentIndex - 1 + focusables.length) % focusables.length;
+			}
+
+			const nextItem = focusables[nextIndex];
+
+			if (this.options.roving) {
+				currentFocused.tabIndex = -1;
+				nextItem.tabIndex = 0;
+			}
+
+			nextItem.focus({ focusVisible: true });
+			nextItem.scrollIntoView({
+				block: 'nearest',
+				inline: 'nearest',
+			});
 		}
 	}
 
@@ -252,89 +410,6 @@ class NavigationController {
 		}
 		const prev = this.contextStack.pop();
 		this.setContext(prev.container, prev.options);
-	}
-
-	/**
-	 * Internal helper to find focusable elements.
-	 * @param {HTMLElement|null} container - The container to search within.
-	 * @returns {Array<HTMLElement>} An array of focusable elements.
-	 * @private
-	 */
-	#getFocusables(container = this.activeContainer) {
-		if (!container) {
-			return [];
-		}
-
-		const selector = this.options.roving
-			? 'button, a[href], input, select, textarea, [tabindex]'
-			: 'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-		return Array.from(container.querySelectorAll(selector)).filter((el) => {
-			const isVisible = el.offsetParent !== null;
-			const isNotAriaHidden = !el.getAttribute('aria-hidden');
-			const isNotDisabled = !el.hasAttribute('disabled');
-
-			return isVisible && isNotAriaHidden && isNotDisabled;
-		});
-	}
-
-	/**
-	 * Resets tabindex for all elements in a container to the default roving state.
-	 * (First item 0, all others -1).
-	 * @param {HTMLElement} container - The container whose elements will be reset.
-	 * @private
-	 */
-	#resetRovingTabindex(container) {
-		const focusables = this.#getFocusables(container);
-		focusables.forEach((el, i) => {
-			el.tabIndex = i === 0 ? 0 : -1;
-		});
-	}
-
-	/**
-	 * Internal helper to calculate and set the next focus.
-	 * @private
-	 * @param {number} direction - Positive (`next`) or Negative (`prev`).
-	 */
-	#moveFocus(direction) {
-		const focusables = this.#getFocusables();
-		if (focusables.length === 0) {
-			return;
-		}
-
-		const currentFocused = document.activeElement;
-		let currentIndex = focusables.indexOf(currentFocused);
-
-		if (currentIndex === -1) {
-			// If focus was lost, reset to top
-			const nextItem = focusables[0];
-			if (this.options.roving) {
-				focusables.forEach((el) => (el.tabIndex = -1));
-				nextItem.tabIndex = 0;
-			}
-			nextItem.focus({ focusVisible: true });
-			nextItem.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-		} else {
-			let nextIndex;
-			if (direction > 0) {
-				nextIndex = (currentIndex + 1) % focusables.length;
-			} else {
-				nextIndex = (currentIndex - 1 + focusables.length) % focusables.length;
-			}
-
-			const nextItem = focusables[nextIndex];
-
-			if (this.options.roving) {
-				currentFocused.tabIndex = -1;
-				nextItem.tabIndex = 0;
-			}
-
-			nextItem.focus({ focusVisible: true });
-			nextItem.scrollIntoView({
-				block: 'nearest',
-				inline: 'nearest',
-			});
-		}
 	}
 }
 

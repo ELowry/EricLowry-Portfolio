@@ -879,6 +879,11 @@ export class UIManager {
 
 		this.elements.gameModalContent.innerHTML = html;
 
+		const scrollables = this.elements.gameModalContent.querySelectorAll(
+			'pre code, .embed-container'
+		);
+		scrollables.forEach((el) => el.setAttribute('tabindex', '0'));
+
 		Obfuscator.processDomElements(this.elements.gameModalContent);
 
 		InputPrompts.refresh(this.elements.gameModalContent);
@@ -912,6 +917,11 @@ export class UIManager {
 	 */
 	displayContentInTextView(html) {
 		this.elements.textContent.innerHTML = html;
+
+		const scrollables = this.elements.textContent.querySelectorAll(
+			'pre code, .embed-container'
+		);
+		scrollables.forEach((el) => el.setAttribute('tabindex', '0'));
 
 		Obfuscator.processDomElements(this.elements.textContent);
 

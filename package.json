@@ -30,7 +30,9 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"blog:post": "node scripts/postToLemmy.mjs && prettier --ignore-path .prettierignore --write lemmy-history.json",
-		"blog:test": "node scripts/postToLemmy.mjs --dry-run"
+		"blog:test": "node scripts/postToLemmy.mjs --dry-run",
+		"update": "npm update && npm ci && npm i",
+		"upgrade": "npx npm-check-updates -u && npm i"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",

@@ -353,7 +353,7 @@
 	.text-navbar-content {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: right;
+		justify-content: flex-end;
 		gap: 0.8em;
 		margin-inline: auto;
 		max-width: var(--page-max-width);
@@ -866,9 +866,17 @@ button.switch-btn {
 
 /* --- MISCELANEOUS --- */
 
-:is([role='menu'], [role='menubar']):has(button:focus-visible) {
-	button:not(:focus-visible, :disabled) {
-		outline: dotted var(--border-width) var(--color-border);
-		outline-offset: var(--border-width);
+body:not([data-input-type='gamepad']) :is([role='menu'], [role='menubar'], .text-navbar-content) {
+	&:has(button:focus-visible) {
+		button:not(:focus-visible, :disabled) {
+			outline: dotted var(--border-width) var(--color-border);
+			outline-offset: var(--border-width);
+		}
+	}
+
+	&:has([role='menu'] button:focus-visible) {
+		> button:not(:focus-visible, :disabled) {
+			outline: none;
+		}
 	}
 }

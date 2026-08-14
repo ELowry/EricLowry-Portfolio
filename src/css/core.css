@@ -37,7 +37,7 @@ body {
 }
 
 *:focus-visible {
-	outline: dotted var(--border-width) var(--color-accent);
+	outline: dashed 1px var(--color-accent);
 	outline-offset: var(--border-width);
 }
 

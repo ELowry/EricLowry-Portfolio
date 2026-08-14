@@ -384,7 +384,11 @@ class VirtualCursorController {
 				this.element?.classList.remove('clicking');
 			}, 150);
 
-			this.currentHover?.click();
+			if (this.currentHover) {
+				this.currentHover.click();
+			} else {
+				document.body.click();
+			}
 		}
 	}
 

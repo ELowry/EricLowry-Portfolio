@@ -458,65 +458,69 @@
 				>Skip to content</a
 			>
 			<nav id="text-navbar" role="menubar" aria-label="Main Navigation">
-				<button
-					role="menuitem"
-					class="lang"
-					data-lang="ui.textMode.btnBlog"
-					data-nav-path="blog"
-					onclick="App.navigate('blog')"
-					>Blog</button
-				>
-				<button
-					role="menuitem"
-					id="game-mode"
-					class="lang"
-					data-lang="ui.textMode.btnGameMode"
-					onclick="App.setMode('game')"
-					>Switch to Exploration Mode</button
-				>
-				<button
-					role="menuitem"
-					class="lang"
-					data-lang="ui.btnPrivacy"
-					data-nav-path="privacy"
-					onclick="App.navigate('privacy')"
-					>Privacy Policy</button
-				>
-				<button
-					role="menuitem"
-					aria-haspopup="menu"
-					aria-expanded="false"
-					aria-controls="text-options-submenu"
-					><span class="menuitem-icon" aria-hidden="true">⚙</span
-					><span class="lang sr-only accessible-forced" data-lang="ui.btnOptions"
-						>Options</span
-					></button
-				>
-				<div
-					id="text-options-submenu"
-					role="menu"
-					class="langAttr"
-					data-langattr="aria-label"
-					data-langAria_label="ui.submenuOptions"
-					aria-label="Options Submenu"
-					hidden
-				>
+				<div class="text-navbar-content">
 					<button
-						role="menuitemcheckbox"
-						aria-checked="false"
-						class="switch-btn js-readability-toggle"
-						onclick="App.toggleReadabilityMode()"
+						role="menuitem"
+						class="lang"
+						data-lang="ui.textMode.btnBlog"
+						data-nav-path="blog"
+						onclick="App.navigate('blog')"
+						>Blog</button
 					>
-						<span class="switch-track"></span>
-						<span class="lang" data-lang="ui.btnReadability">Increase Readability</span>
-					</button>
+					<button
+						role="menuitem"
+						id="game-mode"
+						class="lang"
+						data-lang="ui.textMode.btnGameMode"
+						onclick="App.setMode('game')"
+						>Switch to Exploration Mode</button
+					>
+					<button
+						role="menuitem"
+						class="lang"
+						data-lang="ui.btnPrivacy"
+						data-nav-path="privacy"
+						onclick="App.navigate('privacy')"
+						>Privacy Policy</button
+					>
+					<button
+						role="menuitem"
+						aria-haspopup="menu"
+						aria-expanded="false"
+						aria-controls="text-options-submenu"
+						><span class="menuitem-icon" aria-hidden="true">⚙</span
+						><span class="lang sr-only accessible-forced" data-lang="ui.btnOptions"
+							>Options</span
+						></button
+					>
 					<div
-						class="languageSwitcherButtons langAttr"
+						id="text-options-submenu"
+						role="menu"
+						class="langAttr"
 						data-langattr="aria-label"
-						data-langAria_label="ui.submenuLanguage"
-						role="group"
-						aria-label="Language selection"
-					></div>
+						data-langAria_label="ui.submenuOptions"
+						aria-label="Options Submenu"
+						hidden
+					>
+						<button
+							role="menuitemcheckbox"
+							aria-checked="false"
+							class="switch-btn js-readability-toggle"
+							onclick="App.toggleReadabilityMode()"
+						>
+							<span class="switch-track"></span>
+							<span class="lang" data-lang="ui.btnReadability"
+								>Increase Readability</span
+							>
+						</button>
+						<div
+							class="languageSwitcherButtons langAttr"
+							data-langattr="aria-label"
+							data-langAria_label="ui.submenuLanguage"
+							role="group"
+							aria-label="Language selection"
+						></div>
+					</div>
 				</div>
 			</nav>
 			<div class="text-layout">
