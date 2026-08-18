@@ -24,6 +24,9 @@ hosting/.cache
 # Vite build output
 /dist
 
+# Fallow
+.fallow/
+
 # Logs
 *.log
 npm-debug.log*

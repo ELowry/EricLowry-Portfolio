@@ -1,22 +1,24 @@
-import { Router } from './modules/router.js';
-import { Events } from './modules/events.js';
-import { GameBridge } from './modules/gameBridge.js';
-import { UIManager } from './modules/uiManager.js';
-import { Content } from './modules/content.js';
-import { ContentTree } from './modules/contentTree.js';
-import { Interaction } from './modules/interaction.js';
-import { Lang } from './modules/lang.js';
-import { Input } from './modules/input.js';
-import { LayeredInput } from './modules/layeredInputs.js';
-import { Navigation } from './modules/navigation.js';
-import { TextRenderer } from './modules/textRenderer.js';
-import { TutorialManager } from './modules/tutorialManager.js';
-import { MarkedExtensions } from './modules/markedExtensions.js';
-import { GalleryDisplay } from './modules/gallery.js';
-import { Meta } from './modules/meta.js';
-import { PreviewManager } from './modules/previewManager.js';
-import { ExternalLinks } from './modules/externalLinks.js';
-import { getCacheBuster } from './modules/sharedUtils.js';
+import { Router } from './modules/core/router.js';
+import { Events } from './modules/core/events.js';
+import { GameBridge } from './modules/game/gameBridge.js';
+import { UIManager } from './modules/ui/uiManager.js';
+import { Content } from './modules/content/content.js';
+import { ContentTree } from './modules/content/contentTree.js';
+import { Interaction } from './modules/game/interaction.js';
+import { Lang } from './modules/ui/lang.js';
+import { Input } from './modules/input/input.js';
+import { InputPrompts } from './modules/input/inputPrompts.js';
+import { LayeredInput } from './modules/core/layeredInputs.js';
+import { Navigation } from './modules/input/navigation.js';
+import { TextRenderer } from './modules/ui/textRenderer.js';
+import { TutorialManager } from './modules/input/tutorialManager.js';
+import { MarkedExtensions } from './modules/markdown/markedExtensions.js';
+import { GalleryDisplay } from './modules/markdown/gallery.js';
+import { Meta } from './modules/content/meta.js';
+import { PreviewManager } from './modules/ui/previewManager.js';
+import { ExternalLinks } from './modules/content/externalLinks.js';
+import { getCacheBuster } from './modules/core/sharedUtils.js';
+import { Engine } from './modules/core/engineContext.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.
@@ -44,12 +46,10 @@ class AppController {
 	 * @property {MetaController} Meta - Centralized metadata manager, initialized immediately.
 	 * @property {PreviewManager} PreviewManager - Centralized preview manager, initialized immediately.
 	 * @property {ExternalLinks} ExternalLinks - Centralized external links preview manager, initialized immediately.
-	 * @property {boolean} isLocal - Indicates whether the app is running in a local development environment.
 	 */
 	constructor() {
 		this.isPaused = false;
 		this.isLocked = false;
-		this.isLocal = import.meta.env.DEV;
 
 		// Content Cache
 		this.contentCache = new Map();
@@ -149,6 +149,7 @@ class AppController {
 			]);
 
 			this.LJS = (littleModule && (littleModule.default || littleModule)) || null;
+			Engine.setEngine(this.LJS);
 
 			// Overrides LittleJS' global 'contextmenu' handler to restore the native context menu while in text mode.
 			document.addEventListener(
@@ -193,6 +194,21 @@ class AppController {
 			// Ensure all scripts are loaded
 			this.Lang = Lang;
 			await Promise.all([langPromise, contentPromise, externalLinksPromise]);
+			await InputPrompts.init();
+
+			// Listen for navigation and modal requests
+			Events.on('request:navigate', (path) => this.navigate(path));
+			Events.on('request:modal', (file) => this.loadContentInModal(file));
+			Events.on('request:entryX', (x) => {
+				this.pendingEntryX = x;
+			});
+			Events.on('request:loading', ({ show, isModal }) => {
+				if (show) {
+					this.uiManager.showLoading(true, isModal);
+				} else {
+					this.uiManager.hideLoading(isModal);
+				}
+			});
 
 			// Listen for route changes
 			Events.on('route:changed', async (payload) => {

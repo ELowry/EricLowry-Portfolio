@@ -2,8 +2,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import { marked } from 'marked';
 import { Log } from './logger.mjs';
-import { ContentTree } from '../src/js/modules/contentTree.js';
-import { parseImageVariant, resolveDotPath, escapeHtml } from '../src/js/modules/sharedUtils.js';
+import { ContentTree } from '../src/js/modules/content/contentTree.js';
+import {
+	parseImageVariant,
+	resolveDotPath,
+	escapeHtml,
+} from '../src/js/modules/core/sharedUtils.js';
 
 const BASE_URL = 'https://eric-lowry.com';
 const LANG_DIR = path.resolve('public/lang');

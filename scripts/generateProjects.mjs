@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { Log } from './logger.mjs';
 import { marked } from 'marked';
 import { exec } from 'child_process';
-import { escapeHtml } from '../src/js/modules/sharedUtils.js';
+import { escapeHtml } from '../src/js/modules/core/sharedUtils.js';
 
 const execAsync = util.promisify(exec);
 

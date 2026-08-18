@@ -1,10 +1,12 @@
 import { App } from './app.js';
-import { Camera } from './modules/camera.js';
-import { Player } from './modules/player.js';
-import { Input } from './modules/input.js';
-import { LayeredInput } from './modules/layeredInputs.js';
-import { Interaction } from './modules/interaction.js';
-import { GameBridge } from './modules/gameBridge.js';
+import { Engine } from './modules/core/engineContext.js';
+import { Router } from './modules/core/router.js';
+import { Camera } from './modules/game/camera.js';
+import { Player } from './modules/game/player.js';
+import { Input } from './modules/input/input.js';
+import { LayeredInput } from './modules/core/layeredInputs.js';
+import { Interaction } from './modules/game/interaction.js';
+import { GameBridge } from './modules/game/gameBridge.js';
 
 let player;
 
@@ -15,14 +17,14 @@ let player;
 function gameInit() {
 	const startX = App.pendingStartPos ? App.pendingStartPos.x : 10;
 	const startY = App.pendingStartPos ? App.pendingStartPos.y : 10;
-	const startVec = App.LJS.vec2(startX, startY);
+	const startVec = Engine.LJS.vec2(startX, startY);
 
 	// LittleJS configuration
-	App.LJS.setEnablePhysicsSolver(false);
-	App.LJS.setGamepadDirectionEmulateStick(true);
-	App.LJS.setInputWASDEmulateDirection(true);
+	Engine.LJS.setEnablePhysicsSolver(false);
+	Engine.LJS.setGamepadDirectionEmulateStick(true);
+	Engine.LJS.setInputWASDEmulateDirection(true);
 
-	App.LJS.setCameraPos(startVec);
+	Engine.LJS.setCameraPos(startVec);
 	player = new Player(startVec);
 
 	// Register game-level implementations with GameBridge so the rest of the app can delegate game-specific behavior without creating circular imports.
@@ -32,8 +34,8 @@ function gameInit() {
 				if (!player) {
 					return;
 				}
-				player.pos = App.LJS.vec2(pos.x, pos.y);
-				App.LJS.setCameraPos(player.pos);
+				player.pos = Engine.LJS.vec2(pos.x, pos.y);
+				Engine.LJS.setCameraPos(player.pos);
 				if (typeof player.setState === 'function') {
 					player.setState('idle');
 				}
@@ -58,7 +60,7 @@ function gameInit() {
 				return Promise.resolve();
 			},
 		},
-		App.isLocal
+		import.meta.env.DEV
 	);
 }
 
@@ -67,7 +69,7 @@ function gameInit() {
  * Called each frame by LittleJS engine.
  */
 function gameUpdate() {
-	if (!document.hasFocus() || App.mode !== 'game') {
+	if (!document.hasFocus() || Router.currentMode !== 'game') {
 		return;
 	}
 }
@@ -83,8 +85,8 @@ function gameUpdatePost() {
 		App.handleInput();
 	}
 
-	App.LJS.setPaused(App.mode !== 'game');
-	App.LJS.setInputPreventDefault(LayeredInput.isActive(LayeredInput.LAYER_GAME));
+	Engine.LJS.setPaused(Router.currentMode !== 'game');
+	Engine.LJS.setInputPreventDefault(LayeredInput.isActive(LayeredInput.LAYER_GAME));
 
 	if (!player) {
 		return;
@@ -104,18 +106,18 @@ function gameUpdatePost() {
  * Called each frame by LittleJS engine.
  */
 function gameRender() {
-	if (App.mode === 'text') {
+	if (Router.currentMode === 'text') {
 		return;
 	}
 
 	// HACK: Background color
-	App.LJS.drawRect(
-		App.LJS.vec2(100, 0),
-		App.LJS.vec2(1000, 200),
-		new App.LJS.Color(0.2, 0.2, 0.3)
+	Engine.LJS.drawRect(
+		Engine.LJS.vec2(100, 0),
+		Engine.LJS.vec2(1000, 200),
+		new Engine.LJS.Color(0.2, 0.2, 0.3)
 	);
 
-	if (App.mode !== 'game') {
+	if (Router.currentMode !== 'game') {
 		return;
 	}
 
@@ -127,7 +129,7 @@ function gameRender() {
  * Called each frame by LittleJS engine after `gameRender`.
  */
 function gameRenderPost() {
-	if (App.mode === 'text' || App.isPaused) {
+	if (Router.currentMode === 'text' || App.isPaused) {
 		return;
 	}
 	// These are not the renders you are looking for.
@@ -143,7 +145,7 @@ function initLittleJS() {
 		return;
 	}
 
-	App.LJS.engineInit(
+	Engine.LJS.engineInit(
 		gameInit,
 		gameUpdate,
 		gameUpdatePost,
@@ -158,7 +160,7 @@ function initLittleJS() {
 /* EXECUTE INITIALIZATION */
 
 // Prevent LittleJS from logging its version in production.
-if (App.isLocal) {
+if (import.meta.env.DEV) {
 	initLittleJS();
 } else {
 	const originalLog = console.log;

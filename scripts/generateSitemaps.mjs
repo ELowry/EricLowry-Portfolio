@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Log } from './logger.mjs';
 import { fileURLToPath } from 'url';
-import { ContentTree } from '../src/js/modules/contentTree.js';
+import { ContentTree } from '../src/js/modules/content/contentTree.js';
 
 // SET DOMAIN NAME
 const BASE_URL = 'https://eric-lowry.com';
@@ -82,7 +82,7 @@ const llmLinks = {}; // Keyed by category title
 
 /**
  * Traverses the content tree to collect sitemap URLs and categorized LLM links.
- * @param {import('../src/js/modules/contentTree.js').ContentNode} node - The current node being processed.
+ * @param {import('../src/js/modules/content/contentTree.js').ContentNode} node - The current node being processed.
  * @param {string[]} pathSegments - The accumulated URL path segments.
  * @param {string} currentCategory - The active category for the current branch.
  */

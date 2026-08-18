@@ -3,7 +3,7 @@ import path from 'path';
 import { Log } from './logger.mjs';
 import { marked } from 'marked';
 import { createCanvas } from 'canvas';
-import { resolveDotPath, escapeHtml } from '../src/js/modules/sharedUtils.js';
+import { resolveDotPath, escapeHtml } from '../src/js/modules/core/sharedUtils.js';
 
 const CONTENT_DIR = 'public/content';
 const OUTPUT_FILE = 'public/content/blog-index.json';

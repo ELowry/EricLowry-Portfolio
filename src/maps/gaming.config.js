@@ -2,6 +2,7 @@
  * Map configuration for Gaming.
  * @type {MapData}
  */
+// fallow-ignore-next-line unused-export
 export default {
 	startPos: { x: 10, y: 10 },
 	positions: {
