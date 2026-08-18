@@ -156,8 +156,8 @@ class RouterController {
 				}
 			} else {
 				const modalContent = document.getElementById('game-modal-content');
-				if (modalContent) {
-					modalContent.scrollTop = 0;
+				if (modalContent && modalContent.parentElement) {
+					modalContent.parentElement.scrollTop = 0;
 				}
 			}
 		}
