@@ -237,6 +237,7 @@ export class TextRenderer {
 	 * Fetches the blog index JSON, generates HTML, and renders the list of articles.
 	 * @param {boolean} [suppressLoading=false] - If true, skips showing the loading overlay.
 	 * @param {AbortSignal} [abortSignal] - Optional signal to abort the fetch process.
+	 * @returns {Promise<void>} Resolves when the blog index has been rendered.
 	 * @private
 	 */
 	async #renderBlogIndex(suppressLoading = false, abortSignal) {
@@ -250,68 +251,59 @@ export class TextRenderer {
 			const currentLang = Lang.langCode || 'en_US';
 
 			const renderListItems = (entries) => {
-				let html = '';
-				entries.forEach((entry) => {
-					const escapedTitle = escapeHtml(entry.title);
-					html += `<li><a href="/blog/${entry.date}" data-route="blog/${entry.date}"><span class="blog-list-title" style="--content-length: ${entry.title.length};">${escapedTitle}</span><time class="blog-list-date" datetime="${entry.date}">${entry.date}</time></a></li>`;
-				});
-				return html;
+				return entries
+					.map((entry) => {
+						const escapedTitle = escapeHtml(entry.title);
+						return `
+						<li>
+							<a href="/blog/${entry.date}" data-route="blog/${entry.date}">
+								<span class="blog-list-title" style="--content-length: ${entry.title.length};">${escapedTitle}</span>
+								<time class="blog-list-date" datetime="${entry.date}">${entry.date}</time>
+							</a>
+						</li>`;
+					})
+					.join('');
 			};
+
+			const enEntries = blogEntries.filter((e) => e.language === 'en_US');
+			const localEntries =
+				currentLang !== 'en_US'
+					? blogEntries.filter((e) => e.language === currentLang)
+					: [];
 
 			let finalHtml = '<div class="blog-index">';
 
-			if (currentLang === 'en_US') {
-				const enEntries = blogEntries.filter((e) => e.language === 'en_US');
-				if (enEntries.length > 0) {
-					finalHtml += '<ul class="blog-list">';
-					finalHtml += renderListItems(enEntries);
-					finalHtml += '</ul>';
-				} else {
-					const noArticlesText = Lang.getHtmlString(
-						'blog.empty',
-						null,
-						'No articles found.'
-					);
-					finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
-				}
+			if (enEntries.length === 0 && localEntries.length === 0) {
+				const noArticlesText = Lang.getHtmlString('blog.empty', null, 'No articles found.');
+				finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
 			} else {
-				const localEntries = blogEntries.filter((e) => e.language === currentLang);
-				const enEntries = blogEntries.filter((e) => e.language === 'en_US');
-
-				if (localEntries.length > 0) {
-					finalHtml += '<ul class="blog-list">';
-					finalHtml += renderListItems(localEntries);
-					finalHtml += '</ul>';
-				}
-
-				if (enEntries.length > 0) {
-					let separatorText;
+				if (currentLang === 'en_US') {
+					finalHtml += `<ul class="blog-list">${renderListItems(enEntries)}</ul>`;
+				} else {
 					if (localEntries.length > 0) {
-						separatorText = Lang.getHtmlString(
-							'blog.englishArticles',
-							null,
-							'Articles in English'
-						);
-					} else {
-						separatorText = Lang.getHtmlString(
-							'blog.englishArticlesOnly',
-							null,
-							'Articles only available in English'
-						);
+						finalHtml += `<ul class="blog-list">${renderListItems(localEntries)}</ul>`;
 					}
-					finalHtml += `<hr class="blog-separator" /><h3 class="blog-separator-title">${separatorText}</h3>`;
-					finalHtml += '<ul class="blog-list">';
-					finalHtml += renderListItems(enEntries);
-					finalHtml += '</ul>';
-				}
 
-				if (localEntries.length === 0 && enEntries.length === 0) {
-					const noArticlesText = Lang.getHtmlString(
-						'blog.empty',
-						null,
-						'No articles found.'
-					);
-					finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
+					if (enEntries.length > 0) {
+						const hasLocal = localEntries.length > 0;
+						const separatorKey = hasLocal
+							? 'blog.englishArticles'
+							: 'blog.englishArticlesOnly';
+						const separatorFallback = hasLocal
+							? 'Articles in English'
+							: 'Articles only available in English';
+						const separatorText = Lang.getHtmlString(
+							separatorKey,
+							null,
+							separatorFallback
+						);
+
+						finalHtml += `
+							${hasLocal ? '<hr class="blog-separator" />' : ''}
+							<h3 class="blog-separator-title">${separatorText}</h3>
+							<ul class="blog-list">${renderListItems(enEntries)}</ul>
+						`;
+					}
 				}
 			}
 

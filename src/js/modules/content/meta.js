@@ -36,24 +36,35 @@ class MetaController {
 	}
 
 	/**
+	 * Generates the base metadata structure with default values.
+	 * @returns {Object} The default metadata object.
+	 * @private
+	 */
+	#getDefaultMeta() {
+		return {
+			pageTitle: '',
+			pageDescription: null,
+			pageImage: '',
+			previewImage: '',
+			pageImageAlt: '',
+			imgWidth: '1200',
+			imgHeight: '630',
+			markdownUrl: '',
+		};
+	}
+
+	/**
 	 * Retrieves metadata for blog routes (both single blog post and blog index).
 	 * @param {string} path - The blog route path.
 	 * @returns {Promise<Object>} An object containing the formatted metadata.
 	 * @private
 	 */
 	async #getBlogMeta(path) {
-		let pageTitle = '';
-		let pageDescription = null;
-		let pageImage = '';
-		let previewImage = '';
-		let pageImageAlt = '';
-		let imgWidth = '1200';
-		let imgHeight = '630';
-		let markdownUrl = '';
+		const meta = this.#getDefaultMeta();
 
 		if (path === 'blog') {
-			pageTitle = Lang.getString('content.blog.title', null, null);
-			pageDescription = Lang.getString('content.blog.description', null, null);
+			meta.pageTitle = Lang.getString('content.blog.title', null, null);
+			meta.pageDescription = Lang.getString('content.blog.description', null, null);
 		} else if (path.startsWith('blog/')) {
 			const date = path.substring(5);
 			try {
@@ -61,33 +72,24 @@ class MetaController {
 				const entry = blogIndex.find((e) => e.date === date);
 
 				if (entry) {
-					pageTitle = entry.title;
-					pageImageAlt = entry.title;
+					meta.pageTitle = entry.title;
+					meta.pageImageAlt = entry.title;
 					if (entry.description) {
-						pageDescription = entry.description;
+						meta.pageDescription = entry.description;
 					}
 					const datePath = entry.date.replace(/-/g, '');
-					pageImage = `/assets/images/blog/${datePath}/poster.png`;
-					previewImage = pageImage;
+					meta.pageImage = `/assets/images/blog/${datePath}/poster.png`;
+					meta.previewImage = meta.pageImage;
 
 					const lang = entry.language || Lang.langCode || 'en_US';
-					markdownUrl = `/content/${lang}/blog/${date}.md`;
+					meta.markdownUrl = `/content/${lang}/blog/${date}.md`;
 				}
 			} catch (error) {
 				console.error('Failed to get blog entry title:', error);
 			}
 		}
 
-		return {
-			pageTitle,
-			pageDescription,
-			pageImage,
-			previewImage,
-			pageImageAlt,
-			imgWidth,
-			imgHeight,
-			markdownUrl,
-		};
+		return meta;
 	}
 
 	/**
@@ -97,18 +99,11 @@ class MetaController {
 	 * @private
 	 */
 	async #getProjectMeta(path) {
-		let pageTitle = '';
-		let pageDescription = null;
-		let pageImage = '';
-		let previewImage = '';
-		let pageImageAlt = '';
-		let imgWidth = '1200';
-		let imgHeight = '630';
-		let markdownUrl = '';
+		const meta = this.#getDefaultMeta();
 
 		if (path === 'projects') {
-			pageTitle = Lang.getString('content.projects.title', null, 'Projects');
-			pageDescription = Lang.getString('content.projects.description', null, null);
+			meta.pageTitle = Lang.getString('content.projects.title', null, 'Projects');
+			meta.pageDescription = Lang.getString('content.projects.description', null, null);
 		} else if (path.startsWith('projects/')) {
 			const repoName = path.substring(9);
 			try {
@@ -116,36 +111,27 @@ class MetaController {
 				const project = projectIndex.find((p) => p.id === repoName);
 
 				if (project) {
-					pageTitle = project.title;
-					pageImageAlt = project.title;
+					meta.pageTitle = project.title;
+					meta.pageImageAlt = project.title;
 					if (project.description) {
-						pageDescription = project.description;
+						meta.pageDescription = project.description;
 					}
 
-					pageImage = `/assets/images/projects/${project.id}/poster.jpg`;
-					previewImage = pageImage;
+					meta.pageImage = `/assets/images/projects/${project.id}/poster.jpg`;
+					meta.previewImage = meta.pageImage;
 
-					imgWidth = project.ogImageWidth || '1200';
-					imgHeight = project.ogImageHeight || '630';
+					meta.imgWidth = project.ogImageWidth || '1200';
+					meta.imgHeight = project.ogImageHeight || '630';
 
 					const lang = Lang.langCode || 'en_US';
-					markdownUrl = `/content/${lang}/projects/${project.id}.md`;
+					meta.markdownUrl = `/content/${lang}/projects/${project.id}.md`;
 				}
 			} catch (error) {
 				console.error('Failed to get project title:', error);
 			}
 		}
 
-		return {
-			pageTitle,
-			pageDescription,
-			pageImage,
-			previewImage,
-			pageImageAlt,
-			imgWidth,
-			imgHeight,
-			markdownUrl,
-		};
+		return meta;
 	}
 
 	/**
@@ -156,66 +142,51 @@ class MetaController {
 	 * @private
 	 */
 	#getStandardMeta(path, node = null) {
-		let pageTitle = '';
-		let pageDescription = null;
-		let pageImage = '';
-		let previewImage = '';
-		let pageImageAlt = '';
-		let imgWidth = '1200';
-		let imgHeight = '630';
-		let markdownUrl = '';
+		const meta = this.#getDefaultMeta();
 
-		if (path !== '' && path !== 'index.html') {
-			const pathKey = path.replace(/\//g, '.');
-			const titleKey = `content.${pathKey}.title`;
-			const descKey = `content.${pathKey}.description`;
-			const altKey = `content.${pathKey}.imageAlt`;
-
-			const targetNode = node || Content.findNodeByPath(path);
-
-			let effectiveNode = null;
-			if (targetNode) {
-				effectiveNode =
-					targetNode.type === 'content'
-						? targetNode
-						: targetNode.children?.find((child) => child.id === targetNode.id)
-							|| targetNode;
-			}
-
-			pageTitle = Lang.getString(
-				titleKey,
-				null,
-				effectiveNode ? effectiveNode.title : path.split('/').pop()
-			);
-			pageDescription = Lang.getString(descKey, null, null);
-
-			if (effectiveNode && effectiveNode.file) {
-				markdownUrl = `/content/${Lang.langCode || 'en_US'}/${effectiveNode.file}`;
-			}
-
-			if (effectiveNode && effectiveNode.image) {
-				pageImageAlt = Lang.getString(altKey, null, pageTitle);
-				pageImage = `/assets/images/${effectiveNode.image}`;
-
-				const parsedImg = parseImageVariant(effectiveNode.image);
-				previewImage = parsedImg.url;
-				imgWidth = parsedImg.width;
-				imgHeight = parsedImg.height;
-			}
-		} else {
-			markdownUrl = `/content/${Lang.langCode || 'en_US'}/index.md`;
+		if (path === '' || path === 'index.html') {
+			meta.markdownUrl = `/content/${Lang.langCode || 'en_US'}/index.md`;
+			return meta;
 		}
 
-		return {
-			pageTitle,
-			pageDescription,
-			pageImage,
-			previewImage,
-			pageImageAlt,
-			imgWidth,
-			imgHeight,
-			markdownUrl,
-		};
+		const pathKey = path.replace(/\//g, '.');
+		const titleKey = `content.${pathKey}.title`;
+		const descKey = `content.${pathKey}.description`;
+		const altKey = `content.${pathKey}.imageAlt`;
+
+		const targetNode = node || Content.findNodeByPath(path);
+
+		let effectiveNode = null;
+		if (targetNode) {
+			effectiveNode =
+				targetNode.type === 'content'
+					? targetNode
+					: targetNode.children?.find((child) => child.id === targetNode.id)
+						|| targetNode;
+		}
+
+		meta.pageTitle = Lang.getString(
+			titleKey,
+			null,
+			effectiveNode ? effectiveNode.title : path.split('/').pop()
+		);
+		meta.pageDescription = Lang.getString(descKey, null, null);
+
+		if (effectiveNode && effectiveNode.file) {
+			meta.markdownUrl = `/content/${Lang.langCode || 'en_US'}/${effectiveNode.file}`;
+		}
+
+		if (effectiveNode && effectiveNode.image) {
+			meta.pageImageAlt = Lang.getString(altKey, null, meta.pageTitle);
+			meta.pageImage = `/assets/images/${effectiveNode.image}`;
+
+			const parsedImg = parseImageVariant(effectiveNode.image);
+			meta.previewImage = parsedImg.url;
+			meta.imgWidth = parsedImg.width;
+			meta.imgHeight = parsedImg.height;
+		}
+
+		return meta;
 	}
 
 	/**

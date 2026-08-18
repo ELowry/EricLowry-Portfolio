@@ -147,42 +147,76 @@ class InputPromptsController {
 
 		promptElements.forEach((prompt) => {
 			const action = prompt.dataset.prompt;
-			const forcedType = prompt.dataset.inputForce;
-			const mapping = InputPromptsController.PROMPT_MAPPING[action];
+			const typeToUse = prompt.dataset.inputForce || this.currentType;
 
-			if (!mapping) {
-				return;
-			}
-
-			const typeToUse = forcedType || this.currentType;
-
-			let content = mapping[typeToUse];
-
-			if (typeToUse === 'gamepad' && typeof content === 'object' && content !== null) {
-				content = content[this.gamepadType] || content['default'];
-			}
+			let content = this.#resolveBaseContent(action, typeToUse);
 
 			if (content === null) {
 				prompt.style.display = 'none';
 				return;
-			} else {
-				prompt.style.display = '';
 			}
 
-			if (typeToUse === 'mnk' && content.length === 1) {
-				const mappedChar = this.layoutMap.get(content);
-				if (mappedChar) {
-					content = mappedChar;
-				}
+			prompt.style.display = '';
+
+			if (typeToUse === 'mnk') {
+				content = this.#applyKeyboardLayout(content);
 			}
 
-			// Check if the string looks like a key or just try to translate it
-			if (content.includes('.')) {
-				content = Lang.getHtmlString(content, null, content);
-			}
+			content = this.#applyTranslation(content);
 
 			prompt.innerHTML = content;
 		});
+	}
+
+	/**
+	 * Resolves the base prompt content for a given action and input type.
+	 * @param {string} action - The action identifier (e.g., 'interact').
+	 * @param {string} inputType - The input type to resolve for ('mnk', 'gamepad', or 'touch').
+	 * @returns {string|null} The resolved content string, or null if hidden.
+	 * @private
+	 */
+	#resolveBaseContent(action, inputType) {
+		const mapping = InputPromptsController.PROMPT_MAPPING[action];
+		if (!mapping) {
+			return null;
+		}
+
+		let content = mapping[inputType];
+
+		if (inputType === 'gamepad' && typeof content === 'object' && content !== null) {
+			content = content[this.gamepadType] || content['default'];
+		}
+
+		return content;
+	}
+
+	/**
+	 * Applies physical keyboard layout mappings for single-character MNK prompts.
+	 * @param {string} content - The raw prompt content.
+	 * @returns {string} The localized prompt content.
+	 * @private
+	 */
+	#applyKeyboardLayout(content) {
+		if (content.length === 1) {
+			const mappedChar = this.layoutMap.get(content);
+			if (mappedChar) {
+				return mappedChar;
+			}
+		}
+		return content;
+	}
+
+	/**
+	 * Translates prompt content if it contains a translation key format.
+	 * @param {string} content - The prompt content.
+	 * @returns {string} The translated or original content.
+	 * @private
+	 */
+	#applyTranslation(content) {
+		if (content.includes('.')) {
+			return Lang.getHtmlString(content, null, content);
+		}
+		return content;
 	}
 
 	/**

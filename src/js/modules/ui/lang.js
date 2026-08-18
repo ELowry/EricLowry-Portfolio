@@ -150,19 +150,32 @@ class LangController {
 	}
 
 	/**
-	 * Performs a translation pass on the specified document branch.
-	 * @param {HTMLElement|Document} [root=document] - The root element to translate from.
-	 * @param {Object} [data] - Optional language data to use (defaults to current data).
+	 * Gathers elements matching a specific translation class, including the root if applicable.
+	 * @param {HTMLElement|Document} root - The root element to search within.
+	 * @param {string} className - The class name to query for.
+	 * @returns {Array<HTMLElement>} An array of matching elements.
+	 * @private
 	 */
-	performTranslation(root = document, data = this.data) {
-		if (!data) {
-			return;
-		}
+	#getTranslationElements(root, className) {
+		const objs = root.querySelectorAll
+			? Array.from(root.querySelectorAll(`.${className}`))
+			: [];
+		return root.classList?.contains(className) ? [root, ...objs] : objs;
+	}
 
-		this.translateMeta(data);
-		this.translateHtml(root, data);
-		this.translateAttr(root, data);
-		this.applyRestrictions(root);
+	/**
+	 * Replaces placeholders in a translated string based on original raw values.
+	 * @param {string} target - The translated string.
+	 * @param {string} rawValue - The original raw string from the DOM containing placeholders.
+	 * @returns {string} The formatted string with placeholders injected.
+	 * @private
+	 */
+	#injectPlaceholders(target, rawValue) {
+		const placeholders = rawValue.match(/\u200B([^\u200B]+)\u200B/g);
+		if (placeholders && placeholders.length > 0) {
+			return this.formatString(target, placeholders);
+		}
+		return target;
 	}
 
 	/**
@@ -272,6 +285,22 @@ class LangController {
 	}
 
 	/**
+	 * Performs a translation pass on the specified document branch.
+	 * @param {HTMLElement|Document} [root=document] - The root element to translate from.
+	 * @param {Object} [data] - Optional language data to use (defaults to current data).
+	 */
+	performTranslation(root = document, data = this.data) {
+		if (!data) {
+			return;
+		}
+
+		this.translateMeta(data);
+		this.translateHtml(root, data);
+		this.translateAttr(root, data);
+		this.applyRestrictions(root);
+	}
+
+	/**
 	 * Formats a string by replacing indexed placeholders like {0}, {1}.
 	 * @param {string} str - The target string containing placeholders.
 	 * @param {string[]} args - Values to inject into placeholders.
@@ -339,15 +368,16 @@ class LangController {
 	 * @param {Object} data - The language data object.
 	 */
 	translateHtml(root, data) {
-		const objs = root.querySelectorAll ? Array.from(root.querySelectorAll('.lang')) : [];
-		const elements = root.classList?.contains('lang') ? [root, ...objs] : objs;
+		const elements = this.#getTranslationElements(root, 'lang');
 
 		for (let i = 0; i < elements.length; i++) {
 			const el = elements[i];
 			const path = el.dataset.lang;
+
 			if (!path) {
 				continue;
 			}
+
 			const target = this.getString(path, data);
 
 			if (target === 'notFound') {
@@ -355,13 +385,8 @@ class LangController {
 			} else {
 				el.classList.remove('langHide');
 
-				const placeholders = el.innerHTML.match(/\u200B([^\u200B]+)\u200B/g);
 				const isPre = el.nodeName.toLowerCase() === 'pre';
-
-				let translated = target;
-				if (placeholders && placeholders.length > 0) {
-					translated = this.formatString(target, placeholders);
-				}
+				const translated = this.#injectPlaceholders(target, el.innerHTML);
 
 				el.innerHTML = this.#formatForHtml(translated, isPre);
 			}
@@ -374,12 +399,12 @@ class LangController {
 	 * @param {Object} data - The language data object.
 	 */
 	translateAttr(root, data) {
-		const objs = root.querySelectorAll ? Array.from(root.querySelectorAll('.langAttr')) : [];
-		const elements = root.classList?.contains('langAttr') ? [root, ...objs] : objs;
+		const elements = this.#getTranslationElements(root, 'langAttr');
 
 		for (let i = 0; i < elements.length; i++) {
 			const el = elements[i];
-			const attrNames = el.dataset.langattr.split(' ');
+			const attrNames = el.dataset?.langattr.split(' ');
+
 			if (!attrNames || attrNames.length === 0) {
 				continue;
 			}
@@ -405,13 +430,9 @@ class LangController {
 					el.classList.remove('langHide');
 
 					const rawValue = el.getAttribute(attrName) || '';
-					const placeholders = rawValue.match(/\u200B([^\u200B]+)\u200B/g);
+					const translated = this.#injectPlaceholders(target, rawValue);
 
-					if (placeholders && placeholders.length > 0) {
-						el.setAttribute(attrName, this.formatString(target, placeholders));
-					} else {
-						el.setAttribute(attrName, target);
-					}
+					el.setAttribute(attrName, translated);
 				}
 			}
 		}
