@@ -1,5 +1,4 @@
 import { Events } from '../core/events.js';
-import { Router } from '../core/router.js';
 import { Lang } from '../ui/lang.js';
 import { Blog } from './blog.js';
 import { Projects } from './projects.js';
@@ -37,39 +36,12 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the document metadata based on the current route.
-	 * @param {Object} payload - The route:changed event payload.
-	 * @param {string} payload.path - The current route path.
-	 * @param {Object|null} payload.node - The current route's node.
-	 * @returns {Promise<void>}
+	 * Retrieves metadata for blog routes (both single blog post and blog index).
+	 * @param {string} path - The blog route path.
+	 * @returns {Promise<Object>} An object containing the formatted metadata.
+	 * @private
 	 */
-	async update({ path, node }) {
-		const metaData = await this.getMetadataForPath(path, node);
-		if (!metaData) {
-			return;
-		}
-
-		this.#updateTitle(metaData.pageTitle);
-		this.#updateDescription(metaData.pageDescription);
-		this.#updateCanonical();
-		this.#updateJsonLd(metaData.pageTitle, metaData.pageDescription, metaData.markdownUrl);
-		this.#updateImage(
-			metaData.pageImage,
-			metaData.pageImageAlt,
-			metaData.imgWidth,
-			metaData.imgHeight
-		);
-		this.#updateLanguageTags();
-	}
-
-	/**
-	 * Retrieves formatted metadata for a given content path.
-	 *
-	 * @param {string} path - The route path to look up.
-	 * @param {Object|null} [node=null] - Optional node to skip the tree lookup if already known.
-	 * @returns {Promise<Object>} An object containing the page title, description, and image data.
-	 */
-	async getMetadataForPath(path, node = null) {
+	async #getBlogMeta(path) {
 		let pageTitle = '';
 		let pageDescription = null;
 		let pageImage = '';
@@ -79,7 +51,10 @@ class MetaController {
 		let imgHeight = '630';
 		let markdownUrl = '';
 
-		if (Router.isBlogRoute && path.startsWith('blog/')) {
+		if (path === 'blog') {
+			pageTitle = Lang.getString('content.blog.title', null, null);
+			pageDescription = Lang.getString('content.blog.description', null, null);
+		} else if (path.startsWith('blog/')) {
 			const date = path.substring(5);
 			try {
 				const blogIndex = await Blog.getIndex();
@@ -101,10 +76,40 @@ class MetaController {
 			} catch (error) {
 				console.error('Failed to get blog entry title:', error);
 			}
-		} else if (path === 'blog') {
-			pageTitle = Lang.getString('content.blog.title', null, null);
-			pageDescription = Lang.getString('content.blog.description', null, null);
-		} else if (Router.isProjectRoute && path.startsWith('projects/')) {
+		}
+
+		return {
+			pageTitle,
+			pageDescription,
+			pageImage,
+			previewImage,
+			pageImageAlt,
+			imgWidth,
+			imgHeight,
+			markdownUrl,
+		};
+	}
+
+	/**
+	 * Retrieves metadata for project routes (both single project and project index).
+	 * @param {string} path - The project route path.
+	 * @returns {Promise<Object>} An object containing the formatted metadata.
+	 * @private
+	 */
+	async #getProjectMeta(path) {
+		let pageTitle = '';
+		let pageDescription = null;
+		let pageImage = '';
+		let previewImage = '';
+		let pageImageAlt = '';
+		let imgWidth = '1200';
+		let imgHeight = '630';
+		let markdownUrl = '';
+
+		if (path === 'projects') {
+			pageTitle = Lang.getString('content.projects.title', null, 'Projects');
+			pageDescription = Lang.getString('content.projects.description', null, null);
+		} else if (path.startsWith('projects/')) {
 			const repoName = path.substring(9);
 			try {
 				const projectIndex = await Projects.getIndex();
@@ -129,16 +134,44 @@ class MetaController {
 			} catch (error) {
 				console.error('Failed to get project title:', error);
 			}
-		} else if (path === 'projects') {
-			pageTitle = Lang.getString('content.projects.title', null, 'Projects');
-			pageDescription = Lang.getString('content.projects.description', null, null);
-		} else if (path !== '' && path !== 'index.html') {
+		}
+
+		return {
+			pageTitle,
+			pageDescription,
+			pageImage,
+			previewImage,
+			pageImageAlt,
+			imgWidth,
+			imgHeight,
+			markdownUrl,
+		};
+	}
+
+	/**
+	 * Retrieves metadata for content tree nodes or standard pages.
+	 * @param {string} path - The content path.
+	 * @param {Object|null} [node=null] - Optional pre-resolved content node.
+	 * @returns {Object} An object containing the formatted metadata.
+	 * @private
+	 */
+	#getStandardMeta(path, node = null) {
+		let pageTitle = '';
+		let pageDescription = null;
+		let pageImage = '';
+		let previewImage = '';
+		let pageImageAlt = '';
+		let imgWidth = '1200';
+		let imgHeight = '630';
+		let markdownUrl = '';
+
+		if (path !== '' && path !== 'index.html') {
 			const pathKey = path.replace(/\//g, '.');
 			const titleKey = `content.${pathKey}.title`;
 			const descKey = `content.${pathKey}.description`;
 			const altKey = `content.${pathKey}.imageAlt`;
 
-			let targetNode = node || Content.findNodeByPath(path);
+			const targetNode = node || Content.findNodeByPath(path);
 
 			let effectiveNode = null;
 			if (targetNode) {
@@ -422,7 +455,7 @@ class MetaController {
 	 */
 	#updateLanguageTags() {
 		const currentLang = Lang.langCode || 'en_US';
-		const shortLang = currentLang.split('_')[0].toLowerCase(); // e.g., 'en' or 'fr'
+		const shortLang = currentLang.split('_')[0].toLowerCase();
 
 		document.documentElement.setAttribute('lang', shortLang);
 
@@ -435,6 +468,51 @@ class MetaController {
 		if (ogLocale) {
 			ogLocale.setAttribute('content', currentLang);
 		}
+	}
+
+	/**
+	 * Updates the document metadata based on the current route.
+	 * @param {Object} payload - The route:changed event payload.
+	 * @param {string} payload.path - The current route path.
+	 * @param {Object|null} payload.node - The current route's node.
+	 * @returns {Promise<void>}
+	 */
+	async update({ path, node }) {
+		const metaData = await this.getMetadataForPath(path, node);
+		if (!metaData) {
+			return;
+		}
+
+		this.#updateTitle(metaData.pageTitle);
+		this.#updateDescription(metaData.pageDescription);
+		this.#updateCanonical();
+		this.#updateJsonLd(metaData.pageTitle, metaData.pageDescription, metaData.markdownUrl);
+		this.#updateImage(
+			metaData.pageImage,
+			metaData.pageImageAlt,
+			metaData.imgWidth,
+			metaData.imgHeight
+		);
+		this.#updateLanguageTags();
+	}
+
+	/**
+	 * Retrieves formatted metadata for a given content path.
+	 *
+	 * @param {string} path - The route path to look up.
+	 * @param {Object|null} [node=null] - Optional node to skip the tree lookup if already known.
+	 * @returns {Promise<Object>} An object containing the page title, description, and image data.
+	 */
+	async getMetadataForPath(path, node = null) {
+		if (path === 'blog' || path.startsWith('blog/')) {
+			return this.#getBlogMeta(path);
+		}
+
+		if (path === 'projects' || path.startsWith('projects/')) {
+			return this.#getProjectMeta(path);
+		}
+
+		return this.#getStandardMeta(path, node);
 	}
 }
 

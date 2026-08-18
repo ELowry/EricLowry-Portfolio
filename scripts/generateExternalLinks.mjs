@@ -245,6 +245,128 @@ async function generateExternalLinks() {
 }
 
 /**
+ * Fetches package metadata from the NPM registry.
+ * @param {string} packageName - The NPM package name.
+ * @param {Object} headers - HTTP request headers.
+ * @returns {Promise<{notModified?: boolean, title?: string, description?: string, siteName?: string, imageAltRaw?: string, imageNodes?: string[], responseEtag?: string|null, responseLastModified?: string|null}>} The package metadata.
+ */
+async function fetchNpmData(packageName, headers) {
+	const response = await fetch(`https://registry.npmjs.org/${packageName}`, {
+		headers,
+		signal: AbortSignal.timeout(10000),
+	});
+
+	if (response.status === 304) {
+		return { notModified: true };
+	}
+	if (!response.ok) {
+		throw new Error(`NPM API HTTP ${response.status}`);
+	}
+
+	const pkgData = await response.json();
+	return {
+		title: pkgData.name,
+		description: pkgData.description,
+		siteName: 'NPM',
+		imageAltRaw: `NPM Package: ${pkgData.name}`,
+		imageNodes: [],
+		responseEtag: response.headers.get('etag'),
+		responseLastModified: response.headers.get('last-modified'),
+	};
+}
+
+/**
+ * Fetches and parses OpenGraph metadata from an HTML webpage.
+ * @param {string} url - The webpage URL.
+ * @param {Object} headers - HTTP request headers.
+ * @returns {Promise<{notModified?: boolean, title?: string|null, description?: string|null, siteName?: string|null, imageAltRaw?: string|null, imageNodes?: string[], responseEtag?: string|null, responseLastModified?: string|null}>} The parsed webpage metadata.
+ */
+async function fetchHtmlData(url, headers) {
+	const response = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
+
+	if (response.status === 304) {
+		return { notModified: true };
+	}
+	if (!response.ok) {
+		throw new Error(`HTTP ${response.status}`);
+	}
+
+	const html = await response.text();
+	const extracted = extractOgData(html);
+
+	return {
+		title: extracted.title,
+		description: extracted.description,
+		siteName: extracted.siteName,
+		imageAltRaw: extracted.imageAltRaw,
+		imageNodes: extracted.imageNodes,
+		responseEtag: response.headers.get('etag'),
+		responseLastModified: response.headers.get('last-modified'),
+	};
+}
+
+/**
+ * Downloads candidate images and converts the first successful one via ImageMagick PowerShell script.
+ * @param {string[]} imageNodes - Array of image node URLs or relative paths.
+ * @param {string} url - The base page URL for resolving relative links.
+ * @param {Object} headers - HTTP request headers.
+ * @returns {Promise<string|null>} The relative local image path if successful, otherwise null.
+ */
+async function processOgImage(imageNodes, url, headers) {
+	if (!imageNodes || imageNodes.length === 0) {
+		return null;
+	}
+
+	for (const node of imageNodes) {
+		if (!node) {
+			continue;
+		}
+		const imgUrl = new URL(node, url).toString();
+
+		try {
+			const imgResponse = await fetch(imgUrl, {
+				headers,
+				signal: AbortSignal.timeout(10000),
+			});
+			if (!imgResponse.ok) {
+				continue;
+			}
+
+			const arrayBuffer = await imgResponse.arrayBuffer();
+			const buffer = Buffer.from(arrayBuffer);
+
+			const tempHash = crypto.randomBytes(8).toString('hex');
+			const tempInputPath = path.join(IMAGE_DIR, `temp_og_${tempHash}.tmp`);
+			try {
+				fs.writeFileSync(tempInputPath, buffer);
+
+				const imgHash = crypto.createHash('md5').update(imgUrl).digest('hex');
+				const filename = `${imgHash}.jpg`;
+				const finalOutputPath = path.join(IMAGE_DIR, filename);
+
+				const psScript = path.join(process.cwd(), 'scripts', 'process-og-images.ps1');
+
+				await execAsync(
+					`powershell -ExecutionPolicy Bypass -File "${psScript}" -InputFile "${tempInputPath}" -OutputFile "${finalOutputPath}"`
+				);
+
+				return `/assets/images/external-links/${filename}`;
+			} catch (imgError) {
+				Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
+			} finally {
+				if (fs.existsSync(tempInputPath)) {
+					fs.unlinkSync(tempInputPath);
+				}
+			}
+		} catch (imgError) {
+			Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
+		}
+	}
+
+	return null;
+}
+
+/**
  * Processes a single URL to extract and cache OG data.
  * @param {string} url - The URL to process.
  * @param {Object} linkCache - The global cache object.
@@ -255,72 +377,28 @@ async function processUrl(url, linkCache) {
 	let status = 'failed';
 
 	try {
-		let title, description, siteName, imageAltRaw, responseEtag, responseLastModified;
-		let imageNodes = [];
-
-		const headers = {
-			'User-Agent':
-				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-			Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-			'Accept-Language': 'en-US,en;q=0.5',
-		};
-
-		if (cached?.etag) {
-			headers['If-None-Match'] = cached.etag;
-		}
-		if (cached?.lastModified) {
-			headers['If-Modified-Since'] = cached.lastModified;
-		}
-
+		const headers = buildHeaders(cached);
 		const parsedUrl = new URL(url);
+		const isNpm =
+			parsedUrl.hostname.includes('npmjs.com') && parsedUrl.pathname.startsWith('/package/');
 
-		if (
-			parsedUrl.hostname.includes('npmjs.com')
-			&& parsedUrl.pathname.startsWith('/package/')
-		) {
-			const packageName = parsedUrl.pathname.split('/')[2];
-			const response = await fetch(`https://registry.npmjs.org/${packageName}`, {
-				headers,
-				signal: AbortSignal.timeout(10000),
-			});
+		const pageData = isNpm
+			? await fetchNpmData(parsedUrl.pathname.split('/')[2], headers)
+			: await fetchHtmlData(url, headers);
 
-			if (response.status === 304) {
-				return { status: 'skipped' };
-			}
-			if (!response.ok) {
-				throw new Error(`NPM API HTTP ${response.status}`);
-			}
-
-			const pkgData = await response.json();
-			title = pkgData.name;
-			description = pkgData.description;
-			siteName = 'NPM';
-			imageAltRaw = `NPM Package: ${pkgData.name}`;
-
-			responseEtag = response.headers.get('etag');
-			responseLastModified = response.headers.get('last-modified');
-		} else {
-			const response = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
-
-			if (response.status === 304) {
-				return { status: 'skipped' };
-			}
-			if (!response.ok) {
-				throw new Error(`HTTP ${response.status}`);
-			}
-
-			const html = await response.text();
-			const extracted = extractOgData(html);
-
-			title = extracted.title;
-			description = extracted.description;
-			siteName = extracted.siteName;
-			imageAltRaw = extracted.imageAltRaw;
-			imageNodes = extracted.imageNodes;
-
-			responseEtag = response.headers.get('etag');
-			responseLastModified = response.headers.get('last-modified');
+		if (pageData.notModified) {
+			return { status: 'skipped' };
 		}
+
+		let {
+			title,
+			description,
+			siteName,
+			imageAltRaw,
+			imageNodes = [],
+			responseEtag,
+			responseLastModified,
+		} = pageData;
 
 		if (siteName === 'GitHub' && title?.includes(': ')) {
 			const parts = title.split(': ');
@@ -330,79 +408,28 @@ async function processUrl(url, linkCache) {
 		}
 
 		const imageUrlsStr = imageNodes.map((imgUrl) => new URL(imgUrl, url).toString()).join('|');
-
-		let finalImageAlt = imageAltRaw;
-		if (!finalImageAlt) {
-			finalImageAlt = siteName
+		const finalImageAlt =
+			imageAltRaw
+			|| (siteName
 				? `Preview image for ${siteName}`
-				: `Preview image for ${title || 'external link'}`;
-		}
+				: `Preview image for ${title || 'external link'}`);
 
-		const dataToHash = `${title || ''}|${description || ''}|${imageUrlsStr}|${finalImageAlt}|${siteName || ''}`;
-		const currentHash = crypto.createHash('md5').update(dataToHash).digest('hex');
+		const currentHash = checkCacheValidity(
+			cached,
+			{ title, description, siteName },
+			imageUrlsStr,
+			finalImageAlt
+		);
 
-		if (cached && cached.hash === currentHash) {
+		if (currentHash === true) {
 			cached.etag = responseEtag;
 			cached.lastModified = responseLastModified;
 			return { status: 'skipped' };
 		}
 
 		Log.info(`Processing metadata and image for: ${url}`);
-		let localImagePath = cached?.image || null;
-
-		if (imageNodes.length > 0) {
-			for (const node of imageNodes) {
-				if (!node) {
-					continue;
-				}
-				const imgUrl = new URL(node, url).toString();
-
-				try {
-					const imgResponse = await fetch(imgUrl, {
-						headers,
-						signal: AbortSignal.timeout(10000),
-					});
-					if (!imgResponse.ok) {
-						continue;
-					}
-
-					const arrayBuffer = await imgResponse.arrayBuffer();
-					const buffer = Buffer.from(arrayBuffer);
-
-					const tempHash = crypto.randomBytes(8).toString('hex');
-					const tempInputPath = path.join(IMAGE_DIR, `temp_og_${tempHash}.tmp`);
-					try {
-						fs.writeFileSync(tempInputPath, buffer);
-
-						const imgHash = crypto.createHash('md5').update(imgUrl).digest('hex');
-						const filename = `${imgHash}.jpg`;
-						const finalOutputPath = path.join(IMAGE_DIR, filename);
-
-						const psScript = path.join(
-							process.cwd(),
-							'scripts',
-							'process-og-images.ps1'
-						);
-
-						await execAsync(
-							`powershell -ExecutionPolicy Bypass -File "${psScript}" -InputFile "${tempInputPath}" -OutputFile "${finalOutputPath}"`
-						);
-
-						localImagePath = `/assets/images/external-links/${filename}`;
-						break;
-					} catch (imgError) {
-						Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
-					} finally {
-						if (fs.existsSync(tempInputPath)) {
-							fs.unlinkSync(tempInputPath);
-						}
-					}
-					break;
-				} catch (imgError) {
-					Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
-				}
-			}
-		}
+		const localImagePath =
+			(await processOgImage(imageNodes, url, headers)) || cached?.image || null;
 
 		linkCache[url] = {
 			title: title?.trim() || null,
@@ -423,6 +450,48 @@ async function processUrl(url, linkCache) {
 	}
 
 	return { status };
+}
+
+/**
+ * Builds HTTP headers for link metadata requests.
+ * @param {Object|null} cached - The cached entry for the URL.
+ * @returns {Object} The HTTP headers object.
+ */
+function buildHeaders(cached) {
+	const headers = {
+		'User-Agent':
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+		Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+		'Accept-Language': 'en-US,en;q=0.5',
+	};
+
+	if (cached?.etag) {
+		headers['If-None-Match'] = cached.etag;
+	}
+	if (cached?.lastModified) {
+		headers['If-Modified-Since'] = cached.lastModified;
+	}
+
+	return headers;
+}
+
+/**
+ * Checks if the current metadata matches the cached hash.
+ * @param {Object|null} cached - The cached entry.
+ * @param {Object} metadata - The new metadata.
+ * @param {string} imageUrlsStr - Joined string of candidate image URLs.
+ * @param {string} finalImageAlt - The resolved image alt text.
+ * @returns {string|boolean} The new hash if changed, otherwise true if valid.
+ */
+function checkCacheValidity(cached, metadata, imageUrlsStr, finalImageAlt) {
+	const { title, description, siteName } = metadata;
+	const dataToHash = `${title || ''}|${description || ''}|${imageUrlsStr}|${finalImageAlt}|${siteName || ''}`;
+	const currentHash = crypto.createHash('md5').update(dataToHash).digest('hex');
+
+	if (cached && cached.hash === currentHash) {
+		return true;
+	}
+	return currentHash;
 }
 
 generateExternalLinks();

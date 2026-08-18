@@ -362,76 +362,13 @@ export class GalleryDisplay {
 		contentContainer.innerHTML = '';
 
 		this.#currentGalleryItems.forEach((currentItem, index) => {
-			const itemContainer = document.createElement('div');
-			itemContainer.className = 'gallery-modal-item';
-			itemContainer.dataset.index = index;
-
-			const mediaNode = currentItem.querySelector('picture, img');
-			if (mediaNode) {
-				const mediaClone = mediaNode.cloneNode(true);
-
-				// Progressive blur-up loading.
-				if (mediaClone.tagName === 'PICTURE') {
-					const originalImg = mediaNode.querySelector('img');
-					const imgElement = mediaClone.querySelector('img');
-
-					const cachedSrc = originalImg
-						? originalImg.currentSrc || originalImg.src
-						: null;
-
-					if (imgElement) {
-						imgElement.removeAttribute('class');
-						if (imgElement.hasAttribute('sizes')) {
-							imgElement.setAttribute('sizes', '100vw');
-						}
-
-						if (cachedSrc) {
-							mediaClone.style.backgroundImage = `url("${cachedSrc}")`;
-
-							const onImageLoad = () => {
-								imgElement.classList.add('loaded');
-							};
-
-							if (imgElement.complete) {
-								onImageLoad();
-							} else {
-								imgElement.addEventListener('load', onImageLoad, { once: true });
-							}
-						}
-					}
-
-					const sources = mediaClone.querySelectorAll('source');
-					for (const source of sources) {
-						if (source.hasAttribute('sizes')) {
-							source.setAttribute('sizes', '100vw');
-						}
-					}
-				} else {
-					if (mediaClone.hasAttribute('sizes')) {
-						mediaClone.setAttribute('sizes', '100vw');
-					}
-					mediaClone.removeAttribute('class');
-				}
-
-				itemContainer.appendChild(mediaClone);
-			}
-
+			const itemContainer = this.#processGalleryItem(currentItem, index);
 			contentContainer.appendChild(itemContainer);
 		});
 
 		// Intersection observer for snap layout
 		this.#intersectionObserver = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) {
-						const newIndex = parseInt(entry.target.dataset.index, 10);
-						if (this.#currentIndex !== newIndex) {
-							this.#currentIndex = newIndex;
-							this.#updateUI();
-						}
-					}
-				}
-			},
+			(entries) => this.#handleIntersection(entries),
 			{
 				root: contentContainer,
 				threshold: 0.5,
@@ -445,6 +382,85 @@ export class GalleryDisplay {
 
 		// Initialize UI variables/classes
 		this.#updateUI();
+	}
+
+	/**
+	 * Callback for the IntersectionObserver to sync the current index with scrolling.
+	 * @param {IntersectionObserverEntry[]} entries - The list of entries being observed.
+	 * @private
+	 */
+	#handleIntersection(entries) {
+		for (const entry of entries) {
+			if (entry.isIntersecting) {
+				const newIndex = parseInt(entry.target.dataset.index, 10);
+				if (this.#currentIndex !== newIndex) {
+					this.#currentIndex = newIndex;
+					this.#updateUI();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Clones a gallery item and prepares it for the modal display, including progressive loading.
+	 * @param {HTMLElement} currentItem - The gallery item figure element to process.
+	 * @param {number} index - The index of the item within the gallery.
+	 * @returns {HTMLElement} The prepared container element for the modal.
+	 * @private
+	 */
+	#processGalleryItem(currentItem, index) {
+		const itemContainer = document.createElement('div');
+		itemContainer.className = 'gallery-modal-item';
+		itemContainer.dataset.index = index;
+
+		const mediaNode = currentItem.querySelector('picture, img');
+		if (mediaNode) {
+			const mediaClone = mediaNode.cloneNode(true);
+
+			if (mediaClone.tagName === 'PICTURE') {
+				const originalImg = mediaNode.querySelector('img');
+				const imgElement = mediaClone.querySelector('img');
+
+				const cachedSrc = originalImg ? originalImg.currentSrc || originalImg.src : null;
+
+				if (imgElement) {
+					imgElement.removeAttribute('class');
+					if (imgElement.hasAttribute('sizes')) {
+						imgElement.setAttribute('sizes', '100vw');
+					}
+
+					if (cachedSrc) {
+						mediaClone.style.backgroundImage = `url("${cachedSrc}")`;
+
+						const onImageLoad = () => {
+							imgElement.classList.add('loaded');
+						};
+
+						if (imgElement.complete) {
+							onImageLoad();
+						} else {
+							imgElement.addEventListener('load', onImageLoad, { once: true });
+						}
+					}
+				}
+
+				const sources = mediaClone.querySelectorAll('source');
+				for (const source of sources) {
+					if (source.hasAttribute('sizes')) {
+						source.setAttribute('sizes', '100vw');
+					}
+				}
+			} else {
+				if (mediaClone.hasAttribute('sizes')) {
+					mediaClone.setAttribute('sizes', '100vw');
+				}
+				mediaClone.removeAttribute('class');
+			}
+
+			itemContainer.appendChild(mediaClone);
+		}
+
+		return itemContainer;
 	}
 
 	/**

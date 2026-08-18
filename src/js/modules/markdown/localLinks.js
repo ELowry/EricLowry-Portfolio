@@ -15,6 +15,57 @@ export class LocalLinkParser {
 	}
 
 	/**
+	 * Builds an internal application link HTML string from a matched content file regex and hash.
+	 * @param {RegExpMatchArray} match - The regex match result against CONTENT_LINK_REGEX.
+	 * @param {string} hash - The URL hash fragment (e.g., `#heading`).
+	 * @param {string} innerHtml - The parsed inner HTML/text of the link.
+	 * @param {string} [title=''] - Optional title attribute.
+	 * @returns {string|boolean} The rendered anchor tag string, or false if the path cannot be resolved.
+	 */
+	static buildInternalLink(match, hash, innerHtml, title = '') {
+		const logicalPath = match[1];
+		const file = logicalPath + '.md';
+
+		if (logicalPath.startsWith('blog/') || logicalPath.startsWith('projects/')) {
+			const titleAttr = title ? ` title="${title}"` : '';
+			const hrefPath = `/${Router.currentMode}/${logicalPath}${hash}`;
+
+			return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${innerHtml}</a>`;
+		}
+
+		const paths = Content.findPathsByFile(file);
+
+		if (paths.length === 0) {
+			return false;
+		}
+
+		const currentPath = Router.currentPath;
+		const contextMatch = paths.find((p) => p.startsWith(currentPath));
+		let contentPath = contextMatch || paths[0];
+
+		let urlPath = contentPath;
+		const segments = contentPath.split('/');
+		const lastSegment = segments[segments.length - 1];
+
+		if (segments.length > 1 && lastSegment === segments[segments.length - 2]) {
+			segments.pop();
+			contentPath = segments.join('/');
+			urlPath = contentPath + '/';
+		} else if (lastSegment === 'index') {
+			segments.pop();
+			contentPath = segments.join('/');
+			urlPath = contentPath ? contentPath + '/' : '';
+		}
+
+		const titleAttr = title ? ` title="${title}"` : '';
+		const hrefPath = urlPath
+			? `/${Router.currentMode}/${urlPath}${hash}`
+			: `/${Router.currentMode}/${hash}`;
+
+		return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${innerHtml}</a>`;
+	}
+
+	/**
 	 * Generates the marked.js extension configuration object for parsing links.
 	 * @returns {Object} a marked.js extension configuration object.
 	 */
@@ -43,53 +94,8 @@ export class LocalLinkParser {
 					const hash = hashIndex !== -1 ? href.substring(hashIndex) : '';
 
 					const match = cleanHref.match(LocalLinkParser.CONTENT_LINK_REGEX);
-
 					if (match) {
-						const logicalPath = match[1];
-						const file = logicalPath + '.md';
-
-						if (
-							logicalPath.startsWith('blog/')
-							|| logicalPath.startsWith('projects/')
-						) {
-							const titleAttr = title ? ` title="${title}"` : '';
-							const hrefPath = `/${Router.currentMode}/${logicalPath}${hash}`;
-
-							return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${innerHtml}</a>`;
-						}
-
-						const paths = Content.findPathsByFile(file);
-
-						if (paths.length === 0) {
-							return false;
-						}
-
-						// If there are multiple paths (shared content), try to stay in current branch context, or default to the first one found.
-						const currentPath = Router.currentPath;
-						const contextMatch = paths.find((p) => p.startsWith(currentPath));
-						let contentPath = contextMatch || paths[0];
-
-						let urlPath = contentPath;
-						const segments = contentPath.split('/');
-						const lastSegment = segments[segments.length - 1];
-
-						// Handle 'index' files where the name matches the parent directory or is literally 'index'
-						if (segments.length > 1 && lastSegment === segments[segments.length - 2]) {
-							segments.pop();
-							contentPath = segments.join('/');
-							urlPath = contentPath + '/';
-						} else if (lastSegment === 'index') {
-							segments.pop();
-							contentPath = segments.join('/');
-							urlPath = contentPath ? contentPath + '/' : '';
-						}
-
-						const titleAttr = title ? ` title="${title}"` : '';
-						const hrefPath = urlPath
-							? `/${Router.currentMode}/${urlPath}${hash}`
-							: `/${Router.currentMode}/${hash}`;
-
-						return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${innerHtml}</a>`;
+						return LocalLinkParser.buildInternalLink(match, hash, innerHtml, title);
 					}
 
 					// External links

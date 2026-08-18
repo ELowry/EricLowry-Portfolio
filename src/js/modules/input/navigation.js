@@ -82,7 +82,6 @@ class NavigationController {
 			return;
 		}
 
-		const axis = inputState.axis;
 		const now = performance.now();
 		const debounceActive = now - this.lastMoveTime < NavigationController.NAV_DEBOUNCE;
 
@@ -94,34 +93,10 @@ class NavigationController {
 		const frameRateMultiplier = dt / (1000 / 60);
 
 		// Handle Scrolling
-		let manualScrollY = 0;
-		let manualScrollX = 0;
-
-		if (inputState.lastInputType === 'gamepad') {
-			// Standard Stick Scrolling
-			if (Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
-				manualScrollY = -axis.y;
-			}
-
-			// Add horizontal scrolling, ensuring it doesn't conflict with focus movement if axis is explicitly 'x'
-			if (
-				Math.abs(axis.x) > NavigationController.SCROLL_DEADZONE
-				&& this.options.axis !== 'x'
-			) {
-				manualScrollX = axis.x;
-			}
-
-			if (inputState.triggerLeft > 0.05) {
-				manualScrollY =
-					-inputState.triggerLeft * NavigationController.FAST_SCROLL_MULTIPLIER;
-			} else if (inputState.triggerRight > 0.05) {
-				manualScrollY =
-					inputState.triggerRight * NavigationController.FAST_SCROLL_MULTIPLIER;
-			}
-		}
+		const { x: manualScrollX, y: manualScrollY } = this.#calculateScroll(inputState);
 
 		if (this.options.scroll && (manualScrollY !== 0 || manualScrollX !== 0)) {
-			let scrollTarget = this.#getScrollTarget(manualScrollY, manualScrollX);
+			const scrollTarget = this.#getScrollTarget(manualScrollY, manualScrollX);
 
 			if (scrollTarget) {
 				scrollTarget.scrollBy({
@@ -137,30 +112,16 @@ class NavigationController {
 			let navInput = 0;
 
 			if (this.options.axis === 'x') {
-				navInput = axis.x;
+				navInput = inputState.axis.x;
 			} else if (this.options.axis === 'y') {
-				navInput = -axis.y;
+				navInput = -inputState.axis.y;
 			}
 
-			if (Math.abs(navInput) > NavigationController.NAVIGATE_DEADZONE) {
-				this.lastMoveTime = now;
-				this.#moveFocus(navInput);
-			}
+			this.#calculateFocus(navInput, debounceActive);
 		}
 
 		// Handle Interaction
-		const current = document.activeElement;
-		if (
-			inputState.interact
-			&& inputState.lastInputType === 'gamepad'
-			&& current
-			&& this.activeContainer.contains(current)
-			&& !VirtualCursor.isActive
-		) {
-			current.classList.add('active');
-			setTimeout(() => current.classList.remove('active'), 100);
-			current.click();
-		}
+		this.#handleInteraction(inputState);
 	}
 
 	/**
@@ -172,55 +133,9 @@ class NavigationController {
 	 * @private
 	 */
 	#getScrollTarget(manualScrollY, manualScrollX) {
-		let el = document.activeElement;
-
-		// Traverse up from the active element to find a nested scrollable container
-		while (
-			el
-			&& el !== document.body
-			&& el !== document.documentElement
-			&& this.activeContainer?.contains(el)
-		) {
-			const hasVerticalScroll = el.scrollHeight > el.clientHeight;
-			const hasHorizontalScroll = el.scrollWidth > el.clientWidth;
-			const style = window.getComputedStyle(el);
-
-			const canScrollY =
-				hasVerticalScroll && (style.overflowY === 'auto' || style.overflowY === 'scroll');
-			const canScrollX =
-				hasHorizontalScroll && (style.overflowX === 'auto' || style.overflowX === 'scroll');
-
-			let isViableTarget = false;
-
-			if (manualScrollY !== 0 && canScrollY) {
-				if (manualScrollY < 0 && el.scrollTop > 0) {
-					isViableTarget = true;
-				}
-				if (
-					manualScrollY > 0
-					&& Math.ceil(el.scrollTop + el.clientHeight) < el.scrollHeight - 1
-				) {
-					isViableTarget = true;
-				}
-			}
-
-			if (manualScrollX !== 0 && canScrollX) {
-				if (manualScrollX < 0 && el.scrollLeft > 0) {
-					isViableTarget = true;
-				}
-				if (
-					manualScrollX > 0
-					&& Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
-				) {
-					isViableTarget = true;
-				}
-			}
-
-			if (isViableTarget) {
-				return el;
-			}
-
-			el = el.parentElement;
+		const nestedTarget = this.#findNestedScrollTarget(manualScrollY, manualScrollX);
+		if (nestedTarget) {
+			return nestedTarget;
 		}
 
 		// Fallback to the main active container logic
@@ -328,6 +243,141 @@ class NavigationController {
 	}
 
 	/**
+	 * Calculates the manual scroll delta based on input state.
+	 * @param {Object} inputState - The current state of user input.
+	 * @returns {Object} An object containing the `x` and `y` scroll deltas.
+	 * @private
+	 */
+	#calculateScroll(inputState) {
+		let manualScrollY = 0;
+		let manualScrollX = 0;
+		const axis = inputState.axis;
+
+		if (inputState.lastInputType === 'gamepad') {
+			if (Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
+				manualScrollY = -axis.y;
+			}
+
+			if (
+				Math.abs(axis.x) > NavigationController.SCROLL_DEADZONE
+				&& this.options.axis !== 'x'
+			) {
+				manualScrollX = axis.x;
+			}
+
+			if (inputState.triggerLeft > 0.05) {
+				manualScrollY =
+					-inputState.triggerLeft * NavigationController.FAST_SCROLL_MULTIPLIER;
+			} else if (inputState.triggerRight > 0.05) {
+				manualScrollY =
+					inputState.triggerRight * NavigationController.FAST_SCROLL_MULTIPLIER;
+			}
+		}
+
+		return { x: manualScrollX, y: manualScrollY };
+	}
+
+	/**
+	 * Processes focus navigation based on calculated input.
+	 * @param {number} navInput - The navigation input value.
+	 * @param {boolean} debounceActive - Whether the debounce timer is currently active.
+	 * @private
+	 */
+	#calculateFocus(navInput, debounceActive) {
+		if (Math.abs(navInput) > NavigationController.NAVIGATE_DEADZONE && !debounceActive) {
+			this.lastMoveTime = performance.now();
+			this.#moveFocus(navInput);
+		}
+	}
+
+	/**
+	 * Handles interaction input for the active focus element.
+	 * @param {Object} inputState - The current state of user input.
+	 * @private
+	 */
+	#handleInteraction(inputState) {
+		const current = document.activeElement;
+		if (
+			inputState.interact
+			&& inputState.lastInputType === 'gamepad'
+			&& current
+			&& this.activeContainer.contains(current)
+			&& !VirtualCursor.isActive
+		) {
+			current.classList.add('active');
+			setTimeout(() => current.classList.remove('active'), 100);
+			current.click();
+		}
+	}
+
+	/**
+	 * Traverses the DOM to find a nested scrollable container that can handle the requested scroll.
+	 * @param {number} manualScrollY - The requested vertical scroll amount.
+	 * @param {number} manualScrollX - The requested horizontal scroll amount.
+	 * @returns {HTMLElement|null} The scrollable container if found, otherwise null.
+	 * @private
+	 */
+	#findNestedScrollTarget(manualScrollY, manualScrollX) {
+		let el = document.activeElement;
+
+		while (
+			el
+			&& el !== document.body
+			&& el !== document.documentElement
+			&& this.activeContainer?.contains(el)
+		) {
+			const hasVerticalScroll = el.scrollHeight > el.clientHeight;
+			const hasHorizontalScroll = el.scrollWidth > el.clientWidth;
+			const style = window.getComputedStyle(el);
+
+			const canScrollY =
+				hasVerticalScroll && (style.overflowY === 'auto' || style.overflowY === 'scroll');
+			const canScrollX =
+				hasHorizontalScroll && (style.overflowX === 'auto' || style.overflowX === 'scroll');
+
+			let isViableTarget = false;
+
+			if (manualScrollY !== 0 && canScrollY) {
+				const isAtTop = el.scrollTop <= 0;
+				const isAtBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight - 1;
+
+				if ((manualScrollY < 0 && !isAtTop) || (manualScrollY > 0 && !isAtBottom)) {
+					isViableTarget = true;
+				}
+			}
+
+			if (manualScrollX !== 0 && canScrollX) {
+				const isAtLeft = el.scrollLeft <= 0;
+				const isAtRight = Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth - 1;
+
+				if ((manualScrollX < 0 && !isAtLeft) || (manualScrollX > 0 && !isAtRight)) {
+					isViableTarget = true;
+				}
+			}
+
+			if (isViableTarget) {
+				return el;
+			}
+
+			el = el.parentElement;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Restores the previous navigation context.
+	 * Useful for closing submenus.
+	 */
+	popContext() {
+		if (this.contextStack.length === 0) {
+			return;
+		}
+		const prev = this.contextStack.pop();
+		this.setContext(prev.container, prev.options);
+	}
+
+	/**
 	 * Sets the active container context for navigation.
 	 * @param {HTMLElement|null} containerElement - The DOM element to set as the active navigation container.
 	 * @param {Object} [options] - Navigation behavior settings.
@@ -398,18 +448,6 @@ class NavigationController {
 			});
 		}
 		this.setContext(containerElement, options);
-	}
-
-	/**
-	 * Restores the previous navigation context.
-	 * Useful for closing submenus.
-	 */
-	popContext() {
-		if (this.contextStack.length === 0) {
-			return;
-		}
-		const prev = this.contextStack.pop();
-		this.setContext(prev.container, prev.options);
 	}
 }
 

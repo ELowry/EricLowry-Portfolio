@@ -30,6 +30,9 @@ class AppController {
 	/** @type {AbortController|null} Tracks the current modal fetch request to allow cancellation. */
 	#modalAbortController = null;
 
+	/** @type {string|null} Tracks the last opened modal filename to manage scroll state. */
+	#lastModalFilename = null;
+
 	/**
 	 * @property {Object} LJS - The LittleJS engine namespace, set after dynamic import.
 	 * @property {boolean} isLocked - Whether the game engine should block inputs and interactions.
@@ -615,6 +618,8 @@ class AppController {
 			this.uiManager.showLoading(false, true);
 		}
 
+		const isNewContent = this.#lastModalFilename !== filename;
+		this.#lastModalFilename = filename;
 		try {
 			const html = await this.#fetchContent(filename, abortSignal);
 
@@ -622,7 +627,7 @@ class AppController {
 				return;
 			}
 
-			this.uiManager.displayContentInModal(html);
+			this.uiManager.displayContentInModal(html, isNewContent);
 		} catch (error) {
 			if (error.name !== 'AbortError') {
 				console.error(`Failed to load modal content:`, error);

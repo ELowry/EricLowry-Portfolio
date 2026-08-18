@@ -114,6 +114,56 @@ class RouterController {
 	}
 
 	/**
+	 * Builds a standardized URL pathname for the given mode and clean path.
+	 * @param {string} mode - The active mode (`game` or `text`).
+	 * @param {string} cleanPath - The sanitized content path.
+	 * @returns {string} The formatted URL path.
+	 * @private
+	 */
+	#buildUrl(mode, cleanPath) {
+		if (cleanPath.startsWith('blog') || cleanPath.startsWith('projects')) {
+			return `/${cleanPath}`;
+		}
+		if (mode === 'game' && !cleanPath) {
+			return '/';
+		}
+		return `/${mode}${cleanPath ? '/' + cleanPath : ''}`;
+	}
+
+	/**
+	 * Handles scrolling to an anchor element or resetting scroll positions for the active mode.
+	 * @param {string} mode - The active mode (`game` or `text`).
+	 * @param {string} [hash=''] - Optional anchor hash fragment.
+	 * @private
+	 */
+	#handleScrollAndFocus(mode, hash = '') {
+		if (hash) {
+			let id = hash.substring(1);
+			try {
+				id = decodeURIComponent(id);
+			} catch (e) {
+				// Malformed URI
+			}
+			const targetEl = document.getElementById(id);
+			if (targetEl) {
+				targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}
+		} else {
+			if (mode === 'text') {
+				const textLayer = document.getElementById('text-layer');
+				if (textLayer) {
+					textLayer.scrollTop = 0;
+				}
+			} else {
+				const modalContent = document.getElementById('game-modal-content');
+				if (modalContent) {
+					modalContent.scrollTop = 0;
+				}
+			}
+		}
+	}
+
+	/**
 	 * Reads the current URL path and applies the state.
 	 * @returns {Promise<void>}
 	 */
@@ -147,15 +197,7 @@ class RouterController {
 
 		const validMode = ['game', 'text'].includes(targetMode) ? targetMode : 'game';
 		const newState = { mode: validMode, path: cleanPath };
-
-		let newUrl;
-		if (cleanPath.startsWith('blog') || cleanPath.startsWith('projects')) {
-			newUrl = `/${cleanPath}`;
-		} else if (validMode === 'game' && !cleanPath) {
-			newUrl = '/';
-		} else {
-			newUrl = `/${validMode}${cleanPath ? '/' + cleanPath : ''}`;
-		}
+		const newUrl = this.#buildUrl(validMode, cleanPath);
 
 		if (newState.mode === this.state.mode && newState.path === this.state.path) {
 			const currentHash = window.location.hash || '';
@@ -163,30 +205,7 @@ class RouterController {
 				window.history.pushState(newState, '', newUrl + hash);
 			}
 
-			if (hash) {
-				let id = hash.substring(1);
-				try {
-					id = decodeURIComponent(id);
-				} catch (e) {
-					// Malformed URI
-				}
-				const targetEl = document.getElementById(id);
-				if (targetEl) {
-					targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				}
-			} else {
-				if (newState.mode === 'text') {
-					const textLayer = document.getElementById('text-layer');
-					if (textLayer) {
-						textLayer.scrollTop = 0;
-					}
-				} else {
-					const modalContent = document.getElementById('game-modal-content');
-					if (modalContent) {
-						modalContent.scrollTop = 0;
-					}
-				}
-			}
+			this.#handleScrollAndFocus(newState.mode, hash);
 			return;
 		}
 

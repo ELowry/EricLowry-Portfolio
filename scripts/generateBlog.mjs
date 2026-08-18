@@ -131,7 +131,15 @@ function generateBlog() {
 		return groupedEntries;
 	}, {});
 
-	// Generate separate feed files for each language
+	generateRssFeeds(entriesByLanguage, buildDate);
+}
+
+/**
+ * Generates RSS feed files for each language.
+ * @param {Object} entriesByLanguage - Blog entries grouped by language code.
+ * @param {string} buildDate - The UTC string of the current build time.
+ */
+function generateRssFeeds(entriesByLanguage, buildDate) {
 	for (const [lang, entries] of Object.entries(entriesByLanguage)) {
 		const feedFile = `public/feed-${lang}.xml`;
 		const rssLangCode = lang.replace('_', '-').toLowerCase();
@@ -167,6 +175,7 @@ function generateBlog() {
 \t\t</item>`;
 			})
 			.join('\n');
+
 		const rssContent = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 \t<channel>

@@ -141,6 +141,71 @@ export class Obfuscator {
 	}
 
 	/**
+	 * Builds a protected HTML anchor link for email or phone contacts.
+	 * @param {string} href - The link href (e.g., mailto: or tel:).
+	 * @param {string} text - The raw link text.
+	 * @param {string} [title=''] - Optional link title attribute.
+	 * @returns {string} The rendered HTML string for the protected link.
+	 * @private
+	 */
+	static #buildProtectedLink(href, text, title = '') {
+		if (typeof navigator !== 'undefined') {
+			const isCrawler = /bot|crawler|spider|crawling|slurp|yandex/i.test(
+				navigator.userAgent || ''
+			);
+			if (navigator.webdriver || isCrawler) {
+				return '<span class="protected-link" data-nosnippet></span>';
+			}
+		}
+
+		const isMail = href.startsWith('mailto:');
+		let value = isMail ? href.replace('mailto:', '') : href.replace('tel:', '');
+
+		let encodedText = text;
+		let decodedText;
+		try {
+			const { obfuscated, deobfuscated } = Obfuscator.obfuscateUnlessBase64(text);
+			encodedText = obfuscated;
+			decodedText = deobfuscated;
+		} catch (e) {
+			decodedText = text;
+		}
+
+		try {
+			const { obfuscated } = Obfuscator.obfuscateUnlessBase64(value);
+			value = obfuscated;
+		} catch (e) {
+			// Invalid base64 string
+		}
+
+		const hasEmail = decodedText.includes('@');
+		const hasPhone = /[\d\s+\-()]{7,}/.test(decodedText);
+
+		let displayText = encodedText;
+		let isObfuscated = false;
+
+		if ((isMail && hasEmail) || (!isMail && hasPhone)) {
+			displayText = Lang.getString(
+				`ui.contact.${isMail ? 'email' : 'phone'}Placeholder`,
+				null,
+				isMail ? '[Reveal Email]' : '[Reveal Phone]'
+			);
+			isObfuscated = true;
+		}
+
+		return `
+				<a href="#" 
+					class="protected-link" 
+					data-enc="${value}"
+					data-text-enc="${encodedText}"
+					data-type="${isMail ? 'mailto' : 'tel'}"
+					${isObfuscated ? 'data-obfuscated-text="true"' : ''}
+					${title ? `title="${title}"` : ''}
+					data-nosnippet
+				>${displayText}</a>`;
+	}
+
+	/**
 	 * @returns {Object} the custom renderer object for marked.js.
 	 * @private
 	 */
@@ -152,63 +217,9 @@ export class Obfuscator {
 			 * @returns {string|boolean} the rendered HTML for the link, or false to fall back.
 			 */
 			link(token) {
-				let { href, title, text } = token;
-				const isMail = href && href.startsWith('mailto:');
-				const isPhone = href && href.startsWith('tel:');
-
-				if (isMail || isPhone) {
-					if (typeof navigator !== 'undefined') {
-						const isCrawler = /bot|crawler|spider|crawling|slurp|yandex/i.test(
-							navigator.userAgent || ''
-						);
-						if (navigator.webdriver || isCrawler) {
-							return `<span class="protected-link" data-nosnippet></span>`;
-						}
-					}
-
-					let value = isMail ? href.replace('mailto:', '') : href.replace('tel:', '');
-
-					let decodedText;
-					try {
-						const { obfuscated, deobfuscated } = Obfuscator.obfuscateUnlessBase64(text);
-						text = obfuscated;
-						decodedText = deobfuscated;
-					} catch (e) {
-						decodedText = text;
-					}
-
-					try {
-						const { obfuscated } = Obfuscator.obfuscateUnlessBase64(value);
-						value = obfuscated;
-					} catch (e) {
-						// Invalid base64 string
-					}
-
-					const hasEmail = decodedText.includes('@');
-					const hasPhone = /[\d\s+\-()]{7,}/.test(decodedText);
-
-					let displayText = text;
-					let isObfuscated = false;
-
-					if ((isMail && hasEmail) || (isPhone && hasPhone)) {
-						displayText = Lang.getString(
-							`ui.contact.${isMail ? 'email' : 'phone'}Placeholder`,
-							null,
-							isMail ? '[Reveal Email]' : '[Reveal Phone]'
-						);
-						isObfuscated = true;
-					}
-
-					return `
-				<a href="#" 
-					class="protected-link" 
-					data-enc="${value}"
-					data-text-enc="${text}"
-					data-type="${isMail ? 'mailto' : 'tel'}"
-					${isObfuscated ? 'data-obfuscated-text="true"' : ''}
-					${title ? `title="${title}"` : ''}
-					data-nosnippet
-				>${displayText}</a>`;
+				const { href, title, text } = token;
+				if (href && (href.startsWith('mailto:') || href.startsWith('tel:'))) {
+					return Obfuscator.#buildProtectedLink(href, text, title);
 				}
 
 				return false;

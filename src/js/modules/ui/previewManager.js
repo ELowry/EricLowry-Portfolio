@@ -120,50 +120,66 @@ export class PreviewManager {
 	}
 
 	/**
-	 * Fetches metadata and renders the preview card UI.
+	 * Fetches preview metadata for internal and external links.
 	 * @param {HTMLElement} link - The target anchor tag.
+	 * @returns {Promise<Object|null>} The metadata object, or null if unavailable.
 	 * @private
 	 */
-	async #showPreview(link) {
-		let metaData = null;
-
+	async #fetchPreviewData(link) {
 		if (link.classList.contains('md-external-link')) {
 			const url = link.href;
 			const externalData = await ExternalLinks.getData();
 			const match = externalData[url];
 
 			if (match && match.title && (match.description || match.image)) {
-				metaData = {
+				return {
 					pageTitle: match.title,
 					pageDescription: match.description,
 					previewImage: match.image,
 					pageImageAlt: match.imageAlt || match.title,
 				};
 			}
-		} else {
-			const path = link.getAttribute('data-preview-path');
-			if (path) {
-				const result = await Meta.getMetadataForPath(path);
-				if (result.previewImage || result.pageDescription) {
-					metaData = result;
-				} else {
-					console.warn(`No preview data available for ${path}`);
-				}
-			}
+			return null;
 		}
 
-		if (!metaData || this.activeLink !== link) {
+		const path = link.getAttribute('data-preview-path');
+		if (path) {
+			const result = await Meta.getMetadataForPath(path);
+			if (result.previewImage || result.pageDescription) {
+				return result;
+			}
+			console.warn(`No preview data available for ${path}`);
+		}
+		return null;
+	}
+
+	/**
+	 * Ensures the preview card element is instantiated from the DOM template.
+	 * @private
+	 */
+	#ensureTemplateExists() {
+		if (this.previewElement) {
 			return;
 		}
 
+		const template = document.getElementById('template-preview-card');
+		if (!template) {
+			return;
+		}
+		const clone = template.content.cloneNode(true);
+		this.previewElement = clone.querySelector('.preview-card');
+		document.body.appendChild(this.previewElement);
+	}
+
+	/**
+	 * Injects metadata into the preview card DOM elements and applies anchor styling.
+	 * @param {Object} metaData - The preview metadata object.
+	 * @param {HTMLElement} link - The target anchor tag.
+	 * @private
+	 */
+	#populatePreviewCard(metaData, link) {
 		if (!this.previewElement) {
-			const template = document.getElementById('template-preview-card');
-			if (!template) {
-				return;
-			}
-			const clone = template.content.cloneNode(true);
-			this.previewElement = clone.querySelector('.preview-card');
-			document.body.appendChild(this.previewElement);
+			return;
 		}
 
 		const titleEl = this.previewElement.querySelector('.preview-title');
@@ -201,6 +217,26 @@ export class PreviewManager {
 		if (this.supportsAnchor) {
 			link.style.anchorName = '--active-preview-link';
 		}
+	}
+
+	/**
+	 * Fetches metadata and renders the preview card UI.
+	 * @param {HTMLElement} link - The target anchor tag.
+	 * @private
+	 */
+	async #showPreview(link) {
+		const metaData = await this.#fetchPreviewData(link);
+
+		if (!metaData || this.activeLink !== link) {
+			return;
+		}
+
+		this.#ensureTemplateExists();
+		if (!this.previewElement) {
+			return;
+		}
+
+		this.#populatePreviewCard(metaData, link);
 
 		requestAnimationFrame(() => {
 			this.previewElement.classList.add('visible');

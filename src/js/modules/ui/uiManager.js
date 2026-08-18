@@ -874,8 +874,9 @@ export class UIManager {
 	/**
 	 * Injects content into the game modal and displays it.
 	 * @param {string} html - The raw HTML string to insert into the modal.
+	 * @param {boolean} [resetScroll=true] - Whether to reset the scroll position to the top.
 	 */
-	displayContentInModal(html) {
+	displayContentInModal(html, resetScroll = true) {
 		LayeredInput.activate(LayeredInput.LAYER_GAME_MODAL);
 
 		this.elements.gameModalContent.innerHTML = html;
@@ -897,7 +898,17 @@ export class UIManager {
 
 		this.elements.gameModalContent.focus({ focusVisible: false });
 
-		scrollToHash(window.location.hash, this.elements.gameModalContent, 'auto');
+		requestAnimationFrame(() => {
+			if (resetScroll) {
+				const modalBox = this.elements.gameModal.querySelector('.modal-box');
+				if (modalBox) {
+					modalBox.scrollTop = 0;
+				}
+			}
+
+			this.elements.gameModalContent.focus({ focusVisible: false });
+			scrollToHash(window.location.hash, this.elements.gameModalContent, 'auto');
+		});
 	}
 
 	/**
