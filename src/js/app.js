@@ -32,11 +32,9 @@ class AppController {
 
 	/**
 	 * @property {Object} LJS - The LittleJS engine namespace, set after dynamic import.
-	 * @property {boolean} isPaused - Whether the game engine is actively running and rendering.
 	 * @property {boolean} isLocked - Whether the game engine should block inputs and interactions.
 	 * @property {Map<string, string>} contentCache - Caches fetched markdown content as HTML, keyed by `${langCode}:${filename}`.
 	 * @property {ContentTree|null} currentMapId - The root of the content tree, initialized after content loading.
-	 * @property {Object|null} pendingStartPos - The currently active LittleJS engine namespace, set after dynamic import.
 	 * @property {number|undefined} pendingEntryX - If set, indicates a pending X coordinate for player entry on the next map load.
 	 * @property {TextRenderer|null} textRenderer - Responsible for rendering text-mode content, initialized after core setup.
 	 * @property {TutorialManager|null} tutorialManager - Handles tutorial state and display logic, initialized after core setup.
@@ -48,13 +46,11 @@ class AppController {
 	 * @property {ExternalLinks} ExternalLinks - Centralized external links preview manager, initialized immediately.
 	 */
 	constructor() {
-		this.isPaused = false;
 		this.isLocked = false;
 
 		// Content Cache
 		this.contentCache = new Map();
 		this.currentMapId = null;
-		this.pendingStartPos = null;
 		this.pendingEntryX = undefined;
 
 		// Delegated subsystems
@@ -103,7 +99,7 @@ class AppController {
 	 * @returns {boolean} whether the game engine is actively updating/rendering.
 	 */
 	get isRunning() {
-		return Router.currentMode === 'game' && !this.isPaused;
+		return Router.currentMode === 'game' && !Engine.isPaused;
 	}
 
 	/**
@@ -150,6 +146,7 @@ class AppController {
 
 			this.LJS = (littleModule && (littleModule.default || littleModule)) || null;
 			Engine.setEngine(this.LJS);
+			Engine.onHandleInput = () => this.handleInput();
 
 			// Overrides LittleJS' global 'contextmenu' handler to restore the native context menu while in text mode.
 			document.addEventListener(
@@ -419,7 +416,7 @@ class AppController {
 						};
 						this.pendingEntryX = undefined;
 					}
-					this.pendingStartPos = desiredStart;
+					Engine.pendingStartPos = desiredStart;
 					this.teleportPlayer(desiredStart);
 				}
 			}
@@ -449,7 +446,7 @@ class AppController {
 	 * @private
 	 */
 	#syncPauseUI() {
-		const hidden = this.isPaused || this.isLocked;
+		const hidden = Engine.isPaused || this.isLocked;
 		this.uiManager.elements.gameMenuButton?.classList.toggle('hidden', hidden);
 		this.uiManager.elements.touchControls?.classList.toggle('hidden', hidden);
 	}
@@ -536,7 +533,7 @@ class AppController {
 	 * @param {boolean} state - `true` to pause the app, `false` to resume.
 	 */
 	setPause(state) {
-		this.isPaused = state;
+		Engine.isPaused = state;
 		this.#syncPauseUI();
 	}
 

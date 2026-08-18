@@ -160,3 +160,30 @@ export function getCacheBuster() {
 
 	return '';
 }
+
+/**
+ * Safely decodes a URL hash and scrolls the target element into view.
+ * @param {string} hash - The URL hash (e.g., '#my-id').
+ * @param {HTMLElement|null} [container=null] - Optional container the target must be inside.
+ * @param {ScrollBehavior} [behavior='smooth'] - The scroll behavior ('smooth', 'auto', 'instant').
+ */
+export function scrollToHash(hash, container = null, behavior = 'smooth') {
+	if (!hash) {
+		return;
+	}
+
+	let id = hash.substring(1);
+	try {
+		id = decodeURIComponent(id);
+	} catch (e) {
+		console.error('Failed to decode URL hash:', e);
+	}
+
+	const targetEl = document.getElementById(id);
+
+	if (targetEl) {
+		if (!container || container.contains(targetEl)) {
+			targetEl.scrollIntoView({ behavior, block: 'start' });
+		}
+	}
+}

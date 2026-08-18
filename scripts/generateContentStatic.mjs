@@ -8,6 +8,7 @@ import {
 	resolveDotPath,
 	escapeHtml,
 } from '../src/js/modules/core/sharedUtils.js';
+import { injectIntoMain } from './buildUtils.mjs';
 
 const BASE_URL = 'https://eric-lowry.com';
 const LANG_DIR = path.resolve('public/lang');
@@ -158,24 +159,16 @@ async function generateStaticPage(node, routePath) {
 	const outDir = path.join('.static-html', 'content', routePath);
 	await fs.mkdir(outDir, { recursive: true });
 
-	let updatedHtml = baseHtmlContent.replace(
+	const updatedHtml = baseHtmlContent.replace(
 		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
-		() => {
-			return replacementMeta;
-		}
+		() => replacementMeta
 	);
 
-	if (markdownContent) {
-		const mainMatch = updatedHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
-		if (mainMatch) {
-			const prefix = updatedHtml.substring(0, mainMatch.index) + mainMatch[1];
-			const suffix =
-				mainMatch[2] + updatedHtml.substring(mainMatch.index + mainMatch[0].length);
-			updatedHtml = prefix + markdownContent + suffix;
-		}
-	}
-
-	await fs.writeFile(path.join(outDir, 'index.html'), updatedHtml, 'utf-8');
+	await fs.writeFile(
+		path.join(outDir, 'index.html'),
+		injectIntoMain(updatedHtml, markdownContent),
+		'utf-8'
+	);
 	Log.success(`Generated static wrapper for: /${routePath}`);
 }
 

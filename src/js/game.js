@@ -1,9 +1,9 @@
-import { App } from './app.js';
 import { Engine } from './modules/core/engineContext.js';
 import { Router } from './modules/core/router.js';
 import { Camera } from './modules/game/camera.js';
 import { Player } from './modules/game/player.js';
 import { Input } from './modules/input/input.js';
+import { VirtualCursor } from './modules/input/virtualCursor.js';
 import { LayeredInput } from './modules/core/layeredInputs.js';
 import { Interaction } from './modules/game/interaction.js';
 import { GameBridge } from './modules/game/gameBridge.js';
@@ -15,8 +15,8 @@ let player;
  * Called once by LittleJS engine on startup.
  */
 function gameInit() {
-	const startX = App.pendingStartPos ? App.pendingStartPos.x : 10;
-	const startY = App.pendingStartPos ? App.pendingStartPos.y : 10;
+	const startX = Engine.pendingStartPos ? Engine.pendingStartPos.x : 10;
+	const startY = Engine.pendingStartPos ? Engine.pendingStartPos.y : 10;
 	const startVec = Engine.LJS.vec2(startX, startY);
 
 	// LittleJS configuration
@@ -82,7 +82,8 @@ function gameUpdate() {
 function gameUpdatePost() {
 	if (document.hasFocus()) {
 		Input.update();
-		App.handleInput();
+		VirtualCursor.update();
+		Engine.handleInput();
 	}
 
 	Engine.LJS.setPaused(Router.currentMode !== 'game');
@@ -92,7 +93,7 @@ function gameUpdatePost() {
 		return;
 	}
 
-	if (App.isRunning) {
+	if (Router.currentMode === 'game' && Engine.isRunning) {
 		Interaction.update(player.pos);
 		Camera.follow(player);
 	}
@@ -129,7 +130,7 @@ function gameRender() {
  * Called each frame by LittleJS engine after `gameRender`.
  */
 function gameRenderPost() {
-	if (Router.currentMode === 'text' || App.isPaused) {
+	if (Router.currentMode === 'text' || Engine.isPaused) {
 		return;
 	}
 	// These are not the renders you are looking for.
@@ -139,8 +140,13 @@ function gameRenderPost() {
  * Initialize LittleJS into the `#game-layer` DOM object.
  */
 function initLittleJS() {
+	const gameLayer = document.getElementById('game-layer');
+	if (!gameLayer) {
+		return;
+	}
+
 	// Prevent duplicate engine instances
-	if (App.uiManager.elements.gameLayer.querySelector('canvas')) {
+	if (gameLayer.querySelector('canvas')) {
 		console.log('LittleJS already initialized, skipping.');
 		return;
 	}
@@ -153,7 +159,7 @@ function initLittleJS() {
 		gameRenderPost,
 		// Assets that can be referenced by ID within LittleJS.
 		['/assets/sprites/eric.png'],
-		App.uiManager.elements.gameLayer
+		gameLayer
 	);
 }
 

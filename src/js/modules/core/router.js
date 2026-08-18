@@ -1,4 +1,4 @@
-import { sanitizePath } from './sharedUtils.js';
+import { sanitizePath, scrollToHash } from './sharedUtils.js';
 
 /**
  * RouterController handles application state via URL paths and the History API.
@@ -32,21 +32,7 @@ class RouterController {
 			}
 		});
 
-		window.addEventListener('hashchange', () => {
-			const hash = window.location.hash;
-			if (hash) {
-				let id = hash.substring(1);
-				try {
-					id = decodeURIComponent(id);
-				} catch (err) {
-					// Fallback if decode fails
-				}
-				const targetEl = document.getElementById(id);
-				if (targetEl) {
-					targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				}
-			}
-		});
+		window.addEventListener('hashchange', () => scrollToHash(window.location.hash));
 	}
 
 	/**

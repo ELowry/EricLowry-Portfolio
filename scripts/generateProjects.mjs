@@ -6,6 +6,7 @@ import { Log } from './logger.mjs';
 import { marked } from 'marked';
 import { exec } from 'child_process';
 import { escapeHtml } from '../src/js/modules/core/sharedUtils.js';
+import { injectIntoMain } from './buildUtils.mjs';
 
 const execAsync = util.promisify(exec);
 
@@ -195,21 +196,17 @@ class ProjectGenerator {
 		<meta name="twitter:card" content="summary_large_image" />
 	<!-- OG_META_END -->`;
 
-		// Dynamically import marked so it parses the HTML correctly
 		const parsedMarkdown = marked.parse(data.readme);
-		let updatedHtml = baseHtmlContent.replace(
+		const updatedHtml = baseHtmlContent.replace(
 			/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
 			() => replacementMeta
 		);
-		const mainMatch = updatedHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
-		if (mainMatch) {
-			const prefix = updatedHtml.substring(0, mainMatch.index) + mainMatch[1];
-			const suffix =
-				mainMatch[2] + updatedHtml.substring(mainMatch.index + mainMatch[0].length);
-			updatedHtml = prefix + parsedMarkdown + suffix;
-		}
 
-		await fs.writeFile(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
+		await fs.writeFile(
+			path.join(postDirectory, 'index.html'),
+			injectIntoMain(updatedHtml, parsedMarkdown),
+			'utf-8'
+		);
 	}
 
 	/**

@@ -7,6 +7,7 @@ import { Router } from '../core/router.js';
 import { Content } from '../content/content.js';
 import { Obfuscator } from '../markdown/obfuscator.js';
 import { VirtualCursor } from '../input/virtualCursor.js';
+import { scrollToHash } from '../core/sharedUtils.js';
 
 /**
  * Orchestrates all DOM manipulations, UI state transitions, and event handling.
@@ -896,19 +897,7 @@ export class UIManager {
 
 		this.elements.gameModalContent.focus({ focusVisible: false });
 
-		const hash = window.location.hash;
-		if (hash) {
-			let id = hash.substring(1);
-			try {
-				id = decodeURIComponent(id);
-			} catch (err) {
-				// Fallback if decode fails
-			}
-			const targetEl = document.getElementById(id);
-			if (targetEl && this.elements.gameModalContent.contains(targetEl)) {
-				targetEl.scrollIntoView({ block: 'start' });
-			}
-		}
+		scrollToHash(window.location.hash, this.elements.gameModalContent, 'auto');
 	}
 
 	/**
@@ -941,19 +930,7 @@ export class UIManager {
 			this.#displayTableOfContents(headingsTree.headings);
 		}
 
-		const hash = window.location.hash;
-		if (hash) {
-			let id = hash.substring(1);
-			try {
-				id = decodeURIComponent(id);
-			} catch (err) {
-				// Fallback if decode fails
-			}
-			const targetEl = document.getElementById(id);
-			if (targetEl && this.elements.textContent.contains(targetEl)) {
-				targetEl.scrollIntoView({ block: 'start' });
-			}
-		}
+		scrollToHash(window.location.hash, this.elements.textContent, 'auto');
 	}
 
 	/**

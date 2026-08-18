@@ -4,6 +4,7 @@ import { Log } from './logger.mjs';
 import { marked } from 'marked';
 import { createCanvas } from 'canvas';
 import { resolveDotPath, escapeHtml } from '../src/js/modules/core/sharedUtils.js';
+import { injectIntoMain } from './buildUtils.mjs';
 
 const CONTENT_DIR = 'public/content';
 const OUTPUT_FILE = 'public/content/blog-index.json';
@@ -365,18 +366,16 @@ function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 	<!-- OG_META_END -->`;
 
 	const parsedMarkdown = marked.parse(content);
-	let updatedHtml = baseHtmlContent.replace(
+	const updatedHtml = baseHtmlContent.replace(
 		/<!-- OG_META_START -->[\s\S]*?<!-- OG_META_END -->/,
 		() => replacementMeta
 	);
-	const mainMatch = updatedHtml.match(/(<main[^!>]+>)[\s\S]*?(<\/main>)/);
-	if (mainMatch) {
-		const prefix = updatedHtml.substring(0, mainMatch.index) + mainMatch[1];
-		const suffix = mainMatch[2] + updatedHtml.substring(mainMatch.index + mainMatch[0].length);
-		updatedHtml = prefix + parsedMarkdown + suffix;
-	}
 
-	fs.writeFileSync(path.join(postDirectory, 'index.html'), updatedHtml, 'utf-8');
+	fs.writeFileSync(
+		path.join(postDirectory, 'index.html'),
+		injectIntoMain(updatedHtml, parsedMarkdown),
+		'utf-8'
+	);
 }
 
 generateBlog();
