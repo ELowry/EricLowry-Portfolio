@@ -627,7 +627,20 @@ class AppController {
 				return;
 			}
 
-			this.uiManager.displayContentInModal(html, isNewContent);
+			const paths = Content.findPathsByFile(filename);
+
+			let titleLangKey = '';
+			let fallbackTitle = null;
+			if (paths.length > 0) {
+				const nodePath = paths[0];
+				const node = Content.findNodeByPath(nodePath);
+				if (node) {
+					fallbackTitle = node.title;
+					titleLangKey = `content.${nodePath.replace(/\//g, '.')}.title`;
+				}
+			}
+
+			this.uiManager.displayContentInModal(html, isNewContent, titleLangKey, fallbackTitle);
 		} catch (error) {
 			if (error.name !== 'AbortError') {
 				console.error(`Failed to load modal content:`, error);

@@ -222,55 +222,66 @@
 
 			<div id="touch-instructions" class="hidden">
 				<div class="modal-box">
-					<h4 class="lang" data-lang="ui.touchInstructions.header">Touch Controls</h4>
-					<p class="lang" data-lang="ui.touchInstructions.p1"
-						>It looks like you're using a touch device! Here's how to navigate:</p
-					>
-					<ul>
-						<li class="lang" data-lang="ui.touchInstructions.sides"
-							>Touch the left or right side to move in that direction.</li
+					<div class="modal-content">
+						<h4 class="lang" data-lang="ui.touchInstructions.header">Touch Controls</h4>
+						<p class="lang" data-lang="ui.touchInstructions.p1"
+							>It looks like you're using a touch device! Here's how to navigate:</p
 						>
-						<li class="lang" data-lang="ui.touchInstructions.center"
-							>Touch the center area to interact with objects.</li
-						>
-					</ul>
-					<div
-						style="
-							margin-top: 2em;
-							display: flex;
-							justify-content: space-between;
-							align-items: center;
-						"
-					>
-						<label
-							style="display: flex; align-items: center; gap: 0.5em; cursor: pointer"
-						>
-							<input
-								type="checkbox"
-								id="touch-dont-show"
-								style="width: 20px; height: 20px"
-							/>
-							<span class="lang" data-lang="ui.touchInstructions.dontShow"
-								>Don't show this again</span
+						<ul>
+							<li class="lang" data-lang="ui.touchInstructions.sides"
+								>Touch the left or right side to move in that direction.</li
 							>
-						</label>
-						<button
-							class="lang"
-							data-lang="ui.touchInstructions.btnClose"
-							onclick="App.tutorialManager.closeTouchInstructions()"
-							>Got it!</button
+							<li class="lang" data-lang="ui.touchInstructions.center"
+								>Touch the center area to interact with objects.</li
+							>
+						</ul>
+						<div
+							style="
+								margin-top: 2em;
+								display: flex;
+								justify-content: space-between;
+								align-items: center;
+							"
 						>
+							<label
+								style="
+									display: flex;
+									align-items: center;
+									gap: 0.5em;
+									cursor: pointer;
+								"
+							>
+								<input
+									type="checkbox"
+									id="touch-dont-show"
+									style="width: 20px; height: 20px"
+								/>
+								<span class="lang" data-lang="ui.touchInstructions.dontShow"
+									>Don't show this again</span
+								>
+							</label>
+							<button
+								class="lang"
+								data-lang="ui.touchInstructions.btnClose"
+								onclick="App.tutorialManager.closeTouchInstructions()"
+								>Got it!</button
+							>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<dialog
 				id="welcome-screen"
+				class="langAttr"
+				data-langAttr="data-widnowtitle"
+				data-langData_widnowtitle="ui.welcome.title"
+				data-widnowtitle="Welcome"
 				aria-labelledby="WelcomeTitle"
 				aria-describedby="WelcomeDescription"
 			>
 				<div class="modal-box">
-					<div>
+					<div class="modal-content">
 						<h2 id="WelcomeTitle" class="lang" data-lang="ui.welcome.header"
 							>Welcome to Eric Lowry's portfolio</h2
 						>
@@ -315,140 +326,125 @@
 				</div>
 			</dialog>
 
-			<dialog id="game-menu" aria-labelledby="GameMenuTitle">
+			<dialog
+				id="game-menu"
+				class="langAttr"
+				data-langAttr="data-widnowtitle"
+				data-langData_widnowtitle="ui.gameMenu.header"
+				data-widnowtitle="Menu"
+				aria-labelledby="GameMenuTitle"
+			>
 				<div class="modal-box">
-					<h2 id="GameMenuTitle">
-						<span class="sr-only accessible-forced lang" data-lang="ui.gameMenu.header"
-							>Menu</span
-						>
-						<span class="ascii" aria-hidden="true">
-							<pre>
- __ __ 
-|  V  |
-| \_/ |
-|_| |_|</pre>
-							<pre>
- ___ 
-| __|
-| _| 
-|___|</pre>
-							<pre>
- __  _ 
-|  \| |
-| | ' |
-|_|\__|</pre>
-							<pre>
- _  _ 
-| || |
-| \/ |
- \__/ </pre>
-						</span>
-					</h2>
-					<nav role="menu">
-						<button
-							id="reset-button"
-							role="menuitem"
-							class="lang"
-							data-lang="ui.gameMenu.btnReset"
-							onclick="App.returnToStart()"
-							>Return to Start</button
-						>
-						<button
-							role="menuitem"
-							class="lang"
-							data-lang="ui.gameMenu.btnTextMode"
-							onclick="
-								App.closeGameMenu();
-								App.setMode('text');
-							"
-							>Switch to Text Mode</button
-						>
-						<button
-							role="menuitem"
-							class="lang"
-							data-lang="ui.gameMenu.btnBlog"
-							onclick="
-								App.closeGameMenu();
-								App.setMode('text');
-								App.navigate('blog');
-							"
-							>Blog</button
-						>
-						<button
-							role="menuitem"
-							class="lang"
-							data-lang="ui.gameMenu.btnControls"
-							onclick="
-								App.closeGameMenu();
-								App.loadContentInModal('info/controls.md');
-							"
-							>Display Controls</button
-						>
-						<button
-							role="menuitem"
-							class="lang"
-							data-lang="ui.btnPrivacy"
-							onclick="
-								App.closeGameMenu();
-								App.loadContentInModal('info/privacy.md');
-							"
-							>Privacy Policy</button
-						>
-						<button
-							role="menuitem"
-							class="lang"
-							data-lang="ui.btnOptions"
-							aria-haspopup="menu"
-							aria-expanded="false"
-							aria-controls="game-options-submenu"
-							>Options</button
-						>
-						<div
-							id="game-options-submenu"
-							class="langAttr"
-							role="menu"
-							data-langattr="aria-label"
-							data-langAria_label="ui.submenuOptions"
-							aria-label="Options Submenu"
-							hidden
-						>
+					<div class="modal-content">
+						<h2 id="GameMenuTitle" data-lang="ui.gameMenu.header">Menu</h2>
+						<nav role="menu">
 							<button
-								role="menuitemcheckbox"
-								aria-checked="false"
-								class="switch-btn js-readability-toggle"
-								onclick="App.toggleReadabilityMode()"
+								id="reset-button"
+								role="menuitem"
+								class="lang"
+								data-lang="ui.gameMenu.btnReset"
+								onclick="App.returnToStart()"
+								>Return to Start</button
 							>
-								<span class="switch-track"></span>
-								<span class="lang" data-lang="ui.btnReadability"
-									>Increase Readability</span
-								>
-							</button>
+							<button
+								role="menuitem"
+								class="lang"
+								data-lang="ui.gameMenu.btnTextMode"
+								onclick="
+									App.closeGameMenu();
+									App.setMode('text');
+								"
+								>Switch to Text Mode</button
+							>
+							<button
+								role="menuitem"
+								class="lang"
+								data-lang="ui.gameMenu.btnBlog"
+								onclick="
+									App.closeGameMenu();
+									App.setMode('text');
+									App.navigate('blog');
+								"
+								>Blog</button
+							>
+							<button
+								role="menuitem"
+								class="lang"
+								data-lang="ui.gameMenu.btnControls"
+								onclick="
+									App.closeGameMenu();
+									App.loadContentInModal('info/controls.md');
+								"
+								>Display Controls</button
+							>
+							<button
+								role="menuitem"
+								class="lang"
+								data-lang="ui.btnPrivacy"
+								onclick="
+									App.closeGameMenu();
+									App.loadContentInModal('info/privacy.md');
+								"
+								>Privacy Policy</button
+							>
+							<button
+								role="menuitem"
+								class="lang"
+								data-lang="ui.btnOptions"
+								aria-haspopup="menu"
+								aria-expanded="false"
+								aria-controls="game-options-submenu"
+								>Options</button
+							>
 							<div
-								class="languageSwitcherButtons langAttr"
+								id="game-options-submenu"
+								class="langAttr"
+								role="menu"
 								data-langattr="aria-label"
-								data-langAria_label="ui.submenuLanguage"
-								role="group"
-								aria-label="Language selection"
-							></div>
-						</div>
-						<button
-							role="menuitem"
-							class="lang"
-							data-lang="ui.gameMenu.btnClose"
-							onclick="App.closeGameMenu()"
-							>Close Menu</button
-						>
-					</nav>
+								data-langAria_label="ui.submenuOptions"
+								aria-label="Options Submenu"
+								hidden
+							>
+								<button
+									role="menuitemcheckbox"
+									aria-checked="false"
+									class="switch-btn js-readability-toggle"
+									onclick="App.toggleReadabilityMode()"
+								>
+									<span class="switch-track"></span>
+									<span class="lang" data-lang="ui.btnReadability"
+										>Increase Readability</span
+									>
+								</button>
+								<div
+									class="languageSwitcherButtons langAttr"
+									data-langattr="aria-label"
+									data-langAria_label="ui.submenuLanguage"
+									role="group"
+									aria-label="Language selection"
+								></div>
+							</div>
+							<button
+								role="menuitem"
+								class="lang"
+								data-lang="ui.gameMenu.btnClose"
+								onclick="App.closeGameMenu()"
+								>Close Menu</button
+							>
+						</nav>
+					</div>
 				</div>
 			</dialog>
 
 			<dialog id="game-modal">
 				<div class="modal-box">
-					<button onclick="App.closeGameModal()" class="close-modal">
-						<span class="lang" data-lang="ui.modal.btnClose">Close</span>
-						<span data-prompt="back">[x]</span>
-					</button>
-					<div id="game-modal-content" tabindex="-1"></div>
+					<div class="modal-content">
+						<button onclick="App.closeGameModal()" class="close-modal">
+							<span class="lang" data-lang="ui.modal.btnClose">Close</span>
+							<span data-prompt="back">[x]</span>
+						</button>
+						<div id="game-modal-content" tabindex="-1"></div>
+					</div>
 				</div>
 			</dialog>
 		</div>
@@ -696,7 +692,7 @@
 								d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
 							></path>
 						</svg>
-						Warning
+						<span class="lang" data-lang="alerts.warning">Warning</span>
 					</p>
 					<p class="lang" data-lang="blog.commentsConsent"
 						>This site uses Giscus (powered by GitHub Discussions) to host comments.

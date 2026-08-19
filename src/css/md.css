@@ -132,14 +132,35 @@
 
 	/* Base Alert Style */
 	.markdown-alert {
+		--alert-bar-padding: calc((var(--ui-bar-width) - var(--ui-bar-internal)) / 2);
+
 		position: relative;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
-		border-left: 0.25em solid var(--color-border);
+		border: 1px solid var(--color-border);
 		background-color: oklch(from var(--color-highlight) l c h / 3%);
-		padding: 0.5rem 1rem;
+		padding: 0.5rem;
+		padding-left: calc(0.5rem + var(--ui-bar-width));
 		overflow: hidden;
 		font-size: 0.95em;
+
+		&&::before,
+		&&::after {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: var(--ui-bar-width);
+		}
+		&&::before {
+			top: 0;
+			background-color: var(--color-border);
+			content: '';
+		}
+		&&::after {
+			content: '■';
+			color: var(--color-overlay);
+			text-align: center;
+		}
 
 		/* Alert Title */
 		.markdown-alert-title {
@@ -155,10 +176,12 @@
 			text-transform: uppercase;
 
 			svg {
+				position: absolute;
+				top: 0.4rem;
+				left: var(--alert-bar-padding);
 				fill: currentColor;
-				margin-right: 0.5em;
-				width: 16px;
-				height: 16px;
+				width: var(--ui-bar-internal);
+				height: var(--ui-bar-internal);
 			}
 		}
 
@@ -171,53 +194,61 @@
 		}
 
 		/* Specific Alert Types */
-		&.markdown-alert-note,
-		&.markdown-alert-info {
-			border-left-color: var(--color-alert-note);
-			.markdown-alert-title {
-				color: var(--color-alert-note);
-			}
+		&.markdown-alert-note .markdown-alert-title,
+		&.markdown-alert-info .markdown-alert-title {
+			color: var(--color-alert-note);
 		}
-		&.markdown-alert-tip,
-		&.markdown-alert-astuce {
-			border-left-color: var(--color-alert-tip);
-			.markdown-alert-title {
-				color: var(--color-alert-tip);
-			}
+		&.markdown-alert-tip .markdown-alert-title,
+		&.markdown-alert-astuce .markdown-alert-title {
+			color: var(--color-alert-tip);
 		}
-		&.markdown-alert-important {
-			border-left-color: var(--color-alert-important);
-			.markdown-alert-title {
-				color: var(--color-alert-important);
-			}
+		&.markdown-alert-important .markdown-alert-title {
+			color: var(--color-alert-important);
 		}
-		&.markdown-alert-warning,
-		&.markdown-alert-attention {
-			border-left-color: var(--color-alert-warning);
-			.markdown-alert-title {
-				color: var(--color-alert-warning);
-			}
+		&.markdown-alert-warning .markdown-alert-title,
+		&.markdown-alert-attention .markdown-alert-title {
+			color: var(--color-alert-warning);
 		}
-		&.markdown-alert-caution,
-		&.markdown-alert-avertissement {
-			border-left-color: var(--color-alert-caution);
-			.markdown-alert-title {
-				color: var(--color-alert-caution);
-			}
+		&.markdown-alert-caution .markdown-alert-title,
+		&.markdown-alert-avertissement .markdown-alert-title {
+			color: var(--color-alert-caution);
 		}
 
 		&.markdown-alert-summary,
 		&.markdown-alert-résumé {
 			display: inline-block;
-			border: 0.25em solid var(--color-border);
+			border-width: var(--border-width);
 			padding: 0;
+			font-size: 1.2rem;
+			line-height: 1.1;
+			font-family: var(--font-mono);
+
+			&::before,
+			&::after {
+				display: none;
+			}
 
 			.markdown-alert-title {
 				justify-content: center;
 				margin: 0;
 				background-color: var(--color-border);
-				padding: 0.2rem 0.5rem;
+				padding: 0.2rem 1.4rem;
 				text-align: center;
+
+				&::before,
+				&::after {
+					position: absolute;
+					top: 0.1rem;
+					color: var(--color-overlay);
+				}
+				&::before {
+					left: 0.2rem;
+					content: '-/';
+				}
+				&::after {
+					right: 0.2rem;
+					content: '□■■';
+				}
 			}
 
 			> * {
@@ -263,8 +294,10 @@
 
 		iframe {
 			position: absolute;
+			z-index: 1;
 			inset: 0;
 			border: 0;
+			isolation: isolate;
 			width: 100%;
 			height: 100%;
 		}
@@ -446,12 +479,27 @@
 
 .md-external-link {
 	@media not print {
+		&:focus-visible::before {
+			position: absolute;
+			z-index: 4;
+			inset: calc(var(--focus-corner-thickness) * -3);
+			right: 0;
+			background: var(--bg-focus-corners);
+			pointer-events: none;
+			content: '';
+		}
+
 		&::after {
 			display: inline-block;
+			position: relative;
 			vertical-align: super;
 			opacity: 0.4;
+			z-index: unset;
 			transition: opacity var(--transition-duration) var(--transition-easing);
 			margin-right: 0.4ch;
+			inset: unset;
+			background: unset;
+			pointer-events: unset;
 			content: '⌝';
 			line-height: 0;
 			text-decoration: none;

@@ -10,7 +10,7 @@
 > | **Languages** | Kotlin                        |
 > | **Skillset**  | App Development, UI/UX Design |
 >
-> - ⏱ Pending availability on F-Droid
+> - 📥 [Download from F-Droid](https://f-droid.org/packages/com.ericlowry.dnstoggle/)
 > - 📥 [Download from IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.ericlowry.dnstoggle)
 > - 📦 [Download from GitHub](https://github.com/ELowry/DNSToggle/releases/latest)
 > - 🗎 [Source code on GitHub](https://github.com/ELowry/DNSToggle)

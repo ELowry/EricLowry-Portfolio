@@ -37,8 +37,19 @@ body {
 }
 
 *:focus-visible {
-	outline: dashed 1px var(--color-accent);
-	outline-offset: var(--border-width);
+	position: relative;
+	/* outline: dashed 1px var(--color-accent); */
+	/* outline-offset: var(--border-width); */
+	outline: none;
+}
+
+*:focus-visible::after {
+	position: absolute;
+	z-index: 4;
+	inset: calc(var(--focus-corner-thickness) * -3);
+	background: var(--bg-focus-corners);
+	pointer-events: none;
+	content: '';
 }
 
 button {
@@ -68,6 +79,9 @@ button {
 a {
 	color: var(--color-accent);
 	text-decoration: none;
+	&:link {
+		display: inline-block;
+	}
 
 	&:hover,
 	&:active {

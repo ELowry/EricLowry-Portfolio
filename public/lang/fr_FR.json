@@ -263,5 +263,8 @@
 	"projects": {
 		"intro": "Voici une sélection de repositories de {0}ma page GitHub{1}. Je les ai dupliqués ici afin de créer des pages pratiques faciles d'accès.",
 		"errorLoading": "Impossible de charger l'index des projets."
+	},
+	"alerts": {
+		"warning": "Attention"
 	}
 }

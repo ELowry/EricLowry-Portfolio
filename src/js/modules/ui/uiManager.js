@@ -119,6 +119,9 @@ export class UIManager {
 			LayeredInput.deactivate(LayeredInput.LAYER_GAME_WELCOME);
 			this.app.onModalClose(false);
 		});
+		this.elements.gameWelcome?.addEventListener('keydown', (e) => {
+			this.#handleMenuNavigation(e, this.elements.gameWelcome, 'x');
+		});
 
 		// Text Nav (Breadcrumbs)
 		this.elements.textNav?.addEventListener('keydown', (e) => {
@@ -143,6 +146,9 @@ export class UIManager {
 		this.#setupGameModalEvents();
 		this.#setupSubmenuEvents();
 		this.#setupInteractionLabelEvents();
+
+		this.#setupBackdropClick(this.elements.gameMenu);
+		this.#setupBackdropClick(this.elements.gameModal);
 
 		if (this.elements.textNavbar) {
 			this.#resetTabFocus(this.elements.textNavbar);
@@ -324,6 +330,21 @@ export class UIManager {
 	}
 
 	/**
+	 * Allows clicking the backdrop to close the dialog.
+	 * @param {HTMLDialogElement} dialog - The dialog to apply this to.
+	 * @private
+	 */
+	#setupBackdropClick(dialog) {
+		dialog.addEventListener('click', (e) => {
+			// If the click target is the dialog itself (the backdrop), close it.
+			// Clicks inside the .modal-box will have e.target as the box or its children.
+			if (e.target === dialog) {
+				dialog.close();
+			}
+		});
+	}
+
+	/**
 	 * Forces all modals, menus, and overlays to close (used during mode shifts).
 	 * @private
 	 */
@@ -365,7 +386,9 @@ export class UIManager {
 	 * @private
 	 */
 	#handleMenuNavigation(e, container, axis = 'both') {
-		const allItems = Array.from(container.querySelectorAll('[role^="menuitem"], a[href]'));
+		const allItems = Array.from(
+			container.querySelectorAll('[role^="menuitem"], a[href], button')
+		);
 		const items = allItems.filter((el) => {
 			if (el.disabled || el.hasAttribute('disabled')) {
 				return false;
@@ -394,12 +417,7 @@ export class UIManager {
 			nextIndex = 0;
 		} else if (e.key === 'End') {
 			nextIndex = items.length - 1;
-		} else if (
-			!Navigation.activeContainer
-			|| !Navigation.activeContainer.contains(container)
-			|| !Navigation.options.axis
-			|| Navigation.options.axis === axis
-		) {
+		} else {
 			if ((axis === 'y' || axis === 'both') && e.key === 'ArrowDown') {
 				nextIndex = (currentIndex + 1) % items.length;
 			} else if ((axis === 'y' || axis === 'both') && e.key === 'ArrowUp') {
@@ -428,7 +446,9 @@ export class UIManager {
 	 * @private
 	 */
 	#resetTabFocus(container) {
-		const allItems = Array.from(container.querySelectorAll('[role^="menuitem"], a[href]'));
+		const allItems = Array.from(
+			container.querySelectorAll('[role^="menuitem"], a[href], button')
+		);
 		const items = allItems.filter((el) => {
 			if (el.disabled || el.hasAttribute('disabled')) {
 				return false;
@@ -875,9 +895,28 @@ export class UIManager {
 	 * Injects content into the game modal and displays it.
 	 * @param {string} html - The raw HTML string to insert into the modal.
 	 * @param {boolean} [resetScroll=true] - Whether to reset the scroll position to the top.
+	 * @param {string} [titleLangKey=null] - The translation key for the modal title.
+	 * @param {string} [fallbackTitle=null] - The fallback title.
 	 */
-	displayContentInModal(html, resetScroll = true) {
+	displayContentInModal(html, resetScroll = true, titleLangKey = null, fallbackTitle = null) {
 		LayeredInput.activate(LayeredInput.LAYER_GAME_MODAL);
+
+		if (titleLangKey) {
+			this.elements.gameModal.classList.add('langAttr');
+			this.elements.gameModal.setAttribute('data-langattr', 'data-widnowtitle');
+			this.elements.gameModal.setAttribute('data-langdata_widnowtitle', titleLangKey);
+			this.elements.gameModal.setAttribute(
+				'data-widnowtitle',
+				Lang.getString(titleLangKey, null, fallbackTitle)
+			);
+		} else if (fallbackTitle) {
+			this.elements.gameModal.classList.remove('langAttr');
+			this.elements.gameModal.removeAttribute('data-langattr');
+			this.elements.gameModal.removeAttribute('data-langdata_widnowtitle');
+			this.elements.gameModal.setAttribute('data-widnowtitle', fallbackTitle);
+		} else {
+			this.elements.gameModal.removeAttribute('data-widnowtitle');
+		}
 
 		this.elements.gameModalContent.innerHTML = html;
 
@@ -896,17 +935,18 @@ export class UIManager {
 			this.elements.gameModal.showModal();
 		}
 
-		this.elements.gameModalContent.focus({ focusVisible: false });
+		this.elements.gameModalContent.focus({ preventScroll: true, focusVisible: false });
 
 		requestAnimationFrame(() => {
 			if (resetScroll) {
-				const modalBox = this.elements.gameModal.querySelector('.modal-box');
-				if (modalBox) {
-					modalBox.scrollTop = 0;
+				const modalScrollContainer =
+					this.elements.gameModal.querySelector('.modal-content');
+				if (modalScrollContainer) {
+					modalScrollContainer.scrollTop = 0;
 				}
 			}
 
-			this.elements.gameModalContent.focus({ focusVisible: false });
+			this.elements.gameModalContent.focus({ preventScroll: true, focusVisible: false });
 			scrollToHash(window.location.hash, this.elements.gameModalContent, 'auto');
 		});
 	}

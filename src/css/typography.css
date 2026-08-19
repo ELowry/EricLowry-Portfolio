@@ -103,25 +103,3 @@ small,
 .text-small {
 	font-size: 0.64em;
 }
-
-.ascii,
-pre {
-	font-family: var(--font-mono);
-}
-.ascii {
-	display: flex;
-	font-size: 1rem;
-
-	pre {
-		display: inline-block;
-		margin: unset;
-	}
-
-	@media (forced-colors: active) or (prefers-contrast: more) or (prefers-reduced-data: reduce) {
-		display: none !important;
-	}
-
-	:root.readability-mode & {
-		display: none !important;
-	}
-}

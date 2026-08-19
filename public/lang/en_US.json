@@ -262,6 +262,7 @@
 		"categoryOptionsAria": "Category options",
 		"welcome": {
 			"header": "Welcome to Eric Lowry's portfolio",
+			"title": "Welcome",
 			"p1": "I have set up a small interactive experience which lets you explore my work in a fun little game.",
 			"p2": "However, whether for accessibility reasons or efficiency, a simplified interface is available with all the same information.",
 			"modeSelection": "Mode Selection",
@@ -337,5 +338,8 @@
 	"projects": {
 		"intro": "This is a slection of repositories from my {0}GitHub page{1} that I have mirrored, providing convenient clutter-free pages.",
 		"errorLoading": "Failed to load projects index."
+	},
+	"alerts": {
+		"warning": "Warning"
 	}
 }

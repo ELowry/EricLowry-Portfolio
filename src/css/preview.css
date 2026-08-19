@@ -1,88 +1,97 @@
 /* --- PREVIEW CARD --- */
 
 .preview-card {
-	--preview-card-transition-duration: 0.3s;
-
-	display: flex;
-	position: fixed;
-	right: 2rem;
-	bottom: 2rem;
-	align-items: stretch;
-	transform: translateY(1rem);
+	display: none;
 	opacity: 0;
-	z-index: 2000;
-	transition:
-		var(--transition-base),
-		opacity var(--preview-card-transition-duration) ease-in,
-		transform var(--transition-duration-long) ease-out;
-	box-shadow: 0 8px 24px oklch(from var(--color-overlay) l c h / var(--percent-50));
-	border: var(--border-width) solid var(--color-border);
-	background-color: var(--color-background);
-	padding: 0.4rem 0.4rem 0.4rem 0.6rem;
-	width: fit-content;
-	max-width: min(40dvw, 36rem);
-	pointer-events: none;
 
-	@supports (position-anchor: --foo) or (anchor-name: --foo) {
-		position-anchor: --active-preview-link;
-		position-area: bottom span-right;
-		position-try-fallbacks: flip-block, flip-inline;
-		right: auto;
-		bottom: auto;
-		margin-top: 0.2rem;
-	}
+	@media (width > 36rem) {
+		--preview-card-transition-duration: 0.3s;
 
-	&.visible {
-		transform: translateY(0);
-		opacity: 1;
-	}
-
-	.preview-img-wrapper {
-		display: none;
-		position: relative;
-		flex-shrink: 0;
-		width: 10em;
-		overflow: hidden;
-
-		&::before {
-			position: absolute;
-			opacity: 0.94;
-			z-index: 1;
-			filter: var(--backdrop-blur);
-			inset: calc(-10px);
-			background-image: var(--preview-bg-image);
-			background-position: center;
-			background-size: cover;
-			content: '';
-		}
-
-		.preview-img {
-			display: block;
-			position: relative;
-			z-index: 2;
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-		}
-	}
-
-	.preview-content {
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
+		position: fixed;
+		right: 2rem;
+		bottom: 2rem;
+		align-items: stretch;
+		transform: translateY(1rem);
+		opacity: 0;
+		z-index: 2000;
+		transition:
+			var(--transition-base),
+			opacity var(--preview-card-transition-duration) ease-in,
+			transform var(--transition-duration-long) ease-out;
+		box-shadow: 0 8px 24px oklch(from var(--color-overlay) l c h / var(--percent-50));
+		border: var(--border-width) solid var(--color-border);
+		background-color: var(--color-background);
 		padding: 0.4rem 0.4rem 0.4rem 0.6rem;
-	}
+		width: fit-content;
+		max-width: clamp(36rem, calc(26dvw + 20rem), 80dvw);
+		pointer-events: none;
 
-	.preview-title {
-		margin: 0 0 0.5rem 0;
-		font-size: var(--h5-size);
-		text-wrap: balance;
-	}
+		@media (width < 60rem) {
+			max-width: 80dvw;
+		}
 
-	.preview-desc {
-		opacity: 0.85;
-		margin: 0;
-		font-size: 0.85rem;
-		text-wrap: pretty;
+		@supports (position-anchor: --foo) or (anchor-name: --foo) {
+			position-anchor: --active-preview-link;
+			position-area: bottom span-right;
+			position-try-fallbacks: flip-block, flip-inline;
+			right: auto;
+			bottom: auto;
+			margin-top: 0.2rem;
+		}
+
+		&.visible {
+			transform: translateY(0);
+			opacity: 1;
+		}
+
+		.preview-img-wrapper {
+			display: none;
+			position: relative;
+			flex-shrink: 0;
+			width: 10em;
+			overflow: hidden;
+
+			&::before {
+				position: absolute;
+				opacity: 0.94;
+				z-index: 1;
+				filter: var(--backdrop-blur);
+				inset: calc(-10px);
+				background-image: var(--preview-bg-image);
+				background-position: center;
+				background-size: cover;
+				content: '';
+			}
+
+			.preview-img {
+				display: block;
+				position: relative;
+				z-index: 2;
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
+		}
+
+		.preview-content {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 0.4rem 0.4rem 0.4rem 0.6rem;
+		}
+
+		.preview-title {
+			margin: 0 0 0.5rem 0;
+			font-size: var(--h5-size);
+			text-wrap: balance;
+		}
+
+		.preview-desc {
+			opacity: 0.85;
+			margin: 0;
+			font-size: 0.85rem;
+			text-wrap: pretty;
+		}
 	}
 }

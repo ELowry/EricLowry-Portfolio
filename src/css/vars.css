@@ -58,6 +58,13 @@
 
 	--border-width: 2px;
 
+	--focus-corner-color: var(--color-accent);
+	--focus-corner-length: 0.8rem;
+	--focus-corner-thickness: var(--border-width);
+
+	--ui-bar-width: 2rem;
+	--ui-bar-internal: 1.4rem;
+
 	--topbar-padding: 4rem;
 	--narrow-padding: 1rem;
 
@@ -188,4 +195,28 @@
 :root.readability-mode {
 	--font-sans: var(--font-sans-clean);
 	--font-mono: var(--font-mono-clean);
+}
+
+/* Directly attach variables that rely on other variables */
+
+*:focus-visible,
+.switch-track,
+.md-external-link {
+	--bg-focus-corners:
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) top left /
+			var(--focus-corner-length) var(--focus-corner-thickness) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) top left /
+			var(--focus-corner-thickness) var(--focus-corner-length) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) top right /
+			var(--focus-corner-length) var(--focus-corner-thickness) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) top right /
+			var(--focus-corner-thickness) var(--focus-corner-length) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) bottom left /
+			var(--focus-corner-length) var(--focus-corner-thickness) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) bottom left /
+			var(--focus-corner-thickness) var(--focus-corner-length) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) bottom right /
+			var(--focus-corner-length) var(--focus-corner-thickness) no-repeat,
+		linear-gradient(var(--focus-corner-color), var(--focus-corner-color)) bottom right /
+			var(--focus-corner-thickness) var(--focus-corner-length) no-repeat;
 }

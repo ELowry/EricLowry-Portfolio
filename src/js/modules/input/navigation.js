@@ -108,7 +108,7 @@ class NavigationController {
 		}
 
 		// Handle Focus Navigation
-		if (this.options.axis && !debounceActive) {
+		if (this.options.axis && !debounceActive && inputState.lastInputType === 'gamepad') {
 			let navInput = 0;
 
 			if (this.options.axis === 'x') {
@@ -213,10 +213,7 @@ class NavigationController {
 		if (currentIndex === -1) {
 			// If focus was lost, reset to top
 			const nextItem = focusables[0];
-			if (this.options.roving) {
-				focusables.forEach((el) => (el.tabIndex = -1));
-				nextItem.tabIndex = 0;
-			}
+
 			nextItem.focus({ focusVisible: true });
 			nextItem.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 		} else {
@@ -228,11 +225,6 @@ class NavigationController {
 			}
 
 			const nextItem = focusables[nextIndex];
-
-			if (this.options.roving) {
-				currentFocused.tabIndex = -1;
-				nextItem.tabIndex = 0;
-			}
 
 			nextItem.focus({ focusVisible: true });
 			nextItem.scrollIntoView({
