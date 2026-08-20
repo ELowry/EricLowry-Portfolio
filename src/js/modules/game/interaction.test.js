@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Interaction } from './interaction.js';
-import { Input } from '../input/input.js';
-import { Events } from '../core/events.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Engine } from '../core/engineContext.js';
+import { Events } from '../core/events.js';
+import { Input } from '../input/input.js';
+import { Interaction } from './interaction.js';
 
 Engine.setEngine({
 	vec2: (x, y) => ({ x, y }),

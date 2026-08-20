@@ -272,6 +272,7 @@
 		},
 		"gameMenu": {
 			"header": "Menu",
+			"title": ".config",
 			"btnReset": "Return to Start",
 			"btnTextMode": "Switch to Text Mode",
 			"btnControls": "Display Controls",

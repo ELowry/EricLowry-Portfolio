@@ -1,7 +1,8 @@
 import fs from 'fs';
-import * as readline from 'readline/promises';
-import { Log } from './logger.mjs';
 import { stdin as input, stdout as output } from 'process';
+import * as readline from 'readline/promises';
+
+import { Log } from './logger.mjs';
 
 /**
  * Handles the interactive synchronization of blog posts to Lemmy communities.

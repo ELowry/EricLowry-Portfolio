@@ -1,7 +1,7 @@
 import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
-import { Input } from './input.js';
 import { LayeredInput } from '../core/layeredInputs.js';
+import { Input } from './input.js';
 
 /**
  * Manages a screen-space pointer moved via controller.

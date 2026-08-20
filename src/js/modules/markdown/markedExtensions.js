@@ -1,9 +1,10 @@
-import { Obfuscator } from './obfuscator.js';
+import { markedHighlight } from 'marked-highlight';
+
+import { codeHighlight } from './codeHighlight.js';
+import { VideoEmbeds } from './embeds.js';
 import { Gallery } from './gallery.js';
 import { LocalLinkParser } from './localLinks.js';
-import { VideoEmbeds } from './embeds.js';
-import { markedHighlight } from 'marked-highlight';
-import { codeHighlight } from './codeHighlight.js';
+import { Obfuscator } from './obfuscator.js';
 
 /**
  * Manages custom extensions and renderers for the `marked` library.

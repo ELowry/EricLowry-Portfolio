@@ -1,10 +1,10 @@
-import { Router } from '../core/router.js';
-import { Lang } from './lang.js';
-import { Content as AppContent } from '../content/content.js';
-import { Events } from '../core/events.js';
 import { Blog } from '../content/blog.js';
+import { Content as AppContent } from '../content/content.js';
 import { Projects } from '../content/projects.js';
+import { Events } from '../core/events.js';
+import { Router } from '../core/router.js';
 import { escapeHtml } from '../core/sharedUtils.js';
+import { Lang } from './lang.js';
 
 /**
  * Responsible for composing and injecting the text-mode UI (breadcrumbs and navigation) into the App's text view.
@@ -454,17 +454,19 @@ export class TextRenderer {
 			Lang.getString('ui.breadcrumbsAria', null, 'Breadcrumb')
 		);
 
+		let crumbIndex = 0;
 		const createCrumb = (label, targetPath, isCurrent) => {
 			const clone = this.breadcrumbTemplate.content.cloneNode(true);
 			const listItem = clone.querySelector('li');
+			const link = clone.querySelector('a');
+
+			link.textContent = label;
+			link.setAttribute('tabindex', crumbIndex === 0 ? '0' : '-1');
 
 			if (isCurrent) {
 				listItem.setAttribute('aria-current', 'page');
 				listItem.textContent = label;
 			} else {
-				const link = clone.querySelector('a');
-				link.textContent = label;
-
 				link.href =
 					Router.isBlogRoute || Router.isProjectRoute
 						? `/${targetPath}`
@@ -477,6 +479,7 @@ export class TextRenderer {
 			}
 
 			breadcrumbList.appendChild(clone);
+			crumbIndex++;
 		};
 
 		// Root Crumb

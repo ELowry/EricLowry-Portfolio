@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { Log } from './logger.mjs';
 import { fileURLToPath } from 'url';
+
 import { ContentTree } from '../src/js/modules/content/contentTree.js';
+import { Log } from './logger.mjs';
 
 // SET DOMAIN NAME
 const BASE_URL = 'https://eric-lowry.com';

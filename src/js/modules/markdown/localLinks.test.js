@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { LocalLinkParser } from './localLinks.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Content } from '../content/content.js';
 import { Router } from '../core/router.js';
+import { LocalLinkParser } from './localLinks.js';
 
 vi.mock('../content/content.js', () => {
 	return {

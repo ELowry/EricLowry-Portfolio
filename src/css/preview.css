@@ -24,7 +24,7 @@
 		background-color: var(--color-background);
 		padding: 0.4rem 0.4rem 0.4rem 0.6rem;
 		width: fit-content;
-		max-width: clamp(36rem, calc(26dvw + 20rem), 80dvw);
+		max-width: clamp(36rem, 26dvw + 20rem, 80dvw);
 		pointer-events: none;
 
 		@media (width < 60rem) {

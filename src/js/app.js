@@ -1,24 +1,24 @@
-import { Router } from './modules/core/router.js';
-import { Events } from './modules/core/events.js';
-import { GameBridge } from './modules/game/gameBridge.js';
-import { UIManager } from './modules/ui/uiManager.js';
 import { Content } from './modules/content/content.js';
 import { ContentTree } from './modules/content/contentTree.js';
+import { ExternalLinks } from './modules/content/externalLinks.js';
+import { Meta } from './modules/content/meta.js';
+import { Engine } from './modules/core/engineContext.js';
+import { Events } from './modules/core/events.js';
+import { LayeredInput } from './modules/core/layeredInputs.js';
+import { Router } from './modules/core/router.js';
+import { getCacheBuster } from './modules/core/sharedUtils.js';
+import { GameBridge } from './modules/game/gameBridge.js';
 import { Interaction } from './modules/game/interaction.js';
-import { Lang } from './modules/ui/lang.js';
 import { Input } from './modules/input/input.js';
 import { InputPrompts } from './modules/input/inputPrompts.js';
-import { LayeredInput } from './modules/core/layeredInputs.js';
 import { Navigation } from './modules/input/navigation.js';
-import { TextRenderer } from './modules/ui/textRenderer.js';
 import { TutorialManager } from './modules/input/tutorialManager.js';
-import { MarkedExtensions } from './modules/markdown/markedExtensions.js';
 import { GalleryDisplay } from './modules/markdown/gallery.js';
-import { Meta } from './modules/content/meta.js';
+import { MarkedExtensions } from './modules/markdown/markedExtensions.js';
+import { Lang } from './modules/ui/lang.js';
 import { PreviewManager } from './modules/ui/previewManager.js';
-import { ExternalLinks } from './modules/content/externalLinks.js';
-import { getCacheBuster } from './modules/core/sharedUtils.js';
-import { Engine } from './modules/core/engineContext.js';
+import { TextRenderer } from './modules/ui/textRenderer.js';
+import { UIManager } from './modules/ui/uiManager.js';
 
 /**
  * Manages high-level application state, routing, and ecosystem orchestration.

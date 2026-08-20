@@ -185,6 +185,12 @@ export const ContentTree = category({
 					image: 'osd/osd/github__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
 				content({
+					id: 'dns-toggle',
+					title: 'DNS Toggle',
+					file: 'osd/dns-toggle.md',
+					image: 'osd/dns-toggle/logo__240-117-webp_240-117_400-196-webp_400-196_600-294-webp_600-294_820-401-webp_820-401_1024-501-webp_1024-501.png',
+				}),
+				content({
 					id: 'InputLayers',
 					title: 'InputLayers',
 					file: 'gaming/InputLayers.md',
@@ -206,12 +212,6 @@ export const ContentTree = category({
 					title: 'Obsidian Replace Commands',
 					file: 'osd/obsidian-replace-commands.md',
 					image: 'osd/obsidian-replace-commands/cover__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1200-800-webp_1200-800.jpg',
-				}),
-				content({
-					id: 'dns-toggle',
-					title: 'DNS Toggle',
-					file: 'osd/dns-toggle.md',
-					image: 'osd/dns-toggle/logo__240-117-webp_240-117_400-196-webp_400-196_600-294-webp_600-294_820-401-webp_820-401_1024-501-webp_1024-501.png',
 				}),
 				content({
 					id: 'StadiaIcons',

@@ -33,7 +33,7 @@
 		justify-content: center;
 
 		.md-gallery-item {
-			flex-basis: clamp(calc(50% - var(--border-width)), 12rem, 76dvw);
+			flex-basis: clamp(50% - var(--border-width), 12rem, 76dvw);
 
 			@media print {
 				flex-basis: calc(50% - var(--border-width));

@@ -1,7 +1,7 @@
-import { Input } from '../input/input.js';
 import { Engine } from '../core/engineContext.js';
-import { Router } from '../core/router.js';
 import { LayeredInput } from '../core/layeredInputs.js';
+import { Router } from '../core/router.js';
+import { Input } from '../input/input.js';
 
 /**
  * Player character controlled by user input.

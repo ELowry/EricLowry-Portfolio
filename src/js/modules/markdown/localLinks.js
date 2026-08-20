@@ -1,5 +1,5 @@
-import { Router } from '../core/router.js';
 import { Content } from '../content/content.js';
+import { Router } from '../core/router.js';
 
 /**
  * Intercepts markdown links pointing to local content files and rewrites them to match the application routing system.

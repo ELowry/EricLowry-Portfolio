@@ -330,7 +330,7 @@
 				id="game-menu"
 				class="langAttr"
 				data-langAttr="data-widnowtitle"
-				data-langData_widnowtitle="ui.gameMenu.header"
+				data-langData_widnowtitle="ui.gameMenu.title"
 				data-widnowtitle="Menu"
 				aria-labelledby="GameMenuTitle"
 			>
@@ -437,12 +437,12 @@
 			</dialog>
 
 			<dialog id="game-modal">
+				<button onclick="App.closeGameModal()" class="close-modal">
+					<span class="lang" data-lang="ui.modal.btnClose">Close</span>
+					<span data-prompt="back">[x]</span>
+				</button>
 				<div class="modal-box">
 					<div class="modal-content">
-						<button onclick="App.closeGameModal()" class="close-modal">
-							<span class="lang" data-lang="ui.modal.btnClose">Close</span>
-							<span data-prompt="back">[x]</span>
-						</button>
 						<div id="game-modal-content" tabindex="-1"></div>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { LayeredInput } from './layeredInputs.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Events } from './events.js';
+import { LayeredInput } from './layeredInputs.js';
 
 vi.mock('./events.js', () => {
 	return {

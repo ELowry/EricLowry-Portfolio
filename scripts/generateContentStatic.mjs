@@ -1,14 +1,15 @@
 import fs from 'fs/promises';
-import path from 'path';
 import { marked } from 'marked';
-import { Log } from './logger.mjs';
+import path from 'path';
+
 import { ContentTree } from '../src/js/modules/content/contentTree.js';
 import {
+	escapeHtml,
 	parseImageVariant,
 	resolveDotPath,
-	escapeHtml,
 } from '../src/js/modules/core/sharedUtils.js';
 import { injectIntoMain } from './buildUtils.mjs';
+import { Log } from './logger.mjs';
 
 const BASE_URL = 'https://eric-lowry.com';
 const LANG_DIR = path.resolve('public/lang');

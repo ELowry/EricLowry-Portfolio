@@ -1,10 +1,11 @@
-import fs from 'fs';
-import path from 'path';
-import { Log } from './logger.mjs';
-import { marked } from 'marked';
 import { createCanvas } from 'canvas';
-import { resolveDotPath, escapeHtml } from '../src/js/modules/core/sharedUtils.js';
+import fs from 'fs';
+import { marked } from 'marked';
+import path from 'path';
+
+import { escapeHtml, resolveDotPath } from '../src/js/modules/core/sharedUtils.js';
 import { injectIntoMain } from './buildUtils.mjs';
+import { Log } from './logger.mjs';
 
 const CONTENT_DIR = 'public/content';
 const OUTPUT_FILE = 'public/content/blog-index.json';

@@ -1,6 +1,6 @@
 import { Events } from '../core/events.js';
-import { Input } from './input.js';
 import { Lang } from '../ui/lang.js';
+import { Input } from './input.js';
 
 /**
  * Controller for managing and updating input prompt elements in the DOM.

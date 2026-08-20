@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { TextRenderer } from './textRenderer.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Content } from '../content/content.js';
 import { Router } from '../core/router.js';
+import { TextRenderer } from './textRenderer.js';
 
 vi.mock('./lang.js', () => {
 	return {

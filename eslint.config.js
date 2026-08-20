@@ -1,9 +1,9 @@
 import js from '@eslint/js';
-import globals from 'globals';
-import jsdoc from 'eslint-plugin-jsdoc';
 import json from '@eslint/json';
 import markdown from '@eslint/markdown';
 import prettier from 'eslint-config-prettier';
+import jsdoc from 'eslint-plugin-jsdoc';
+import globals from 'globals';
 
 export default [
 	{

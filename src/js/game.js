@@ -1,12 +1,12 @@
 import { Engine } from './modules/core/engineContext.js';
+import { LayeredInput } from './modules/core/layeredInputs.js';
 import { Router } from './modules/core/router.js';
 import { Camera } from './modules/game/camera.js';
+import { GameBridge } from './modules/game/gameBridge.js';
+import { Interaction } from './modules/game/interaction.js';
 import { Player } from './modules/game/player.js';
 import { Input } from './modules/input/input.js';
 import { VirtualCursor } from './modules/input/virtualCursor.js';
-import { LayeredInput } from './modules/core/layeredInputs.js';
-import { Interaction } from './modules/game/interaction.js';
-import { GameBridge } from './modules/game/gameBridge.js';
 
 let player;
 

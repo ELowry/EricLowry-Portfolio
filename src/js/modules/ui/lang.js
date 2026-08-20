@@ -1,5 +1,5 @@
 import { Events } from '../core/events.js';
-import { resolveDotPath, getCacheBuster } from '../core/sharedUtils.js';
+import { getCacheBuster, resolveDotPath } from '../core/sharedUtils.js';
 
 /**
  * LangController manages multi-language support, translation logic, and persistence.

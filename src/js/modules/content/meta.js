@@ -1,9 +1,9 @@
 import { Events } from '../core/events.js';
+import { parseImageVariant } from '../core/sharedUtils.js';
 import { Lang } from '../ui/lang.js';
 import { Blog } from './blog.js';
-import { Projects } from './projects.js';
 import { Content } from './content.js';
-import { parseImageVariant } from '../core/sharedUtils.js';
+import { Projects } from './projects.js';
 
 /**
  * MetaController manages page metadata, updating document title, descriptions, and Open Graph tags.

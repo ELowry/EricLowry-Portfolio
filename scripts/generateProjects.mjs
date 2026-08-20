@@ -1,12 +1,13 @@
+import { exec } from 'child_process';
+import crypto from 'crypto';
 import fs from 'fs/promises';
+import { marked } from 'marked';
 import path from 'path';
 import util from 'util';
-import crypto from 'crypto';
-import { Log } from './logger.mjs';
-import { marked } from 'marked';
-import { exec } from 'child_process';
+
 import { escapeHtml } from '../src/js/modules/core/sharedUtils.js';
 import { injectIntoMain } from './buildUtils.mjs';
+import { Log } from './logger.mjs';
 
 const execAsync = util.promisify(exec);
 

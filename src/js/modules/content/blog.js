@@ -1,7 +1,6 @@
-import { Lang } from '../ui/lang.js';
-import { escapeHtml, getCacheBuster } from '../core/sharedUtils.js';
-
 import giscusThemePath from '../../../css/giscus.css?url';
+import { escapeHtml, getCacheBuster } from '../core/sharedUtils.js';
+import { Lang } from '../ui/lang.js';
 
 /**
  * BlogController manages the fetching and caching of blog data.

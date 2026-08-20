@@ -1,5 +1,9 @@
 {
-	"plugins": ["@prettier/plugin-xml", "prettier-plugin-css-order"],
+	"plugins": [
+		"@prettier/plugin-xml",
+		"prettier-plugin-css-order",
+		"@trivago/prettier-plugin-sort-imports"
+	],
 	"experimentalOperatorPosition": "start",
 	"singleQuote": true,
 	"useTabs": true,
@@ -7,6 +11,9 @@
 	"printWidth": 100,
 	"htmlWhitespaceSensitivity": "strict",
 	"trailingComma": "es5",
+	"importOrder": ["^react$", "^@core/(.*)$", "^[./]"],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true,
 	"overrides": [
 		{
 			"files": "llms.txt",

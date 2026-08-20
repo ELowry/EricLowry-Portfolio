@@ -197,6 +197,7 @@
 		},
 		"gameMenu": {
 			"header": "Menu",
+			"title": ".config",
 			"btnReset": "Retour au départ",
 			"btnTextMode": "Passer au mode texte",
 			"btnControls": "Afficher les commandes",

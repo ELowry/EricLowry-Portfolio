@@ -1,8 +1,8 @@
-import { Lang } from '../ui/lang.js';
 import { Events } from '../core/events.js';
-import { Navigation } from '../input/navigation.js';
 import { LayeredInput } from '../core/layeredInputs.js';
 import { InputPrompts } from '../input/inputPrompts.js';
+import { Navigation } from '../input/navigation.js';
+import { Lang } from '../ui/lang.js';
 
 /**
  * Converts marked.js markdown tables into HTML galleries.

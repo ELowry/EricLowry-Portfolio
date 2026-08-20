@@ -1,6 +1,6 @@
 import { Engine } from '../core/engineContext.js';
-import { Router } from '../core/router.js';
 import { Events } from '../core/events.js';
+import { Router } from '../core/router.js';
 
 /**
  * InputController manages physical keyboard, virtual touch, and gamepad inputs.

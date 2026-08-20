@@ -1,13 +1,13 @@
-import { Navigation } from '../input/navigation.js';
-import { Events } from '../core/events.js';
-import { Lang } from './lang.js';
-import { LayeredInput } from '../core/layeredInputs.js';
-import { InputPrompts } from '../input/inputPrompts.js';
-import { Router } from '../core/router.js';
 import { Content } from '../content/content.js';
-import { Obfuscator } from '../markdown/obfuscator.js';
-import { VirtualCursor } from '../input/virtualCursor.js';
+import { Events } from '../core/events.js';
+import { LayeredInput } from '../core/layeredInputs.js';
+import { Router } from '../core/router.js';
 import { scrollToHash } from '../core/sharedUtils.js';
+import { InputPrompts } from '../input/inputPrompts.js';
+import { Navigation } from '../input/navigation.js';
+import { VirtualCursor } from '../input/virtualCursor.js';
+import { Obfuscator } from '../markdown/obfuscator.js';
+import { Lang } from './lang.js';
 
 /**
  * Orchestrates all DOM manipulations, UI state transitions, and event handling.
@@ -125,7 +125,18 @@ export class UIManager {
 
 		// Text Nav (Breadcrumbs)
 		this.elements.textNav?.addEventListener('keydown', (e) => {
-			this.#handleMenuNavigation(e, this.elements.textNav, 'both');
+			const targetMenu = e.target.closest('.breadcrumbs, .nav-list');
+			if (!targetMenu) {
+				return;
+			}
+			// Horizontal-only navigation for breadcrumbs
+			if (targetMenu.classList.contains('breadcrumbs')) {
+				this.#handleMenuNavigation(e, targetMenu, 'x');
+			}
+			// Vertical-only navigation for the category list
+			else if (targetMenu.classList.contains('nav-list')) {
+				this.#handleMenuNavigation(e, targetMenu, 'y');
+			}
 		});
 
 		// Text Navbar (Main Menu)

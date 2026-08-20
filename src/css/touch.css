@@ -3,7 +3,7 @@
 #touch-controls {
 	display: flex;
 	position: fixed;
-	gap: max(2em, 4vw);
+	gap: max(2em, 4dvw);
 	z-index: 500;
 	inset: 0;
 	touch-action: manipulation;
@@ -95,7 +95,7 @@
 }
 
 .touch-half-circle {
-	--touch-feedback-size: min(max(24vw, 20vh), 14rem);
+	--touch-feedback-size: min(max(24dvw, 20vh), 14rem);
 	transform: translate(-50%, -50%) scale(0.2);
 	-webkit-mask-image: linear-gradient(to right, black 28%, transparent 52%);
 	mask-image: linear-gradient(to right, black 28%, transparent 52%);
@@ -128,7 +128,7 @@
 }
 
 .touch-tap-ripple {
-	--touch-feedback-size: min(24vw, 10rem);
+	--touch-feedback-size: min(24dvw, 10rem);
 	transform: translate(-50%, -50%) scale(0.3);
 	animation: touch-tap-burst 0.3s ease-out forwards;
 
@@ -161,7 +161,7 @@
 	justify-content: center;
 	align-items: start;
 	z-index: 2100;
-	inset: 10vh 5vw 20vh;
+	inset: 10vh 5dvw 20vh;
 	pointer-events: none;
 
 	.modal-box {

@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
-import path from 'path';
-import fs from 'fs';
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+import { defineConfig } from 'vite';
 
 // Generate a hash to use for cache busting
 const timestamp = Date.now().toString();

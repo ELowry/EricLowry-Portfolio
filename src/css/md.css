@@ -313,7 +313,7 @@
 		}
 
 		@media print {
-			max-width: 80vw;
+			max-width: 80dvw;
 		}
 	}
 
@@ -331,7 +331,7 @@
 	/* Blog List */
 	.blog-list {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(40ch - 0.5rem)), 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 40ch - 0.5rem), 1fr));
 		gap: 1rem;
 		padding: 0;
 		list-style: none;
@@ -382,7 +382,7 @@
 					align-items: center;
 					align-self: center;
 					overflow-y: auto;
-					font-size: clamp(1rem, calc(5cqw + (120cqw / var(--content-length))), 4rem);
+					font-size: clamp(1rem, 5cqw + 120cqw / var(--content-length), 4rem);
 					line-height: min(1.2em, 4rem);
 					font-family: var(--font-mono);
 					text-align: center;
@@ -395,8 +395,7 @@
 	/* Projects List */
 	.projects-list {
 		display: grid;
-		/* Note: If you want 2 items to stretch to 50% each instead of leaving an empty 3rd column, change 'auto-fill' to 'auto-fit' below */
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(40ch - 0.5rem)), 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 40ch - 0.5rem), 1fr));
 		gap: 1rem;
 		padding: 0;
 		list-style: none;

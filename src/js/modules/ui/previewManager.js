@@ -1,5 +1,5 @@
-import { Meta } from '../content/meta.js';
 import { ExternalLinks } from '../content/externalLinks.js';
+import { Meta } from '../content/meta.js';
 
 /**
  * Manages the generation and display of link preview cards on hover and focus.
