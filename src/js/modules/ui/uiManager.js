@@ -382,8 +382,12 @@ export class UIManager {
 			this.interactionOverlayTimeout = null;
 		}
 
-		this.elements.touchControls?.classList.add('hidden');
-		this.elements.touchInstructions?.classList.add('hidden');
+		if (this.elements.touchControls) {
+			this.elements.touchControls.hidden = true;
+		}
+		if (this.elements.touchInstructions) {
+			this.elements.touchInstructions.hidden = true;
+		}
 
 		Navigation.setContext(null);
 	}
@@ -614,19 +618,20 @@ export class UIManager {
 	showLoading(opaque = false, fadeIn = false) {
 		LayeredInput.activate(LayeredInput.LAYER_LOADING);
 
-		const isHidden = this.elements.loadingOverlay.classList.contains('hidden');
+		const isHidden = this.elements.loadingOverlay.hidden;
 
 		this.loadingStartTime = performance.now();
 		this.elements.loadingOverlay.classList.toggle('opaque', opaque);
 
 		if (fadeIn && isHidden) {
 			this.elements.loadingOverlay.classList.add('fade-out');
-			this.elements.loadingOverlay.classList.remove('hidden');
+			this.elements.loadingOverlay.hidden = false;
 			// Trigger reflow
 			void this.elements.loadingOverlay.offsetWidth;
 			this.elements.loadingOverlay.classList.remove('fade-out');
 		} else {
-			this.elements.loadingOverlay.classList.remove('hidden', 'fade-out');
+			this.elements.loadingOverlay.classList.remove('fade-out');
+			this.elements.loadingOverlay.hidden = false;
 		}
 
 		document.body.setAttribute('aria-busy', 'true');
@@ -649,7 +654,7 @@ export class UIManager {
 			await new Promise((resolve) => setTimeout(resolve, UIManager.FADE_DURATION_MS));
 		}
 
-		this.elements.loadingOverlay.classList.add('hidden');
+		this.elements.loadingOverlay.hidden = true;
 		this.elements.loadingOverlay.classList.remove('fade-out', 'opaque');
 		document.body.setAttribute('aria-busy', 'false');
 
@@ -665,12 +670,12 @@ export class UIManager {
 	 */
 	setMode(mode) {
 		if (mode === 'game') {
-			this.elements.gameLayer.classList.remove('hidden');
-			this.elements.textLayer.classList.add('hidden');
+			this.elements.gameLayer.hidden = false;
+			this.elements.textLayer.hidden = true;
 			this.canvas?.focus({ focusVisible: false });
 		} else {
-			this.elements.gameLayer.classList.add('hidden');
-			this.elements.textLayer.classList.remove('hidden');
+			this.elements.gameLayer.hidden = true;
+			this.elements.textLayer.hidden = false;
 			this.elements.textLayer.setAttribute('tabindex', '-1');
 			this.elements.textLayer.focus({ focusVisible: false });
 

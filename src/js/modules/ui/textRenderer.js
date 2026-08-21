@@ -84,6 +84,7 @@ export class TextRenderer {
 					);
 				} else {
 					this.app.uiManager.elements.textContent.innerHTML = '';
+					if (!suppressLoading) this.app.uiManager.hideLoading(true);
 				}
 			} else if (path.startsWith('blog/')) {
 				const date = path.substring(5);
@@ -114,6 +115,7 @@ export class TextRenderer {
 				);
 			} else {
 				this.app.uiManager.elements.textContent.innerHTML = '';
+				if (!suppressLoading) this.app.uiManager.hideLoading(true);
 			}
 		};
 

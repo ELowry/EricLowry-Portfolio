@@ -86,7 +86,7 @@ export class TutorialManager {
 		this.app.setPause(true);
 
 		document.body.classList.add('show-touch-zones');
-		this.app.uiManager.elements.touchInstructions.classList.remove('hidden');
+		this.app.uiManager.elements.touchInstructions.hidden = false;
 		this.app.uiManager.elements.touchInstructions.setAttribute('aria-hidden', 'false');
 
 		const closeBtn = this.app.uiManager.elements.touchInstructions.querySelector('button');
@@ -104,7 +104,7 @@ export class TutorialManager {
 
 		LayeredInput.deactivate(LayeredInput.LAYER_TOUCH_INSTRUCTIONS);
 
-		this.app.uiManager.elements.touchInstructions.classList.add('hidden');
+		this.app.uiManager.elements.touchInstructions.hidden = true;
 		this.app.uiManager.elements.touchInstructions.setAttribute('aria-hidden', 'true');
 		document.body.classList.remove('show-touch-zones');
 		this.app.onModalClose();

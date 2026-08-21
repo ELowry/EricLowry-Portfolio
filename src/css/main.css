@@ -63,7 +63,7 @@
 	text-decoration: none;
 
 	@media print {
-		display: none;
+		display: none !important;
 	}
 
 	&:focus {
@@ -96,6 +96,13 @@
 	width: 100%;
 	height: 100%;
 
+	@media print {
+		position: static !important;
+		background: none !important;
+		height: auto !important;
+		overflow: visible !important;
+	}
+
 	canvas,
 	canvas:focus,
 	canvas:focus-visible {
@@ -125,12 +132,17 @@
 		@media print {
 			display: block;
 			position: static;
-			background-color: var(--color-background);
+			margin: 0 !important;
+			width: 100% !important;
 			height: auto;
 			overflow: unset;
 
+			&:not([open]) {
+				display: none !important;
+			}
+
 			&::backdrop {
-				display: none;
+				display: none !important;
 			}
 		}
 
@@ -143,7 +155,7 @@
 			}
 		}
 
-		.hidden & {
+		[hidden] & {
 			display: none;
 		}
 
@@ -253,6 +265,7 @@
 				max-width: none;
 				max-height: none;
 				overflow: unset;
+				overflow: visible !important;
 			}
 
 			@media (width <= 50em) {
@@ -348,10 +361,6 @@
 		pointer-events: none;
 	}
 
-	&.hidden {
-		display: none;
-	}
-
 	@media print {
 		display: none;
 	}
@@ -416,16 +425,20 @@
 #text-layer {
 	box-sizing: border-box;
 	container-name: layout-root;
-	container-type: inline-size;
 	background-color: var(--color-background);
 	scroll-behavior: smooth;
 	scroll-padding-top: var(--topbar-padding);
 	color: var(--color-text);
 
+	@media print {
+		overflow: visible !important;
+	}
+
 	@media not print {
 		position: absolute;
 		top: 0;
 		left: 0;
+		container-type: inline-size;
 		width: 100%;
 		height: 100%;
 		overflow-y: auto;
@@ -465,6 +478,7 @@
 	}
 
 	#text-table-of-contents {
+		position: relative;
 		border: var(--border-width) solid var(--color-border);
 		background-color: oklch(from var(--color-highlight) l c h / 3%);
 		padding: calc(2em + 1.5ch) 2em 2em;
@@ -717,6 +731,10 @@
 /* Back-to-top link */
 .back-to-top {
 	display: none;
+
+	@media print {
+		display: none !important;
+	}
 
 	@supports (animation-timeline: scroll()) {
 		display: inline-flex;

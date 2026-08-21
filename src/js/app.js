@@ -256,8 +256,8 @@ class AppController {
 			// TEMP TEXT-ONLY END
 		} catch (error) {
 			console.error('Core initialization failed:', error);
+			await this.uiManager.hideLoading(true);
 		}
-		await this.uiManager.hideLoading(true);
 	}
 
 	/**
@@ -434,7 +434,7 @@ class AppController {
 
 			if (
 				this.uiManager.elements.loadingOverlay
-				&& !this.uiManager.elements.loadingOverlay.classList.contains('hidden')
+				&& !this.uiManager.elements.loadingOverlay.hidden
 			) {
 				await this.uiManager.hideLoading(false);
 			}
@@ -450,8 +450,12 @@ class AppController {
 	 */
 	#syncPauseUI() {
 		const hidden = Engine.isPaused || this.isLocked;
-		this.uiManager.elements.gameMenuButton?.classList.toggle('hidden', hidden);
-		this.uiManager.elements.touchControls?.classList.toggle('hidden', hidden);
+		if (this.uiManager.elements.gameMenuButton) {
+			this.uiManager.elements.gameMenuButton.hidden = hidden;
+		}
+		if (this.uiManager.elements.touchControls) {
+			this.uiManager.elements.touchControls.hidden = hidden;
+		}
 	}
 
 	/**
@@ -524,6 +528,7 @@ class AppController {
 				return;
 			} else {
 				this.uiManager.render404();
+				this.uiManager.hideLoading(true);
 				return;
 			}
 		}
@@ -672,7 +677,8 @@ class AppController {
 		let html = await this.#fetchContent(filename, abortSignal);
 
 		if (wrapper) {
-			html = `<${wrapper}>${html}</${wrapper}>`;
+			const tag = wrapper.split(' ')[0];
+			html = `<${wrapper}>${html}</${tag}>`;
 		}
 
 		this.uiManager.displayContentInTextView(html);

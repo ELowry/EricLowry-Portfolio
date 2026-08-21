@@ -187,7 +187,7 @@
 		--color-alert-important: oklch(
 			from var(--hex-alert-important) calc(l - 0.12) calc(c - 0.02) h
 		);
-		--color-alert-warning: oklch(from var(--hex-alert-warning) calc(l - 0.12) calc(c - 0.02) h);
+		--color-alert-warning: oklch(from var(--hex-alert-warning) calc(l - 0.1) calc(c + 0.05) h);
 		--color-alert-caution: oklch(from var(--hex-alert-caution) calc(l - 0.12) calc(c - 0.02) h);
 	}
 }

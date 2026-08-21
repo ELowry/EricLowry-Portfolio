@@ -223,6 +223,10 @@
 			font-size: 1.8em;
 		}
 
+		@media print {
+			display: none !important;
+		}
+
 		&:hover,
 		&:focus-visible {
 			color: var(--color-accent);
