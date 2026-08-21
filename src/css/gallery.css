@@ -148,6 +148,10 @@
 		scroll-snap-type: x mandatory;
 		scrollbar-width: none;
 
+		@media (prefers-reduced-motion: reduce) {
+			scroll-behavior: auto;
+		}
+
 		&::-webkit-scrollbar {
 			display: none;
 		}

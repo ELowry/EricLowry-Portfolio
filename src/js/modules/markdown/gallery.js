@@ -309,7 +309,12 @@ export class GalleryDisplay {
 					contentContainer.style.scrollBehavior = 'auto';
 					contentContainer.scrollLeft = contentContainer.clientWidth * this.#currentIndex;
 					requestAnimationFrame(() => {
-						contentContainer.style.scrollBehavior = 'smooth';
+						const prefersReducedMotion = window.matchMedia(
+							'(prefers-reduced-motion: reduce)'
+						).matches;
+						contentContainer.style.scrollBehavior = prefersReducedMotion
+							? 'auto'
+							: 'smooth';
 					});
 				}
 			}
@@ -525,11 +530,14 @@ export class GalleryDisplay {
 			return;
 		}
 
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const scrollBehavior = prefersReducedMotion ? 'auto' : behavior;
+
 		const contentContainer = this.#activeModal.querySelector('.gallery-modal-content');
 		if (contentContainer) {
 			contentContainer.scrollTo({
 				left: contentContainer.clientWidth * newIndex,
-				behavior: behavior,
+				behavior: scrollBehavior,
 			});
 		}
 	}

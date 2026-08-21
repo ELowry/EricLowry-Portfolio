@@ -146,7 +146,8 @@ class RouterController {
 			}
 			const targetEl = document.getElementById(id);
 			if (targetEl) {
-				targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				targetEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
 			}
 		} else {
 			if (mode === 'text') {

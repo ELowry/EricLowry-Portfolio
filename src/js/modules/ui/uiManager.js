@@ -172,8 +172,14 @@ export class UIManager {
 		}
 
 		// Load Preferences
-		if (localStorage.getItem('readabilityMode') === 'true') {
+		const storedReadability = localStorage.getItem('readabilityMode');
+		if (storedReadability === 'true') {
 			this.toggleReadabilityMode(true);
+		} else if (storedReadability === null) {
+			const prefersContrast = window.matchMedia('(prefers-contrast: more)').matches;
+			if (prefersContrast) {
+				this.toggleReadabilityMode(true);
+			}
 		}
 
 		// Ensure the `marked` class exists for markdown styling
@@ -651,7 +657,13 @@ export class UIManager {
 
 		if (shouldFade) {
 			this.elements.loadingOverlay.classList.add('fade-out');
-			await new Promise((resolve) => setTimeout(resolve, UIManager.FADE_DURATION_MS));
+
+			const prefersReducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)'
+			).matches;
+			const waitTime = prefersReducedMotion ? 0 : UIManager.FADE_DURATION_MS;
+
+			await new Promise((resolve) => setTimeout(resolve, waitTime));
 		}
 
 		this.elements.loadingOverlay.hidden = true;
