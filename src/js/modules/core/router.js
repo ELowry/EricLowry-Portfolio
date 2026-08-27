@@ -146,8 +146,12 @@ class RouterController {
 			}
 			const targetEl = document.getElementById(id);
 			if (targetEl) {
-				const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-				targetEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+				const prefersReducedMotion =
+					window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
+				targetEl.scrollIntoView({
+					behavior: prefersReducedMotion ? 'auto' : 'smooth',
+					block: 'start',
+				});
 			}
 		} else {
 			if (mode === 'text') {
