@@ -9,7 +9,7 @@
 		"marked-alert": "^2.1.2",
 		"marked-gfm-heading-id": "^4.1.4",
 		"marked-highlight": "^2.2.4",
-		"marked-responsive-images": "^2.2.1"
+		"marked-responsive-images": "^2.3.0"
 	},
 	"scripts": {
 		"postinstall": "prettier --ignore-path .prettierignore --write package.json package-lock.json",

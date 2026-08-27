@@ -90,6 +90,7 @@ export class MarkedExtensions {
 			sizes: '(max-width: 820px) 95vw, 820px',
 			class: 'md-img',
 			decoding: 'async',
+			lazyLoadThreshold: '700',
 		};
 	}
 
