@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Obfuscator } from './obfuscator.js';
 
@@ -136,6 +136,47 @@ describe('Obfuscator', () => {
 			expect(config.extensions[0].name).toBe(Obfuscator.EXTENSION_NAME);
 			expect(typeof config.extensions[0].tokenizer).toBe('function');
 			expect(typeof config.renderer.link).toBe('function');
+		});
+	});
+
+	describe('Epoch Token Injection', () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+			// Set a fixed timestamp
+			vi.setSystemTime(new Date('2026-08-28T12:00:00Z'));
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		it('should replace the epoch token with a base36 timestamp in links', () => {
+			const config = Obfuscator.getMarkedExtension();
+			const linkRenderer = config.renderer.link;
+
+			const token = {
+				href: 'mailto:test.__EPOCH__@example.com',
+				text: 'test.__EPOCH__@example.com',
+				title: '',
+			};
+
+			const result = linkRenderer(token);
+
+			// Get expected base36 string for our mocked time
+			const expectedTimestamp = Date.now().toString(36);
+			const expectedEmail = `test.${expectedTimestamp}@example.com`;
+
+			// Create a temporary DOM element to parse the HTML string output
+			const div = document.createElement('div');
+			div.innerHTML = result;
+			const anchor = div.querySelector('a');
+
+			// Extract and decode the encoded href and text attributes
+			const decodedHref = Obfuscator.deobfuscate(anchor.getAttribute('data-enc'));
+			const decodedText = Obfuscator.deobfuscate(anchor.getAttribute('data-text-enc'));
+
+			expect(decodedHref).toBe(expectedEmail);
+			expect(decodedText).toBe(expectedEmail);
 		});
 	});
 });

@@ -21,6 +21,14 @@ export class Obfuscator {
 	}
 
 	/**
+	 * @returns {string} the token used to inject the current epoch into strings.
+	 * @constant
+	 */
+	static get EPOCH_TOKEN() {
+		return '__EPOCH__';
+	}
+
+	/**
 	 * Reverses a string.
 	 * @param {string} str - The string to reverse.
 	 * @returns {string} the reversed string.
@@ -54,14 +62,14 @@ export class Obfuscator {
 			if (/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(string)) {
 				return true;
 			}
-		} catch (e) {
+		} catch {
 			// Invalid base64 string
 		}
 		return false;
 	}
 
 	/**
-	 * Converts characters randomly to hex or decimal HTML entities.
+	 * Converts characters randomly to hex or decimal HTML entities.  
 	 * Ensures non-Latin1 characters are converted to safely pass through base64 encoding.
 	 * @param {string} text - The text to convert to entities.
 	 * @returns {string} the text converted to entities.
@@ -84,6 +92,20 @@ export class Obfuscator {
 		}
 
 		return output;
+	}
+
+	/**
+	 * Replaces the epoch token in a string with a base36 compressed timestamp.
+	 * @param {string} str - The string to process.
+	 * @returns {string} the processed string.
+	 * @private
+	 */
+	static #injectEpochToken(str) {
+		if (str && typeof str === 'string' && str.includes(Obfuscator.EPOCH_TOKEN)) {
+			const epochStr = Date.now().toString(36);
+			return str.split(Obfuscator.EPOCH_TOKEN).join(epochStr);
+		}
+		return str;
 	}
 
 	/**
@@ -127,7 +149,8 @@ export class Obfuscator {
 				 * @returns {string} the rendered HTML for the token.
 				 */
 				renderer(token) {
-					const payload = token.text.trim();
+					const payload = Obfuscator.#injectEpochToken(token.text.trim());
+
 					if (Obfuscator.#isBase64(payload)) {
 						return `<span class="${Obfuscator.TARGET_SELECTOR.replace('.', '')}" data-payload="${payload}" data-nosnippet></span>`;
 					}
@@ -161,27 +184,22 @@ export class Obfuscator {
 		const isMail = href.startsWith('mailto:');
 		let value = isMail ? href.replace('mailto:', '') : href.replace('tel:', '');
 
-		let encodedText = text;
-		let decodedText;
-		try {
-			const { obfuscated, deobfuscated } = Obfuscator.obfuscateUnlessBase64(text);
-			encodedText = obfuscated;
-			decodedText = deobfuscated;
-		} catch (e) {
-			decodedText = text;
-		}
+		const processField = (input) => {
+			const { deobfuscated } = Obfuscator.obfuscateUnlessBase64(input);
+			const tokenized = Obfuscator.#injectEpochToken(deobfuscated);
+			return {
+				decoded: tokenized,
+				encoded: Obfuscator.obfuscate(tokenized),
+			};
+		};
 
-		try {
-			const { obfuscated } = Obfuscator.obfuscateUnlessBase64(value);
-			value = obfuscated;
-		} catch (e) {
-			// Invalid base64 string
-		}
+		const valueData = processField(value);
+		const textData = processField(text);
 
-		const hasEmail = decodedText.includes('@');
-		const hasPhone = /[\d\s+\-()]{7,}/.test(decodedText);
+		const hasEmail = textData.decoded.includes('@');
+		const hasPhone = /[\d\s+\-()]{7,}/.test(textData.decoded);
 
-		let displayText = encodedText;
+		let displayText = textData.encoded;
 		let isObfuscated = false;
 
 		if ((isMail && hasEmail) || (!isMail && hasPhone)) {
@@ -194,15 +212,15 @@ export class Obfuscator {
 		}
 
 		return `
-				<a href="#" 
-					class="protected-link" 
-					data-enc="${value}"
-					data-text-enc="${encodedText}"
-					data-type="${isMail ? 'mailto' : 'tel'}"
-					${isObfuscated ? 'data-obfuscated-text="true"' : ''}
-					${title ? `title="${title}"` : ''}
-					data-nosnippet
-				>${displayText}</a>`;
+			<a href="#" 
+				class="protected-link" 
+				data-enc="${valueData.encoded}"
+				data-text-enc="${textData.encoded}"
+				data-type="${isMail ? 'mailto' : 'tel'}"
+				${isObfuscated ? 'data-obfuscated-text="true"' : ''}
+				${title ? `title="${title}"` : ''}
+				data-nosnippet
+			>${displayText}</a>`;
 	}
 
 	/**
