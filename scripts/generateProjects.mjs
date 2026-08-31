@@ -33,6 +33,7 @@ class ProjectGenerator {
 			'MarkedResponsiveImages',
 			'WinGet-Updater',
 			'obsidian-replace-commands',
+			'Qwant-Results-Filter',
 			'obsidian-format-with-prettier',
 			'EricLowry-Portfolio',
 		];
