@@ -19,7 +19,7 @@ Embedded videos are hosted on [Spectra Video](https://spectra.video), an indepen
 
 ## External Images and Badges
 
-[Project pages](/projects) may display external images hosted by third parties (such as GitHub, Shields.io, or Weblate). When you load a page containing these elements:
+[Project pages](/projects) may display external images hosted by third parties (such as [GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement), [Shields.io](https://shields.io/privacy), or [Weblate](https://weblate.org/en/privacy/)). When you load a page containing these elements:
 
 - **Data Transmitted:**  
   Your IP address and basic browser information (User-Agent) are sent to the respective third-party servers hosting these images.

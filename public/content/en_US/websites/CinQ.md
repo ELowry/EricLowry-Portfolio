@@ -46,7 +46,7 @@ The primary design challenge around CinQ has always been creating a visual ident
 
 ### The Marketing Workflow (Statamic & automation)
 
-Transitioning to Statamic (powered by Laravel) allowed me to move past a simple static corporate site and instead create a highly automated digital storefront.
+Transitioning to Statamic (powered by [Laravel](https://laravel.com/)) allowed me to move past a simple static corporate site and instead create a highly automated digital storefront.
 
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |

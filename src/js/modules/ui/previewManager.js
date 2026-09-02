@@ -1,5 +1,6 @@
 import { ExternalLinks } from '../content/externalLinks.js';
 import { Meta } from '../content/meta.js';
+import { Events } from '../core/events.js';
 
 /**
  * Manages the generation and display of link preview cards on hover and focus.
@@ -65,6 +66,10 @@ export class PreviewManager {
 			if (e.key === 'Escape' && this.previewElement) {
 				this.#hidePreview();
 			}
+		});
+
+		Events.on('route:changed', () => {
+			this.#hidePreview();
 		});
 	}
 

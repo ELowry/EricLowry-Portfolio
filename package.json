@@ -1,7 +1,6 @@
 {
 	"type": "module",
 	"dependencies": {
-		"@prettier/plugin-xml": "^3.4.2",
 		"giscus": "^1.6.0",
 		"highlight.js": "^11.12.0",
 		"littlejsengine": "^1.18.29",
@@ -36,19 +35,20 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@eslint/json": "^2.0.1",
+		"@eslint/json": "^2.1.0",
 		"@eslint/markdown": "^8.0.3",
-		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
 		"canvas": "^3.2.3",
 		"concurrently": "^10.0.5",
 		"eslint": "^10.9.1",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-jsdoc": "^64.3.3",
-		"globals": "^17.11.0",
+		"eslint-plugin-jsdoc": "^64.3.4",
+		"globals": "^17.12.0",
 		"jsdom": "^30.0.1",
 		"lightningcss": "^1.33.0",
 		"prettier": "^3.9.6",
 		"prettier-plugin-css-order": "^2.2.0",
+		"@prettier/plugin-xml": "^3.4.2",
+		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
 		"vite": "^8.2.2",
 		"vitest": "^4.1.11"
 	},
