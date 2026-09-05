@@ -8,7 +8,11 @@ import { Player } from './modules/game/player.js';
 import { Input } from './modules/input/input.js';
 import { VirtualCursor } from './modules/input/virtualCursor.js';
 
+/** @type {Player|null} The player character instance. */
 let player;
+
+/** @type {HTMLElement|null} Cache for the game layer DOM element to optimize the render loop. */
+let gameLayerElement = null;
 
 /**
  * Initializes the game world and player.
@@ -103,7 +107,7 @@ function gameUpdatePost() {
 }
 
 /**
- * Renders the game world and interactive objects.
+ * Renders the game world and interactive objects.  
  * Called each frame by LittleJS engine.
  */
 function gameRender() {
@@ -111,12 +115,20 @@ function gameRender() {
 		return;
 	}
 
-	// HACK: Background color
-	Engine.LJS.drawRect(
-		Engine.LJS.vec2(100, 0),
-		Engine.LJS.vec2(1000, 200),
-		new Engine.LJS.Color(0.2, 0.2, 0.3)
+	const groundY = player ? player.pos.y - 0.45 : 8.72;
+	const horizonScreenPos = Engine.LJS.worldToScreen(Engine.LJS.vec2(0, groundY));
+	const horizonPercent = Math.max(
+		0,
+		Math.min(100, (horizonScreenPos.y / Engine.LJS.mainCanvasSize.y) * 100)
 	);
+
+	if (!gameLayerElement) {
+		gameLayerElement = document.getElementById('game-layer');
+	}
+
+	if (gameLayerElement) {
+		gameLayerElement.style.setProperty('--horizon-pos', `${horizonPercent}%`);
+	}
 
 	if (Router.currentMode !== 'game') {
 		return;
@@ -158,7 +170,7 @@ function initLittleJS() {
 		gameRender,
 		gameRenderPost,
 		// Assets that can be referenced by ID within LittleJS.
-		['/assets/sprites/eric.png'],
+		['/assets/sprites/main.png'],
 		gameLayer
 	);
 }

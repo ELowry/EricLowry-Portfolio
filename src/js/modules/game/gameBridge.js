@@ -9,12 +9,22 @@
  */
 export const GameBridge = {
 	implementation: null,
+	mapBounds: null,
+
 	/**
 	 * Register implementations for the bridge.
 	 * @param {Object} implementations - Object with optional methods: `teleportPlayer`, `playerPos`, `requestBehindInteract`, `requestFrontInteract`
 	 */
 	init(implementations = {}) {
 		this.implementation = implementations;
+	},
+
+	/**
+	 * Sets the horizontal boundaries for the current map.
+	 * @param {{minX: number, maxX: number}|null} bounds - The boundary limits, or null for an infinite map.
+	 */
+	setMapBounds(bounds) {
+		this.mapBounds = bounds || null;
 	},
 
 	/**

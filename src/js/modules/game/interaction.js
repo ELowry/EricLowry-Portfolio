@@ -85,24 +85,21 @@ class InteractionController {
 	}
 
 	/**
-	 * Renders highlights and labels for interactive objects.
+	 * Evaluates highlights and labels for interactive objects.
 	 */
 	render() {
 		for (const obj of this.activeObjects) {
 			const isHighlighted = obj === this.highlightedObject;
-			const color = isHighlighted
-				? new Engine.LJS.Color(1, 1, 0, 0.8)
-				: new Engine.LJS.Color(1, 1, 1, 0.7);
 
-			Engine.LJS.drawRect(obj.pos, Engine.LJS.vec2(1, 1), color);
+			if (typeof obj.setHighlight === 'function') {
+				obj.setHighlight(isHighlighted);
+			}
 
-			// If this object is highlighted and has a label, emit an event so the UI can show it
 			if (isHighlighted && obj.label) {
 				Events.emit('interaction:label', obj.label);
 			}
 		}
 
-		// If nothing is highlighted, ensure the UI overlay hides
 		if (!this.highlightedObject) {
 			Events.emit('interaction:label', null);
 		}
@@ -158,7 +155,7 @@ class InteractionController {
 	 * @param {Object} payload.node - The node of the new route.
 	 * @private
 	 */
-	#handleMapObjects({ mode, path, node }) {
+	async #handleMapObjects({ mode, path, node }) {
 		if (mode !== 'game') {
 			return;
 		}
@@ -186,17 +183,21 @@ class InteractionController {
 				});
 			}
 
+			const { Door } = await import('./props/doors.js');
+
 			const gameObjects = currentObjects.map((obj) => {
-				return {
-					id: obj.id,
-					pos: Engine.LJS.vec2(obj.pos.x, obj.pos.y),
-					radius: obj.radius,
-					file: obj.file,
-					label: obj.label,
-					path: obj.path,
-					below: obj.below,
-					type: obj.type,
-				};
+				const isFrontInteract = !obj.below;
+				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), isFrontInteract);
+
+				door.id = obj.id;
+				door.radius = obj.radius;
+				door.file = obj.file;
+				door.label = obj.label;
+				door.path = obj.path;
+				door.below = obj.below;
+				door.type = obj.type;
+
+				return door;
 			});
 
 			this.setObjects(gameObjects);
@@ -211,6 +212,10 @@ class InteractionController {
 	 * @private
 	 */
 	#handleCategoryInteraction(obj) {
+		if (typeof obj.open === 'function') {
+			obj.open();
+		}
+
 		// Special handling for the 'exit' node: ensure player enters the parent map at the coordinate matching where the child map expects the entry to be.
 		if (obj.id === 'parent_exit' || obj.path === '') {
 			const parentPath = obj.path || '';
@@ -252,6 +257,12 @@ class InteractionController {
 	 * @param {Array} objects - Array of interactive objects with `pos`, `file`, `label`, etc.
 	 */
 	setObjects(objects) {
+		for (const obj of this.activeObjects) {
+			if (typeof obj.destroy === 'function') {
+				obj.destroy();
+			}
+		}
+
 		this.activeObjects = objects || [];
 		this.highlightedObject = null;
 	}

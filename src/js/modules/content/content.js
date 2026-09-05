@@ -18,7 +18,16 @@ class ContentController {
 	}
 
 	/**
-	 * Walks the tree and loads all map configurations.
+	 * @returns {number} the default padding added to the furthest objects when auto-calculating map bounds.
+	 * @constant
+	 */
+	static get DEFAULT_BOUNDS_MARGIN() {
+		return 5;
+	}
+
+	/**
+	 * Walks the tree and loads all map configurations, auto-calculating bounds where missing.
+	 * @returns {Promise<void>}
 	 */
 	async init() {
 		const promises = [];
@@ -46,9 +55,11 @@ class ContentController {
 				nodesToHydrate.push(node);
 			}
 
-			node.children?.forEach((child) => {
-				traverse(child, newPathSegments);
-			});
+			if (node.children) {
+				node.children.forEach((child) => {
+					traverse(child, newPathSegments);
+				});
+			}
 		};
 
 		traverse(this.tree);
@@ -57,8 +68,33 @@ class ContentController {
 			const results = await Promise.all(promises);
 
 			results.forEach((module, index) => {
-				// Handle both default exports (ESM) and direct exports
-				nodesToHydrate[index].mapData = module.default || module;
+				const mapData = module.default || module;
+
+				if (!mapData.bounds) {
+					let minX = mapData.startPos ? mapData.startPos.x : 0;
+					let maxX = mapData.startPos ? mapData.startPos.x : 0;
+
+					if (mapData.positions) {
+						for (const key in mapData.positions) {
+							const posX = mapData.positions[key].x;
+							if (typeof posX === 'number') {
+								if (posX < minX) {
+									minX = posX;
+								}
+								if (posX > maxX) {
+									maxX = posX;
+								}
+							}
+						}
+					}
+
+					mapData.bounds = {
+						minX: minX - ContentController.DEFAULT_BOUNDS_MARGIN,
+						maxX: maxX + ContentController.DEFAULT_BOUNDS_MARGIN,
+					};
+				}
+
+				nodesToHydrate[index].mapData = mapData;
 				// Clear the loader to free memory
 				delete nodesToHydrate[index].mapLoader;
 			});

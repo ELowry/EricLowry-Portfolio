@@ -11,6 +11,7 @@
  * @typedef {Object} MapConfig
  * @property {Vec2} startPos - Default player entry point
  * @property {Object<string, PositionData>} positions - Keyed by child node ID
+ * @property {{minX: number, maxX: number}} [bounds] - Optional horizontal boundaries for the map
  */
 
 /**

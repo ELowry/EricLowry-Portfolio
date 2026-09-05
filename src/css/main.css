@@ -89,10 +89,19 @@
 /* --- GAME CONTAINER --- */
 
 #game-layer {
+	--horizon-pos: 58%;
+
 	display: block;
 	position: absolute;
 	top: 0;
 	left: 0;
+	background: linear-gradient(
+		to bottom,
+		#473d45 0%,
+		#2f2730 var(--horizon-pos),
+		#1f1a21 var(--horizon-pos),
+		#0f0d0f 100%
+	) !important;
 	width: 100%;
 	height: 100%;
 

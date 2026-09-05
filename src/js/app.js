@@ -406,6 +406,8 @@ class AppController {
 			const mapNode = Content.getParentMapNode(path);
 
 			if (mapNode && mapNode.mapData) {
+				GameBridge.setMapBounds(mapNode.mapData.bounds || null);
+				
 				if (this.currentMapId !== mapNode.id) {
 					this.currentMapId = mapNode.id;
 					let desiredStart = mapNode.mapData.startPos;
