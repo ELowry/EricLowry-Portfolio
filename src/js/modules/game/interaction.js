@@ -185,9 +185,13 @@ class InteractionController {
 
 			const { Door } = await import('./props/doors.js');
 
+			const mapTexIndex = mapNode.mapData.textureIndex || 0;
+
 			const gameObjects = currentObjects.map((obj) => {
 				const isFrontInteract = !obj.below;
-				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), isFrontInteract);
+				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), isFrontInteract, {
+					textureIndex: mapTexIndex,
+				});
 
 				door.id = obj.id;
 				door.radius = obj.radius;

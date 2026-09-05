@@ -52,6 +52,17 @@ export const GameBridge = {
 	},
 
 	/**
+	 * Updates the player's texture index.
+	 * @param {number} index - The spritesheet index.
+	 * @returns {void} nothing
+	 */
+	setPlayerTexture(index) {
+		if (this.implementation && typeof this.implementation.setPlayerTexture === 'function') {
+			this.implementation.setPlayerTexture(index);
+		}
+	},
+
+	/**
 	 * Requests the app to perform the behind-interact animation/sequence.
 	 * @param {number} duration - Suggested duration in ms for the animation.
 	 * @returns {Promise<void>} a Promise that resolves when the request completes (e.g., after fade/teleport).

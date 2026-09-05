@@ -45,6 +45,11 @@ function gameInit() {
 				}
 			},
 			getPlayerPos: () => (player ? player.pos : null),
+			setPlayerTexture: (index) => {
+				if (player) {
+					player.textureIndex = index;
+				}
+			},
 			requestBehindInteract: (duration = 500) => {
 				if (!player) {
 					return Promise.resolve();

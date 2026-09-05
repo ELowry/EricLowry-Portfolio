@@ -2,6 +2,30 @@ import { Engine } from '../../core/engineContext.js';
 import { AnimatedEntity } from '../animatedEntity.js';
 
 /**
+ * @typedef {Object} DoorHighlightConfig
+ * @property {number} [textureIndex] - The sprite sheet index.
+ * @property {Object} [resolution] - The pixel dimensions of the highlight frame.
+ * @property {Object} [offset] - The pixel offset in the spritesheet.
+ * @property {number} [padding] - The padding in pixels.
+ * @property {Object} [renderSize] - The physical size in world units.
+ * @property {Object} [renderOffset] - The physical offset relative to the door's base position.
+ */
+
+/**
+ * @typedef {Object} DoorConfig
+ * @property {Object} [size] - Physical size in world units.
+ * @property {number} [textureIndex] - Sprite sheet index.
+ * @property {Object} [resolution] - Pixel dimensions of a single frame.
+ * @property {Object} [offset] - Pixel offset in the spritesheet.
+ * @property {number} [cols] - Number of columns in the spritesheet grid.
+ * @property {number} [padding] - Padding between frames in pixels.
+ * @property {number} [animDelayOpen] - Frames to wait before starting the opening animation.
+ * @property {number} [animSpeedOpen] - Frames per second for the opening animation.
+ * @property {number} [yOffset] - Physical Y offset in world units applied upon instantiation.
+ * @property {DoorHighlightConfig} [highlightConfig] - Configuration for the door's highlight frame.
+ */
+
+/**
  * Interactive door entity representing map nodes.
  */
 export class Door extends AnimatedEntity {
@@ -17,8 +41,14 @@ export class Door extends AnimatedEntity {
 	/** @type {number} */
 	yOffset;
 
-	/** @type {Object} */
+	/** @type {DoorHighlightConfig} */
 	highlightConfig;
+
+	/** @type {Object} */
+	highlightRenderSize;
+
+	/** @type {Object} */
+	highlightRenderOffset;
 
 	/** @type {Object|null} */
 	#highlightTileInfo;
@@ -26,13 +56,15 @@ export class Door extends AnimatedEntity {
 	/**
 	 * @param {Object} pos - World space coordinates.
 	 * @param {boolean} [isFrontInteract=false] - Whether the interaction triggers a front-facing animation.
-	 * @param {Object} [customConfig={}] - Overrides for the default door configuration.
+	 * @param {DoorConfig} [customConfig={}] - Overrides for the default door configuration.
 	 */
 	constructor(pos, isFrontInteract = false, customConfig = {}) {
 		const baseConfig = isFrontInteract ? Door.CONFIG_FRONT : Door.CONFIG_BEHIND;
 		const config = { ...baseConfig, ...customConfig };
 
-		super(pos, config.size, config.textureIndex, config.resolution, isFrontInteract ? -1 : 1);
+		const texIndex = config.textureIndex !== undefined ? config.textureIndex : 0;
+
+		super(pos, config.size, texIndex, config.resolution, isFrontInteract ? -1 : 1);
 
 		this.isHighlighted = false;
 		this.isFrontInteract = isFrontInteract;
@@ -65,7 +97,7 @@ export class Door extends AnimatedEntity {
 			this.highlightRenderSize = hc.renderSize || this.size;
 			this.highlightRenderOffset = hc.renderOffset || Engine.LJS.vec2(0, 0);
 
-			const dummyTile = Engine.LJS.tile(0, hc.resolution, hc.textureIndex);
+			const dummyTile = Engine.LJS.tile(0, hc.resolution, texIndex);
 			this.#highlightTileInfo = new Engine.LJS.TileInfo(
 				Engine.LJS.vec2(pixelX, pixelY),
 				hc.resolution,
@@ -75,7 +107,7 @@ export class Door extends AnimatedEntity {
 	}
 
 	/**
-	 * @returns {Object} The configuration object for doors that are in front of the player.
+	 * @returns {DoorConfig} The configuration object for doors that are in front of the player.
 	 * @constant
 	 */
 	static get CONFIG_FRONT() {
@@ -101,7 +133,7 @@ export class Door extends AnimatedEntity {
 	}
 
 	/**
-	 * @returns {Object} The configuration object for doors that are behind the player.
+	 * @returns {DoorConfig} The configuration object for doors that are behind the player.
 	 * @constant
 	 */
 	static get CONFIG_BEHIND() {

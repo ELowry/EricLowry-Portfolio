@@ -275,7 +275,7 @@ export default defineConfig(({ mode }) => {
 			rollupOptions: {
 				output: {
 					manualChunks(id) {
-						if (id.includes('.config.js')) {
+						if (id.includes('.config.js') || id.includes('.sprites.js')) {
 							return 'configs';
 						}
 					},

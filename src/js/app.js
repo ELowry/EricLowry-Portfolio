@@ -176,6 +176,9 @@ class AppController {
 
 			await import('./game.js');
 
+			const { PropManager } = await import('./modules/game/propManager.js');
+			this.PropManager = PropManager;
+
 			this.#syncGameFont();
 
 			this.Input.initTouch(this.uiManager.elements.touchControls);
@@ -407,7 +410,10 @@ class AppController {
 
 			if (mapNode && mapNode.mapData) {
 				GameBridge.setMapBounds(mapNode.mapData.bounds || null);
-				
+
+				const texIndex = mapNode.mapData.textureIndex || 0;
+				GameBridge.setPlayerTexture(texIndex);
+
 				if (this.currentMapId !== mapNode.id) {
 					this.currentMapId = mapNode.id;
 					let desiredStart = mapNode.mapData.startPos;

@@ -8,10 +8,23 @@
  */
 
 /**
+ * @typedef {Object} PropPlacement
+ * @property {string} type - The registered name of the prop (e.g., 'ServerRack').
+ * @property {Object} pos - The world coordinates `{x, y}` to spawn the prop.
+ * @property {number} pos.x - X coordinate.
+ * @property {number} pos.y - Y coordinate.
+ * @property {number} [scale=1] - Scaling factor for the prop.
+ * @property {number} [renderOrder=0] - Z-index sorting order.
+ */
+
+/**
  * @typedef {Object} MapConfig
  * @property {Vec2} startPos - Default player entry point
  * @property {Object<string, PositionData>} positions - Keyed by child node ID
  * @property {{minX: number, maxX: number}} [bounds] - Optional horizontal boundaries for the map
+ * @property {number} [textureIndex=0] - The spritesheet index to use for this map's player, doors, and props.
+ * @property {import('../game/propManager.js').SpriteConfig} [sprites] - The imported `.sprites.js` configuration object containing regional prop definitions.
+ * @property {Array<PropPlacement>} [props] - Declarative list of environmental props to spawn.
  */
 
 /**
