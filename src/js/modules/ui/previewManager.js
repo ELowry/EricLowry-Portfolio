@@ -159,21 +159,26 @@ export class PreviewManager {
 	}
 
 	/**
-	 * Ensures the preview card element is instantiated from the DOM template.
+	 * Ensures the preview card element is instantiated from the DOM template
+	 * and appended to the correct layer context (handling modal top-layers).
 	 * @private
 	 */
 	#ensureTemplateExists() {
-		if (this.previewElement) {
-			return;
+		if (!this.previewElement) {
+			const template = document.getElementById('template-preview-card');
+			if (!template) {
+				return;
+			}
+			const clone = template.content.cloneNode(true);
+			this.previewElement = clone.querySelector('.preview-card');
 		}
 
-		const template = document.getElementById('template-preview-card');
-		if (!template) {
-			return;
+		const activeDialog = Array.from(document.querySelectorAll('dialog[open]')).pop();
+		const targetParent = activeDialog || document.body;
+
+		if (this.previewElement.parentElement !== targetParent) {
+			targetParent.appendChild(this.previewElement);
 		}
-		const clone = template.content.cloneNode(true);
-		this.previewElement = clone.querySelector('.preview-card');
-		document.body.appendChild(this.previewElement);
 	}
 
 	/**

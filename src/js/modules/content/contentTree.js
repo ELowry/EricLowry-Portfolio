@@ -325,7 +325,7 @@ export const ContentTree = category({
 				category({
 					id: 'projects',
 					title: 'Architecture Projects',
-					mapId: 'architecture',
+					mapId: 'architecture/projects',
 					children: [
 						content({
 							id: 'projects',

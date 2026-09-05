@@ -137,11 +137,10 @@ class InputController {
 	}
 
 	/**
-	 * Returns the current horizontal movement axis (`-1`, `0`, or `1`).
-	 * Priorities: Gamepad > Touch > Keyboard.
+	 * Returns the discrete navigation axis combining Gamepad D-pad, Touch, and Keyboard.
 	 * @returns {vec2} a movement vector
 	 */
-	get axis() {
+	get navAxis() {
 		let x = 0;
 		let y = 0;
 
@@ -162,8 +161,47 @@ class InputController {
 			x = 1;
 		}
 
-		// Gamepad
+		// Gamepad D-pad
+		const dpad = Engine.LJS.gamepadDpad(0);
+		if (dpad.x !== 0) {
+			x = dpad.x;
+		}
+		if (dpad.y !== 0) {
+			y = dpad.y;
+		}
+
+		return Engine.LJS.vec2(x, y);
+	}
+
+	/**
+	 * Returns the raw input from the primary (left) gamepad stick.
+	 * @returns {vec2} the left stick axis vector
+	 */
+	get cursorAxis() {
 		const stick = Engine.LJS.gamepadStick(0);
+		return Engine.LJS.vec2(stick.x, stick.y);
+	}
+
+	/**
+	 * Returns the raw input from the secondary (right) gamepad stick.
+	 * @returns {vec2} the right stick axis vector
+	 */
+	get scrollAxis() {
+		const stick = Engine.LJS.gamepadStick(1);
+		return Engine.LJS.vec2(stick.x, stick.y);
+	}
+
+	/**
+	 * Returns the current horizontal movement axis (`-1`, `0`, or `1`).
+	 * Composites the navigation and cursor axes.
+	 * @returns {vec2} a movement vector
+	 */
+	get axis() {
+		const nav = this.navAxis;
+		const stick = this.cursorAxis;
+		let x = nav.x;
+		let y = nav.y;
+
 		if (Math.abs(stick.x) > InputController.GAMEPAD_DEADZONE_X) {
 			x = Math.sign(stick.x);
 		}
@@ -172,15 +210,6 @@ class InputController {
 		}
 
 		return Engine.LJS.vec2(x, y);
-	}
-
-	/**
-	 * Returns the raw input from the secondary (right) gamepad stick.
-	 * @returns {vec2} the right stick axis vector
-	 */
-	get rightAxis() {
-		const stick = Engine.LJS.gamepadStick(1);
-		return Engine.LJS.vec2(stick.x, stick.y);
 	}
 
 	/**
@@ -326,6 +355,7 @@ class InputController {
 			|| Engine.LJS.gamepadStick(0).length() > InputController.GAMEPAD_DEADZONE_X // Left stick X
 			|| Engine.LJS.gamepadStick(0).length() > InputController.GAMEPAD_DEADZONE_Y // Left stick Y
 			|| Engine.LJS.gamepadStick(1).length() > InputController.GAMEPAD_DEADZONE_STICK_RIGHT // Right stick
+			|| Engine.LJS.gamepadDpad(0).lengthSquared() > 0 // D-Pad
 		) {
 			this.#setInputType('gamepad');
 		}

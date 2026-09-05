@@ -13,6 +13,8 @@ export default {
 		osd: { x: 2, y: 10 },
 		'coaching-business': { x: 6, y: 10 },
 		architecture: { x: 18, y: 10 },
+		blog: { x: 20, y: 10 },
+		projects: { x: 22, y: 10 },
 	},
 	textureIndex: 0,
 	props: [

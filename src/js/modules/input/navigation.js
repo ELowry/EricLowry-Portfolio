@@ -92,7 +92,7 @@ export class NavigationController {
 		this._lastUpdateTime = now;
 		const frameRateMultiplier = dt / (1000 / 60);
 
-		// Handle Scrolling
+		// Handle Scrolling (Right Stick & Triggers)
 		const { x: manualScrollX, y: manualScrollY } = this.#calculateScroll(inputState);
 
 		if (this.options.scroll && (manualScrollY !== 0 || manualScrollX !== 0)) {
@@ -107,17 +107,24 @@ export class NavigationController {
 			}
 		}
 
-		// Handle Focus Navigation
-		if (this.options.axis && !debounceActive && inputState.lastInputType === 'gamepad') {
-			let navInput = 0;
+		// Handle Focus & Paging Navigation (D-Pad, and Left Stick if Virtual Cursor is inactive)
+		if (
+			!debounceActive
+			&& (inputState.lastInputType === 'gamepad' || inputState.lastInputType === 'mnk')
+		) {
+			let navX = inputState.navAxis.x;
+			let navY = inputState.navAxis.y;
 
-			if (this.options.axis === 'x') {
-				navInput = inputState.axis.x;
-			} else if (this.options.axis === 'y') {
-				navInput = -inputState.axis.y;
+			if (!VirtualCursor.isActive) {
+				if (Math.abs(inputState.cursorAxis.x) > NavigationController.NAVIGATE_DEADZONE) {
+					navX = Math.sign(inputState.cursorAxis.x);
+				}
+				if (Math.abs(inputState.cursorAxis.y) > NavigationController.NAVIGATE_DEADZONE) {
+					navY = Math.sign(inputState.cursorAxis.y);
+				}
 			}
 
-			this.#calculateFocus(navInput, debounceActive);
+			this.#calculateFocus({ x: navX, y: navY }, debounceActive, inputState);
 		}
 
 		// Handle Interaction
@@ -142,15 +149,19 @@ export class NavigationController {
 		let scrollTarget = this.activeContainer;
 		if (
 			this.activeContainer.classList.contains('modal-box')
+			|| this.activeContainer.classList.contains('modal-content')
 			|| this.activeContainer.classList.contains('gallery-modal-content')
 			|| this.activeContainer.id === 'text-layer'
 		) {
 			scrollTarget = this.activeContainer;
-		} else if (this.activeContainer.parentElement?.classList.contains('modal-box')) {
+		} else if (
+			this.activeContainer.parentElement?.classList.contains('modal-box')
+			|| this.activeContainer.parentElement?.classList.contains('modal-content')
+		) {
 			scrollTarget = this.activeContainer.parentElement;
 		} else {
 			const childBox = this.activeContainer.querySelector(
-				'.modal-box, .gallery-modal-content'
+				'.modal-box, .modal-content, .gallery-modal-content'
 			);
 			if (childBox) {
 				scrollTarget = childBox;
@@ -198,10 +209,11 @@ export class NavigationController {
 
 	/**
 	 * Internal helper to calculate and set the next focus.
-	 * @private
 	 * @param {number} direction - Positive (`next`) or Negative (`prev`).
+	 * @param {Object} inputState - The current state of user input.
+	 * @private
 	 */
-	#moveFocus(direction) {
+	#moveFocus(direction, inputState) {
 		const focusables = this.#getFocusables();
 		if (focusables.length === 0) {
 			return;
@@ -209,13 +221,11 @@ export class NavigationController {
 
 		const currentFocused = document.activeElement;
 		let currentIndex = focusables.indexOf(currentFocused);
+		let nextItem;
 
 		if (currentIndex === -1) {
-			// If focus was lost, reset to top
-			const nextItem = focusables[0];
-
-			nextItem.focus({ focusVisible: true });
-			nextItem.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+			// Focus lost, reset to top
+			nextItem = focusables[0];
 		} else {
 			let nextIndex;
 			if (direction > 0) {
@@ -224,13 +234,28 @@ export class NavigationController {
 				nextIndex = (currentIndex - 1 + focusables.length) % focusables.length;
 			}
 
-			const nextItem = focusables[nextIndex];
+			nextItem = focusables[nextIndex];
+		}
 
-			nextItem.focus({ focusVisible: true });
-			nextItem.scrollIntoView({
-				block: 'nearest',
-				inline: 'nearest',
-			});
+		nextItem.focus({ focusVisible: true });
+		nextItem.scrollIntoView({
+			block: 'nearest',
+			inline: 'nearest',
+		});
+
+		if (inputState && inputState.lastInputType === 'gamepad') {
+			const updateCursor = () => {
+				if (document.activeElement === nextItem) {
+					const rect = nextItem.getBoundingClientRect();
+					inputState.cursorPos.x = rect.left + rect.width / 2;
+					inputState.cursorPos.y = rect.top + rect.height / 2;
+				}
+			};
+
+			// Snap immediately, then track briefly to accommodate smooth scrolling
+			requestAnimationFrame(updateCursor);
+			setTimeout(updateCursor, 100);
+			setTimeout(updateCursor, 250);
 		}
 	}
 
@@ -243,18 +268,16 @@ export class NavigationController {
 	#calculateScroll(inputState) {
 		let manualScrollY = 0;
 		let manualScrollX = 0;
-		const axis = inputState.axis;
 
 		if (inputState.lastInputType === 'gamepad') {
-			if (Math.abs(axis.y) > NavigationController.SCROLL_DEADZONE) {
-				manualScrollY = -axis.y;
+			const scrollAxis = inputState.scrollAxis || { x: 0, y: 0 };
+
+			if (Math.abs(scrollAxis.y) > NavigationController.SCROLL_DEADZONE) {
+				manualScrollY = -scrollAxis.y;
 			}
 
-			if (
-				Math.abs(axis.x) > NavigationController.SCROLL_DEADZONE
-				&& this.options.axis !== 'x'
-			) {
-				manualScrollX = axis.x;
+			if (Math.abs(scrollAxis.x) > NavigationController.SCROLL_DEADZONE) {
+				manualScrollX = scrollAxis.x;
 			}
 
 			if (inputState.triggerLeft > 0.05) {
@@ -271,14 +294,65 @@ export class NavigationController {
 
 	/**
 	 * Processes focus navigation based on calculated input.
-	 * @param {number} navInput - The navigation input value.
+	 * @param {vec2} navAxis - The navigation input value.
 	 * @param {boolean} debounceActive - Whether the debounce timer is currently active.
+	 * @param {Object} inputState - The current state of user input.
 	 * @private
 	 */
-	#calculateFocus(navInput, debounceActive) {
-		if (Math.abs(navInput) > NavigationController.NAVIGATE_DEADZONE && !debounceActive) {
+	#calculateFocus(navAxis, debounceActive, inputState) {
+		if (debounceActive || !navAxis || (navAxis.x === 0 && navAxis.y === 0)) {
+			return;
+		}
+
+		let focusInput = 0;
+		let pageInput = 0;
+
+		const primaryAxis = this.options.axis || 'y';
+
+		if (primaryAxis === 'y') {
+			focusInput = -navAxis.y;
+			pageInput = navAxis.x;
+		} else if (primaryAxis === 'x') {
+			focusInput = navAxis.x;
+			pageInput = -navAxis.y;
+		}
+
+		if (Math.abs(focusInput) > NavigationController.NAVIGATE_DEADZONE) {
 			this.lastMoveTime = performance.now();
-			this.#moveFocus(navInput);
+			this.#moveFocus(Math.sign(focusInput), inputState);
+		} else if (
+			Math.abs(pageInput) > NavigationController.NAVIGATE_DEADZONE
+			&& this.options.scroll
+		) {
+			this.lastMoveTime = performance.now();
+			this.#pageScroll(Math.sign(pageInput));
+		}
+	}
+
+	/**
+	 * Performs a page-sized scroll in the specified direction based on the orthogonal input.
+	 * @param {number} direction - Positive (down/right) or Negative (up/left).
+	 * @private
+	 */
+	#pageScroll(direction) {
+		const manualScrollY = this.options.axis === 'x' ? 0 : direction;
+		const manualScrollX = this.options.axis === 'x' ? direction : 0;
+		const scrollTarget =
+			this.#getScrollTarget(manualScrollY, manualScrollX) || this.activeContainer;
+
+		if (!scrollTarget) {
+			return;
+		}
+
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const behavior = prefersReducedMotion ? 'instant' : 'smooth';
+
+		if (this.options.axis === 'x') {
+			const pageAmount = scrollTarget.clientWidth * 0.8 * direction;
+			scrollTarget.scrollBy({ left: pageAmount, behavior });
+		} else {
+			const pageAmount = scrollTarget.clientHeight * 0.8 * direction;
+			scrollTarget.scrollBy({ top: pageAmount, behavior });
 		}
 	}
 

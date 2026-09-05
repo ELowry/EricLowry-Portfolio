@@ -94,7 +94,10 @@ describe('NavigationController', () => {
 
 			const inputState = {
 				lastInputType: 'gamepad',
-				axis: { x: 0, y: -1 },
+				navAxis: { x: 0, y: -1 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
 			};
 
 			Navigation.lastMoveTime = 0;
@@ -109,7 +112,10 @@ describe('NavigationController', () => {
 
 			const inputState = {
 				lastInputType: 'gamepad',
-				axis: { x: 0, y: -1 },
+				navAxis: { x: 0, y: -1 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
 			};
 
 			Navigation.lastMoveTime = 0;
@@ -124,7 +130,10 @@ describe('NavigationController', () => {
 
 			const inputState = {
 				lastInputType: 'gamepad',
-				axis: { x: 0, y: -1 },
+				navAxis: { x: 0, y: -1 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
 			};
 
 			Navigation.lastMoveTime = performance.now();
@@ -140,7 +149,10 @@ describe('NavigationController', () => {
 
 			const inputState = {
 				lastInputType: 'gamepad',
-				axis: { x: 0, y: -1 },
+				navAxis: { x: 0, y: -1 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
 			};
 
 			Navigation.lastMoveTime = 0;
@@ -159,7 +171,10 @@ describe('NavigationController', () => {
 			const inputState = {
 				lastInputType: 'gamepad',
 				interact: true,
-				axis: { x: 0, y: 0 },
+				navAxis: { x: 0, y: 0 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
 			};
 
 			Navigation.update(inputState);
@@ -176,7 +191,10 @@ describe('NavigationController', () => {
 			const inputState = {
 				lastInputType: 'gamepad',
 				interact: true,
-				axis: { x: 0, y: 0 },
+				navAxis: { x: 0, y: 0 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
 			};
 
 			Navigation.update(inputState);

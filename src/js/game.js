@@ -25,7 +25,7 @@ function gameInit() {
 
 	// LittleJS configuration
 	Engine.LJS.setEnablePhysicsSolver(false);
-	Engine.LJS.setGamepadDirectionEmulateStick(true);
+	Engine.LJS.setGamepadDirectionEmulateStick(false);
 	Engine.LJS.setInputWASDEmulateDirection(true);
 
 	Engine.LJS.setCameraPos(startVec);

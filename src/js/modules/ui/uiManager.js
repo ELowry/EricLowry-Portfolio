@@ -1059,7 +1059,15 @@ export class UIManager {
 	 * @param {Object} inputState - The current state of the Input module.
 	 */
 	handleSubmenuInput(inputState) {
-		const axis = inputState.axis;
+		let axisX = inputState.navAxis.x;
+
+		if (
+			!VirtualCursor.isActive
+			&& Math.abs(inputState.cursorAxis.x) > NavigationController.NAVIGATE_DEADZONE
+		) {
+			axisX = Math.sign(inputState.cursorAxis.x);
+		}
+
 		const now = performance.now();
 
 		if (now - this.lastSubmenuMoveTime < NavigationController.NAV_DEBOUNCE) {
@@ -1072,14 +1080,14 @@ export class UIManager {
 		}
 
 		// Right to open
-		if (axis.x > Navigation.constructor.NAVIGATE_DEADZONE) {
+		if (axisX > NavigationController.NAVIGATE_DEADZONE) {
 			if (current.getAttribute('aria-haspopup') === 'menu') {
 				this.lastSubmenuMoveTime = now;
 				this.toggleSubmenu(current, true);
 			}
 		}
 		// Left to close
-		else if (axis.x < -Navigation.constructor.NAVIGATE_DEADZONE) {
+		else if (axisX < -NavigationController.NAVIGATE_DEADZONE) {
 			// If on an open trigger, close it
 			if (
 				current.getAttribute('aria-haspopup') === 'menu'

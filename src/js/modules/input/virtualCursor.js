@@ -145,11 +145,11 @@ class VirtualCursorController {
 	}
 
 	/**
-	 * Handles right stick movement and screen clamping.
+	 * Handles left stick movement and screen clamping.
 	 * @private
 	 */
 	#handleMovement() {
-		const stick = Input.rightAxis;
+		const stick = Input.cursorAxis;
 		const speed = VirtualCursorController.BASE_SPEED * this.frameRateMultiplier;
 
 		if (stick.length() > VirtualCursorController.STICK_DEADZONE) {
@@ -179,10 +179,18 @@ class VirtualCursorController {
 			Input.cursorPos.y += moveY;
 
 			this.#applyMagnetism(stick);
-			this.#clampToParent();
-			this.#handleAutoScroll();
-			this.#updateVisuals();
 		}
+
+		this.#clampToParent();
+
+		// Only trigger edge scrolling if the stick is actively being pushed
+		if (stick.length() > VirtualCursorController.STICK_DEADZONE) {
+			this.#handleAutoScroll();
+		} else {
+			this.isScrolling = false;
+		}
+
+		this.#updateVisuals();
 	}
 
 	/**
@@ -401,7 +409,7 @@ class VirtualCursorController {
 			return document.getElementById('text-layer');
 		}
 		return document.querySelector(
-			'dialog[open] .modal-box, dialog[open] .gallery-modal-content'
+			'dialog[open] .modal-content, dialog[open] .gallery-modal-content'
 		);
 	}
 

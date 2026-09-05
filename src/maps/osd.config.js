@@ -7,9 +7,10 @@ export default {
 	positions: {
 		osd: { x: 12, y: 10 },
 		'winget-updater': { x: 14, y: 10 },
+		'dns-toggle': { x: 16, y: 10 },
 		InputLayers: { x: 8, y: 10 },
 		'marked-responsive-images': { x: 6, y: 10 },
 		'obsidian-replace-commands': { x: 4, y: 10 },
-		StadiaIcons: { x: 6, y: 10 },
+		StadiaIcons: { x: 2, y: 10 },
 	},
 };

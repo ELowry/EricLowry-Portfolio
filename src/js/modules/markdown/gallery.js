@@ -566,11 +566,11 @@ export class GalleryDisplay {
 		}
 
 		// Debounced horizontal navigation for Gallery
-		if (Math.abs(inputState.axis.x) > 0.5) {
+		if (Math.abs(inputState.navAxis.x) > 0.5) {
 			const now = performance.now();
 			if (!this.lastGalleryNavTime || now - this.lastGalleryNavTime > 300) {
 				this.lastGalleryNavTime = now;
-				this.#navigate(inputState.axis.x > 0 ? 1 : -1, 'smooth');
+				this.#navigate(inputState.navAxis.x > 0 ? 1 : -1, 'smooth');
 			}
 		} else {
 			this.lastGalleryNavTime = 0;
