@@ -40,11 +40,21 @@
 			"description": "Discover my background in architecture and landscape design, focusing on spatial conceptualization, ecological design, and bridging physical and virtual spaces.",
 			"imageAlt": "3D view of public park infrastructure integrated into the shopping and cultural center",
 
+			"architecture": {
+				"title": "About my Architecture Studies",
+				"label": "About Architecture"
+			},
+
 			"projects": {
 				"title": "Selection of Architecture Projects",
 				"label": "Architecture Projects",
 				"description": "Browse a curated selection of architectural and landscape design projects, ranging from ecological student housing to complex urban transit hubs.",
 				"imageAlt": "3D view of public park infrastructure integrated into the shopping and cultural center",
+
+				"projects": {
+					"title": "Architecture Projects Overview",
+					"label": "Projects Overview"
+				},
 
 				"Unstant": {
 					"title": "Unstant",
@@ -90,11 +100,21 @@
 			"description": "Learn about my hands-on experience in business operations, brand strategy, and executive facilitation for top-tier esports teams and Fortune 500 leaders.",
 			"imageAlt": "Photos of in-person The Heist events with people using physical maps to navigate",
 
+			"coaching-business": {
+				"title": "About my Coaching & Business experience",
+				"label": "About Coaching & Business"
+			},
+
 			"CinQ": {
 				"title": "CinQ – Operations & Coaching",
 				"label": "CinQ Business",
 				"description": "An overview of my role as co-founder of Disruptive Learning Solutions, managing agile product cycles, B2B sales, and executive team coaching.",
 				"imageAlt": "Photos of in-person The Heist events with people using physical maps to navigate",
+
+				"CinQ": {
+					"title": "About CinQ",
+					"label": "About CinQ"
+				},
 
 				"CinQ-game": {
 					"title": "CinQ Game Development",
@@ -122,6 +142,11 @@
 			"description": "An overview of a decade in game development, from architecture thesis to scaling multiplayer Unity3D titles and automation tooling.",
 			"imageAlt": "A screenshot of the cemetery level from thhe game Unstant",
 
+			"gaming": {
+				"title": "About my Game Development work",
+				"label": "About Game Development"
+			},
+
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",
 				"label": "CinQ",
@@ -146,6 +171,11 @@
 			"label": "OSD Overview",
 			"description": "Explore a portfolio of open-source projects and developer tools, including Unity assets, Obsidian plugins, and PowerShell scripts, built to remove friction.",
 			"imageAlt": "A screenshot of Eric Lowry's GitHub profile",
+
+			"osd": {
+				"title": "About my Open Source work",
+				"label": "About Open Source"
+			},
 
 			"InputLayers": {
 				"title": "InputLayers",
@@ -189,6 +219,11 @@
 			"description": "An overview of my web development and UI/UX design journey, highlighting a shift toward modern frameworks and reusable static architectures.",
 			"imageAlt": "Screenshot of a website designed and coded by Eric Lowry",
 
+			"websites": {
+				"title": "About my Web Development work",
+				"label": "About Web Development"
+			},
+
 			"CinQ": {
 				"title": "CinQ – corporate team training video game",
 				"label": "CinQ",
@@ -206,6 +241,11 @@
 				"label": "Lightweight Static Framework",
 				"description": "A custom, zero-dependency static frontend architecture hosted on Firebase, featuring a native JSON-based translation system.",
 				"imageAlt": "Screenshot of a lightweight static website designed and coded by Eric Lowry",
+
+				"lightweight-static": {
+					"title": "Lightweight Static Framework Overview",
+					"label": "Framework Overview"
+				},
 
 				"thenextmind": {
 					"title": "The Next Mind",
