@@ -15,7 +15,7 @@
 >
 > **License:** Unity Asset Store Extension Asset (source available)
 
-After over a decade of building UIs in Unity3D, one thing that has kept feeling _off_ about how it handles inputs. When they introduced the "new" Input System and Action Maps, it felt closer to something fully realized, but not quite _right_ either.
+After over a decade of building UIs in Unity3D, one thing that has kept feeling "off" about how it handles inputs. When they introduced the "new" Input System and Action Maps, it felt closer to something fully realized, but not quite _right_ either.
 
 So for some projects on which I was working, I decided to try to fix my biggest peeve with the whole thing: implementing a simple, straightforward way to determine which UI, popup, or character controller should receive inputs at any given time. I started building InputLayers as a system for my own games, but quickly realized it could be useful for other developers, giving me an excuse to experiment with publishing a package to the Unity Asset Store.
 
@@ -63,4 +63,4 @@ While the core of InputLayers is its stack and event system, ensuring its stabil
 
 ## Onboarding
 
-To ensure a smooth onboarding experience for users downloading the package from the Asset Store, I authored comprehensive [online documentation](https://github.com/ELowry/Unity_InputLayers_Documentation/wiki) that included some fully functional sample scenes within the package to demonstrate the basic configurations and use cases.
+To ensure a smooth onboarding experience for users downloading the package from the Asset Store, I authored comprehensive [online documentation](https://github.com/ELowry/Unity_InputLayers_Documentation/wiki) and I included some fully functional sample scenes within the package to demonstrate the basic configurations and use cases.

@@ -15,7 +15,7 @@
 
 As a co-founder of Disruptive Learning Solutions (DLS), my role evolved organically as the company scaled. While my early focus was rooted in game development and communication, it progressively grew to include nearly all aspects of the company.
 
-Over nearly a decade, I worked closely with my colleagues on prospecting, key account onboarding, and B2B sales support, and served as the main bridge between our technical product and enterprise clients, including pre-sales engineering for conducting technical demonstrations and navigating strict corporate IT and security audits.
+Over nearly a decade, I worked closely with my colleagues on prospecting, key account onboarding, and B2B sales support. I also served as the main bridge between our technical product and enterprise clients, including pre-sales engineering for conducting technical demonstrations and navigating strict corporate IT and security audit.
 
 ### Agile Operations & Brand Strategy
 

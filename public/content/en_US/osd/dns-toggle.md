@@ -22,7 +22,7 @@ This is a great security baseline across the Android ecosystem, but it can inter
 
 ![DNS Toggle app logo](/assets/images/osd/dns-toggle/logo__240-117-webp_240-117_400-196-webp_400-196_600-294-webp_600-294_820-401-webp_820-401_1024-501-webp_1024-501.png)
 
-Though this is not the first attempt to make toggling the option more practical, and likely not the most advanced, my aim was to set up an extremely lightweight toggle for _private DNS_ in the Android quick settings menu myself as a means to learn the basics of Android app development.
+Though this is not the first attempt to develop and implement a more practical way to toggle this option (and likely not the most advanced), my aim was to set up an extremely lightweight toggle for _private DNS_ in the Android quick settings menu myself as a means to learn the basics of Android app development.
 
 <!-- prettier-ignore -->
 | Gallery |  |  |  |

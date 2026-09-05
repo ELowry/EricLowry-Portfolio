@@ -17,7 +17,7 @@ My goal has always been to ensure that our messaging remains clear, professional
 
 ### Brand Identity & Art Direction
 
-I designed most logos, and established the core brand identities for DLS, our flagship product CinQ, and various projects that we have established with partners.
+I designed most logos and established the core brand identities for DLS, as well as for our flagship product CinQ, and various projects that we have established with partners.
 
 ![Screenshot of the CinQ workshops catalog](/assets/images/websites/CinQ/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
 

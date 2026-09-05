@@ -14,7 +14,7 @@
 
 ### Context
 
-CinQ is the core technology behind a decade-long applied R&D effort to capture the inherent capacity of video games to foster teamwork, leadership, and collaboration into the world of corporate training.
+CinQ is the core technology behind a decade-long applied R&D effort to capture the inherent capacity of video games to foster teamwork, leadership, and collaboration, and then to integrate this capacity into the world of corporate training.
 
 <!-- prettier-ignore -->
 | Gallery |  |
@@ -72,4 +72,4 @@ Scaling CinQ for the enterprise required overcoming significant technical and ne
 
 > [!NOTE]
 >
-> Beyond the game client itself, I also directed the platform's marketing strategies and podcast editing, and I actively facilitated corporate coaching workshops. You can read more about those specific roles in the [Coaching & Business](/content/en_US/coaching-business/coaching-business.md) section of this portfolio.
+> Beyond the game client itself, I also directed the platform's marketing strategies for the platform as well as podcast editing and content publishing. I also actively facilitated corporate coaching workshops. You can read more about those specific roles in the [Coaching & Business](/content/en_US/coaching-business/coaching-business.md) section of this portfolio.
