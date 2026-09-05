@@ -346,7 +346,9 @@ class AppController {
 					const contentType = result.headers.get('content-type') || '';
 
 					if (!result.ok) {
-						console.warn(`Content: Rejected ${url} - Status ${result.status}`);
+						if (import.meta.env.DEV) {
+							console.warn(`Content: Rejected ${url} - Status ${result.status}`);
+						}
 						return null;
 					}
 
@@ -354,16 +356,20 @@ class AppController {
 						contentType.includes('text/html')
 						|| contentType.includes('application/json')
 					) {
-						console.warn(
-							`Content: Rejected ${url} - Invalid Content-Type: ${contentType}`
-						);
+						if (import.meta.env.DEV) {
+							console.warn(
+								`Content: Rejected ${url} - Invalid Content-Type: ${contentType}`
+							);
+						}
 						return null;
 					}
 
 					const clone = result.clone();
 					const text = await clone.text();
 					if (!text) {
-						console.warn(`Content: Rejected ${url} - Empty body`);
+						if (import.meta.env.DEV) {
+							console.warn(`Content: Rejected ${url} - Empty body`);
+						}
 						return null;
 					}
 
@@ -373,7 +379,9 @@ class AppController {
 						|| trimmed.startsWith('<html')
 						|| trimmed.includes('id="game-layer"')
 					) {
-						console.warn(`Content: Rejected ${url} - Detected SPA HTML fallback.`);
+						if (import.meta.env.DEV) {
+							console.warn(`Content: Rejected ${url} - Detected SPA HTML fallback.`);
+						}
 						return null;
 					}
 					return result;

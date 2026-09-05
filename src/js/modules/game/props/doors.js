@@ -91,12 +91,7 @@ export class Door extends AnimatedEntity {
 		this.setCollision(false, false);
 
 		this.addAnimation('closed', config.framesClosed || [0], 0, false);
-		this.addAnimation(
-			'opening',
-			config.framesOpening || [0],
-			config.animSpeedOpen || 0,
-			false
-		);
+		this.addAnimation('opening', config.framesOpening || [0], config.animSpeedOpen || 0, false);
 		this.addAnimation('open', config.framesOpen || [0], 0, false);
 
 		this.setState('closed');
