@@ -7,7 +7,9 @@ vi.mock('../core/engineContext.js', () => {
 	 * Mock representation of the LittleJS EngineObject base class.
 	 */
 	class MockEngineObject {
-		constructor() {
+		constructor(pos, size) {
+			this.pos = pos;
+			this.size = size;
 			this.isEngineObject = true;
 		}
 	}
@@ -39,7 +41,13 @@ vi.mock('../core/engineContext.js', () => {
 						return 0;
 					}
 				},
-				TileInfo: class {},
+				TileInfo: class {
+					constructor(pos, size, textureInfo) {
+						this.pos = pos;
+						this.size = size;
+						this.textureInfo = textureInfo;
+					}
+				},
 				/**
 				 * @returns {Object} A mock tile payload.
 				 */
@@ -58,7 +66,9 @@ vi.mock('./animatedEntity.js', () => {
 	 * Mock representation of the AnimatedEntity class.
 	 */
 	class MockAnimatedEntity {
-		constructor() {
+		constructor(pos, size) {
+			this.pos = pos;
+			this.size = size;
 			this.isAnimatedEntity = true;
 			this.animations = {};
 		}
@@ -114,13 +124,30 @@ describe('PropManagerController', () => {
 		expect(spawned.length).toBe(3);
 	});
 
+	it('should default size to resolution / 10 if not provided', () => {
+		PropManager.buildRegistry([
+			{
+				local: {
+					'auto-size-prop': {
+						isAnimated: false,
+						resolution: { x: 32, y: 16 },
+					},
+				},
+			},
+		]);
+
+		const spawned = PropManager.spawnProps([{ type: 'auto-size-prop', pos: { x: 0, y: 0 } }]);
+
+		expect(spawned.length).toBe(1);
+		expect(spawned[0].size).toEqual({ x: 3.2, y: 1.6 });
+	});
+
 	it('should spawn an AnimatedEntity when isAnimated is true', () => {
 		PropManager.buildRegistry([
 			{
 				local: {
 					'animated-prop': {
 						isAnimated: true,
-						textureIndex: 0,
 						size: { x: 1, y: 1 },
 						resolution: { x: 16, y: 16 },
 						animations: { idle: { frames: [0], speed: 1, loop: false } },
@@ -141,7 +168,6 @@ describe('PropManagerController', () => {
 				local: {
 					'static-prop': {
 						isAnimated: false,
-						textureIndex: 0,
 						size: { x: 1, y: 1 },
 						resolution: { x: 16, y: 16 },
 					},

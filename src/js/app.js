@@ -176,6 +176,17 @@ class AppController {
 
 			await import('./game.js');
 
+			await new Promise((resolve) => {
+				const checkReady = () => {
+					if (GameBridge.implementation !== null) {
+						resolve();
+					} else {
+						requestAnimationFrame(checkReady);
+					}
+				};
+				checkReady();
+			});
+
 			const { PropManager } = await import('./modules/game/propManager.js');
 			this.PropManager = PropManager;
 
@@ -471,17 +482,17 @@ class AppController {
 	 */
 	handleInput() {
 		// UI Layers
-		if (this.uiManager.handleInput(this.Input)) {
+		if (this.uiManager?.handleInput(this.Input)) {
 			return;
 		}
 
 		// Gallery Layer
-		if (this.galleryDisplay.handleInput(this.Input)) {
+		if (this.galleryDisplay?.handleInput(this.Input)) {
 			return;
 		}
 
 		// Tutorial Layer
-		if (this.tutorialManager.handleInput(this.Input)) {
+		if (this.tutorialManager?.handleInput(this.Input)) {
 			return;
 		}
 

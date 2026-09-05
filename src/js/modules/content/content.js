@@ -26,12 +26,30 @@ class ContentController {
 	}
 
 	/**
+	 * @returns {Record<string, () => Promise<any>>} Glob mapping for dynamic map configurations.
+	 * @constant
+	 */
+	static get MAP_CONFIGS() {
+		return import.meta.glob('../../../maps/**/*.config.js');
+	}
+
+	/**
+	 * @returns {Record<string, () => Promise<any>>} Glob mapping for dynamic map sprites.
+	 * @constant
+	 */
+	static get SPRITE_CONFIGS() {
+		return import.meta.glob('../../../maps/**/*.sprites.js');
+	}
+
+	/**
 	 * Walks the tree and loads all map configurations, auto-calculating bounds where missing.
 	 * @returns {Promise<void>}
 	 */
 	async init() {
 		const promises = [];
 		const nodesToHydrate = [];
+		const mapConfigs = ContentController.MAP_CONFIGS;
+		const spriteConfigs = ContentController.SPRITE_CONFIGS;
 
 		const traverse = (node, pathSegments = []) => {
 			if (node.type === 'separator') {
@@ -51,14 +69,26 @@ class ContentController {
 
 			if (node.mapId) {
 				const loadMapData = async () => {
-					const configModule = await import(`../../../maps/${node.mapId}.config.js`);
+					const configKey = `../../../maps/${node.mapId}.config.js`;
+					const configImporter = mapConfigs[configKey];
+
+					if (!configImporter) {
+						throw new Error(`Map config not found for mapId: ${node.mapId}`);
+					}
+
+					const configModule = await configImporter();
 					const mapData = configModule.default || configModule;
 
-					try {
-						const spriteModule = await import(`../../../maps/${node.mapId}.sprites.js`);
-						mapData.sprites = spriteModule.default || spriteModule;
-					} catch {
-						// No custom sprites exist for this map
+					const spriteKey = `../../../maps/${node.mapId}.sprites.js`;
+					const spriteImporter = spriteConfigs[spriteKey];
+
+					if (spriteImporter) {
+						try {
+							const spriteModule = await spriteImporter();
+							mapData.sprites = spriteModule.default || spriteModule;
+						} catch {
+							// No custom sprites exist for this map
+						}
 					}
 
 					return mapData;

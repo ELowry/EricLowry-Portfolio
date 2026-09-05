@@ -23,9 +23,6 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 	/** @type {Object} */
 	spriteResolution;
 
-	/** @type {number} */
-	spritePadding;
-
 	/** @type {Object} */
 	gridOffset;
 
@@ -36,10 +33,18 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 	#tileCache;
 
 	/**
+	 * @returns {number} the universal transparent padding around every packed sprite frame.
+	 * @constant
+	 */
+	static get SPRITE_PADDING() {
+		return 1;
+	}
+
+	/**
 	 * @param {Object} pos - The world position.
 	 * @param {Object} size - The physical size.
 	 * @param {number} textureIndex - The sprite sheet index.
-	 * @param {Object} spriteResolution - The pixel dimensions of a single frame.
+	 * @param {Object} spriteResolution - The pixel dimensions of a single frame (inner bounds).
 	 * @param {number} [renderOrder=0] - Z-index sorting order.
 	 */
 	constructor(pos, size, textureIndex, spriteResolution, renderOrder = 0) {
@@ -51,7 +56,6 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 		this.animations = {};
 		this.textureIndex = textureIndex;
 		this.spriteResolution = spriteResolution;
-		this.spritePadding = 0;
 		this.gridOffset = Engine.LJS.vec2(0, 0);
 		this.gridCols = 1;
 
@@ -114,11 +118,12 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 		const col = localTileIndex % this.gridCols;
 		const row = Math.floor(localTileIndex / this.gridCols);
 
-		const strideX = this.spriteResolution.x + this.spritePadding * 2;
-		const strideY = this.spriteResolution.y + this.spritePadding * 2;
+		const padding = AnimatedEntity.SPRITE_PADDING;
+		const strideX = this.spriteResolution.x + padding * 2;
+		const strideY = this.spriteResolution.y + padding * 2;
 
-		const pixelX = this.gridOffset.x + col * strideX + this.spritePadding;
-		const pixelY = this.gridOffset.y + row * strideY + this.spritePadding;
+		const pixelX = this.gridOffset.x + col * strideX + padding;
+		const pixelY = this.gridOffset.y + row * strideY + padding;
 
 		const dummyTile = Engine.LJS.tile(0, this.spriteResolution, this.textureIndex);
 

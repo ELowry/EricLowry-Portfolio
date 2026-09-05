@@ -141,9 +141,8 @@ describe('AnimatedEntity', () => {
 		expect(timerSetSpy).toHaveBeenCalledWith(0.5);
 	});
 
-	it('should calculate correct TileInfo pixel coordinates based on grid index', () => {
+	it('should calculate correct TileInfo pixel coordinates based on grid index and implicit padding', () => {
 		entity.gridCols = 5;
-		entity.spritePadding = 1;
 		entity.gridOffset = { x: 10, y: 20 };
 
 		const tileInfo = entity.getTileInfo(6);

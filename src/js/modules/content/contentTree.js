@@ -1,10 +1,11 @@
+// File: src/js/modules/content/contentTree.js
 /**
  * @typedef {Object} PositionData
  * @property {number} x - X coordinate
  * @property {number} y - Y coordinate
  * @property {number} [radius=1.5] - Collision/radius for interactions
  * @property {boolean} [below=false] - If `true`, this position is 'below' the camera (affects animation)
- * @property {string} [label] - Optional translation key or fallback label
+ * @property {string} [label=null] - Optional translation key or fallback label
  */
 
 /**
@@ -21,23 +22,23 @@
  * @typedef {Object} MapConfig
  * @property {Vec2} startPos - Default player entry point
  * @property {Object<string, PositionData>} positions - Keyed by child node ID
- * @property {{minX: number, maxX: number}} [bounds] - Optional horizontal boundaries for the map
+ * @property {{minX: number, maxX: number}} [bounds=null] - Optional horizontal boundaries for the map
  * @property {number} [textureIndex=0] - The spritesheet index to use for this map's player, doors, and props.
- * @property {import('../game/propManager.js').SpriteConfig} [sprites] - The imported `.sprites.js` configuration object containing regional prop definitions.
- * @property {Array<PropPlacement>} [props] - Declarative list of environmental props to spawn.
+ * @property {import('../game/propManager.js').SpriteConfig} [sprites=null] - The imported `.sprites.js` configuration object containing regional prop definitions.
+ * @property {Array<PropPlacement>} [props=null] - Declarative list of environmental props to spawn.
  */
 
 /**
  * @typedef {Object} ContentNode
- * @property {string} [id] - Unique identifier within current level
- * @property {string} [title] - Fallback literal title
  * @property {'category'|'content'|'separator'} type - Whether the node is a category, content, or visual separator.
- * @property {string} [file] - Markdown file path (used if `type === 'content'`)
- * @property {boolean} [hidden] - Hides the node from text-mode navigation menus if `true`.
- * @property {string|null} [image] - Path to the header image inside the `assets/images/` directory.
- * @property {string} [mapId] - The file path identifier for the map config and sprites (used if `type === 'category'`)
- * @property {MapConfig} [mapData] - Game map settings populated during initialization.
- * @property {Array<ContentNode>} [children] - Child nodes (used if `type === 'category'`)
+ * @property {string} [id=null] - Unique identifier within current level
+ * @property {string} [title=null] - Fallback literal title
+ * @property {string} [file=null] - Markdown file path (used if `type === 'content'`)
+ * @property {boolean} [hidden=false] - Hides the node from text-mode navigation menus if `true`.
+ * @property {string|null} [image=null] - Path to the header image inside the `assets/images/` directory.
+ * @property {string} [mapId=null] - The file path identifier for the map config and sprites (used if `type === 'category'`)
+ * @property {MapConfig} [mapData=null] - Game map settings populated during initialization.
+ * @property {Array<ContentNode>} [children=null] - Child nodes (used if `type === 'category'`)
  */
 
 /**
@@ -106,7 +107,7 @@ export const ContentTree = category({
 		// COACHING & BUSINESS
 		category({
 			id: 'coaching-business',
-			title: 'Coaching & Business',
+			title: 'Coaching & Business',
 			mapId: 'coaching-business',
 			children: [
 				content({
@@ -118,7 +119,7 @@ export const ContentTree = category({
 				}),
 				category({
 					id: 'CinQ',
-					title: 'CinQ – Operations & Coaching',
+					title: 'CinQ – Operations & Coaching',
 					mapId: 'coaching-business/CinQ',
 					children: [
 						content({
@@ -144,7 +145,7 @@ export const ContentTree = category({
 				}),
 				content({
 					id: 'multimedia',
-					title: 'Content & Multimedia',
+					title: 'Content & Multimedia',
 					file: 'coaching-business/multimedia.md',
 					image: 'websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
@@ -166,7 +167,7 @@ export const ContentTree = category({
 				}),
 				content({
 					id: 'CinQ',
-					title: 'CinQ – corporate team training video game',
+					title: 'CinQ – corporate team training video game',
 					file: 'gaming/CinQ.md',
 					image: 'gaming/cinq/van__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
@@ -239,19 +240,19 @@ export const ContentTree = category({
 		// WEBSITES
 		category({
 			id: 'websites',
-			title: 'Web Development & Design',
+			title: 'Web Development & Design',
 			mapId: 'websites',
 			children: [
 				content({
 					id: 'websites',
-					title: 'Web Development & Design',
+					title: 'Web Development & Design',
 					file: 'websites/websites.md',
 					hidden: true,
 					image: 'websites/luzech/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
 				content({
 					id: 'CinQ',
-					title: 'CinQ – corporate team training video game',
+					title: 'CinQ – corporate team training video game',
 					file: 'websites/CinQ.md',
 					image: 'websites/CinQ/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),

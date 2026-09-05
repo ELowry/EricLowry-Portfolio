@@ -3,26 +3,26 @@ import { AnimatedEntity } from '../animatedEntity.js';
 
 /**
  * @typedef {Object} DoorHighlightConfig
- * @property {number} [textureIndex] - The sprite sheet index.
- * @property {Object} [resolution] - The pixel dimensions of the highlight frame.
- * @property {Object} [offset] - The pixel offset in the spritesheet.
- * @property {number} [padding] - The padding in pixels.
- * @property {Object} [renderSize] - The physical size in world units.
- * @property {Object} [renderOffset] - The physical offset relative to the door's base position.
+ * @property {Object} resolution - The pixel dimensions of the highlight frame.
+ * @property {Object} [offset=null] - The pixel offset in the spritesheet.
+ * @property {Object} [renderSize=null] - The physical size in world units. Defaults to resolution / 10.
+ * @property {Object} [renderOffset=null] - The physical offset relative to the door's base position.
  */
 
 /**
  * @typedef {Object} DoorConfig
- * @property {Object} [size] - Physical size in world units.
- * @property {number} [textureIndex] - Sprite sheet index.
- * @property {Object} [resolution] - Pixel dimensions of a single frame.
- * @property {Object} [offset] - Pixel offset in the spritesheet.
- * @property {number} [cols] - Number of columns in the spritesheet grid.
- * @property {number} [padding] - Padding between frames in pixels.
- * @property {number} [animDelayOpen] - Frames to wait before starting the opening animation.
- * @property {number} [animSpeedOpen] - Frames per second for the opening animation.
- * @property {number} [yOffset] - Physical Y offset in world units applied upon instantiation.
- * @property {DoorHighlightConfig} [highlightConfig] - Configuration for the door's highlight frame.
+ * @property {Object} resolution - Pixel dimensions of a single frame.
+ * @property {Object} [size=null] - Physical size in world units. Defaults to resolution / 10.
+ * @property {number} [textureIndex=0] - Sprite sheet index.
+ * @property {Object} [offset=null] - Pixel offset in the spritesheet.
+ * @property {number} [cols=1] - Number of columns in the spritesheet grid.
+ * @property {number} [animDelayOpen=0] - Frames to wait before starting the opening animation.
+ * @property {number} [animSpeedOpen=0] - Frames per second for the opening animation.
+ * @property {number} [yOffset=0] - Physical Y offset in world units applied upon instantiation.
+ * @property {Array<number>} [framesClosed=[0]] - The frames to use for the closed state.
+ * @property {Array<number>} [framesOpening=[0]] - The frames to use for the opening animation sequence.
+ * @property {Array<number>} [framesOpen=[0]] - The frames to use for the open state.
+ * @property {DoorHighlightConfig} [highlightConfig=null] - Configuration for the door's highlight frame.
  */
 
 /**
@@ -55,33 +55,49 @@ export class Door extends AnimatedEntity {
 
 	/**
 	 * @param {Object} pos - World space coordinates.
-	 * @param {boolean} [isFrontInteract=false] - Whether the interaction triggers a front-facing animation.
+	 * @param {string} [variant='front'] - The visual variant of the door ('front', 'behind', 'sign').
 	 * @param {DoorConfig} [customConfig={}] - Overrides for the default door configuration.
 	 */
-	constructor(pos, isFrontInteract = false, customConfig = {}) {
-		const baseConfig = isFrontInteract ? Door.CONFIG_FRONT : Door.CONFIG_BEHIND;
+	constructor(pos, variant = 'front', customConfig = {}) {
+		let baseConfig;
+		if (variant === 'sign') {
+			baseConfig = Door.CONFIG_SIGN;
+		} else if (variant === 'behind') {
+			baseConfig = Door.CONFIG_BEHIND;
+		} else {
+			baseConfig = Door.CONFIG_FRONT;
+		}
+
 		const config = { ...baseConfig, ...customConfig };
 
-		const texIndex = config.textureIndex !== undefined ? config.textureIndex : 0;
+		const texIndex = config.textureIndex || 0;
+		const zIndex = variant === 'behind' ? 1 : -1;
 
-		super(pos, config.size, texIndex, config.resolution, isFrontInteract ? -1 : 1);
+		const calculatedSize =
+			config.size || Engine.LJS.vec2(config.resolution.x / 10, config.resolution.y / 10);
+
+		super(pos, calculatedSize, texIndex, config.resolution, zIndex);
 
 		this.isHighlighted = false;
-		this.isFrontInteract = isFrontInteract;
-		this.animDelayOpen = config.animDelayOpen;
-		this.yOffset = config.yOffset;
+		this.isFrontInteract = variant !== 'behind';
+		this.animDelayOpen = config.animDelayOpen || 0;
+		this.yOffset = config.yOffset || 0;
 		this.highlightConfig = config.highlightConfig;
 
-		this.spritePadding = config.padding;
-		this.gridOffset = config.offset;
-		this.gridCols = config.cols;
+		this.gridOffset = config.offset || Engine.LJS.vec2(0, 0);
+		this.gridCols = config.cols || 1;
 
 		this.pos.y += this.isFrontInteract ? this.yOffset : -this.yOffset;
 		this.setCollision(false, false);
 
-		this.addAnimation('closed', [0], 0, false);
-		this.addAnimation('opening', [1, 2, 3], config.animSpeedOpen, false);
-		this.addAnimation('open', [3], 0, false);
+		this.addAnimation('closed', config.framesClosed || [0], 0, false);
+		this.addAnimation(
+			'opening',
+			config.framesOpening || [0],
+			config.animSpeedOpen || 0,
+			false
+		);
+		this.addAnimation('open', config.framesOpen || [0], 0, false);
 
 		this.setState('closed');
 
@@ -91,10 +107,13 @@ export class Door extends AnimatedEntity {
 
 		if (this.highlightConfig) {
 			const hc = this.highlightConfig;
-			const pixelX = hc.offset.x + hc.padding;
-			const pixelY = hc.offset.y + hc.padding;
+			const padding = AnimatedEntity.SPRITE_PADDING;
+			const hcOffset = hc.offset || Engine.LJS.vec2(0, 0);
+			const pixelX = hcOffset.x + padding;
+			const pixelY = hcOffset.y + padding;
 
-			this.highlightRenderSize = hc.renderSize || this.size;
+			this.highlightRenderSize =
+				hc.renderSize || Engine.LJS.vec2(hc.resolution.x / 10, hc.resolution.y / 10);
 			this.highlightRenderOffset = hc.renderOffset || Engine.LJS.vec2(0, 0);
 
 			const dummyTile = Engine.LJS.tile(0, hc.resolution, texIndex);
@@ -112,21 +131,17 @@ export class Door extends AnimatedEntity {
 	 */
 	static get CONFIG_FRONT() {
 		return {
-			size: Engine.LJS.vec2(1.6, 3.5),
-			textureIndex: 0,
 			resolution: Engine.LJS.vec2(16, 35),
 			offset: Engine.LJS.vec2(0, 36),
 			cols: 5,
-			padding: 1,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
 			yOffset: 1,
+			framesOpening: [1, 2, 3],
+			framesOpen: [3],
 			highlightConfig: {
-				textureIndex: 0,
 				resolution: Engine.LJS.vec2(20, 35),
 				offset: Engine.LJS.vec2(72, 36),
-				padding: 1,
-				renderSize: Engine.LJS.vec2(2.0, 3.5),
 				renderOffset: Engine.LJS.vec2(0, 0.1),
 			},
 		};
@@ -138,22 +153,35 @@ export class Door extends AnimatedEntity {
 	 */
 	static get CONFIG_BEHIND() {
 		return {
-			size: Engine.LJS.vec2(2.1, 3.5),
-			textureIndex: 0,
 			resolution: Engine.LJS.vec2(21, 35),
 			offset: Engine.LJS.vec2(94, 36),
-			cols: 5,
-			padding: 1,
+			cols: 4,
 			animDelayOpen: 20,
 			animSpeedOpen: 10,
 			yOffset: 0.4,
+			framesOpening: [1, 2, 3],
+			framesOpen: [3],
 			highlightConfig: {
-				textureIndex: 0,
 				resolution: Engine.LJS.vec2(20, 35),
 				offset: Engine.LJS.vec2(186, 36),
-				padding: 1,
-				renderSize: Engine.LJS.vec2(2.0, 3.5),
 				renderOffset: Engine.LJS.vec2(-0.2, -0.2),
+			},
+		};
+	}
+
+	/**
+	 * @returns {DoorConfig} The configuration object for static text-content signs.
+	 * @constant
+	 */
+	static get CONFIG_SIGN() {
+		return {
+			resolution: Engine.LJS.vec2(20, 19),
+			offset: Engine.LJS.vec2(230, 52),
+			yOffset: 0.2,
+			highlightConfig: {
+				resolution: Engine.LJS.vec2(22, 11),
+				offset: Engine.LJS.vec2(252, 52),
+				renderOffset: Engine.LJS.vec2(0, 0.5),
 			},
 		};
 	}
@@ -186,7 +214,6 @@ export class Door extends AnimatedEntity {
 	 * Triggers the opening animation sequence.
 	 * @returns {void}
 	 */
-	// fallow-ignore-next-line unused-class-member
 	open() {
 		if (this.currentState === 'closed') {
 			this.setState('opening', this.animDelayOpen / 60);
@@ -197,7 +224,6 @@ export class Door extends AnimatedEntity {
 	 * Resets the door to its closed state.
 	 * @returns {void}
 	 */
-	// fallow-ignore-next-line unused-class-member
 	close() {
 		this.setState('closed');
 	}
@@ -207,7 +233,6 @@ export class Door extends AnimatedEntity {
 	 * @param {boolean} highlighted - Whether the door should be highlighted.
 	 * @returns {void}
 	 */
-	// fallow-ignore-next-line unused-class-member
 	setHighlight(highlighted) {
 		this.isHighlighted = highlighted;
 	}

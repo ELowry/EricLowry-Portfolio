@@ -7,26 +7,24 @@ import { AnimatedEntity } from './animatedEntity.js';
  * @typedef {Object} PropAnimationData
  * @property {Array<number>} frames - The ordered array of grid indexes.
  * @property {number} speed - Playback speed in frames per second.
- * @property {boolean} loop - Whether the animation loops.
+ * @property {boolean} [loop=true] - Whether the animation loops.
  */
 
 /**
  * @typedef {Object} PropDefinition
  * @property {boolean} isAnimated - Whether the prop is an AnimatedEntity or a static EngineObject.
- * @property {number} textureIndex - The sprite sheet index for this prop.
- * @property {Object} size - The physical size in world units (`vec2`).
  * @property {Object} resolution - The pixel dimensions of a single frame (`vec2`).
- * @property {Object} [offset] - The pixel offset in the spritesheet (`vec2`).
- * @property {number} [padding=0] - The padding between frames in pixels.
+ * @property {Object} [size=null] - The physical size in world units (`vec2`). Defaults to resolution / 10.
+ * @property {Object} [offset=null] - The pixel offset in the spritesheet (`vec2`).
  * @property {number} [cols=1] - The number of columns in the spritesheet grid.
- * @property {Object<string, PropAnimationData>} [animations] - Dictionary of animations (required if `isAnimated` is true).
- * @property {string} [defaultState] - The default animation state to play.
+ * @property {Object<string, PropAnimationData>} [animations=null] - Dictionary of animations (required if `isAnimated` is true).
+ * @property {string} [defaultState='idle'] - The default animation state to play.
  */
 
 /**
  * @typedef {Object} SpriteConfig
- * @property {Object<string, PropDefinition>} [shared] - Prop definitions that cascade to child maps.
- * @property {Object<string, PropDefinition>} [local] - Prop definitions specific only to the current map.
+ * @property {Object<string, PropDefinition>} [shared=null] - Prop definitions that cascade to child maps.
+ * @property {Object<string, PropDefinition>} [local=null] - Prop definitions specific only to the current map.
  */
 
 /**
@@ -78,9 +76,10 @@ class PropManagerController {
 	/**
 	 * Spawns an array of props based on the active definitions.
 	 * @param {import('../content/contentTree.js').PropPlacement[]} propsData - The map's declarative props array.
+	 * @param {number} [mapTextureIndex=0] - The spritesheet index of the current map.
 	 * @returns {Array<Object>} The instantiated entities.
 	 */
-	spawnProps(propsData) {
+	spawnProps(propsData, mapTextureIndex = 0) {
 		const spawned = [];
 
 		if (!propsData || propsData.length === 0) {
@@ -101,17 +100,18 @@ class PropManagerController {
 
 			const pos = Engine.LJS.vec2(data.pos.x, data.pos.y);
 			const renderOrder = data.renderOrder !== undefined ? data.renderOrder : 0;
+			const propSize =
+				def.size || Engine.LJS.vec2(def.resolution.x / 10, def.resolution.y / 10);
 
 			if (def.isAnimated) {
 				const entity = new AnimatedEntity(
 					pos,
-					def.size,
-					def.textureIndex,
+					propSize,
+					mapTextureIndex,
 					def.resolution,
 					renderOrder
 				);
 				entity.gridOffset = def.offset || Engine.LJS.vec2(0, 0);
-				entity.spritePadding = def.padding || 0;
 				entity.gridCols = def.cols || 1;
 
 				if (def.animations) {
@@ -127,10 +127,23 @@ class PropManagerController {
 				entity.setState(def.defaultState || 'idle');
 				spawned.push(entity);
 			} else {
-				const tileInfo = Engine.LJS.tile(0, def.resolution, def.textureIndex);
+				let tileInfo;
+				const padding = AnimatedEntity.SPRITE_PADDING;
+
+				if (def.offset) {
+					const dummyTile = Engine.LJS.tile(0, def.resolution, mapTextureIndex);
+					tileInfo = new Engine.LJS.TileInfo(
+						Engine.LJS.vec2(def.offset.x + padding, def.offset.y + padding),
+						def.resolution,
+						dummyTile.textureInfo
+					);
+				} else {
+					tileInfo = Engine.LJS.tile(0, def.resolution, mapTextureIndex, padding);
+				}
+
 				const entity = new Engine.LJS.EngineObject(
 					pos,
-					def.size,
+					propSize,
 					tileInfo,
 					0,
 					new Engine.LJS.Color(1, 1, 1),
@@ -192,7 +205,8 @@ class PropManagerController {
 		this.buildRegistry(configChain);
 
 		if (mapNode.mapData && mapNode.mapData.props) {
-			this.#activeProps = this.spawnProps(mapNode.mapData.props);
+			const mapTexIndex = mapNode.mapData.textureIndex || 0;
+			this.#activeProps = this.spawnProps(mapNode.mapData.props, mapTexIndex);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+// File: src/js/modules/game/interaction.js
 import { Content } from '../content/content.js';
 import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
@@ -11,12 +12,26 @@ import { GameBridge } from './gameBridge.js';
  * Handles detection, highlighting, and triggering of object interactions.
  */
 class InteractionController {
+	/** @type {Object[]} Array of interactive objects in the map. */
+	activeObjects;
+
+	/** @type {Object|null} The object currently under the player's interaction distance. */
+	highlightedObject;
+
+	/** @type {number} Detection radius for interactions. */
+	interactionRadius;
+
+	/** @type {number|null} Handle for the UI label fade-out timer. */
+	overlayTimeout;
+
+	/** @type {number} Timestamp until which input is ignored (cooldown). */
+	blockTimer;
+
+	/** @type {Object<string, Function>} Map of interaction type handlers. */
+	#interactionHandlers;
+
 	/**
-	 * @property {Object[]} activeObjects - Array of interactive objects in the map.
-	 * @property {Object|null} highlightedObject - The object currently under the player's interaction distance.
-	 * @property {number} interactionRadius - Detection radius for interactions.
-	 * @property {number|null} overlayTimeout - Handle for the UI label fade-out timer.
-	 * @property {number} blockTimer - Timestamp until which input is ignored (cooldown).
+	 * Creates an instance of the InteractionController.
 	 */
 	constructor() {
 		this.activeObjects = [];
@@ -24,6 +39,15 @@ class InteractionController {
 		this.interactionRadius = 2.2;
 		this.overlayTimeout = null;
 		this.blockTimer = 0;
+
+		this.#interactionHandlers = {
+			category: (obj) => this.#handleCategoryInteraction(obj),
+			content: (obj) => Events.emit('request:navigate', obj.path),
+			link: (obj) => Events.emit('request:navigate', obj.path),
+			path: (obj) => Events.emit('request:navigate', obj.path),
+			file: (obj) => Events.emit('request:modal', obj.file),
+			action: (obj) => obj.action(),
+		};
 
 		Events.on('route:changed', (payload) => this.#handleMapObjects(payload));
 	}
@@ -37,7 +61,7 @@ class InteractionController {
 	}
 
 	/**
-	 * @returns {number} the duration in milliseconds to wait before transitioning to a new map.
+	 * @returns {number} the duration in milliseconds to wait before transitioning to a new map behind the player.
 	 * @constant
 	 */
 	static get TRANSITION_BEHIND_MS() {
@@ -45,22 +69,12 @@ class InteractionController {
 	}
 
 	/**
-	 * @returns {number} the duration in milliseconds to wait before transitioning to a new map.
+	 * @returns {number} the duration in milliseconds to wait before transitioning to a new map in front of the player.
 	 * @constant
 	 */
 	static get TRANSITION_FRONT_MS() {
 		return 800;
 	}
-
-	/** @type {Object<string, Function>} Map of interaction type handlers. */
-	#interactionHandlers = {
-		category: (obj) => this.#handleCategoryInteraction(obj),
-		content: (obj) => Events.emit('request:navigate', obj.path),
-		link: (obj) => Events.emit('request:navigate', obj.path),
-		path: (obj) => Events.emit('request:navigate', obj.path),
-		file: (obj) => Events.emit('request:modal', obj.file),
-		action: (obj) => obj.action(),
-	};
 
 	/**
 	 * Updates interaction state each frame.
@@ -188,8 +202,14 @@ class InteractionController {
 			const mapTexIndex = mapNode.mapData.textureIndex || 0;
 
 			const gameObjects = currentObjects.map((obj) => {
-				const isFrontInteract = !obj.below;
-				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), isFrontInteract, {
+				let variant = 'front';
+				if (obj.type === 'content') {
+					variant = 'sign';
+				} else if (obj.below) {
+					variant = 'behind';
+				}
+
+				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), variant, {
 					textureIndex: mapTexIndex,
 				});
 
@@ -220,7 +240,6 @@ class InteractionController {
 			obj.open();
 		}
 
-		// Special handling for the 'exit' node: ensure player enters the parent map at the coordinate matching where the child map expects the entry to be.
 		if (obj.id === 'parent_exit' || obj.path === '') {
 			const parentPath = obj.path || '';
 			const parentNode = Content.findNodeByPath(parentPath);
@@ -237,9 +256,9 @@ class InteractionController {
 			GameBridge.requestBehindInteract(InteractionController.TRANSITION_BEHIND_MS).then(
 				async () => {
 					Events.emit('request:loading', { show: true, isModal: true });
-					await new Promise((r) =>
-						setTimeout(r, InteractionController.TRANSITION_BEHIND_MS)
-					);
+					await new Promise((r) => {
+						setTimeout(r, InteractionController.TRANSITION_BEHIND_MS);
+					});
 					Events.emit('request:navigate', obj.path);
 				}
 			);
@@ -247,9 +266,9 @@ class InteractionController {
 			GameBridge.requestFrontInteract(InteractionController.TRANSITION_FRONT_MS).then(
 				async () => {
 					Events.emit('request:loading', { show: true, isModal: true });
-					await new Promise((r) =>
-						setTimeout(r, InteractionController.TRANSITION_FRONT_MS)
-					);
+					await new Promise((r) => {
+						setTimeout(r, InteractionController.TRANSITION_FRONT_MS);
+					});
 					Events.emit('request:navigate', obj.path);
 				}
 			);
