@@ -4,7 +4,7 @@ import { LayeredInput } from '../core/layeredInputs.js';
 import { Router } from '../core/router.js';
 import { scrollToHash } from '../core/sharedUtils.js';
 import { InputPrompts } from '../input/inputPrompts.js';
-import { Navigation } from '../input/navigation.js';
+import { Navigation, NavigationController } from '../input/navigation.js';
 import { VirtualCursor } from '../input/virtualCursor.js';
 import { Obfuscator } from '../markdown/obfuscator.js';
 import { Lang } from './lang.js';
@@ -1062,7 +1062,7 @@ export class UIManager {
 		const axis = inputState.axis;
 		const now = performance.now();
 
-		if (now - this.lastSubmenuMoveTime < Navigation.constructor.NAV_DEBOUNCE) {
+		if (now - this.lastSubmenuMoveTime < NavigationController.NAV_DEBOUNCE) {
 			return;
 		}
 

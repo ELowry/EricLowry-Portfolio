@@ -175,8 +175,8 @@ export function scrollToHash(hash, container = null, behavior = 'smooth') {
 	let id = hash.substring(1);
 	try {
 		id = decodeURIComponent(id);
-	} catch (e) {
-		console.error('Failed to decode URL hash:', e);
+	} catch {
+		// Malformed URI
 	}
 
 	const targetEl = document.getElementById(id);

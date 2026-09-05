@@ -1,3 +1,4 @@
+import { escapeHtml } from '../core/sharedUtils.js';
 import { Lang } from '../ui/lang.js';
 
 /**
@@ -218,7 +219,7 @@ export class Obfuscator {
 				data-text-enc="${textData.encoded}"
 				data-type="${isMail ? 'mailto' : 'tel'}"
 				${isObfuscated ? 'data-obfuscated-text="true"' : ''}
-				${title ? `title="${title}"` : ''}
+				${title ? `title="${escapeHtml(title)}"` : ''}
 				data-nosnippet
 			>${displayText}</a>`;
 	}
@@ -450,31 +451,6 @@ export class Obfuscator {
 		}
 
 		Obfuscator.#decodeLink(link);
-
-		const encodedHref = link.getAttribute('data-enc');
-		const encodedText = link.getAttribute('data-text-enc');
-		const type = link.getAttribute('data-type') || 'mailto';
-
-		if (encodedHref) {
-			try {
-				const value = Obfuscator.deobfuscate(encodedHref);
-				link.href = `${type}:${value}`;
-
-				if (link.dataset.obfuscatedText === 'true' && encodedText) {
-					link.textContent = Obfuscator.deobfuscate(encodedText);
-					link.removeAttribute('data-obfuscated-text');
-				}
-
-				link.classList.remove('protected-link');
-				if (import.meta.env.PROD) {
-					link.removeAttribute('data-enc');
-					link.removeAttribute('data-text-enc');
-					link.removeAttribute('data-type');
-				}
-			} catch (e) {
-				console.error('Failed to decode contact information');
-			}
-		}
 	}
 
 	/**

@@ -1,3 +1,5 @@
+import { escapeHtml } from '../core/sharedUtils.js';
+
 /**
  * Detects specific video embed links and transforms them into responsive iframes.
  */
@@ -70,8 +72,8 @@ export class VideoEmbeds {
 						}
 
 						const titleAttr = title
-							? ` title="${title}"`
-							: ` title="${text || 'Video player'}"`;
+							? ` title="${escapeHtml(title)}"`
+							: ` title="${escapeHtml(text || 'Video player')}"`;
 
 						return `<div class="embed-container" style="padding-top: ${aspect};"><iframe ${titleAttr} src="${cleanHref}" allow="fullscreen"></iframe></div>`;
 					}

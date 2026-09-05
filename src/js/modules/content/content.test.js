@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { Content } from './content.js';
 
 describe('ContentController', () => {
-	// We run init() first to populate the internal #fileToPaths map. This might log a console error if mapLoader dynamic imports fail in the test environment, but it will still traverse the tree and build the paths correctly.
+	// We run init() first to populate the internal #fileToPaths map. This might log a console error if map config dynamic imports fail in the test environment, but it will still traverse the tree and build the paths correctly.
 	beforeAll(async () => {
 		await Content.init();
 	});

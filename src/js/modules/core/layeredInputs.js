@@ -62,6 +62,15 @@ class LayeredInputController {
 		}
 	}
 
+	/**
+	 * Acts as a safeguard against same-frame trigger bleed-through.
+	 * @returns {number} the minimum time in milliseconds that must pass before an activated layer can process inputs.
+	 * @constant
+	 */
+	static get FRAME_SECURITY_MS() {
+		return 16;
+	}
+
 	// PRIORITIES
 
 	/**
@@ -173,15 +182,6 @@ class LayeredInputController {
 	 */
 	get LAYER_DEACTIVATION_EVENT() {
 		return 'layer:deactivated';
-	}
-
-	/**
-	 * Acts as a safeguard against same-frame trigger bleed-through.
-	 * @returns {number} the minimum time in milliseconds that must pass before an activated layer can process inputs.
-	 * @constant
-	 */
-	static get FRAME_SECURITY_MS() {
-		return 16;
 	}
 
 	/**

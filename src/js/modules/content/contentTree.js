@@ -35,7 +35,7 @@
  * @property {string} [file] - Markdown file path (used if `type === 'content'`)
  * @property {boolean} [hidden] - Hides the node from text-mode navigation menus if `true`.
  * @property {string|null} [image] - Path to the header image inside the `assets/images/` directory.
- * @property {() => Promise<any>} [mapLoader] - Function that imports the map's configuration (used if `type === 'category'`)
+ * @property {string} [mapId] - The file path identifier for the map config and sprites (used if `type === 'category'`)
  * @property {MapConfig} [mapData] - Game map settings populated during initialization.
  * @property {Array<ContentNode>} [children] - Child nodes (used if `type === 'category'`)
  */
@@ -64,15 +64,15 @@ const content = ({ id, title, file, hidden = false, image = null }) => ({
  * @param {Object} options - The category configuration properties.
  * @param {string} options.id - Unique identifier for the node (URL segment).
  * @param {string} options.title - Fallback human-readable title.
- * @param {() => Promise<any>} options.mapLoader - Function that imports the map's configuration.
+ * @param {string} options.mapId - The file path identifier for the map config and sprites.
  * @param {Array<ContentNode>} [options.children=[]] - Child nodes (used if `type === category`)
  * @returns {ContentNode} a standardized content node object.
  */
-const category = ({ id, title, mapLoader, children = [] }) => ({
+const category = ({ id, title, mapId, children = [] }) => ({
 	id,
 	title,
 	type: 'category',
-	mapLoader,
+	mapId,
 	mapData: null, // Will be filled by init()
 	children,
 });
@@ -93,7 +93,7 @@ const separator = () => ({
 export const ContentTree = category({
 	id: 'root',
 	title: 'Portfolio',
-	mapLoader: () => import('../../../maps/root.config.js'),
+	mapId: 'root',
 	children: [
 		// Hidden
 		content({ id: 'privacy', title: 'Privacy Policy', file: 'info/privacy.md', hidden: true }),
@@ -107,7 +107,7 @@ export const ContentTree = category({
 		category({
 			id: 'coaching-business',
 			title: 'Coaching & Business',
-			mapLoader: () => import('../../../maps/coaching-business.config.js'),
+			mapId: 'coaching-business',
 			children: [
 				content({
 					id: 'coaching-business',
@@ -119,7 +119,7 @@ export const ContentTree = category({
 				category({
 					id: 'CinQ',
 					title: 'CinQ – Operations & Coaching',
-					mapLoader: () => import('../../../maps/coaching-business/CinQ.config.js'),
+					mapId: 'coaching-business/CinQ',
 					children: [
 						content({
 							id: 'CinQ',
@@ -155,7 +155,7 @@ export const ContentTree = category({
 		category({
 			id: 'gaming',
 			title: 'Video Games',
-			mapLoader: () => import('../../../maps/gaming.config.js'),
+			mapId: 'gaming',
 			children: [
 				content({
 					id: 'gaming',
@@ -189,7 +189,7 @@ export const ContentTree = category({
 		category({
 			id: 'osd',
 			title: 'Open Source Development',
-			mapLoader: () => import('../../../maps/osd.config.js'),
+			mapId: 'osd',
 			children: [
 				content({
 					id: 'osd',
@@ -240,7 +240,7 @@ export const ContentTree = category({
 		category({
 			id: 'websites',
 			title: 'Web Development & Design',
-			mapLoader: () => import('../../../maps/websites.config.js'),
+			mapId: 'websites',
 			children: [
 				content({
 					id: 'websites',
@@ -264,7 +264,7 @@ export const ContentTree = category({
 				category({
 					id: 'lightweight-static',
 					title: 'Lightweight Static Sites',
-					mapLoader: () => import('../../../maps/websites/lightweight-static.config.js'),
+					mapId: 'websites/lightweight-static',
 					children: [
 						content({
 							id: 'lightweight-static',
@@ -312,7 +312,7 @@ export const ContentTree = category({
 		category({
 			id: 'architecture',
 			title: 'Architecture Studies',
-			mapLoader: () => import('../../../maps/architecture.config.js'),
+			mapId: 'architecture',
 			children: [
 				content({
 					id: 'architecture',
@@ -324,7 +324,7 @@ export const ContentTree = category({
 				category({
 					id: 'projects',
 					title: 'Architecture Projects',
-					mapLoader: () => import('../../../maps/architecture/projects.config.js'),
+					mapId: 'architecture',
 					children: [
 						content({
 							id: 'projects',

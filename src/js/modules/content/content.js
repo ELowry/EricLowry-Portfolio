@@ -49,9 +49,22 @@ class ContentController {
 				this.#fileToPaths.get(node.file).push(currentPath);
 			}
 
-			if (node.mapLoader) {
-				const mapToLoad = node.mapLoader();
-				promises.push(mapToLoad);
+			if (node.mapId) {
+				const loadMapData = async () => {
+					const configModule = await import(`../../../maps/${node.mapId}.config.js`);
+					const mapData = configModule.default || configModule;
+
+					try {
+						const spriteModule = await import(`../../../maps/${node.mapId}.sprites.js`);
+						mapData.sprites = spriteModule.default || spriteModule;
+					} catch {
+						// No custom sprites exist for this map
+					}
+
+					return mapData;
+				};
+
+				promises.push(loadMapData());
 				nodesToHydrate.push(node);
 			}
 
@@ -95,8 +108,6 @@ class ContentController {
 				}
 
 				nodesToHydrate[index].mapData = mapData;
-				// Clear the loader to free memory
-				delete nodesToHydrate[index].mapLoader;
 			});
 
 			this.isReady = true;

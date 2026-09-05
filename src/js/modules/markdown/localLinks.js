@@ -1,5 +1,6 @@
 import { Content } from '../content/content.js';
 import { Router } from '../core/router.js';
+import { escapeHtml } from '../core/sharedUtils.js';
 
 /**
  * Intercepts markdown links pointing to local content files and rewrites them to match the application routing system.
@@ -27,10 +28,11 @@ export class LocalLinkParser {
 		const file = logicalPath + '.md';
 
 		if (logicalPath.startsWith('blog/') || logicalPath.startsWith('projects/')) {
-			const titleAttr = title ? ` title="${title}"` : '';
+			const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
 			const hrefPath = `/${Router.currentMode}/${logicalPath}${hash}`;
+			const safeNavPath = (logicalPath + hash).replace(/'/g, "\\'");
 
-			return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${logicalPath}${hash}');">${innerHtml}</a>`;
+			return `<a href="${hrefPath}"${titleAttr} data-preview-path="${logicalPath}" onclick="event.preventDefault(); App.navigate('${safeNavPath}');">${innerHtml}</a>`;
 		}
 
 		const paths = Content.findPathsByFile(file);
@@ -57,12 +59,13 @@ export class LocalLinkParser {
 			urlPath = contentPath ? contentPath + '/' : '';
 		}
 
-		const titleAttr = title ? ` title="${title}"` : '';
+		const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
 		const hrefPath = urlPath
 			? `/${Router.currentMode}/${urlPath}${hash}`
 			: `/${Router.currentMode}/${hash}`;
+		const safeNavPath = (contentPath + hash).replace(/'/g, "\\'");
 
-		return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${contentPath}${hash}');">${innerHtml}</a>`;
+		return `<a href="${hrefPath}"${titleAttr} data-preview-path="${contentPath}" onclick="event.preventDefault(); App.navigate('${safeNavPath}');">${innerHtml}</a>`;
 	}
 
 	/**
@@ -100,7 +103,7 @@ export class LocalLinkParser {
 
 					// External links
 					if (href.startsWith('http') || href.startsWith('//')) {
-						const titleAttr = title ? ` title="${title}"` : '';
+						const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
 						const classAttr = innerHtml.includes('<img')
 							? ''
 							: ' class="md-external-link"';

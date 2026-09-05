@@ -473,7 +473,9 @@ class LangController {
 		const result = resolveDotPath(pathString, searchData, failSymbol);
 
 		if (result === failSymbol) {
-			console.warn(`Translation: no translation for "${pathString}"`);
+			if (searchData) {
+				console.warn(`Translation: no translation for "${pathString}"`);
+			}
 			return fallback;
 		}
 

@@ -2,7 +2,6 @@
  * Map configuration for the Root level.
  * @type {MapData}
  */
-// fallow-ignore-next-line unused-export
 export default {
 	startPos: { x: 10, y: 10 },
 	positions: {

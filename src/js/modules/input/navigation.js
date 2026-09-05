@@ -5,7 +5,7 @@ import { VirtualCursor } from './virtualCursor.js';
  * Navigation
  * Manages generic focus traversal and scrolling for DOM containers via Gamepad/Keyboard.
  */
-class NavigationController {
+export class NavigationController {
 	/**
 	 * @property {HTMLElement|null} activeContainer - The container currently handling focus navigation.
 	 * @property {Object} options - Configuration for the current context.
