@@ -60,3 +60,7 @@ yarn-error.log*
 /public/.obsidian/
 /public/obsidian/
 /public/.vault-nickname
+
+# Local note taking
+/public/LOCAL/
+/LOCAL/
