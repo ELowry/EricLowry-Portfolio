@@ -565,12 +565,21 @@ export class GalleryDisplay {
 			}
 		}
 
-		// Debounced horizontal navigation for Gallery
-		if (Math.abs(inputState.navAxis.x) > 0.5) {
+		// Debounced horizontal navigation for Gallery (both sticks and D-pad)
+		let stickX = 0;
+		if (Math.abs(inputState.scrollAxis?.x || 0) > 0.3) {
+			stickX = inputState.scrollAxis.x;
+		} else if (Math.abs(inputState.cursorAxis?.x || 0) > 0.3) {
+			stickX = inputState.cursorAxis.x;
+		} else if (Math.abs(inputState.navAxis?.x || 0) > 0.5) {
+			stickX = inputState.navAxis.x;
+		}
+
+		if (stickX !== 0) {
 			const now = performance.now();
 			if (!this.lastGalleryNavTime || now - this.lastGalleryNavTime > 300) {
 				this.lastGalleryNavTime = now;
-				this.#navigate(inputState.navAxis.x > 0 ? 1 : -1, 'smooth');
+				this.#navigate(stickX > 0 ? 1 : -1, 'smooth');
 			}
 		} else {
 			this.lastGalleryNavTime = 0;

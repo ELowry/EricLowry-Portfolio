@@ -92,15 +92,18 @@ describe('NavigationController', () => {
 			expect(Navigation.contextStack[0].container).toBe(container);
 		});
 
-		it('should pop context and restore previous state', () => {
+		it('should pop context and restore previous state and focused element', () => {
 			const subContainer = document.createElement('div');
-			Navigation.setContext(container, { axis: 'x', autoFocus: false });
+			Navigation.setContext(container, { axis: 'x', roving: true, autoFocus: false });
+			btn2.focus();
 			Navigation.pushContext(subContainer, { axis: 'y', autoFocus: false });
 			Navigation.popContext();
 
 			expect(Navigation.activeContainer).toBe(container);
 			expect(Navigation.options.axis).toBe('x');
 			expect(Navigation.contextStack.length).toBe(0);
+			expect(document.activeElement).toBe(btn2);
+			expect(btn2.tabIndex).toBe(0);
 		});
 	});
 
@@ -199,6 +202,43 @@ describe('NavigationController', () => {
 			expect(clickSpy).toHaveBeenCalled();
 		});
 
+		it('should bypass focus navigation when lastInputType is not gamepad', () => {
+			Navigation.setContext(container, { axis: 'x', autoFocus: false });
+			btn1.focus();
+
+			const inputState = {
+				lastInputType: 'mnk',
+				navAxis: { x: 1, y: 0 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
+			};
+
+			Navigation.lastMoveTime = -Infinity;
+			Navigation.update(inputState);
+
+			expect(document.activeElement).toBe(btn1);
+		});
+
+		it('should bypass interaction when lastInputType is not gamepad', () => {
+			Navigation.setContext(container, { autoFocus: false });
+			btn1.focus();
+			const clickSpy = vi.spyOn(btn1, 'click');
+
+			const inputState = {
+				lastInputType: 'mnk',
+				interact: true,
+				navAxis: { x: 0, y: 0 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
+			};
+
+			Navigation.update(inputState);
+
+			expect(clickSpy).not.toHaveBeenCalled();
+		});
+
 		it('should not trigger click if virtual cursor is active', () => {
 			VirtualCursor.isActive = true;
 			Navigation.setContext(container, { autoFocus: false });
@@ -217,6 +257,28 @@ describe('NavigationController', () => {
 			Navigation.update(inputState);
 
 			expect(clickSpy).not.toHaveBeenCalled();
+		});
+
+		it('should bypass navigation and interaction when an editable input is focused', () => {
+			const textInput = document.createElement('input');
+			container.appendChild(textInput);
+			textInput.focus();
+
+			const clickSpy = vi.spyOn(textInput, 'click');
+
+			const inputState = {
+				lastInputType: 'mnk',
+				interact: true,
+				navAxis: { x: 1, y: 0 },
+				scrollAxis: { x: 0, y: 0 },
+				cursorAxis: { x: 0, y: 0 },
+				cursorPos: { x: 0, y: 0 },
+			};
+
+			Navigation.update(inputState);
+
+			expect(clickSpy).not.toHaveBeenCalled();
+			expect(document.activeElement).toBe(textInput);
 		});
 	});
 });

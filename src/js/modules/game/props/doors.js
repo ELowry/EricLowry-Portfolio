@@ -23,6 +23,9 @@ import { AnimatedEntity } from '../animatedEntity.js';
  * @property {Array<number>} [framesOpening=[0]] - The frames to use for the opening animation sequence.
  * @property {Array<number>} [framesOpen=[0]] - The frames to use for the open state.
  * @property {DoorHighlightConfig} [highlightConfig=null] - Configuration for the door's highlight frame.
+ * @property {string} [shadowType='wall-floor'] - Shadow rendering type.
+ * @property {number} [shadowDistance=null] - Shadow projection distance override.
+ * @property {number} [shadowBaselineOffset=0] - Vertical baseline offset for shadow clipping/anchoring.
  */
 
 /**
@@ -78,6 +81,12 @@ export class Door extends AnimatedEntity {
 
 		super(pos, calculatedSize, texIndex, config.resolution, zIndex);
 
+		this.shadowType = config.shadowType !== undefined ? config.shadowType : 'wall-floor';
+		if (config.shadowDistance !== undefined) {
+			this.shadowDistance = config.shadowDistance;
+		}
+		this.shadowBaselineOffset =
+			config.shadowBaselineOffset !== undefined ? config.shadowBaselineOffset : 0;
 		this.isHighlighted = false;
 		this.isFrontInteract = variant !== 'behind';
 		this.animDelayOpen = config.animDelayOpen || 0;
@@ -115,7 +124,8 @@ export class Door extends AnimatedEntity {
 			this.#highlightTileInfo = new Engine.LJS.TileInfo(
 				Engine.LJS.vec2(pixelX, pixelY),
 				hc.resolution,
-				dummyTile.textureInfo
+				dummyTile.textureInfo,
+				padding
 			);
 		}
 	}
@@ -132,6 +142,7 @@ export class Door extends AnimatedEntity {
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
 			yOffset: 1,
+			shadowBaselineOffset: 0.3,
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
 			highlightConfig: {
@@ -154,6 +165,7 @@ export class Door extends AnimatedEntity {
 			animDelayOpen: 20,
 			animSpeedOpen: 10,
 			yOffset: 0.4,
+			shadowBaselineOffset: 0.3,
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
 			highlightConfig: {
@@ -173,6 +185,7 @@ export class Door extends AnimatedEntity {
 			resolution: Engine.LJS.vec2(20, 19),
 			offset: Engine.LJS.vec2(230, 52),
 			yOffset: 0.2,
+			shadowType: 'floor',
 			highlightConfig: {
 				resolution: Engine.LJS.vec2(22, 11),
 				offset: Engine.LJS.vec2(252, 52),

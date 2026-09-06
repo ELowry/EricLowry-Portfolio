@@ -229,4 +229,28 @@ describe('PropManagerController', () => {
 		expect(spawned.length).toBe(1);
 		expect(spawned[0].isInputPromptEntity).toBe(true);
 	});
+
+	it('should propagate shadowType, shadowDistance, and shadowBaselineOffset to static props', () => {
+		PropManager.buildRegistry([
+			{
+				local: {
+					'shadow-prop': {
+						isAnimated: false,
+						size: { x: 1, y: 1 },
+						resolution: { x: 16, y: 16 },
+						shadowType: 'wall',
+						shadowDistance: 0.3,
+						shadowBaselineOffset: 0.3,
+					},
+				},
+			},
+		]);
+
+		const spawned = PropManager.spawnProps([{ type: 'shadow-prop', pos: { x: 0, y: 0 } }]);
+
+		expect(spawned.length).toBe(1);
+		expect(spawned[0].shadowType).toBe('wall');
+		expect(spawned[0].shadowDistance).toBe(0.3);
+		expect(spawned[0].shadowBaselineOffset).toBe(0.3);
+	});
 });

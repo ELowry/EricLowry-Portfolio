@@ -25,6 +25,7 @@ export class InputPromptEntity extends AnimatedEntity {
 	 * Sets the logical key code to resolve for keyboard layout variations (e.g. 'A', 'W').
 	 * @param {string} key - The physical code or default character.
 	 */
+	// fallow-ignore-next-line unused-class-member
 	setLogicalKey(key) {
 		this.#logicalKey = key;
 	}

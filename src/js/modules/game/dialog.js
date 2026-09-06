@@ -31,6 +31,8 @@ class DialogController {
 	#steps;
 	/** @type {number} */
 	#currentStepIndex;
+	/** @type {number} */
+	#lastAdvanceTime;
 
 	/**
 	 * Creates an instance of DialogController.
@@ -39,13 +41,20 @@ class DialogController {
 		this.isActive = false;
 		this.#steps = [];
 		this.#currentStepIndex = 0;
+		this.#lastAdvanceTime = 0;
 	}
 
 	/**
 	 * Updates the dialogue state each frame, handling user interactions.
 	 */
 	update() {
-		if (!this.isActive) return;
+		if (!this.isActive) {
+			return;
+		}
+
+		if (performance.now() - this.#lastAdvanceTime < 150) {
+			return;
+		}
 
 		const step = this.#steps[this.#currentStepIndex];
 		if (!step.choices || step.choices.length === 0) {
@@ -69,7 +78,9 @@ class DialogController {
 
 		const step = this.#steps[this.#currentStepIndex];
 
-		if (typeof step.onEnter === 'function') step.onEnter();
+		if (typeof step.onEnter === 'function') {
+			step.onEnter();
+		}
 
 		if (step.text || step.textLangKey || step.element) {
 			const payload = {
@@ -84,7 +95,9 @@ class DialogController {
 					label: c.label,
 					langKey: c.langKey,
 					action: () => {
-						if (typeof c.action === 'function') c.action();
+						if (typeof c.action === 'function') {
+							c.action();
+						}
 
 						if (this.isActive) {
 							this.advance();
@@ -102,7 +115,9 @@ class DialogController {
 	 * @param {Array<DialogStep>} sequence - The array of dialogue steps to play.
 	 */
 	play(sequence) {
-		if (!sequence || sequence.length === 0) return;
+		if (!sequence || sequence.length === 0) {
+			return;
+		}
 		this.#steps = sequence;
 		this.#currentStepIndex = 0;
 		this.isActive = true;
@@ -113,8 +128,11 @@ class DialogController {
 	 * Advances the dialogue sequence to the next step.
 	 */
 	advance() {
+		this.#lastAdvanceTime = performance.now();
 		const step = this.#steps[this.#currentStepIndex];
-		if (typeof step.onExit === 'function') step.onExit();
+		if (typeof step.onExit === 'function') {
+			step.onExit();
+		}
 		this.#currentStepIndex++;
 		this.#executeStep();
 	}
@@ -146,10 +164,14 @@ class DialogController {
 						Engine.LJS.Ease.OUT(Engine.LJS.Ease.POWER(2)),
 						Engine.LJS.Ease.LINEAR()
 					);
-					if (player) player.setState('front_interact');
+					if (player) {
+						player.setState('wave');
+					}
 				},
 				onExit: () => {
-					if (player) player.setState('idle');
+					if (player) {
+						player.setState('idle');
+					}
 				},
 			},
 			{

@@ -148,21 +148,32 @@ class InputController {
 		let x = 0;
 		let y = 0;
 
-		// Keyboard
-		const keyDir = Engine.LJS.keyDirection();
-		if (keyDir.x !== 0) {
-			x = keyDir.x;
-		}
-		if (keyDir.y !== 0) {
-			y = keyDir.y;
-		}
+		const left =
+			Engine.LJS.keyIsDown('ArrowLeft')
+			|| Engine.LJS.keyIsDown('KeyA')
+			|| Engine.LJS.keyIsDown('KeyQ')
+			|| this.virtualState.left;
+		const right =
+			Engine.LJS.keyIsDown('ArrowRight')
+			|| Engine.LJS.keyIsDown('KeyD')
+			|| this.virtualState.right;
+		const up =
+			Engine.LJS.keyIsDown('ArrowUp')
+			|| Engine.LJS.keyIsDown('KeyW')
+			|| Engine.LJS.keyIsDown('KeyZ');
+		const down = Engine.LJS.keyIsDown('ArrowDown') || Engine.LJS.keyIsDown('KeyS');
 
-		// Touch
-		if (this.virtualState.left) {
-			x = -1;
+		if (left) {
+			x -= 1;
 		}
-		if (this.virtualState.right) {
-			x = 1;
+		if (right) {
+			x += 1;
+		}
+		if (up) {
+			y += 1;
+		}
+		if (down) {
+			y -= 1;
 		}
 
 		// Gamepad D-pad

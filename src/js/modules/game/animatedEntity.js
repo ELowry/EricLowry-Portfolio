@@ -1,10 +1,11 @@
 import { Engine } from '../core/engineContext.js';
+import { WithShadows } from './mixins/withShadows.js';
 
 /**
  * Base class for all animated game objects.
  * Extends LittleJS `EngineObject` to provide a robust state machine and sub-grid sprite rendering.
  */
-export class AnimatedEntity extends Engine.LJS.EngineObject {
+export class AnimatedEntity extends WithShadows(Engine.LJS.EngineObject) {
 	/** @type {string} */
 	currentState;
 
@@ -53,11 +54,14 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 		this.currentState = 'idle';
 		this.prevState = 'idle';
 		this.animTimer = new Engine.LJS.Timer();
+		this.prevAnimTime = 0;
+		this.currentDelay = 0;
 		this.animations = {};
 		this.textureIndex = textureIndex;
 		this.spriteResolution = spriteResolution;
 		this.gridOffset = Engine.LJS.vec2(0, 0);
 		this.gridCols = 1;
+		this.shadowType = null;
 
 		this.#tileCache = [];
 	}
@@ -71,7 +75,7 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 	}
 
 	/**
-	 * Renders the current frame of the active animation state.
+	 * Renders the current frame of the active animation state and its shadow.
 	 * @returns {void}
 	 */
 	render() {
@@ -80,7 +84,7 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 
 		if (timeElapsed < 0 && this.prevState) {
 			activeState = this.prevState;
-			timeElapsed = 0;
+			timeElapsed = this.prevAnimTime + (this.currentDelay + timeElapsed);
 		}
 
 		const anim = this.animations[activeState];
@@ -101,6 +105,8 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 
 		const localTileIndex = anim.frames[frameIndex];
 		const tileInfo = this.getTileInfo(localTileIndex);
+
+		this.renderShadow(tileInfo);
 
 		Engine.LJS.drawTile(this.pos, this.size, tileInfo, this.color, this.angle, this.mirror);
 	}
@@ -130,7 +136,8 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 		const tileInfo = new Engine.LJS.TileInfo(
 			Engine.LJS.vec2(pixelX, pixelY),
 			this.spriteResolution,
-			dummyTile.textureInfo
+			dummyTile.textureInfo,
+			padding
 		);
 
 		this.#tileCache[localTileIndex] = tileInfo;
@@ -158,6 +165,9 @@ export class AnimatedEntity extends Engine.LJS.EngineObject {
 	 */
 	setState(newState, delayInSeconds = 0, forceRestart = false) {
 		if (this.currentState !== newState || forceRestart) {
+			this.prevAnimTime = this.animTimer.get() > 0 ? this.animTimer.get() : 0;
+			this.currentDelay = delayInSeconds;
+
 			this.prevState = this.currentState;
 			this.currentState = newState;
 			this.animTimer.set(delayInSeconds);

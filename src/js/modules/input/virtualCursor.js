@@ -58,11 +58,7 @@ class VirtualCursorController {
 		this.element = document.getElementById('virtual-cursor');
 
 		// Subscribe to events instead of polling
-		const activeLayers = [
-			LayeredInput.LAYER_GAME_MODAL,
-			LayeredInput.LAYER_GALLERY,
-			LayeredInput.LAYER_TEXT,
-		];
+		const activeLayers = [LayeredInput.LAYER_GAME_MODAL, LayeredInput.LAYER_TEXT];
 
 		Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
 			if (activeLayers.includes(layerId)) {
@@ -99,6 +95,17 @@ class VirtualCursorController {
 	 */
 	update() {
 		if (!this.element) {
+			return;
+		}
+
+		if (LayeredInput.isActive(LayeredInput.LAYER_GALLERY, true)) {
+			if (this.isActive) {
+				this.isActive = false;
+				this.lastContainer = null;
+				this.#clearHover();
+				this.element.classList.remove('active');
+				this.element.remove();
+			}
 			return;
 		}
 
@@ -261,6 +268,10 @@ class VirtualCursorController {
 					Input.cursorPos.x += pull.x;
 					Input.cursorPos.y += pull.y;
 				}
+				continue;
+			}
+
+			if (dist < 0.1) {
 				continue;
 			}
 

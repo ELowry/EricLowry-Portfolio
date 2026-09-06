@@ -31,6 +31,7 @@ export default {
 			},
 		},
 		dirtPiles: {
+			shadowBaselineOffset: 0.1,
 			isAnimated: false,
 			get resolution() {
 				return Engine.LJS.vec2(19, 7);
@@ -40,6 +41,7 @@ export default {
 			},
 		},
 		promptFrame: {
+			shadowType: 'wall',
 			isAnimated: false,
 			get resolution() {
 				return Engine.LJS.vec2(30, 14);

@@ -83,6 +83,16 @@ export class NavigationController {
 			return;
 		}
 
+		// Avoid intercepting navigation when user is actively editing a text input
+		const isEditingText =
+			document.activeElement
+			&& (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)
+				|| document.activeElement.isContentEditable);
+
+		if (isEditingText) {
+			return;
+		}
+
 		const now = performance.now();
 		const debounceActive = now - this.lastMoveTime < NavigationController.NAV_DEBOUNCE;
 
@@ -108,8 +118,8 @@ export class NavigationController {
 			}
 		}
 
-		// Handle Focus & Paging Navigation (D-Pad, and Left Stick if Virtual Cursor is inactive)
-		if (!debounceActive && inputState.lastInputType === 'gamepad') {
+		// Handle Focus & Paging Navigation (Gamepad D-Pad, and Left Stick if Virtual Cursor is inactive)
+		if (inputState.lastInputType === 'gamepad' && !debounceActive) {
 			let navX = inputState.navAxis.x;
 			let navY = inputState.navAxis.y;
 
@@ -122,11 +132,15 @@ export class NavigationController {
 				}
 			}
 
-			this.#calculateFocus({ x: navX, y: navY }, debounceActive, inputState);
+			if (navX !== 0 || navY !== 0) {
+				this.#calculateFocus({ x: navX, y: navY }, debounceActive, inputState);
+			}
 		}
 
-		// Handle Interaction
-		this.#handleInteraction(inputState);
+		// Handle Interaction (Gamepad A button)
+		if (inputState.lastInputType === 'gamepad') {
+			this.#handleInteraction(inputState);
+		}
 	}
 
 	/**
@@ -302,55 +316,28 @@ export class NavigationController {
 			return;
 		}
 
-		let focusInput = 0;
-		let pageInput = 0;
+		let direction = 0;
+		const axisMode = this.options.axis;
 
-		const primaryAxis = this.options.axis || 'y';
-
-		if (primaryAxis === 'y') {
-			focusInput = -navAxis.y;
-			pageInput = navAxis.x;
-		} else if (primaryAxis === 'x') {
-			focusInput = navAxis.x;
-			pageInput = -navAxis.y;
-		}
-
-		if (Math.abs(focusInput) > NavigationController.NAVIGATE_DEADZONE) {
-			this.lastMoveTime = performance.now();
-			this.#moveFocus(Math.sign(focusInput), inputState);
-		} else if (
-			Math.abs(pageInput) > NavigationController.NAVIGATE_DEADZONE
-			&& this.options.scroll
-		) {
-			this.lastMoveTime = performance.now();
-			this.#pageScroll(Math.sign(pageInput));
-		}
-	}
-
-	/**
-	 * Performs a page-sized scroll in the specified direction based on the orthogonal input.
-	 * @param {number} direction - Positive (down/right) or Negative (up/left).
-	 * @private
-	 */
-	#pageScroll(direction) {
-		const manualScrollY = this.options.axis === 'x' ? 0 : direction;
-		const manualScrollX = this.options.axis === 'x' ? direction : 0;
-		const scrollTarget =
-			this.#getScrollTarget(manualScrollY, manualScrollX) || this.activeContainer;
-
-		if (!scrollTarget) {
-			return;
-		}
-
-		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const behavior = prefersReducedMotion ? 'instant' : 'smooth';
-
-		if (this.options.axis === 'x') {
-			const pageAmount = scrollTarget.clientWidth * 0.8 * direction;
-			scrollTarget.scrollBy({ left: pageAmount, behavior });
+		if (axisMode === 'x') {
+			if (Math.abs(navAxis.x) > NavigationController.NAVIGATE_DEADZONE) {
+				direction = Math.sign(navAxis.x);
+			}
+		} else if (axisMode === 'y') {
+			if (Math.abs(navAxis.y) > NavigationController.NAVIGATE_DEADZONE) {
+				direction = -Math.sign(navAxis.y);
+			}
 		} else {
-			const pageAmount = scrollTarget.clientHeight * 0.8 * direction;
-			scrollTarget.scrollBy({ top: pageAmount, behavior });
+			if (Math.abs(navAxis.y) > NavigationController.NAVIGATE_DEADZONE) {
+				direction = -Math.sign(navAxis.y);
+			} else if (Math.abs(navAxis.x) > NavigationController.NAVIGATE_DEADZONE) {
+				direction = Math.sign(navAxis.x);
+			}
+		}
+
+		if (direction !== 0) {
+			this.lastMoveTime = performance.now();
+			this.#moveFocus(direction, inputState);
 		}
 	}
 
@@ -363,13 +350,15 @@ export class NavigationController {
 		const current = document.activeElement;
 		if (
 			inputState.interact
-			&& inputState.lastInputType === 'gamepad'
 			&& current
+			&& this.activeContainer
 			&& this.activeContainer.contains(current)
 			&& !VirtualCursor.isActive
 		) {
 			current.classList.add('active');
-			setTimeout(() => current.classList.remove('active'), 100);
+			setTimeout(() => {
+				current.classList.remove('active');
+			}, 100);
 			current.click();
 		}
 	}
@@ -438,7 +427,20 @@ export class NavigationController {
 			return;
 		}
 		const prev = this.contextStack.pop();
-		this.setContext(prev.container, prev.options);
+		this.setContext(prev.container, {
+			...prev.options,
+			autoFocus: false,
+		});
+
+		if (prev.focusedElement && prev.focusedElement.isConnected) {
+			if (this.options.roving) {
+				const focusables = this.#getFocusables();
+				focusables.forEach((el) => {
+					el.tabIndex = el === prev.focusedElement ? 0 : -1;
+				});
+			}
+			prev.focusedElement.focus({ focusVisible: true });
+		}
 	}
 
 	/**
@@ -514,6 +516,7 @@ export class NavigationController {
 			this.contextStack.push({
 				container: this.activeContainer,
 				options: { ...this.options },
+				focusedElement: document.activeElement,
 			});
 		}
 		this.setContext(containerElement, options);

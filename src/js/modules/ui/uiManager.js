@@ -270,6 +270,14 @@ export class UIManager {
 		});
 
 		this.elements.gameMenu.addEventListener('keydown', (e) => {
+			if (
+				(e.key === 'ArrowRight' || e.code === 'KeyD')
+				&& document.activeElement?.getAttribute('aria-haspopup') === 'menu'
+			) {
+				e.preventDefault();
+				this.toggleSubmenu(document.activeElement, true);
+				return;
+			}
 			this.#handleMenuNavigation(e, this.elements.gameMenu, 'y');
 		});
 	}
@@ -454,14 +462,25 @@ export class UIManager {
 			nextIndex = 0;
 		} else if (e.key === 'End') {
 			nextIndex = items.length - 1;
+		} else if (e.code === 'KeyE') {
+			e.preventDefault();
+			current.click();
+			return true;
 		} else {
-			if ((axis === 'y' || axis === 'both') && e.key === 'ArrowDown') {
+			const isDown =
+				(axis === 'y' || axis === 'both') && (e.key === 'ArrowDown' || e.code === 'KeyS');
+			const isUp =
+				(axis === 'y' || axis === 'both')
+				&& (e.key === 'ArrowUp' || e.code === 'KeyW' || e.code === 'KeyZ');
+			const isRight =
+				(axis === 'x' || axis === 'both') && (e.key === 'ArrowRight' || e.code === 'KeyD');
+			const isLeft =
+				(axis === 'x' || axis === 'both')
+				&& (e.key === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyQ');
+
+			if (isDown || isRight) {
 				nextIndex = (currentIndex + 1) % items.length;
-			} else if ((axis === 'y' || axis === 'both') && e.key === 'ArrowUp') {
-				nextIndex = (currentIndex - 1 + items.length) % items.length;
-			} else if ((axis === 'x' || axis === 'both') && e.key === 'ArrowRight') {
-				nextIndex = (currentIndex + 1) % items.length;
-			} else if ((axis === 'x' || axis === 'both') && e.key === 'ArrowLeft') {
+			} else if (isUp || isLeft) {
 				nextIndex = (currentIndex - 1 + items.length) % items.length;
 			}
 		}
@@ -760,7 +779,16 @@ export class UIManager {
 
 		// Text Layer
 		if (LayeredInput.isActive(LayeredInput.LAYER_TEXT)) {
-			Navigation.update(inputState);
+			if (inputState.menu) {
+				this.focusTextNavbar();
+				Navigation.lastMoveTime = performance.now();
+				return true;
+			}
+
+			const submenuHandled = this.handleSubmenuInput(inputState);
+			if (!submenuHandled) {
+				Navigation.update(inputState);
+			}
 
 			// Browser History Navigation
 			if (inputState.bumperLeft) {
@@ -778,16 +806,55 @@ export class UIManager {
 			return true;
 		}
 		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MENU)) {
-			Navigation.update(inputState);
-			this.handleSubmenuInput(inputState);
+			const submenuHandled = this.handleSubmenuInput(inputState);
+			if (!submenuHandled) {
+				Navigation.update(inputState);
 
-			if (inputState.menu || inputState.back) {
-				this.app.closeGameMenu();
+				if (inputState.menu || inputState.back) {
+					this.app.closeGameMenu();
+				}
 			}
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Focuses the top text navbar and scrolls text mode content to the top.
+	 */
+	focusTextNavbar() {
+		if (this.elements.textLayer) {
+			const prefersReducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)'
+			).matches;
+			this.elements.textLayer.scrollTo({
+				top: 0,
+				behavior: prefersReducedMotion ? 'auto' : 'smooth',
+			});
+		}
+
+		if (this.elements.textNavbar) {
+			const openTrigger = this.elements.textNavbar.querySelector(
+				'[aria-haspopup="menu"][aria-expanded="true"]'
+			);
+			if (openTrigger) {
+				this.toggleSubmenu(openTrigger, false);
+			}
+
+			const buttons = Array.from(
+				this.elements.textNavbar.querySelectorAll(
+					'button:not([disabled]), a[href]:not([disabled])'
+				)
+			).filter((el) => el.offsetParent !== null && !el.closest('[hidden]'));
+
+			if (buttons.length > 0) {
+				buttons.forEach((btn, i) => {
+					btn.tabIndex = i === 0 ? 0 : -1;
+				});
+				buttons[0].focus({ focusVisible: true });
+			}
+		}
 	}
 
 	/**
@@ -930,61 +997,78 @@ export class UIManager {
 			return;
 		}
 
-		const isTextMode = this.app.mode === 'text';
-
 		if (shouldExpand) {
 			trigger.setAttribute('aria-expanded', 'true');
 			targetMenu.hidden = false;
 
-			if (isTextMode) {
-				Navigation.pushContext(targetMenu, {
-					roving: true,
-					axis: 'y',
-					autoFocus: true,
-				});
+			Navigation.pushContext(targetMenu, {
+				roving: true,
+				axis: 'y',
+				autoFocus: true,
+			});
 
-				const closeHandler = (e) => {
-					if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-						e.stopPropagation();
-					}
+			const closeHandler = (e) => {
+				if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+					e.stopPropagation();
+				}
 
-					if (e.key === 'Tab') {
-						this.toggleSubmenu(trigger, false);
-						return;
-					}
+				if (e.key === 'Tab') {
+					this.toggleSubmenu(trigger, false);
+					return;
+				}
 
-					if (e.key === 'Home' || e.key === 'End') {
-						e.preventDefault();
-						e.stopPropagation();
-						this.#handleMenuNavigation(e, targetMenu, 'y');
-						return;
-					}
+				if (e.key === 'Home' || e.key === 'End') {
+					e.preventDefault();
+					e.stopPropagation();
+					this.#handleMenuNavigation(e, targetMenu, 'y');
+					return;
+				}
 
-					if (e.key === 'Escape' || e.key === 'ArrowLeft') {
-						e.preventDefault();
-						this.toggleSubmenu(trigger, false);
-						trigger.focus();
-					} else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-						e.preventDefault();
-						this.#handleMenuNavigation(e, targetMenu, 'y');
-					}
-				};
-				targetMenu.addEventListener('keydown', closeHandler);
-				targetMenu._closeHandler = closeHandler;
-			}
+				if (
+					e.key === 'Escape'
+					|| e.key === 'ArrowLeft'
+					|| e.code === 'KeyA'
+					|| e.code === 'KeyQ'
+				) {
+					e.preventDefault();
+					this.toggleSubmenu(trigger, false);
+					trigger.focus({ focusVisible: true });
+				} else if (
+					e.key === 'ArrowUp'
+					|| e.key === 'ArrowDown'
+					|| e.code === 'KeyW'
+					|| e.code === 'KeyS'
+					|| e.code === 'KeyZ'
+					|| e.code === 'KeyE'
+				) {
+					e.preventDefault();
+					this.#handleMenuNavigation(e, targetMenu, 'y');
+				}
+			};
+			targetMenu.addEventListener('keydown', closeHandler);
+			targetMenu._closeHandler = closeHandler;
 		} else {
 			trigger.setAttribute('aria-expanded', 'false');
 			targetMenu.hidden = true;
 
 			this.#resetTabFocus(targetMenu);
 
-			if (isTextMode) {
-				Navigation.popContext();
+			Navigation.popContext();
 
-				if (targetMenu._closeHandler) {
-					targetMenu.removeEventListener('keydown', targetMenu._closeHandler);
-					delete targetMenu._closeHandler;
-				}
+			const parentMenu = trigger.closest(
+				'#text-navbar, #game-menu, [role="menubar"], [role="menu"]'
+			);
+			if (parentMenu) {
+				const buttons = parentMenu.querySelectorAll('button, a[href]');
+				buttons.forEach((btn) => {
+					btn.tabIndex = btn === trigger ? 0 : -1;
+				});
+			}
+			trigger.focus({ focusVisible: true });
+
+			if (targetMenu._closeHandler) {
+				targetMenu.removeEventListener('keydown', targetMenu._closeHandler);
+				delete targetMenu._closeHandler;
 			}
 		}
 	}
@@ -1001,19 +1085,19 @@ export class UIManager {
 
 		if (titleLangKey) {
 			this.elements.gameModal.classList.add('langAttr');
-			this.elements.gameModal.setAttribute('data-langattr', 'data-widnowtitle');
-			this.elements.gameModal.setAttribute('data-langdata_widnowtitle', titleLangKey);
+			this.elements.gameModal.setAttribute('data-langattr', 'data-windowtitle');
+			this.elements.gameModal.setAttribute('data-langdata_windowtitle', titleLangKey);
 			this.elements.gameModal.setAttribute(
-				'data-widnowtitle',
+				'data-windowtitle',
 				Lang.getString(titleLangKey, null, fallbackTitle)
 			);
 		} else if (fallbackTitle) {
 			this.elements.gameModal.classList.remove('langAttr');
 			this.elements.gameModal.removeAttribute('data-langattr');
-			this.elements.gameModal.removeAttribute('data-langdata_widnowtitle');
-			this.elements.gameModal.setAttribute('data-widnowtitle', fallbackTitle);
+			this.elements.gameModal.removeAttribute('data-langdata_windowtitle');
+			this.elements.gameModal.setAttribute('data-windowtitle', fallbackTitle);
 		} else {
-			this.elements.gameModal.removeAttribute('data-widnowtitle');
+			this.elements.gameModal.removeAttribute('data-windowtitle');
 		}
 
 		this.elements.gameModalContent.innerHTML = html;
@@ -1125,11 +1209,34 @@ export class UIManager {
 	}
 
 	/**
-	 * Processes gamepad and axis input for horizontal submenu navigation.
+	 * Processes gamepad and axis input for opening, closing, and navigating submenus.
 	 * @param {Object} inputState - The current state of the Input module.
+	 * @returns {boolean} `true` if submenu input was handled and consumed.
 	 */
 	handleSubmenuInput(inputState) {
+		const now = performance.now();
+
+		// Handle Gamepad B (Back) to close any currently expanded nested submenu
+		if (inputState.back) {
+			const activeContainer = document.querySelector('dialog[open], #text-navbar');
+			const openSubmenuTrigger = activeContainer?.querySelector(
+				'[aria-haspopup="menu"][aria-expanded="true"][aria-controls$="submenu"]'
+			);
+			if (openSubmenuTrigger) {
+				this.lastSubmenuMoveTime = now;
+				Navigation.lastMoveTime = now;
+				this.toggleSubmenu(openSubmenuTrigger, false);
+				openSubmenuTrigger.focus({ focusVisible: true });
+				return true;
+			}
+		}
+
+		if (now - this.lastSubmenuMoveTime < NavigationController.NAV_DEBOUNCE) {
+			return false;
+		}
+
 		let axisX = inputState.navAxis.x;
+		let axisY = inputState.navAxis.y;
 
 		if (
 			!VirtualCursor.isActive
@@ -1137,47 +1244,58 @@ export class UIManager {
 		) {
 			axisX = Math.sign(inputState.cursorAxis.x);
 		}
-
-		const now = performance.now();
-
-		if (now - this.lastSubmenuMoveTime < NavigationController.NAV_DEBOUNCE) {
-			return;
+		if (
+			!VirtualCursor.isActive
+			&& Math.abs(inputState.cursorAxis.y) > NavigationController.NAVIGATE_DEADZONE
+		) {
+			axisY = Math.sign(inputState.cursorAxis.y);
 		}
 
 		const current = document.activeElement;
 		if (!current) {
-			return;
+			return false;
 		}
 
-		// Right to open
-		if (axisX > NavigationController.NAVIGATE_DEADZONE) {
-			if (current.getAttribute('aria-haspopup') === 'menu') {
+		const isTextNavbar = current.closest('#text-navbar') !== null;
+		const isGameMenu = current.closest('#game-menu') !== null;
+
+		// Directional open: Down for text navbar, Right for game menu
+		if (
+			current.getAttribute('aria-haspopup') === 'menu'
+			&& current.getAttribute('aria-expanded') !== 'true'
+			&& current.getAttribute('aria-controls')?.endsWith('submenu')
+		) {
+			const shouldOpen =
+				(isTextNavbar && axisY < -NavigationController.NAVIGATE_DEADZONE)
+				|| (isGameMenu && axisX > NavigationController.NAVIGATE_DEADZONE);
+
+			if (shouldOpen) {
 				this.lastSubmenuMoveTime = now;
+				Navigation.lastMoveTime = now;
 				this.toggleSubmenu(current, true);
+				return true;
 			}
 		}
-		// Left to close
-		else if (axisX < -NavigationController.NAVIGATE_DEADZONE) {
-			// If on an open trigger, close it
-			if (
-				current.getAttribute('aria-haspopup') === 'menu'
-				&& current.getAttribute('aria-expanded') === 'true'
-			) {
-				this.lastSubmenuMoveTime = now;
-				this.toggleSubmenu(current, false);
-				return;
-			}
 
-			// Check if we are inside a submenu
-			const submenu = current.closest('[role="menu"]');
-			if (submenu && submenu.id && submenu.id.endsWith('submenu')) {
-				const trigger = document.querySelector(`[aria-controls="${submenu.id}"]`);
-				if (trigger) {
+		// Directional close: Left or Up when inside an open submenu
+		const submenu = current.closest('[role="menu"]');
+		if (submenu && submenu.id && submenu.id.endsWith('submenu')) {
+			const trigger = document.querySelector(`[aria-controls="${submenu.id}"]`);
+			if (trigger) {
+				const shouldClose =
+					axisX < -NavigationController.NAVIGATE_DEADZONE
+					|| (isTextNavbar && axisY > NavigationController.NAVIGATE_DEADZONE);
+
+				if (shouldClose) {
 					this.lastSubmenuMoveTime = now;
+					Navigation.lastMoveTime = now;
 					this.toggleSubmenu(trigger, false);
-					trigger.focus();
+					trigger.focus({ focusVisible: true });
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 }

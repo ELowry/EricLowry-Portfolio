@@ -495,7 +495,7 @@ class AppController {
 
 		// Game logic layer
 		if (LayeredInput.isActive(LayeredInput.LAYER_GAME)) {
-			if (this.Input.menu || this.Input.back) {
+			if (this.Input.menu) {
 				this.openGameMenu();
 				return;
 			}

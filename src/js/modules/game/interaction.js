@@ -94,6 +94,7 @@ class InteractionController {
 		this.highlightedObject = this.#findClosestObject(playerPos);
 		if (this.highlightedObject && Input.interact) {
 			Input.spawnTapRipple();
+			this.setBlock();
 			this.#triggerInteraction(this.highlightedObject);
 		}
 	}
@@ -276,7 +277,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Sets the list of interactive objects for the current map.
+	 * Sets the list of interactive objects for the current map.  
 	 * @param {Array} objects - Array of interactive objects with `pos`, `file`, `label`, etc.
 	 */
 	setObjects(objects) {
@@ -291,11 +292,12 @@ class InteractionController {
 	}
 
 	/**
-	 * Prevent interactions for a duration.
+	 * Prevent interactions for a duration.  
 	 * Useful when closing menus to prevent 'double interactions'.
+	 * @param {number} duration - Optionally set the duration to block interactions for in milliseconds. Defaults to 500ms.
 	 */
-	setBlock() {
-		this.blockTimer = performance.now() + InteractionController.BLOCK_INPUT_MS;
+	setBlock(duration = InteractionController.BLOCK_INPUT_MS) {
+		this.blockTimer = performance.now() + duration;
 	}
 }
 

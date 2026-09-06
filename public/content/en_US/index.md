@@ -1,9 +1,9 @@
 # Welcome to my Portfolio
 
-Welcome to my online portfolio.
+This website is built to function as an [interactive experience](/game). However, I have also provided this more traditional mode for accessiblity purposes and general ease-of-use.
 
-I have designed this website to function as a small video game; however, I am currently working on drawing the graphics, so I have decided to default the site to its accessibility-focused text mode.  
-The contents of the website are entirely the same though!
+You can start exploring my background, works, projects, and read my blog using the menu below.
 
-You can explore the site using the menu above.  
+You can also change the site's font and language using the `⚙` icon in the top right corner, and even switch back into "exploration mode" at any time!
+
 Enjoy ♥

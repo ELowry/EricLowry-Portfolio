@@ -211,4 +211,32 @@ describe('Player', () => {
 		expect(player.savedStopFrame).toBe(13);
 		expect(player.animations['front_interact_stopping'].frames[0]).toBe(13);
 	});
+
+	it('should transition through wave_start, wave, and wave_stop sequences', () => {
+		player.setState('wave');
+		expect(player.currentState).toBe('wave_start');
+		expect(player.animations['wave_start'].frames).toEqual([19, 33]);
+
+		// Simulate completion of wave_start
+		player.animTimer.time = 1;
+		player.update();
+		expect(player.currentState).toBe('wave');
+		expect(player.animations['wave'].frames).toEqual([34, 35]);
+
+		// Stop waving
+		player.setState('idle');
+		expect(player.currentState).toBe('wave_stop');
+		expect(player.animations['wave_stop'].frames).toEqual([33, 19]);
+
+		// Simulate completion of wave_stop
+		player.animTimer.time = 1;
+		player.update();
+		expect(player.currentState).toBe('idle');
+	});
+
+	it('should start waving when total idle time reaches IDLE_WAVE_DURATION', () => {
+		player.totalIdleTimer.time = Player.IDLE_WAVE_DURATION;
+		player.update();
+		expect(player.currentState).toBe('wave_start');
+	});
 });

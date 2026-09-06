@@ -22,6 +22,9 @@ export class Player extends AnimatedEntity {
 	/** @type {Object} */
 	idleLookTimer;
 
+	/** @type {Object} */
+	totalIdleTimer;
+
 	/** @type {boolean} */
 	isLookingAround;
 
@@ -38,6 +41,9 @@ export class Player extends AnimatedEntity {
 	constructor(pos) {
 		super(pos, Engine.LJS.vec2(1, 2.9), 0, Player.SPRITE_RESOLUTION, 0);
 
+		this.shadowType = 'floor';
+		this.shadowBaselineOffset = 0.15;
+
 		this.moveSpeed = Player.MOVE_SPEED;
 		this.color = new Engine.LJS.Color(1, 1, 1);
 		this.facingLeft = true;
@@ -45,6 +51,7 @@ export class Player extends AnimatedEntity {
 		this.idleLookTimer = new Engine.LJS.Timer(
 			Engine.LJS.rand(Player.IDLE_LOOK_DURATION_MIN, Player.IDLE_LOOK_DURATION_MAX)
 		);
+		this.totalIdleTimer = new Engine.LJS.Timer();
 		this.isLookingAround = false;
 		this.savedStopFrame = null;
 		this.#tileCache = [];
@@ -82,6 +89,9 @@ export class Player extends AnimatedEntity {
 			Player.ANIM_SPEED_INTERACT_FRONT,
 			false
 		);
+		this.addAnimation('wave_start', [19, 33], Player.ANIM_SPEED_WAVE, false);
+		this.addAnimation('wave', [34, 35], Player.ANIM_SPEED_WAVE_LOOP, true);
+		this.addAnimation('wave_stop', [33, 19], Player.ANIM_SPEED_WAVE, false);
 	}
 
 	/**
@@ -133,6 +143,22 @@ export class Player extends AnimatedEntity {
 	}
 
 	/**
+	 * @returns {number} the transition speed for the waving animation in frames per second.
+	 * @constant
+	 */
+	static get ANIM_SPEED_WAVE() {
+		return 8;
+	}
+
+	/**
+	 * @returns {number} the looping wave animation speed in frames per second.
+	 * @constant
+	 */
+	static get ANIM_SPEED_WAVE_LOOP() {
+		return 3;
+	}
+
+	/**
 	 * @returns {number} the base horizontal movement speed of the player.
 	 * @constant
 	 */
@@ -154,6 +180,14 @@ export class Player extends AnimatedEntity {
 	 */
 	static get IDLE_LOOK_DURATION_MAX() {
 		return 8;
+	}
+
+	/**
+	 * @returns {number} the duration in seconds of continuous idle time before the player starts waving.
+	 * @constant
+	 */
+	static get IDLE_WAVE_DURATION() {
+		return 60;
 	}
 
 	/**
@@ -242,6 +276,8 @@ export class Player extends AnimatedEntity {
 				if (moveDir !== 0) {
 					this.setState('walk');
 					this.facingLeft = moveDir < 0;
+				} else if (this.totalIdleTimer.get() >= Player.IDLE_WAVE_DURATION) {
+					this.setState('wave');
 				} else if (!this.isLookingAround && this.idleLookTimer.elapsed()) {
 					this.isLookingAround = true;
 					this.setState('idle_look');
@@ -277,6 +313,45 @@ export class Player extends AnimatedEntity {
 				this.velocity.x *= 0.8;
 				break;
 			}
+			case 'wave_start': {
+				this.velocity.x *= 0.8;
+
+				if (moveDir !== 0) {
+					this.setState('walk');
+					this.facingLeft = moveDir < 0;
+					break;
+				}
+
+				const anim = this.animations['wave_start'];
+				if (this.animTimer.get() > anim.frames.length / anim.speed) {
+					this.setState('wave');
+				}
+				break;
+			}
+			case 'wave': {
+				this.velocity.x *= 0.8;
+
+				if (moveDir !== 0) {
+					this.setState('walk');
+					this.facingLeft = moveDir < 0;
+				}
+				break;
+			}
+			case 'wave_stop': {
+				this.velocity.x *= 0.8;
+
+				if (moveDir !== 0) {
+					this.setState('walk');
+					this.facingLeft = moveDir < 0;
+					break;
+				}
+
+				const anim = this.animations['wave_stop'];
+				if (this.animTimer.get() > anim.frames.length / anim.speed) {
+					this.setState('idle');
+				}
+				break;
+			}
 		}
 
 		this.mirror = !this.facingLeft;
@@ -296,6 +371,26 @@ export class Player extends AnimatedEntity {
 			this.savedStopFrame = 11 + Math.min(frameOffset, 7);
 		} else {
 			this.savedStopFrame = null;
+		}
+
+		if (
+			newState === 'walk'
+			|| newState === 'stopping'
+			|| newState === 'front_interact'
+			|| newState === 'front_interact_stopping'
+			|| newState === 'behind_interact'
+		) {
+			this.totalIdleTimer.set();
+		}
+
+		if (newState === 'wave') {
+			if (this.currentState !== 'wave' && this.currentState !== 'wave_start') {
+				newState = 'wave_start';
+			}
+		} else if (newState === 'idle') {
+			if (this.currentState === 'wave' || this.currentState === 'wave_start') {
+				newState = 'wave_stop';
+			}
 		}
 
 		if (newState === 'idle_look') {

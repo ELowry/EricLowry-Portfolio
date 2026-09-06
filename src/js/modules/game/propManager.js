@@ -3,6 +3,7 @@ import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
 import { AnimatedEntity } from './animatedEntity.js';
 import { InputPromptEntity } from './props/inputPromptEntity.js';
+import { StaticPropEntity } from './props/staticPropEntity.js';
 
 /**
  * @typedef {Object} PropAnimationData
@@ -50,7 +51,7 @@ class PropManagerController {
 		this.#activeProps = [];
 
 		this.#entityMap = {
-			static: Engine.LJS.EngineObject,
+			static: StaticPropEntity,
 			animated: AnimatedEntity,
 			inputPrompt: InputPromptEntity,
 		};
@@ -155,6 +156,16 @@ class PropManagerController {
 				const defaultState =
 					def.defaultState || (targetType === 'inputPrompt' ? 'mnk' : 'idle');
 				entity.setState(defaultState);
+
+				const defaultShadow = targetType === 'inputPrompt' ? 'none' : 'floor';
+				entity.shadowType = def.shadowType !== undefined ? def.shadowType : defaultShadow;
+				if (def.shadowDistance !== undefined) {
+					entity.shadowDistance = def.shadowDistance;
+				}
+				if (def.shadowBaselineOffset !== undefined) {
+					entity.shadowBaselineOffset = def.shadowBaselineOffset;
+				}
+
 				spawned.push(entity);
 			} else {
 				let tileInfo;
@@ -165,7 +176,8 @@ class PropManagerController {
 					tileInfo = new Engine.LJS.TileInfo(
 						Engine.LJS.vec2(def.offset.x + padding, def.offset.y + padding),
 						def.resolution,
-						dummyTile.textureInfo
+						dummyTile.textureInfo,
+						padding
 					);
 				} else {
 					tileInfo = Engine.LJS.tile(0, def.resolution, mapTextureIndex, padding);
@@ -179,6 +191,15 @@ class PropManagerController {
 					new Engine.LJS.Color(1, 1, 1),
 					renderOrder
 				);
+
+				entity.shadowType = def.shadowType !== undefined ? def.shadowType : 'floor';
+				if (def.shadowDistance !== undefined) {
+					entity.shadowDistance = def.shadowDistance;
+				}
+				if (def.shadowBaselineOffset !== undefined) {
+					entity.shadowBaselineOffset = def.shadowBaselineOffset;
+				}
+
 				spawned.push(entity);
 			}
 		}
