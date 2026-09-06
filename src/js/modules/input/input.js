@@ -44,8 +44,12 @@ class InputController {
 		// Detect Mouse & Keyboard usage
 		const boundMouseInput = this.#handleMouseInput.bind(this);
 		window.addEventListener('keydown', () => this.#setInputType('mnk'));
-		window.addEventListener('pointermove', boundMouseInput);
-		window.addEventListener('pointerdown', boundMouseInput);
+		window.addEventListener('pointermove', boundMouseInput, { capture: true });
+		window.addEventListener('pointerdown', boundMouseInput, { capture: true });
+		window.addEventListener('touchstart', () => this.#setInputType('touch'), {
+			capture: true,
+			passive: true,
+		});
 	}
 
 	/**

@@ -51,8 +51,12 @@ export default {
 		promptHorizontalLeft: {
 			entityType: 'inputPrompt',
 			logicalKey: 'A',
-			resolution: Engine.LJS.vec2(9, 9),
-			offset: Engine.LJS.vec2(284, 36),
+			get resolution() {
+				return Engine.LJS.vec2(9, 9);
+			},
+			get offset() {
+				return Engine.LJS.vec2(284, 36);
+			},
 			cols: 4,
 			animations: {
 				mnk: {
@@ -73,8 +77,12 @@ export default {
 		promptHorizontalRight: {
 			entityType: 'inputPrompt',
 			logicalKey: 'D',
-			resolution: Engine.LJS.vec2(9, 9),
-			offset: Engine.LJS.vec2(328, 36),
+			get resolution() {
+				return Engine.LJS.vec2(9, 9);
+			},
+			get offset() {
+				return Engine.LJS.vec2(328, 36);
+			},
 			cols: 5,
 			animations: {
 				mnk: {
