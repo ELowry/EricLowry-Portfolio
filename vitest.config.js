@@ -11,6 +11,7 @@ export default defineConfig((configEnv) => {
 				globals: true,
 				include: ['src/**/*.test.js'],
 				setupFiles: ['vitest.setup.js'],
+				pool: 'vmThreads',
 			},
 		})
 	);

@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Router } from './router.js';
 import { sanitizePath } from './sharedUtils.js';
@@ -7,20 +7,10 @@ describe('RouterController', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
 
-		// Stub window.location to prevent JSDOM navigation crash errors
-		vi.stubGlobal('location', {
-			href: 'http://localhost/',
-			pathname: '/',
-			hostname: 'localhost',
-			hash: '',
-		});
+		window.history.replaceState(null, '', '/');
 
 		Router.state = { mode: 'game', path: '' };
 		Router.onStateChange = null;
-	});
-
-	afterEach(() => {
-		vi.unstubAllGlobals();
 	});
 
 	describe('sanitizePath', () => {
@@ -44,7 +34,7 @@ describe('RouterController', () => {
 
 	describe('readURL', () => {
 		it('should parse window.location.pathname and apply state', async () => {
-			window.location.pathname = '/text/about/bio';
+			window.history.replaceState(null, '', '/text/about/bio');
 			const applyStateSpy = vi.spyOn(Router, 'applyState');
 
 			await Router.readURL();

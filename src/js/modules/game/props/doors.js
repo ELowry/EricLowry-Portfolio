@@ -216,14 +216,6 @@ export class Door extends AnimatedEntity {
 	}
 
 	/**
-	 * Resets the door to its closed state.
-	 * @returns {void}
-	 */
-	close() {
-		this.setState('closed');
-	}
-
-	/**
 	 * Sets the visual highlight state of the door.
 	 * @param {boolean} highlighted - Whether the door should be highlighted.
 	 * @returns {void}

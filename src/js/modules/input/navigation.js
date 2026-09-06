@@ -23,8 +23,9 @@ export class NavigationController {
 			scroll: false,
 			axis: 'y',
 		};
-		this.lastMoveTime = 0;
+		this.lastMoveTime = -Infinity;
 		this._onFocusIn = null;
+		this._autoFocusTimeout = null;
 		this.contextStack = [];
 	}
 
@@ -108,10 +109,7 @@ export class NavigationController {
 		}
 
 		// Handle Focus & Paging Navigation (D-Pad, and Left Stick if Virtual Cursor is inactive)
-		if (
-			!debounceActive
-			&& (inputState.lastInputType === 'gamepad' || inputState.lastInputType === 'mnk')
-		) {
+		if (!debounceActive && inputState.lastInputType === 'gamepad') {
 			let navX = inputState.navAxis.x;
 			let navY = inputState.navAxis.y;
 
@@ -492,8 +490,13 @@ export class NavigationController {
 			this.activeContainer.addEventListener('focusin', this._onFocusIn);
 		}
 
+		if (this._autoFocusTimeout) {
+			clearTimeout(this._autoFocusTimeout);
+			this._autoFocusTimeout = null;
+		}
+
 		if (this.options.axis && this.options.autoFocus) {
-			setTimeout(() => {
+			this._autoFocusTimeout = setTimeout(() => {
 				const first = this.#getFocusables()[0];
 				first?.focus({ focusVisible: true });
 			}, 10);
