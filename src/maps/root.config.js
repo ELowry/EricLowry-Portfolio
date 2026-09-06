@@ -19,7 +19,7 @@ export default {
 	textureIndex: 0,
 	props: [
 		{ type: 'boxWarning', pos: { x: 13.8, y: 6.7 }, renderOrder: -1 },
-		{ type: 'boxes', pos: { x: 21, y: 9.7 }, renderOrder: -1 },
+		{ type: 'boxes', pos: { x: 23.2, y: 9.6 }, renderOrder: -1 },
 		{ type: 'signWarning', pos: { x: 0, y: 9.2 }, renderOrder: -1 },
 		{ type: 'dirtPiles', pos: { x: 6, y: 8.7 }, renderOrder: 1 },
 	],

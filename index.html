@@ -262,62 +262,6 @@
 			</div>
 
 			<dialog
-				id="welcome-screen"
-				class="langAttr"
-				data-langAttr="data-widnowtitle"
-				data-langData_widnowtitle="ui.welcome.title"
-				data-widnowtitle="Welcome"
-				aria-labelledby="WelcomeTitle"
-				aria-describedby="WelcomeDescription"
-			>
-				<div class="modal-box">
-					<div class="modal-content">
-						<h2 id="WelcomeTitle" class="lang" data-lang="ui.welcome.header"
-							>Welcome to Eric Lowry's portfolio</h2
-						>
-						<div id="WelcomeDescription">
-							<p class="lang" data-lang="ui.welcome.p1"
-								>I have set up a small interactive experience which lets you explore
-								my work in a fun little game.</p
-							>
-							<p class="lang" data-lang="ui.welcome.p2"
-								>However, whether for accessibility reasons or efficiency, a
-								simplified interface is available with all the same information.</p
-							>
-						</div>
-						<nav
-							class="classic-nav langAttr"
-							role="toolbar"
-							data-langAttr="aria-label"
-							data-langAria_label="ui.welcome.modeSelection"
-							aria-label="Mode Selection"
-						>
-							<button
-								class="lang"
-								data-lang="ui.welcome.btnGame"
-								onclick="App.closeGameWelcome('game')"
-								>Exploration Mode</button
-							>
-							<button
-								class="lang"
-								data-lang="ui.welcome.btnText"
-								onclick="App.closeGameWelcome('text')"
-								>Text Mode</button
-							>
-						</nav>
-						<p>
-							<em class="lang" data-lang="ui.welcome.note"
-								>In exploration mode, you can press &#8203;<kbd data-prompt="menu"
-									>[Esc]</kbd
-								>&#8203; at any point to open up a menu which lets you navigate back
-								to text mode.</em
-							>
-						</p>
-					</div>
-				</div>
-			</dialog>
-
-			<dialog
 				id="game-menu"
 				class="langAttr"
 				data-langAttr="data-widnowtitle"
@@ -550,6 +494,16 @@
 			<div id="interaction-label-contents">
 				<div id="interaction-label-text" aria-live="polite"></div>
 				<span data-prompt="interact">[E]</span>
+			</div>
+		</div>
+
+		<div id="dialog-overlay" aria-live="polite" role="dialog" aria-labelledby="dialog-text">
+			<div class="dialog-container">
+				<div id="dialog-text"></div>
+				<div id="dialog-choices" role="menu"></div>
+				<button id="dialog-prompt" class="dialog-prompt" aria-label="Continue">
+					<span data-prompt="interact" aria-hidden="true"></span>
+				</button>
 			</div>
 		</div>
 

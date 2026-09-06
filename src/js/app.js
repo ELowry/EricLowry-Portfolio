@@ -254,7 +254,7 @@ class AppController {
 			const pathName = window.location.pathname.replace(/^\/|\/$/g, '');
 			const searchParams = new URLSearchParams(window.location.search);
 			if ((pathName === '' || pathName === 'index.html') && !searchParams.has('mode')) {
-				this.openGameWelcome();
+				GameBridge.playIntroCinematic();
 			}
 		} catch (error) {
 			console.error('Core initialization failed:', error);
@@ -738,24 +738,6 @@ class AppController {
 	 */
 	isContentCached(filename) {
 		return this.contentCache.has(`${Lang.langCode}:${filename}`);
-	}
-
-	/**
-	 * Opens the initial welcome/help modal.
-	 */
-	openGameWelcome() {
-		LayeredInput.activate(LayeredInput.LAYER_GAME_WELCOME);
-		this.uiManager.openGameWelcome();
-	}
-
-	/**
-	 * Closes the welcome modal and enters the specified mode.
-	 * @param {string} mode - The mode to transition to after closing, usually `game` or `text`.
-	 */
-	closeGameWelcome(mode) {
-		LayeredInput.deactivate(LayeredInput.LAYER_GAME_WELCOME);
-		this.uiManager.closeGameWelcome();
-		this.setMode(mode);
 	}
 
 	/**

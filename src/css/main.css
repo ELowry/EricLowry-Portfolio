@@ -30,6 +30,9 @@
 
 @import url('./transitions.css');
 
+/* --- DIALOG --- */
+@import url('./dialog.css');
+
 /* --- TOUCH --- */
 
 @import url('./touch.css');
@@ -473,6 +476,16 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		scroll-behavior: auto;
+	}
+
+	/* Landing page mode (Text Nav below content) */
+	&.is-landing-page .text-layout {
+		display: flex;
+		flex-direction: column-reverse;
+
+		#text-nav .breadcrumbs {
+			display: none;
+		}
 	}
 }
 

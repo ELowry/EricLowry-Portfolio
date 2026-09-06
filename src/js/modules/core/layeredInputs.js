@@ -44,7 +44,7 @@ class LayeredInputController {
 			[this.PRIORITY_UI]: [this.LAYER_GAME_MENU],
 			[this.PRIORITY_MODAL]: [
 				this.LAYER_GAME_MODAL,
-				this.LAYER_GAME_WELCOME,
+				this.LAYER_DIALOG,
 				this.LAYER_GALLERY,
 			],
 			[this.PRIORITY_SYSTEM]: [this.LAYER_TOUCH_INSTRUCTIONS, this.LAYER_LOADING],
@@ -143,8 +143,8 @@ class LayeredInputController {
 	 * @returns {string} the identifier for the welcome screen layer.
 	 * @constant
 	 */
-	get LAYER_GAME_WELCOME() {
-		return 'gameWelcome';
+	get LAYER_DIALOG() {
+		return 'dialog';
 	}
 	/**
 	 * @returns {string} the identifier for the gallery layer.

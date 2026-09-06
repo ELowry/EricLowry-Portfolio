@@ -25,8 +25,13 @@ export class UIManager {
 			gameLayer: document.getElementById('game-layer'),
 			textLayer: document.getElementById('text-layer'),
 
-			// Dialogs/modals
-			gameWelcome: document.getElementById('welcome-screen'),
+			// Dialog system
+			dialogOverlay: document.getElementById('dialog-overlay'),
+			dialogText: document.getElementById('dialog-text'),
+			dialogChoices: document.getElementById('dialog-choices'),
+			dialogPrompt: document.getElementById('dialog-prompt'),
+
+			// Menus/modals
 			gameMenu: document.getElementById('game-menu'),
 			gameModal: document.getElementById('game-modal'),
 
@@ -114,13 +119,15 @@ export class UIManager {
 		// Virtual Cursor
 		VirtualCursor.init(this.elements.virtualCursorTemplate);
 
-		// Welcome Screen
-		this.elements.gameWelcome?.addEventListener('close', () => {
-			LayeredInput.deactivate(LayeredInput.LAYER_GAME_WELCOME);
-			this.app.onModalClose(false);
+		// Dialog System
+		Events.on('dialog:show', (payload) => {
+			this.showDialog(payload);
 		});
-		this.elements.gameWelcome?.addEventListener('keydown', (e) => {
-			this.#handleMenuNavigation(e, this.elements.gameWelcome, 'x');
+		Events.on('dialog:hide', () => {
+			this.hideDialog();
+		});
+		this.elements.dialogChoices?.addEventListener('keydown', (e) => {
+			this.#handleMenuNavigation(e, this.elements.dialogChoices, 'x');
 		});
 
 		// Text Nav (Breadcrumbs)
@@ -372,8 +379,8 @@ export class UIManager {
 		if (this.elements.gameModal?.open) {
 			this.elements.gameModal.close();
 		}
-		if (this.elements.gameWelcome?.open) {
-			this.elements.gameWelcome.close();
+		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.classList.remove('shown');
 		}
 
 		if (this.elements.interactionOverlay) {
@@ -757,16 +764,8 @@ export class UIManager {
 		}
 
 		// Modal layers
-		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_WELCOME)) {
+		if (LayeredInput.isActive(LayeredInput.LAYER_DIALOG)) {
 			Navigation.update(inputState);
-			if (inputState.interact) {
-				const current = document.activeElement;
-				if (current?.id === 'welcome-start-game') {
-					this.app.closeGameWelcome('game');
-				} else if (current?.id === 'welcome-start-text') {
-					this.app.closeGameWelcome('text');
-				}
-			}
 			return true;
 		}
 		if (LayeredInput.isActive(LayeredInput.LAYER_GAME_MENU)) {
@@ -806,28 +805,90 @@ export class UIManager {
 	}
 
 	/**
-	 * Displays the initial welcome/tutorial dialog.
+	 * Shows the dialog overlay and populates its content.
+	 * @param {Object} payload - The dialog payload.
+	 * @param {string} payload.text - The text to display.
+	 * @param {Array<Object>} [payload.choices] - Array of choice objects.
 	 */
-	openGameWelcome() {
-		if (!this.elements.gameWelcome._cancelListenerAdded) {
-			this.elements.gameWelcome.addEventListener('cancel', (e) => e.preventDefault());
-			this.elements.gameWelcome._cancelListenerAdded = true;
-		}
-		this.app.setLock(true);
+	showDialog(payload) {
+		LayeredInput.activate(LayeredInput.LAYER_DIALOG);
 
-		Navigation.setContext(this.elements.gameWelcome, {
-			scroll: true,
-			axis: 'x',
-			roving: true,
+		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.classList.add('shown');
+		}
+
+		if (this.elements.dialogText) {
+			this.elements.dialogText.innerHTML = '';
+
+			if (payload.element instanceof HTMLElement) {
+				this.elements.dialogText.appendChild(payload.element);
+			} else {
+				this.elements.dialogText.innerHTML = payload.textLangKey
+					? Lang.getHtmlString(payload.textLangKey, null, payload.text)
+					: payload.text;
+			}
+		}
+
+		this.elements.dialogPrompt?.addEventListener('click', (e) => {
+			e.preventDefault();
+			if (this.app.Input) {
+				this.app.Input.virtualState.interact = true;
+			}
 		});
-		this.elements.gameWelcome.showModal();
+
+		if (this.elements.dialogChoices) {
+			this.elements.dialogChoices.innerHTML = '';
+
+			if (payload.choices && payload.choices.length > 0) {
+				if (this.elements.dialogPrompt) this.elements.dialogPrompt.hidden = true;
+
+				payload.choices.forEach((choice, index) => {
+					const btn = document.createElement('button');
+					btn.textContent = choice.langKey
+						? Lang.getString(choice.langKey, null, choice.label)
+						: choice.label;
+
+					btn.tabIndex = index === 0 ? 0 : -1;
+
+					btn.addEventListener('click', () => {
+						if (typeof choice.action === 'function') {
+							choice.action();
+						}
+					});
+
+					this.elements.dialogChoices.appendChild(btn);
+				});
+
+				Navigation.setContext(this.elements.dialogChoices, { axis: 'x', roving: true });
+
+				const firstBtn = this.elements.dialogChoices.querySelector('button');
+				if (firstBtn) {
+					firstBtn.focus({ focusVisible: true });
+				}
+			} else {
+				if (this.elements.dialogPrompt) {
+					this.elements.dialogPrompt.hidden = false;
+					this.elements.dialogPrompt.focus({ focusVisible: true });
+				}
+				Navigation.setContext(null);
+			}
+		}
+
+		// Force the input prompt module to scan and format the dynamic [data-prompt] tag
+		InputPrompts.refresh(this.elements.dialogOverlay);
 	}
 
 	/**
-	 * Closes the welcome dialog.
+	 * Hides the dialog overlay.
 	 */
-	closeGameWelcome() {
-		this.elements.gameWelcome.close();
+	hideDialog() {
+		LayeredInput.deactivate(LayeredInput.LAYER_DIALOG);
+
+		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.classList.remove('shown');
+		}
+
+		Navigation.setContext(null);
 	}
 
 	/**

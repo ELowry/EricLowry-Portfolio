@@ -2,6 +2,7 @@ import { Engine } from './modules/core/engineContext.js';
 import { LayeredInput } from './modules/core/layeredInputs.js';
 import { Router } from './modules/core/router.js';
 import { Camera } from './modules/game/camera.js';
+import { Dialog } from './modules/game/dialog.js';
 import { GameBridge } from './modules/game/gameBridge.js';
 import { Interaction } from './modules/game/interaction.js';
 import { Player } from './modules/game/player.js';
@@ -68,6 +69,14 @@ function gameInit() {
 				}
 				return Promise.resolve();
 			},
+
+			playIntroCinematic: () => {
+				Dialog.playIntro(player, (mode) => {
+					if (window.App) {
+						window.App.setMode(mode);
+					}
+				});
+			},
 		},
 		import.meta.env.DEV
 	);
@@ -96,7 +105,10 @@ function gameUpdatePost() {
 	}
 
 	Engine.LJS.setPaused(Router.currentMode !== 'game');
-	Engine.LJS.setInputPreventDefault(LayeredInput.isActive(LayeredInput.LAYER_GAME));
+	Engine.LJS.setInputPreventDefault(
+		LayeredInput.isActive(LayeredInput.LAYER_GAME)
+			|| LayeredInput.isActive(LayeredInput.LAYER_DIALOG)
+	);
 
 	if (!player) {
 		return;
@@ -106,6 +118,9 @@ function gameUpdatePost() {
 		Interaction.update(player.pos);
 		Camera.follow(player);
 	}
+
+	// Run the dialog system
+	Dialog.update();
 
 	// Clear virtual inputs at the end of the frame
 	Input.clearEvents();

@@ -63,10 +63,10 @@ export const GameBridge = {
 	},
 
 	/**
-	 * Requests the app to perform the behind-interact animation/sequence.
-	 * @param {number} duration - Suggested duration in ms for the animation.
-	 * @returns {Promise<void>} a Promise that resolves when the request completes (e.g., after fade/teleport).
-	 */
+			 * Requests an animation of the player interacting with something "behind" them.
+			 * @param {number} duration - The animation duration in ms.
+			 * @returns {Promise<void>} a Promise that resolves when the request completes.
+			 */
 	requestBehindInteract(duration = 500) {
 		if (
 			this.implementation
@@ -78,13 +78,27 @@ export const GameBridge = {
 	},
 
 	/**
-	 * Requests the app to perform the front-interact animation/sequence.
-	 * @param {number} duration - Suggested duration in ms for the animation.
-	 * @returns {Promise<void>} a Promise that resolves when the request completes (e.g., after fade/teleport).
-	 */
+			 * Requests an animation of the player interacting with something "in front" of them.
+			 * @param {number} duration - The animation duration in ms.
+			 * @returns {Promise<void>} a Promise that resolves when the request completes.
+			 */
 	requestFrontInteract(duration = 800) {
 		if (this.implementation && typeof this.implementation.requestFrontInteract === 'function') {
 			return this.implementation.requestFrontInteract(duration);
+		}
+		return Promise.resolve();
+	},
+
+	/**
+			 * Requests that the intro cinematic be triggered.
+			 * @returns {Promise<void>} a Promise that resolves when the sequence completes.
+			 */
+	playIntroCinematic() {
+		if (
+			this.implementation
+			&& typeof this.implementation.playIntroCinematic === 'function'
+		) {
+			return this.implementation.playIntroCinematic();
 		}
 		return Promise.resolve();
 	},

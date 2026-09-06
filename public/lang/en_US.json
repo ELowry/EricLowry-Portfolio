@@ -306,7 +306,7 @@
 			"p1": "I have set up a small interactive experience which lets you explore my work in a fun little game.",
 			"p2": "However, whether for accessibility reasons or efficiency, a simplified interface is available with all the same information.",
 			"modeSelection": "Mode Selection",
-			"btnGame": "Exploration Mode",
+			"btnGame": "Interactive Mode",
 			"btnText": "Text Mode",
 			"note": "In exploration mode, you can press {0} at any point to open up a menu which lets you navigate back to text mode."
 		},

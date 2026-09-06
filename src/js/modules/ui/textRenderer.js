@@ -448,6 +448,13 @@ export class TextRenderer {
 		// Clear existing content
 		this.app.uiManager.elements.textNav.innerHTML = '';
 
+		// Enable landing page mode for the welcome screen
+		if (currentNode && currentNode.id === 'root') {
+			this.app.uiManager.elements.textLayer.classList.add('is-landing-page');
+		} else {
+			this.app.uiManager.elements.textLayer.classList.remove('is-landing-page');
+		}
+
 		// BREADCRUMBS
 		const breadcrumbList = document.createElement('ol');
 		breadcrumbList.className = 'breadcrumbs';
