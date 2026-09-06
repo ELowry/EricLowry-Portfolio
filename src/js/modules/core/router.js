@@ -104,12 +104,6 @@ class RouterController {
 			}
 		}
 
-		// TEMP TEXT-ONLY START
-		if (import.meta.env.PROD) {
-			mode = 'text';
-		}
-		// TEMP TEXT-ONLY END
-
 		return { mode, path };
 	}
 
@@ -193,12 +187,6 @@ class RouterController {
 		if (cleanPath.startsWith('blog') || cleanPath.startsWith('projects')) {
 			targetMode = 'text';
 		}
-
-		// TEMP TEXT-ONLY START
-		if (import.meta.env.PROD) {
-			targetMode = 'text';
-		}
-		// TEMP TEXT-ONLY END
 
 		const validMode = ['game', 'text'].includes(targetMode) ? targetMode : 'game';
 		const newState = { mode: validMode, path: cleanPath };

@@ -38,8 +38,6 @@ body {
 
 *:focus-visible {
 	position: relative;
-	/* outline: dashed 1px var(--color-accent); */
-	/* outline-offset: var(--border-width); */
 	outline: none;
 }
 

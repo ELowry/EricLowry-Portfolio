@@ -254,20 +254,8 @@ class AppController {
 			const pathName = window.location.pathname.replace(/^\/|\/$/g, '');
 			const searchParams = new URLSearchParams(window.location.search);
 			if ((pathName === '' || pathName === 'index.html') && !searchParams.has('mode')) {
-				// TEMP TEXT-ONLY START
-				if (import.meta.env.DEV) {
-					// TEMP TEXT-ONLY END
-					this.openGameWelcome();
-					// TEMP TEXT-ONLY START
-				}
-				// TEMP TEXT-ONLY END
+				this.openGameWelcome();
 			}
-
-			// TEMP TEXT-ONLY START
-			if (import.meta.env.DEV) {
-				document.body.classList.add('isLocal');
-			}
-			// TEMP TEXT-ONLY END
 		} catch (error) {
 			console.error('Core initialization failed:', error);
 			await this.uiManager.hideLoading(true);
