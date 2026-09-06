@@ -17,7 +17,8 @@
 	"content": {
 		"privacy": {
 			"title": "Politique de confidentialité",
-			"label": "Politique de confidentialité"
+			"label": "Politique de confidentialité",
+			"description": "Consultez la politique du site concernant le stockage des données, les cookies, la gestion des vidéos intégrées, etc."
 		},
 		"index": {
 			"title": "Bienvenue",
@@ -25,155 +26,260 @@
 		},
 		"cv": {
 			"title": "Curriculum Vitae",
-			"label": "Curriculum Vitae"
+			"label": "Curriculum Vitae",
+			"description": "Découvrez mon parcours professionnel, mes compétences techniques et mes projets professionnels."
 		},
 		"about": {
 			"title": "À propos",
-			"label": "À propos de moi"
+			"label": "À propos de moi",
+			"description": "Je suis passionné d'open-source, j'aime résoudre les problèmes. Découvrez mon parcours en création de jeux, en architecture et en tant que dévelopeur."
 		},
 		"architecture": {
 			"title": "Études d'architecture",
 			"label": "Études d'architecture",
+			"description": "Découvrez mon parcours en architecture et paysage, axé sur la conceptualisation spatiale, le design écologique et l'exploration des liens entre espaces physiques et virtuels.",
+			"imageAlt": "Vue 3D d'une infrastructure de parc public intégrée à un centre commercial et culturel",
+
 			"architecture": {
 				"title": "À propos de mes études d'architecture",
 				"label": "Sur l'architecture"
 			},
 			"3Dgallery": {
 				"title": "Galerie de mon travail 3D",
-				"label": "Galerie d'œuvres 3D"
+				"label": "Galerie d'œuvres 3D",
+				"description": "Explorez une galerie de travaux de modélisation et de rendu 3D d'architecture, d'aménagements paysagers et d'impression 3D.",
+				"imageAlt": "Vue 3D d'un projet de parc public"
 			},
 			"projects": {
 				"title": "Sélection de projets d'architecture",
-				"label": "Projets d'architecture"
-			},
-			"Unstant": {
-				"title": "Unstant",
-				"label": "Unstant"
+				"label": "Projets d'architecture",
+				"description": "Parcourez une sélection de projets d'architecture et de paysage, dont des logements étudiants écoresponsables ou encore un pôle d'échanges urbains.",
+				"imageAlt": "Vue 3D d'une infrastructure de parc public intégrée à un centre commercial et culturel",
+
+				"projects": {
+					"title": "Aperçu des projets d'architecture",
+					"label": "Aperçu des projets"
+				},
+				"Unstant": {
+					"title": "Unstant",
+					"label": "Unstant",
+					"description": "Découvreez un jeu à la première personne atmosphérique développé sous Unreal Engine 4, alliant conception architecturale et espace virtuel.",
+					"imageAlt": "Capture d'écran du jeu Unstant montrant une vue artistique d'un désert jaune avec une bouée rouge"
+				},
+				"BASELAND": {
+					"title": "'BASELAND – Paysage Virtuel",
+					"label": "BASELAND",
+					"description": "Découvrez comment j'ai repensé un vaste modèle paysager numérique collaboratif à l'aide d'une identité visuelle stylisée et d'une méthode de travail 3D collective semi-automatisée.",
+					"imageAlt": "Rendu 3D stylisé d'une place avec des arbres poussant dans un grand bassin"
+				},
+				"student-housing": {
+					"title": "Logement étudiant écologique",
+					"label": "Logements étudiants",
+					"description": "Un projet architectural pour le Solar Decathlon 2014 axé sur un logement étudiant écologique et bioclimatique en pleine zone humide.",
+					"imageAlt": "Vue 3D d'un logement étudiant temporaire en bois sur pilotis construit au-dessus de zones humides"
+				},
+				"pavilion": {
+					"title": "Pavillon \"La Mariée Japonaise\"",
+					"label": "Pavillon d'exposition",
+					"description": "De la modélisation 3D complexe à la fabrication physique, découvrez la conception technique et la construction d'un pavillon pour le Solar Decathlon 2014.",
+					"imageAlt": "Vue d'un pavillon en bois construit par une équipe d'étudiants"
+				},
+				"station": {
+					"title": "Gare du Plateau de Saclay",
+					"label": "Gare ferroviaire",
+					"description": "Concept architectural pour un pôle d'échanges urbain sur le Plateau de Saclay, conçu pour démanteler les barrières physiques et s'intégrer harmonieusement dans une ville naissante.",
+					"imageAlt": "Vue 3D d'une infrastructure de parc public intégrée à un centre commercial et culturel"
+				}
 			}
 		},
 		"coaching-business": {
 			"title": "Business & coaching",
 			"label": "Business & coaching",
+			"description": "Découvrez mon expérience pratique en opérations commerciales, stratégie de marque et facilitation pour des équipes e-sport de haut niveau et des dirigeant·e·s d'entreprises.",
+			"imageAlt": "Photos d'événements présentiels The Heist avec des participants utilisant des cartes physiques pour naviguer",
+
 			"coaching-business": {
 				"title": "À propos de mon activité de business & coaching",
 				"label": "Business & coaching"
 			},
-			"multimedia": {
-				"title": "Stratégie de contenu & multimédia",
-				"label": "Contenu & Multimédia"
-			},
 			"CinQ": {
 				"title": "CinQ – Opérations & Coaching",
 				"label": "CinQ",
+				"description": "Aperçu de mon rôle de co-fondateur chez Disruptive Learning Solutions, gérant le déploiement en mode agile, les ventes B2B et le coaching d'équipes de direction.",
+				"imageAlt": "Photos d'événements présentiels The Heist avec des participants utilisant des cartes physiques pour naviguer",
+
+				"CinQ": {
+					"title": "À propos de CinQ",
+					"label": "À propos de CinQ"
+				},
 				"CinQ-game": {
 					"title": "Développement du jeu CinQ",
-					"label": "Développement du jeu CinQ"
+					"label": "Développement du jeu CinQ",
+					"description": "Un jeu immersif multijoueur développé sous Unity3D pour la formation professionnelle aux compétences comportementales, au leadership et au travail d'équipe.",
+					"imageAlt": "Capture d'écran des personnages de CinQ planifiant leur mission à l'intérieur d'un van."
 				},
 				"website": {
 					"title": "Le site web CinQ",
-					"label": "Site web CinQ"
+					"label": "Site web CinQ",
+					"description": "Découvrez l'architecture du double écosystème web de CinQ: une plateforme marketing construite avec Statamic et un portail utilisateur·rice PHP sur mesure.",
+					"imageAlt": "Capture d'écran du site web CinQ conçu et codé par Eric Lowry"
 				}
+			},
+			"multimedia": {
+				"title": "Stratégie de contenu & multimédia",
+				"label": "Contenu & Multimédia",
+				"description": "Découvrez la stratégie de marque, le processus éditorial multilingue et la production de podcasts vidéo derrière le contenu B2B de Disruptive Learning Solutions.",
+				"imageAlt": "Capture d'écran de la page web CinQ listant des articles et des épisodes de podcast"
 			}
 		},
 		"gaming": {
 			"title": "Jeux vidéo",
 			"label": "Jeux vidéo",
+			"description": "Un aperçu d'une décennie dans le développement de jeux vidéo, de mon projet de fin d'études en architecture à la mise à l'échelle de titres multijoueurs sous Unity3D et d'outils d'automatisation.",
+			"imageAlt": "Capture d'écran du niveau du cimetière du jeu Unstant",
+
 			"gaming": {
 				"title": "À propos de mon travail de développement de jeux vidéo",
 				"label": "Mon travail de dev jeu vidéo"
 			},
 			"CinQ": {
 				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
-				"label": "CinQ"
+				"label": "CinQ",
+				"description": "Un jeu immersif multijoueur développé sous Unity3D pour la formation professionnelle aux compétences comportementales, au leadership et au travail d'équipe.",
+				"imageAlt": "Capture d'écran des personnages de CinQ planifiant leur mission à l'intérieur d'un van."
 			},
 			"InputLayers": {
 				"title": "InputLayers",
-				"label": "InputLayers"
+				"label": "InputLayers",
+				"description": "Un système de filtrage des inputs par calques pour Unity3D qui simplifie la gestion des commandes pour l'interface et le gameplay sans configuration manuelle.",
+				"imageAlt": "Le logo InputLayers sur un fond en dégradé coloré"
 			},
 			"Unstant": {
 				"title": "Unstant",
-				"label": "Unstant"
+				"label": "Unstant",
+				"description": "Explorez un jeu vidéo atmosphérique à la première personne développé sous Unreal Engine 4, alliant conception architecturale et espace virtuel.",
+				"imageAlt": "Capture d'écran du jeu Unstant montrant une vue artistique d'un désert jaune avec une bouée rouge"
 			}
 		},
 		"osd": {
 			"title": "Développement Open Source",
 			"label": "Développement Open Source",
+			"description": "Explorez mon portfolio de projets open source et d'outils pour développeur·euse·s, incluant des assets Unity, des plugins Obsidian et des scripts PowerShell.",
+			"imageAlt": "Capture d'écran du profil GitHub d'Eric Lowry",
+
 			"osd": {
 				"title": "À propos de mon travail Open Source",
 				"label": "Mon travail Open Source"
 			},
 			"InputLayers": {
 				"title": "InputLayers",
-				"label": "InputLayers"
+				"label": "InputLayers",
+				"description": "Un système de filtrage des inputs par calques pour Unity3D qui simplifie la gestion des commandes pour l'interface et le gameplay sans configuration manuelle.",
+				"imageAlt": "Le logo InputLayers sur un fond en dégradé coloré"
 			},
 			"winget-updater": {
 				"title": "WinGet Updater",
-				"label": "WinGet Updater"
+				"label": "WinGet Updater",
+				"description": "Un petit utilitaire portable écrit en PowerShell conçu pour automatiser silencieusement les mises à jour d'applications Windows en arrière-plan via WinGet.",
+				"imageAlt": "Capture d'écran d'une fenêtre de terminal WinGet Updater"
 			},
 			"marked-responsive-images": {
 				"title": "Marked Responsive Images",
-				"label": "Marked Responsive Images"
+				"label": "Marked Responsive Images",
+				"description": "Une extension NPM pour Marked.js qui génère automatiquement des éléments HTML <picture> responsives en analysant les noms de fichiers d'images Markdown standard."
 			},
 			"obsidian-replace-commands": {
 				"title": "Obsidian Replace Commands",
-				"label": "Obsidian Replace Commands"
+				"label": "Obsidian Replace Commands",
+				"description": "Un plugin communautaire Obsidian qui fluidifie l'édition de documents en permettant aux utilisateur·rice·s de créer, prévisualiser et exécuter des séquences de remplacements via regex en un seul clic.",
+				"imageAlt": "Le logo Obsidian avec le texte Replace Commands et trois bulles lisant plug-in, plugin et amazing plugin"
 			},
 			"dns-toggle": {
 				"title": "DNS Toggle",
-				"label": "DNS Toggle"
+				"label": "DNS Toggle",
+				"description": "Une petite application Android permettant facilement d'activer, de désactiver, et d'automatiser le DNS privé de votre téléphone via le panneau des paramètres rapides.",
+				"imageAlt": "Logo de l'application DNS Toggle"
 			},
 			"StadiaIcons": {
 				"title": "StadiaIcons",
-				"label": "StadiaIcons"
+				"label": "StadiaIcons",
+				"description": "Une Progressive Web App et une bibliothèque d'icônes conçues pour créer facilement des raccourcis bureau pour le service (obsolète) de cloud gaming Stadia.",
+				"imageAlt": "Bannière StadiaIcons 2022 avec le logo StadiaIcons et des icônes pour divers jeux"
 			}
 		},
 		"websites": {
 			"title": "Développement & Design Web",
 			"label": "Développement & Design Web",
+			"description": "Un aperçu de mon parcours en développement web et design UX/UI, mettant en lumière une transition vers des frameworks modernes et des architectures statiques réutilisables.",
+			"imageAlt": "Capture d'écran d'un site web conçu et codé par Eric Lowry",
+
 			"websites": {
 				"title": "À propos de mon travail de développement web",
 				"label": "Mon travail de dev web"
 			},
 			"CinQ": {
 				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
-				"label": "CinQ"
+				"label": "CinQ",
+				"description": "Découvrez l'architecture du double écosystème web de CinQ: une plateforme marketing construite avec Statamic et un portail applicatif PHP sur mesure.",
+				"imageAlt": "Capture d'écran du site web CinQ conçu et codé par Eric Lowry"
 			},
 			"altoe": {
 				"title": "Alto´e",
-				"label": "Alto´e"
+				"label": "Alto´e",
+				"description": "Explorez l'identité de marque et le design web sur mesure sous WordPress créés pour un cabinet de conseil en coaching d'entreprise et transformation organisationnelle.",
+				"imageAlt": "Capture d'écran du site web Alto´e conçu et codé par Eric Lowry"
 			},
 			"lightweight-static": {
 				"title": "Framework statique léger",
 				"label": "Framework statique léger",
+				"description": "Une architecture frontend statique sur mesure, sans dépendances et hébergée sur Firebase, intégrant un système de traduction natif basé sur JSON.",
+				"imageAlt": "Capture d'écran d'un site web statique léger conçu et codé par Eric Lowry",
+
 				"lightweight-static": {
-					"title": "Framework statique léger",
-					"label": "Framework statique léger"
+					"title": "Aperçu du framework statique léger",
+					"label": "Aperçu du framework"
 				},
 				"thenextmind": {
 					"title": "The Next Mind",
-					"label": "The Next Mind"
+					"label": "The Next Mind",
+					"description": "Un site web interactif et rétrofuturiste construit sur mesure en HTML et JavaScript pour un cabinet de conseil en IA et stratégie.",
+					"imageAlt": "Capture d'écran du site web The Next Mind conçu et codé par Eric Lowry"
 				},
 				"luzech": {
 					"title": "Luzech",
-					"label": "Luzech"
+					"label": "Luzech",
+					"description": "Un site web audacieux à l'esthétique hybride analogique/numérique, conçu pour un consultant et expert en data basé au Royaume-Uni.",
+					"imageAlt": "Capture d'écran du site web luzech.co.uk conçu et codé par Eric Lowry"
 				},
 				"koalakrash": {
 					"title": "Koala Krash",
-					"label": "Koala Krash"
+					"label": "Koala Krash",
+					"description": "Un portfolio en ligne bilingue et minimaliste servant de plateforme de commande, conçu pour une artiste indépendante via un framework statique léger.",
+					"imageAlt": "Capture d'écran du site web Koala Krash conçu et codé par Eric Lowry"
 				}
 			},
 			"StadiaIcons": {
 				"title": "StadiaIcons",
-				"label": "StadiaIcons"
+				"label": "StadiaIcons",
+				"description": "Un système dynamique de PWA et de Firebase Cloud Functions générant des raccourcis natifs pour PC et des icônes unifiées pour plus de 280 jeux cloud Google Stadia.",
+				"imageAlt": "Bannière StadiaIcons 2022 avec le logo StadiaIcons et des icônes pour divers jeux"
 			},
 			"archive": {
 				"title": "Archives des anciens projets",
-				"label": "Anciens projets"
+				"label": "Anciens projets",
+				"description": "Explorez une archive sélectionnée d'anciens projets web, comprenant des sites WordPress sur mesure pour des cabinets d'architecture et des restaurants.",
+				"imageAlt": "Capture d'écran du site web Maia Architectes conçu et codé par Eric Lowry"
 			}
 		},
 		"blog": {
 			"title": "Blog",
-			"label": "Blog"
+			"label": "Blog",
+			"description": "Je publie des articles sur mes projets en cours, mes créations, mon développement ou mes contributions à l'open source."
+		},
+		"projects": {
+			"title": "Projets GitHub",
+			"label": "Projets GitHub",
+			"description": "Une collection de mes fichiers README de projets GitHub."
 		}
 	},
 	"ui": {
@@ -188,6 +294,7 @@
 		"categoryOptionsAria": "Options des catégories",
 		"welcome": {
 			"header": "Bienvenue sur le portfolio d'Eric Lowry",
+			"title": "Bienvenue",
 			"p1": "J'ai mis en place une petite expérience interactive qui vous permet d'explorer mon travail à travers un petit jeu ludique.",
 			"p2": "Toutefois, pour des raisons d'accessibilité ou d'efficacité, une interface simplifiée est disponible avec toutes les mêmes informations.",
 			"modeSelection": "Choissisez un mode d'affichage",
@@ -262,7 +369,7 @@
 		"loadComments": "Afficher les commentaires"
 	},
 	"projects": {
-		"intro": "Voici une sélection de repositories de {0}ma page GitHub{1}. Je les ai dupliqués ici afin de créer des pages pratiques faciles d'accès.",
+		"intro": "Voici une sélection de projets de {0}ma page GitHub{1}.\nLe contenu de ces pages est uniquement disponible en Anglais conformément aux standards de la platforme GitHub. Elles ont toutefois été dupliqués ici afin de les rendre plus pratiques faciles d'accès.",
 		"errorLoading": "Impossible de charger l'index des projets."
 	},
 	"alerts": {

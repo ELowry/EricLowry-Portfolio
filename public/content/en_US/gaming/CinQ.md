@@ -23,7 +23,7 @@ CinQ is the core technology behind a decade-long applied R&D effort to capture t
 
 <!-- prettier-ignore end -->
 
-When I first joined the team in 2014, the project (then known as "The Heist") was a conference-room experience built largely from Unity Asset Store components, designed to run locally on dedicated hardware. We quickly realized that to scale effectively, we needed to pivot. Instead of building bespoke projects, we envisioned a single, leaner game that could act as a versatile sandbox for remote and hybrid teamwork training.
+When I first joined the DLS team in 2014, the project (then known as "The Heist") was a conference-room experience built largely from Unity Asset Store components, designed to run locally on dedicated hardware. We quickly realized that to scale effectively, we needed to pivot. Instead of building bespoke projects, we envisioned a single, leaner game that could act as a versatile sandbox for remote and hybrid teamwork training.
 
 ![Photos of in-person The Heist events with people using physical maps to navigate ](/assets/images/gaming/cinq/heist__240-190-webp_240-190_400-317-webp_400-317_600-476-webp_600-476.jpg)
 
@@ -31,7 +31,7 @@ This pivot required transforming a controlled, local multiplayer prototype into 
 
 ### Game & Pedagogical Design
 
-My initial role on the team was focused on marketing and effectively game design lead. I was tasked with adapting the pedagogical frameworks established by my colleagues around team psychology, shared cognition, and the Sloan Leadership Model, and translating them into tangible game mechanics.
+My initial role on the team was focused on marketing and essentially being a game design lead. I was tasked with adapting the pedagogical frameworks established by my colleagues around team psychology, shared cognition, and the Sloan Leadership Model, and translating them into tangible game mechanics.
 
 Drawing from collaborative games such as _Keep Talking and Nobody Explodes_, _PayDay_, and the _Rainbow Six_ series, I designed the fundamental gameplay systems around challenging team skills (communication, agility, and leadership). We also needed to have the game remain non-violent while ensuring that the experience remained accessible, professional, and adapted to the corporate business world.
 
@@ -64,11 +64,11 @@ As the project evolved, I took hands-on ownership of nearly every facet of the g
 Scaling CinQ for the enterprise required overcoming significant technical and networking hurdles, ultimately shaping my current systems-driven approach to development:
 
 - **The Multiplayer Migration:**  
-  We initially built the game on the legacy UNET framework. As the project matured, we undertook a massive rewrite to migrate the entire stack to Unity's newer Netcode for GameObjects. I assisted heavily in this transition, debugging network logic and updating UI and puzzle mechanics to function within the new framework.
+  We initially built the game on the legacy _UNET_ framework. As the project matured, we undertook a massive rewrite to migrate the entire stack to Unity's newer _Netcode for GameObjects_. I assisted heavily in this transition, debugging network logic and updating UI and puzzle mechanics to function within the new framework.
 - **Corporate IT & Network Reliability:**  
   Deploying games on enterprise networks requires combating frequent drops, excessive ping, and strict firewalls blocking UDP/TCP traffic. We engineered numerous layers of safeguards over the networking defaults to prevent data loss, smooth out animations, and seamlessly reconnect players. We also set up a strict IT testing and validation workflow to ensure smooth deployments across entire companies.
 - **Deployment & Automation:**  
-  Building the game was only half the battle; packaging it for enterprise deployment required an extensive suite of automated tooling. I wrote custom bash and PowerShell scripts to automatically compile, code-sign, and package CinQ into the 8+ formats required for distribution across the Microsoft Store, Google Play Store, macOS App Store, and standalone installers, as well as deploying game server builds to our custom network infrastructure.
+  Building the game was only half the battle; packaging it for enterprise deployment required an extensive suite of automated tooling. I wrote custom _bash_ and _PowerShell_ scripts to automatically compile, code-sign, and package CinQ into the 8+ formats required for distribution across the Microsoft Store, Google Play Store, macOS App Store, and standalone installers, as well as deploying game server builds to our custom network infrastructure.
 
 > [!NOTE]
 >

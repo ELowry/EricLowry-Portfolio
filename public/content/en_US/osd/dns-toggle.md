@@ -31,10 +31,10 @@ Though this is not the first attempt to develop and implement a more practical w
 
 <!-- prettier-ignore end -->
 
-Over the course of a few days, I coded the app, designed its logo, and submitted it to F-Droid to make it more easily available.
+Over the course of a few days, I coded the initial app, designed its logo, and submitted it to F-Droid to make it more easily available. Since then, it has evolved into a more capable tool allowing you to fully automate your private DNS directly from the quick settings panel.
 
 ### UX & Requirements
 
-To keep the user experience as frictionless and lightweight as possible, I designed the app to be effectively "invisible". It does not create an icon in the device's app drawer. Instead, everything is managed directly from the quick settings panel: a single tap toggles _private DNS_, and a long-press opens a minimal configuration menu where users can input custom DNS provider hostnames or rename the tile label.
+To keep the user experience as frictionless and lightweight as possible, I designed the app to be effectively "invisible" by offering an option to hide the app from your launcher drawer. Instead, everything is managed directly from the quick settings panel: a single tap toggles _private DNS_, and a long-press opens a configuration menu. From there, users can save multiple custom DNS provider hostnames, rename the tile label, or set up automation rules to disable or override the DNS on specific Wi-Fi networks (SSID filtering) or active VPNs. It also supports securely backing up and restoring your configurations via password-encrypted files.
 
-Because this relies on changing a protected system setting, the app requires the `WRITE_SECURE_SETTINGS` permission to function, which must be granted via root or manually through an ADB command.
+Because this relies on changing a protected system setting, the app requires the `WRITE_SECURE_SETTINGS` permission to function, which must be granted via root, Shizuku, or manually through an ADB command.

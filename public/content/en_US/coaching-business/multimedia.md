@@ -23,11 +23,11 @@ I designed most logos and established the core brand identities for DLS, as well
 
 As both projects and online marketing evolved, I maintained and updated the brand designs, visual identities, and media content production for DLS and CinQ. Throughout this evolution, the principal challenge has been to maintain a delicate balance between establishing a brand identity that carried the professional weight required for the corporate boardroom while also utilizing aesthetic choices that evoke the cutting-edge gaming technology powering our solutions.
 
+![A screenshot from the CinQ web page listing articles and podcast episodes](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+
 ### Video Production & Podcasting
 
 I have recorded, directed, and edited all DLS video content using professional editing software such as Adobe Premiere Pro, After Effects, and Adobe Audition, alongside agile tools like Microsoft ClipChamp for short-form content. The following is a selection of the video content I have produced for DLS:
-
-![A screenshot from the CinQ web page listing articles and podcast episodes](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
 
 #### Video Podcasts
 
@@ -39,11 +39,11 @@ These were recorded entirely remotely using a flexible mix of Google Meet, Disco
 
 ![A screenshot of the CinQ YouTube Shorts feed](/assets/images/coaching-business/multimedia/shorts__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
 
-I have edited 30+ vertical shorts/reels tailored for social media engagement and quick-burst concept delivery. For a majority of these, I was in charge of assigning "questions" for team members, partners, and clients to answer as a means of creating interest in CinQ and of increasing brand recognition.
+I have edited dozens of vertical shorts/reels tailored for social media engagement and quick-burst concept delivery. For a majority of these, I was in charge of assigning "questions" for team members, partners, and clients to answer as a means of creating interest in CinQ and of increasing brand recognition.
 
 #### Marketing, Informational Content, & Interviews
 
-I directed and produced all official CinQ game teasers and cinematic trailers, as well as a various high-level concept explainer videos and game walkthroughs for prospective clients.
+I directed and produced all official CinQ game teasers and cinematic trailers, as well as various high-level concept explainer videos and game walkthroughs for prospective clients.
 
 I was also in charge of conducting, recording, and editing both online and offline client video interviews.
 

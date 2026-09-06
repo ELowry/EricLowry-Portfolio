@@ -12,7 +12,7 @@
 
 ### Context
 
-Anticipating the arrival of a new metro line, a new university campus, and an entirely new town planned for the Plateau de Saclay (south of Paris), our studio was tasked with conceptualizing the area's main train station and accompanying commercial/business center.
+Anticipating the arrival of a new metro line, a new university campus, and an entirely new town planned for the Plateau de Saclay (south of Paris), our work group was tasked with conceptualizing the area's main train station and accompanying commercial/business center.
 
 Because this station would be among the very first major pieces of infrastructure built in the area, our focus was on envisioning the transit hub not just as a utilitarian stop, but as the foundational "seed" from which the surrounding urban life would grow.
 
