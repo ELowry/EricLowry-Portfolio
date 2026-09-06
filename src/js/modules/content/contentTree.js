@@ -16,6 +16,7 @@
  * @property {number} pos.y - Y coordinate.
  * @property {number} [scale=1] - Scaling factor for the prop.
  * @property {number} [renderOrder=0] - Z-index sorting order.
+ * @property {string} [logicalKey] - Explicit key mapping for input prompts (e.g., 'A', 'D').
  */
 
 /**

@@ -42,11 +42,7 @@ class LayeredInputController {
 			[this.PRIORITY_BACKGROUND]: [],
 			[this.PRIORITY_GAME]: [this.LAYER_GAME, this.LAYER_TEXT],
 			[this.PRIORITY_UI]: [this.LAYER_GAME_MENU],
-			[this.PRIORITY_MODAL]: [
-				this.LAYER_GAME_MODAL,
-				this.LAYER_DIALOG,
-				this.LAYER_GALLERY,
-			],
+			[this.PRIORITY_MODAL]: [this.LAYER_GAME_MODAL, this.LAYER_DIALOG, this.LAYER_GALLERY],
 			[this.PRIORITY_SYSTEM]: [this.LAYER_TOUCH_INSTRUCTIONS, this.LAYER_LOADING],
 		};
 

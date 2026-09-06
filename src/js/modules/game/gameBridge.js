@@ -63,10 +63,10 @@ export const GameBridge = {
 	},
 
 	/**
-			 * Requests an animation of the player interacting with something "behind" them.
-			 * @param {number} duration - The animation duration in ms.
-			 * @returns {Promise<void>} a Promise that resolves when the request completes.
-			 */
+	 * Requests an animation of the player interacting with something "behind" them.
+	 * @param {number} duration - The animation duration in ms.
+	 * @returns {Promise<void>} a Promise that resolves when the request completes.
+	 */
 	requestBehindInteract(duration = 500) {
 		if (
 			this.implementation
@@ -78,10 +78,10 @@ export const GameBridge = {
 	},
 
 	/**
-			 * Requests an animation of the player interacting with something "in front" of them.
-			 * @param {number} duration - The animation duration in ms.
-			 * @returns {Promise<void>} a Promise that resolves when the request completes.
-			 */
+	 * Requests an animation of the player interacting with something "in front" of them.
+	 * @param {number} duration - The animation duration in ms.
+	 * @returns {Promise<void>} a Promise that resolves when the request completes.
+	 */
 	requestFrontInteract(duration = 800) {
 		if (this.implementation && typeof this.implementation.requestFrontInteract === 'function') {
 			return this.implementation.requestFrontInteract(duration);
@@ -90,14 +90,11 @@ export const GameBridge = {
 	},
 
 	/**
-			 * Requests that the intro cinematic be triggered.
-			 * @returns {Promise<void>} a Promise that resolves when the sequence completes.
-			 */
+	 * Requests that the intro cinematic be triggered.
+	 * @returns {Promise<void>} a Promise that resolves when the sequence completes.
+	 */
 	playIntroCinematic() {
-		if (
-			this.implementation
-			&& typeof this.implementation.playIntroCinematic === 'function'
-		) {
+		if (this.implementation && typeof this.implementation.playIntroCinematic === 'function') {
 			return this.implementation.playIntroCinematic();
 		}
 		return Promise.resolve();

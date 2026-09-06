@@ -69,25 +69,32 @@ class ContentController {
 
 			if (node.mapId) {
 				const loadMapData = async () => {
-					const configKey = `../../../maps/${node.mapId}.config.js`;
-					const configImporter = mapConfigs[configKey];
+					const expectedConfigPath = `${node.mapId}.config.js`;
+					const configKey = Object.keys(mapConfigs).find((k) =>
+						k.endsWith(expectedConfigPath)
+					);
 
-					if (!configImporter) {
+					if (!configKey) {
 						throw new Error(`Map config not found for mapId: ${node.mapId}`);
 					}
 
-					const configModule = await configImporter();
+					const configModule = await mapConfigs[configKey]();
 					const mapData = configModule.default || configModule;
 
-					const spriteKey = `../../../maps/${node.mapId}.sprites.js`;
-					const spriteImporter = spriteConfigs[spriteKey];
+					const expectedSpritePath = `${node.mapId}.sprites.js`;
+					const spriteKey = Object.keys(spriteConfigs).find((k) =>
+						k.endsWith(expectedSpritePath)
+					);
 
-					if (spriteImporter) {
+					if (spriteKey) {
 						try {
-							const spriteModule = await spriteImporter();
+							const spriteModule = await spriteConfigs[spriteKey]();
 							mapData.sprites = spriteModule.default || spriteModule;
-						} catch {
-							// No custom sprites exist for this map
+						} catch (error) {
+							console.error(
+								`ContentController: Failed to load sprites for ${node.mapId}`,
+								error
+							);
 						}
 					}
 

@@ -61,6 +61,28 @@ vi.mock('../core/engineContext.js', () => {
 	};
 });
 
+vi.mock('./props/inputPromptEntity.js', () => {
+	/**
+	 * Mock representation of the InputPromptEntity class.
+	 */
+	class MockInputPromptEntity {
+		constructor(pos, size) {
+			this.pos = pos;
+			this.size = size;
+			this.isInputPromptEntity = true;
+			this.animations = {};
+		}
+
+		addAnimation() {}
+		setState() {}
+		setLogicalKey() {}
+	}
+
+	return {
+		InputPromptEntity: MockInputPromptEntity,
+	};
+});
+
 vi.mock('./animatedEntity.js', () => {
 	/**
 	 * Mock representation of the AnimatedEntity class.
@@ -186,5 +208,25 @@ describe('PropManagerController', () => {
 		const spawned = PropManager.spawnProps([{ type: 'missing-prop', pos: { x: 0, y: 0 } }]);
 
 		expect(spawned.length).toBe(0);
+	});
+
+	it('should spawn an InputPromptEntity when entityType is inputPrompt', () => {
+		PropManager.buildRegistry([
+			{
+				local: {
+					'prompt-prop': {
+						entityType: 'inputPrompt',
+						size: { x: 1, y: 1 },
+						resolution: { x: 16, y: 16 },
+						animations: { mnk: { frames: [0], speed: 1 } },
+					},
+				},
+			},
+		]);
+
+		const spawned = PropManager.spawnProps([{ type: 'prompt-prop', pos: { x: 0, y: 0 } }]);
+
+		expect(spawned.length).toBe(1);
+		expect(spawned[0].isInputPromptEntity).toBe(true);
 	});
 });

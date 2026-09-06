@@ -2,6 +2,7 @@ import { Content } from '../content/content.js';
 import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
 import { AnimatedEntity } from './animatedEntity.js';
+import { InputPromptEntity } from './props/inputPromptEntity.js';
 
 /**
  * @typedef {Object} PropAnimationData
@@ -12,12 +13,13 @@ import { AnimatedEntity } from './animatedEntity.js';
 
 /**
  * @typedef {Object} PropDefinition
- * @property {boolean} isAnimated - Whether the prop is an AnimatedEntity or a static EngineObject.
+ * @property {string} [entityType='static'] - The specific class behavior to instantiate ('static', 'animated', 'inputPrompt').
+ * @property {boolean} [isAnimated] - Legacy boolean for AnimatedEntity (superseded by entityType).
  * @property {Object} resolution - The pixel dimensions of a single frame (`vec2`).
  * @property {Object} [size=null] - The physical size in world units (`vec2`). Defaults to resolution / 10.
  * @property {Object} [offset=null] - The pixel offset in the spritesheet (`vec2`).
  * @property {number} [cols=1] - The number of columns in the spritesheet grid.
- * @property {Object<string, PropAnimationData>} [animations=null] - Dictionary of animations (required if `isAnimated` is true).
+ * @property {Object<string, PropAnimationData>} [animations=null] - Dictionary of animations.
  * @property {string} [defaultState='idle'] - The default animation state to play.
  */
 
@@ -37,12 +39,21 @@ class PropManagerController {
 	/** @type {Array<Object>} */
 	#activeProps;
 
+	/** @type {Object<string, Function>} */
+	#entityMap;
+
 	/**
 	 * Creates a new PropManagerController.
 	 */
 	constructor() {
 		this.#activeDefinitions = new Map();
 		this.#activeProps = [];
+
+		this.#entityMap = {
+			static: Engine.LJS.EngineObject,
+			animated: AnimatedEntity,
+			inputPrompt: InputPromptEntity,
+		};
 
 		Events.on('route:changed', (payload) => {
 			this.#handleRouteChanged(payload);
@@ -103,8 +114,16 @@ class PropManagerController {
 			const propSize =
 				def.size || Engine.LJS.vec2(def.resolution.x / 10, def.resolution.y / 10);
 
-			if (def.isAnimated) {
-				const entity = new AnimatedEntity(
+			let targetType = def.entityType || 'static';
+			if (def.isAnimated && !def.entityType) {
+				targetType = 'animated';
+			}
+
+			const isAnimatedBase = targetType !== 'static';
+			const EntityClass = this.#entityMap[targetType] || this.#entityMap['static'];
+
+			if (isAnimatedBase) {
+				const entity = new EntityClass(
 					pos,
 					propSize,
 					mapTextureIndex,
@@ -114,17 +133,28 @@ class PropManagerController {
 				entity.gridOffset = def.offset || Engine.LJS.vec2(0, 0);
 				entity.gridCols = def.cols || 1;
 
+				if (targetType === 'inputPrompt' && typeof entity.setLogicalKey === 'function') {
+					entity.setLogicalKey(def.logicalKey || 'A');
+				}
+
 				if (def.animations) {
 					for (const [animName, animData] of Object.entries(def.animations)) {
 						entity.addAnimation(
 							animName,
-							animData.frames,
-							animData.speed,
-							animData.loop
+							animData.frames || [0],
+							animData.speed || 0,
+							animData.loop || false
 						);
+
+						if (animData.keys) {
+							entity.animations[animName].keys = animData.keys;
+						}
 					}
 				}
-				entity.setState(def.defaultState || 'idle');
+
+				const defaultState =
+					def.defaultState || (targetType === 'inputPrompt' ? 'mnk' : 'idle');
+				entity.setState(defaultState);
 				spawned.push(entity);
 			} else {
 				let tileInfo;
@@ -141,7 +171,7 @@ class PropManagerController {
 					tileInfo = Engine.LJS.tile(0, def.resolution, mapTextureIndex, padding);
 				}
 
-				const entity = new Engine.LJS.EngineObject(
+				const entity = new EntityClass(
 					pos,
 					propSize,
 					tileInfo,

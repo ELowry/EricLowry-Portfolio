@@ -129,7 +129,6 @@ class AppController {
 
 		try {
 			const langPromise = Lang.init();
-			const contentPromise = Content.init();
 
 			const externalLinksPromise = ExternalLinks.getData();
 
@@ -150,6 +149,8 @@ class AppController {
 			this.LJS = (littleModule && (littleModule.default || littleModule)) || null;
 			Engine.setEngine(this.LJS);
 			Engine.onHandleInput = () => this.handleInput();
+
+			const contentPromise = Content.init();
 
 			// Overrides LittleJS' global 'contextmenu' handler to restore the native context menu while in text mode.
 			document.addEventListener(

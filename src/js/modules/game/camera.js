@@ -30,19 +30,41 @@ class CameraController {
 		this.#currentBaselineY = CameraController.BASELINE_Y;
 	}
 
+	/**
+	 * @returns {number} The damping factor applied to camera movement smoothing.
+	 * @constant
+	 */
 	static get DAMPING() {
 		return 0.02;
 	}
+
+	/**
+	 * @returns {number} The fractional width of the screen deadzone where the camera won't track the player.
+	 * @constant
+	 */
 	static get DEADZONE_WIDTH() {
 		return 0.04;
 	}
+
+	/**
+	 * @returns {number} The default vertical offset of the camera relative to the player.
+	 * @constant
+	 */
 	static get BASELINE_Y() {
 		return 4;
 	}
+
+	/**
+	 * @returns {number} The default zoom scale of the camera.
+	 * @constant
+	 */
 	static get DEFAULT_SCALE() {
 		return 32;
 	}
 
+	/**
+	 * @returns {number} The visible width of the game world in world units based on current scale.
+	 */
 	get viewWidth() {
 		return Engine.LJS.mainCanvasSize.x / Engine.LJS.cameraScale;
 	}

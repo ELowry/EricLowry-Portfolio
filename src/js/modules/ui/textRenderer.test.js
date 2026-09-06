@@ -37,6 +37,7 @@ vi.mock('../content/blog.js', () => {
 describe('TextRenderer', () => {
 	let appMock;
 	let textNavContainer;
+	let textLayerContainer;
 	let breadcrumbTemplate;
 	let navLinkTemplate;
 	let textRenderer;
@@ -48,6 +49,9 @@ describe('TextRenderer', () => {
 
 		textNavContainer = document.createElement('div');
 		textNavContainer.id = 'text-nav';
+
+		textLayerContainer = document.createElement('div');
+		textLayerContainer.id = 'text-layer';
 
 		breadcrumbTemplate = document.createElement('template');
 		breadcrumbTemplate.id = 'template-breadcrumb';
@@ -63,6 +67,7 @@ describe('TextRenderer', () => {
 			uiManager: {
 				elements: {
 					textNav: textNavContainer,
+					textLayer: textLayerContainer,
 				},
 			},
 		};

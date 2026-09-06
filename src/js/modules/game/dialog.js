@@ -21,6 +21,9 @@ import { Interaction } from './interaction.js';
  * @property {Array<DialogChoice>} [choices] - Array of choice buttons to present.
  */
 
+/**
+ * Manages the in-game dialogue system, executing step-by-step sequences.
+ */
 class DialogController {
 	/** @type {boolean} */
 	isActive;
@@ -29,12 +32,18 @@ class DialogController {
 	/** @type {number} */
 	#currentStepIndex;
 
+	/**
+	 * Creates an instance of DialogController.
+	 */
 	constructor() {
 		this.isActive = false;
 		this.#steps = [];
 		this.#currentStepIndex = 0;
 	}
 
+	/**
+	 * Updates the dialogue state each frame, handling user interactions.
+	 */
 	update() {
 		if (!this.isActive) return;
 
@@ -48,6 +57,10 @@ class DialogController {
 		}
 	}
 
+	/**
+	 * Executes the current step in the dialogue sequence.
+	 * @private
+	 */
 	#executeStep() {
 		if (this.#currentStepIndex >= this.#steps.length) {
 			this.end();
@@ -72,7 +85,10 @@ class DialogController {
 					langKey: c.langKey,
 					action: () => {
 						if (typeof c.action === 'function') c.action();
-						this.advance();
+
+						if (this.isActive) {
+							this.advance();
+						}
 					},
 				}));
 			}
@@ -81,6 +97,10 @@ class DialogController {
 		}
 	}
 
+	/**
+	 * Starts playing a new dialogue sequence.
+	 * @param {Array<DialogStep>} sequence - The array of dialogue steps to play.
+	 */
 	play(sequence) {
 		if (!sequence || sequence.length === 0) return;
 		this.#steps = sequence;
@@ -89,6 +109,9 @@ class DialogController {
 		this.#executeStep();
 	}
 
+	/**
+	 * Advances the dialogue sequence to the next step.
+	 */
 	advance() {
 		const step = this.#steps[this.#currentStepIndex];
 		if (typeof step.onExit === 'function') step.onExit();
@@ -96,6 +119,9 @@ class DialogController {
 		this.#executeStep();
 	}
 
+	/**
+	 * Ends the current dialogue sequence and hides the interface.
+	 */
 	end() {
 		this.isActive = false;
 		Events.emit('dialog:hide');
@@ -136,6 +162,7 @@ class DialogController {
 						action: () => {
 							Camera.setZoom();
 							setModeCallback('text');
+							this.end();
 						},
 					},
 					{
@@ -154,7 +181,7 @@ class DialogController {
 			},
 			{
 				textLangKey: 'ui.welcome.d5',
-				text: "You can walk around freely, enter doors, and read sign posts to explore my portfolio. These are placeholder assets, and should look much fancier in the future…",
+				text: 'You can walk around freely, enter doors, and read sign posts to explore my portfolio. These are placeholder assets, and should look much fancier in the future…',
 				choices: [
 					{
 						langKey: 'ui.welcome.btnContinue',

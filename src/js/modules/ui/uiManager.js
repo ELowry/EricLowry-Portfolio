@@ -130,6 +130,15 @@ export class UIManager {
 			this.#handleMenuNavigation(e, this.elements.dialogChoices, 'x');
 		});
 
+		// Fix dialog box pointer events breaking because game mode is active.
+		['pointerdown', 'pointerup', 'touchstart', 'touchend'].forEach((event) => {
+			this.elements.dialogOverlay?.addEventListener(event, (e) => {
+				if (e.target.closest('.dialog-container')) {
+					e.stopPropagation();
+				}
+			});
+		});
+
 		// Text Nav (Breadcrumbs)
 		this.elements.textNav?.addEventListener('keydown', (e) => {
 			const targetMenu = e.target.closest('.breadcrumbs, .nav-list');

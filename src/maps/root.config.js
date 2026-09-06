@@ -22,5 +22,8 @@ export default {
 		{ type: 'boxes', pos: { x: 23.2, y: 9.6 }, renderOrder: -1 },
 		{ type: 'signWarning', pos: { x: 0, y: 9.2 }, renderOrder: -1 },
 		{ type: 'dirtPiles', pos: { x: 6, y: 8.7 }, renderOrder: 1 },
+		{ type: 'promptFrame', pos: { x: 12.5, y: 15.05 }, renderOrder: -1 },
+		{ type: 'promptHorizontalLeft', pos: { x: 11.95, y: 15 }, renderOrder: -1 },
+		{ type: 'promptHorizontalRight', pos: { x: 13.05, y: 15 }, renderOrder: -1 },
 	],
 };
