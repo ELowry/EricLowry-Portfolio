@@ -362,10 +362,11 @@ export class Player extends AnimatedEntity {
 	 * Sets the player's current state animation, dynamically generating
 	 * precise animation arrays for context-sensitive transitions.
 	 * @param {string} newState - New state to set.
-	 * @param {number} [delayInSeconds=0] - Delay before playing animation.
-	 * @param {boolean} [forceRestart=false] - Force animation to restart.
+	 * @param {Object} options - OPTIONS WRAPPER.
+	 * @param {number} [options.delay=0] - Delay before playing animation.
+	 * @param {boolean} [options.forceRestart=false] - Force animation to restart.
 	 */
-	setState(newState, delayInSeconds = 0, forceRestart = false) {
+	setState(newState, { delay = 0, forceRestart = false } = {}) {
 		if (this.currentState === 'stopping') {
 			const frameOffset = Math.floor(this.animTimer.get() * Player.ANIM_SPEED_STOP);
 			this.savedStopFrame = 11 + Math.min(frameOffset, 7);
@@ -441,7 +442,7 @@ export class Player extends AnimatedEntity {
 			this.addAnimation('front_interact', frames, Player.ANIM_SPEED_INTERACT_FRONT, false);
 		}
 
-		super.setState(newState, delayInSeconds, forceRestart);
+		super.setState(newState, delay, forceRestart);
 
 		this.isLookingAround = false;
 		this.idleLookTimer.set(

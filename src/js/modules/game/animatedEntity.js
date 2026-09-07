@@ -159,18 +159,19 @@ export class AnimatedEntity extends WithShadows(Engine.LJS.EngineObject) {
 	/**
 	 * Transitions the entity to a new animation state.
 	 * @param {string} newState - The state to transition to.
-	 * @param {number} [delayInSeconds=0] - Optional delay before the animation starts.
-	 * @param {boolean} [forceRestart=false] - Force the timer to reset even if already in this state.
+	 * @param {Object} options - OPTIONS WRAPPER.
+	 * @param {number} [options.delay=0] - (seconds) Delay before the animation starts.
+	 * @param {boolean} [options.forceRestart=false] - Force the timer to reset even if already in this state.
 	 * @returns {void}
 	 */
-	setState(newState, delayInSeconds = 0, forceRestart = false) {
+	setState(newState, { delay = 0, forceRestart = false } = {}) {
 		if (this.currentState !== newState || forceRestart) {
 			this.prevAnimTime = this.animTimer.get() > 0 ? this.animTimer.get() : 0;
-			this.currentDelay = delayInSeconds;
+			this.currentDelay = delay;
 
 			this.prevState = this.currentState;
 			this.currentState = newState;
-			this.animTimer.set(delayInSeconds);
+			this.animTimer.set(delay);
 		}
 	}
 }

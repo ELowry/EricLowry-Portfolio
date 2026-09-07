@@ -80,7 +80,7 @@ class CameraController {
 	 */
 	setZoom(
 		scale = CameraController.DEFAULT_SCALE,
-		{ duration = 1.0, baselineY = null, ease = null, panEase = null }
+		{ duration = 1.0, baselineY = null, ease = null, panEase = null } = {}
 	) {
 		this.#targetScale = scale;
 		this.#startScale = Engine.LJS.cameraScale;

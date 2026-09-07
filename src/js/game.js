@@ -71,10 +71,7 @@ function gameInit() {
 			},
 
 			playIntroCinematic: () => {
-				Dialog.playIntro({
-					player,
-					onModeSet: (gameMode) => window.App?.setMode(gameMode),
-				});
+				Dialog.playIntro(player, (gameMode) => window.App?.setMode(gameMode));
 			},
 		},
 		import.meta.env.DEV

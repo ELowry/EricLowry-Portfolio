@@ -414,7 +414,7 @@ class AppController {
 	 */
 	async #handleGameTransition({ path, node }) {
 		try {
-			const mapNode = Content.getParentMapNode(path);
+			const mapNode = Content.getParentCategoryMapNode(path);
 
 			if (mapNode && mapNode.mapData) {
 				GameBridge.setMapBounds(mapNode.mapData.bounds || null);
@@ -791,7 +791,7 @@ class AppController {
 		this.uiManager.closeGameMenu();
 
 		this.Input.clearEvents();
-		Interaction.setBlock(200);
+		Interaction.setInputDebounce(200);
 
 		if (this.mode === 'game') {
 			this.setPause(false);
@@ -832,7 +832,7 @@ class AppController {
 		}
 
 		this.Input.clearEvents();
-		Interaction.setBlock(200);
+		Interaction.setInputDebounce(200);
 
 		// Focus the canvas so keyboard input goes back to the game engine
 		if (focusGame && this.canvas) {

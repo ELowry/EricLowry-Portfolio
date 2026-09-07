@@ -114,7 +114,7 @@ vi.mock('./animatedEntity.js', () => {
 vi.mock('../content/content.js', () => {
 	return {
 		Content: {
-			getParentMapNode: vi.fn(),
+			getParentCategoryMapNode: vi.fn(),
 			findNodeByPath: vi.fn(),
 			tree: {},
 		},

@@ -224,7 +224,7 @@ export class Door extends AnimatedEntity {
 	 */
 	open() {
 		if (this.currentState === 'closed') {
-			this.setState('opening', this.animDelayOpen / 60);
+			this.setState('opening', { delay: this.animDelayOpen / 60 });
 		}
 	}
 
