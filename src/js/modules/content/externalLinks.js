@@ -1,17 +1,31 @@
 import { getCacheBuster } from '../core/sharedUtils.js';
 
 /**
- * ExternalLinksController manages the fetching and caching of external link metadata.
+ * Manages fetching and caching external link metadata.
  */
 class ExternalLinksController {
-	/** @type {Object|null} */
+	/**
+	 * Cached JSON representation of all the site's external links.
+	 * @type {Object|null}
+	 */
 	#dataCache = null;
 
-	/** @type {Promise<Object>|null} */
+	/**
+	 * Resolves with the cached data.
+	 * @type {Promise<Object>|null}
+	 */
 	#fetchPromise = null;
 
 	/**
-	 * Fetches the external links JSON and caches it.
+	 * @returns {string} the location of the file in which to store fetched links.
+	 * @constant
+	 */
+	static get CACHE_FILE_LOCATION() {
+		return '/assets/external-links.json';
+	}
+
+	/**
+	 * Fetches and caches external links JSON.
 	 * @returns {Promise<Object>} The parsed external links dictionary.
 	 */
 	async getData() {
@@ -30,13 +44,15 @@ class ExternalLinksController {
 	}
 
 	/**
-	 * Internal method to perform the fetch operation.
+	 * Performs the fetch operation.
 	 * @returns {Promise<Object>} The external links data.
 	 * @private
 	 */
 	async #fetchData() {
 		try {
-			const response = await fetch(`/assets/external-links.json?v=${getCacheBuster()}`);
+			const response = await fetch(
+				`${ExternalLinksController.CACHE_FILE_LOCATION}?v=${getCacheBuster()}`
+			);
 
 			if (!response.ok) {
 				throw new Error(`Failed to load external links: ${response.statusText}`);

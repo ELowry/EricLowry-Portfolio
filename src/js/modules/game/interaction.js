@@ -25,7 +25,7 @@ class InteractionController {
 	overlayTimeout;
 
 	/** @type {number} Timestamp until which input is ignored (cooldown). */
-	blockTimer;
+	debounceTimer;
 
 	/** @type {Object<string, Function>} Map of interaction type handlers. */
 	#interactionHandlers;
@@ -38,7 +38,7 @@ class InteractionController {
 		this.highlightedObject = null;
 		this.interactionRadius = 2.2;
 		this.overlayTimeout = null;
-		this.blockTimer = 0;
+		this.debounceTimer = 0;
 
 		this.#interactionHandlers = {
 			category: (obj) => this.#handleCategoryInteraction(obj),
@@ -49,14 +49,14 @@ class InteractionController {
 			action: (obj) => obj.action(),
 		};
 
-		Events.on('route:changed', (payload) => this.#handleMapObjects(payload));
+		Events.subscribe('route:changed', (payload) => this.#handleMapObjects(payload));
 	}
 
 	/**
 	 * @returns {number} the duration in milliseconds to block user input after an interaction.
 	 * @constant
 	 */
-	static get BLOCK_INPUT_MS() {
+	static get INPUT_DEBOUNCE_MS() {
 		return 500;
 	}
 
@@ -82,7 +82,7 @@ class InteractionController {
 	 * @param {vec2} playerPos - Current player position
 	 */
 	update(playerPos) {
-		if (performance.now() < this.blockTimer) {
+		if (performance.now() < this.debounceTimer) {
 			return;
 		}
 
@@ -94,7 +94,7 @@ class InteractionController {
 		this.highlightedObject = this.#findClosestObject(playerPos);
 		if (this.highlightedObject && Input.interact) {
 			Input.spawnTapRipple();
-			this.setBlock();
+			this.setInputDebounce();
 			this.#triggerInteraction(this.highlightedObject);
 		}
 	}
@@ -175,7 +175,7 @@ class InteractionController {
 			return;
 		}
 
-		const mapNode = Content.getParentMapNode(path);
+		const mapNode = Content.getParentCategoryMapNode(path);
 
 		if (mapNode && mapNode.mapData) {
 			const pathParts = path.split('/').filter((p) => p);
@@ -244,7 +244,7 @@ class InteractionController {
 		if (obj.id === 'parent_exit' || obj.path === '') {
 			const parentPath = obj.path || '';
 			const parentNode = Content.findNodeByPath(parentPath);
-			const childId = Content.getParentMapNode(Router.currentPath)?.id;
+			const childId = Content.getParentCategoryMapNode(Router.currentPath)?.id;
 			const posData = parentNode?.mapData?.positions?.[childId];
 			if (posData && typeof posData.x === 'number') {
 				Events.emit('request:entryX', posData.x);
@@ -296,8 +296,8 @@ class InteractionController {
 	 * Useful when closing menus to prevent 'double interactions'.
 	 * @param {number} duration - Optionally set the duration to block interactions for in milliseconds. Defaults to 500ms.
 	 */
-	setBlock(duration = InteractionController.BLOCK_INPUT_MS) {
-		this.blockTimer = performance.now() + duration;
+	setInputDebounce(duration = InteractionController.INPUT_DEBOUNCE_MS) {
+		this.debounceTimer = performance.now() + duration;
 	}
 }
 

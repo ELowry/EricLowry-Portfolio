@@ -120,10 +120,10 @@ export class UIManager {
 		VirtualCursor.init(this.elements.virtualCursorTemplate);
 
 		// Dialog System
-		Events.on('dialog:show', (payload) => {
+		Events.subscribe('dialog:show', (payload) => {
 			this.showDialog(payload);
 		});
-		Events.on('dialog:hide', () => {
+		Events.subscribe('dialog:hide', () => {
 			this.hideDialog();
 		});
 		this.elements.dialogChoices?.addEventListener('keydown', (e) => {
@@ -213,7 +213,7 @@ export class UIManager {
 		// Reveal before the print spooler grabs the DOM
 		window.addEventListener('beforeprint', Obfuscator.revealAllForPrint);
 
-		Events.on('route:changed', (payload) => {
+		Events.subscribe('route:changed', (payload) => {
 			if (payload.mode === 'text') {
 				const navButtons = document.querySelectorAll('#text-navbar button[data-nav-path]');
 				for (const navButton of navButtons) {
@@ -345,7 +345,7 @@ export class UIManager {
 	#setupInteractionLabelEvents() {
 		this.interactionOverlayTimeout = null;
 
-		Events.on('interaction:label', (text) => {
+		Events.subscribe('interaction:label', (text) => {
 			if (!this.elements.interactionOverlay || !this.elements.interactionLabelText) {
 				return;
 			}
@@ -900,7 +900,7 @@ export class UIManager {
 				this.elements.dialogText.appendChild(payload.element);
 			} else {
 				this.elements.dialogText.innerHTML = payload.textLangKey
-					? Lang.getHtmlString(payload.textLangKey, null, payload.text)
+					? Lang.getHtmlString(payload.textLangKey, { fallback: payload.text })
 					: payload.text;
 			}
 		}
@@ -919,20 +919,27 @@ export class UIManager {
 				if (this.elements.dialogPrompt) this.elements.dialogPrompt.hidden = true;
 
 				payload.choices.forEach((choice, index) => {
-					const btn = document.createElement('button');
-					btn.textContent = choice.langKey
-						? Lang.getString(choice.langKey, null, choice.label)
+					const button = document.createElement('button');
+
+					button.textContent = choice.langKey
+						? Lang.getString(choice.langKey, { fallback: choice.label })
 						: choice.label;
 
-					btn.tabIndex = index === 0 ? 0 : -1;
+					if (choice.title || choice.titleLangKey) {
+						button.title = choice.titleLangKey
+							? Lang.getString(choice.titleLangKey, { fallback: choice.title || '' })
+							: choice.title || '';
+					}
 
-					btn.addEventListener('click', () => {
-						if (typeof choice.action === 'function') {
-							choice.action();
+					button.tabIndex = index === 0 ? 0 : -1;
+
+					button.addEventListener('click', () => {
+						if (typeof choice.onSelected === 'function') {
+							choice.onSelected();
 						}
 					});
 
-					this.elements.dialogChoices.appendChild(btn);
+					this.elements.dialogChoices.appendChild(button);
 				});
 
 				Navigation.setContext(this.elements.dialogChoices, { axis: 'x', roving: true });
@@ -1089,7 +1096,7 @@ export class UIManager {
 			this.elements.gameModal.setAttribute('data-langdata_windowtitle', titleLangKey);
 			this.elements.gameModal.setAttribute(
 				'data-windowtitle',
-				Lang.getString(titleLangKey, null, fallbackTitle)
+				Lang.getString(titleLangKey, { fallback: fallbackTitle })
 			);
 		} else if (fallbackTitle) {
 			this.elements.gameModal.classList.remove('langAttr');

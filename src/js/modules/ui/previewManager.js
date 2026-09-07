@@ -68,7 +68,7 @@ export class PreviewManager {
 			}
 		});
 
-		Events.on('route:changed', () => {
+		Events.subscribe('route:changed', () => {
 			this.#hidePreview();
 		});
 	}

@@ -204,11 +204,9 @@ export class Obfuscator {
 		let isObfuscated = false;
 
 		if ((isMail && hasEmail) || (!isMail && hasPhone)) {
-			displayText = Lang.getString(
-				`ui.contact.${isMail ? 'email' : 'phone'}Placeholder`,
-				null,
-				isMail ? '[Reveal Email]' : '[Reveal Phone]'
-			);
+			displayText = Lang.getString(`ui.contact.${isMail ? 'email' : 'phone'}Placeholder`, {
+				fallback: isMail ? '[Reveal Email]' : '[Reveal Phone]',
+			});
 			isObfuscated = true;
 		}
 

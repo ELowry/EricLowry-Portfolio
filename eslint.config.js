@@ -67,8 +67,12 @@ export default [
 						ClassExpression: true,
 						FunctionDeclaration: true,
 						FunctionExpression: false,
-						MethodDefinition: true,
+						MethodDefinition: false, // Specified in contexts instead
 					},
+					contexts: [
+						"MethodDefinition[kind='method']",
+						"MethodDefinition[kind='constructor'][value.params.length>0]",
+					],
 					checkGetters: 'no-setter',
 					checkSetters: false,
 				},

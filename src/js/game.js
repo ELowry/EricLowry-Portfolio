@@ -20,8 +20,8 @@ let gameLayerElement = null;
  * Called once by LittleJS engine on startup.
  */
 function gameInit() {
-	const startX = Engine.pendingStartPos ? Engine.pendingStartPos.x : 10;
-	const startY = Engine.pendingStartPos ? Engine.pendingStartPos.y : 10;
+	const startX = Engine.pendingStartPosition ? Engine.pendingStartPosition.x : 10;
+	const startY = Engine.pendingStartPosition ? Engine.pendingStartPosition.y : 10;
 	const startVec = Engine.LJS.vec2(startX, startY);
 
 	// LittleJS configuration
@@ -71,10 +71,9 @@ function gameInit() {
 			},
 
 			playIntroCinematic: () => {
-				Dialog.playIntro(player, (mode) => {
-					if (window.App) {
-						window.App.setMode(mode);
-					}
+				Dialog.playIntro({
+					player,
+					onModeSet: (gameMode) => window.App?.setMode(gameMode),
 				});
 			},
 		},

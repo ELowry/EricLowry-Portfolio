@@ -1,56 +1,53 @@
-// File: src/js/modules/content/contentTree.js
 /**
  * @typedef {Object} PositionData
- * @property {number} x - X coordinate
- * @property {number} y - Y coordinate
- * @property {number} [radius=1.5] - Collision/radius for interactions
- * @property {boolean} [below=false] - If `true`, this position is 'below' the camera (affects animation)
- * @property {string} [label=null] - Optional translation key or fallback label
- */
-
-/**
- * @typedef {Object} PropPlacement
- * @property {string} type - The registered name of the prop (e.g., 'ServerRack').
- * @property {Object} pos - The world coordinates `{x, y}` to spawn the prop.
- * @property {number} pos.x - X coordinate.
- * @property {number} pos.y - Y coordinate.
- * @property {number} [scale=1] - Scaling factor for the prop.
- * @property {number} [renderOrder=0] - Z-index sorting order.
- * @property {string} [logicalKey] - Explicit key mapping for input prompts (e.g., 'A', 'D').
+ * @property {number} x - The X coordinates at which to spawn the object.
+ * @property {number} y - The Y coordinate at which to spawn the object.
+ * @property {number} [radius=1.5] - The object's collision radius for interactions.
+ * @property {boolean} [below=false] - Whether this position is 'below' the camera.
+ * @property {string} [label=''] - Translation key for the object's label.
  */
 
 /**
  * @typedef {Object} MapConfig
- * @property {Vec2} startPos - Default player entry point
- * @property {Object<string, PositionData>} positions - Keyed by child node ID
- * @property {{minX: number, maxX: number}} [bounds=null] - Optional horizontal boundaries for the map
- * @property {number} [textureIndex=0] - The spritesheet index to use for this map's player, doors, and props.
- * @property {import('../game/propManager.js').SpriteConfig} [sprites=null] - The imported `.sprites.js` configuration object containing regional prop definitions.
- * @property {Array<PropPlacement>} [props=null] - Declarative list of environmental props to spawn.
+ * @property {Vec2} startPos - The default player entry position.
+ * @property {Object<string, PositionData>} positions - The `InteractiveMapObject` positions, keyed by destination child node ID.
+ * @property {{minX: number, maxX: number}} [bounds=undefined] - The map's horizontal boundaries.
+ * @property {number} [textureIndex=0] - Index of the spritesheet to use for this map.
+ * @property {import('../game/propManager.js').SpriteConfig} [sprites=null] - The `.sprites.js` configuration for this map's prop definitions.
+ * @property {Array<PropPlacement>} [props=null] - The list of environmental props to spawn across the map.
+ */
+
+/**
+ * @typedef {Object} PropPlacement
+ * @property {string} type - The prop's name as registered in a `.sprite.js` config.
+ * @property {{ x: number, y: number }} pos - Coordinate at which to spawn the prop.
+ * @property {number} [scale=1] - The scaling factor to apply to the prop.
+ * @property {number} [renderOrder=0] - The prop's Z-index sorting order.
+ * @property {string} [logicalKey=''] - Explicit key mapping for input prompts (e.g., 'A', 'D').
  */
 
 /**
  * @typedef {Object} ContentNode
  * @property {'category'|'content'|'separator'} type - Whether the node is a category, content, or visual separator.
- * @property {string} [id=null] - Unique identifier within current level
- * @property {string} [title=null] - Fallback literal title
- * @property {string} [file=null] - Markdown file path (used if `type === 'content'`)
- * @property {boolean} [hidden=false] - Hides the node from text-mode navigation menus if `true`.
- * @property {string|null} [image=null] - Path to the header image inside the `assets/images/` directory.
- * @property {string} [mapId=null] - The file path identifier for the map config and sprites (used if `type === 'category'`)
+ * @property {string} [id=null] - Unique ID within current level.
+ * @property {string} [title=null] - The title (label fallback).
+ * @property {string} [file=null] - Path to the markdown file relative to the content root (for `type === 'content'`).
+ * @property {boolean} [hidden=false] - Whether to hide it from text-mode navigation menus.
+ * @property {string|null} [image=null] - Path to its image within `assets/images/`.
+ * @property {string} [mapId=null] - The file path identifier for the map and sprites config files (for `type === 'category'`).
  * @property {MapConfig} [mapData=null] - Game map settings populated during initialization.
- * @property {Array<ContentNode>} [children=null] - Child nodes (used if `type === 'category'`)
+ * @property {Array<ContentNode>} [children=null] - Child nodes (for `type === 'category'`).
  */
 
 /**
- * Factory helper to create a content node (markdown file).
- * @param {Object} options - The content configuration properties.
- * @param {string} options.id - Unique identifier for the node (URL segment).
- * @param {string} options.title - Fallback human-readable title.
+ * Create a content node corresponding to a markdown file.
+ * @param {Object} options - Content configuration properties.
+ * @param {string} options.id - Unique ID for the node (URL segment).
+ * @param {string} options.title - The title (label fallback).
  * @param {string} options.file - Path to the markdown file relative to the content root.
- * @param {boolean} [options.hidden=false] - Hides the node from text-mode navigation menus if `true`.
- * @param {string|null} [options.image=null] - Path to the header image inside the `assets/images/` directory.
- * @returns {ContentNode} a standardized content node object.
+ * @param {boolean} [options.hidden=false] - Whether to hide it from text-mode navigation menus.
+ * @param {string|null} [options.image=null] - Path to its image within `assets/images/`.
+ * @returns {ContentNode} a content node object.
  */
 const content = ({ id, title, file, hidden = false, image = null }) => ({
 	id,
@@ -62,34 +59,36 @@ const content = ({ id, title, file, hidden = false, image = null }) => ({
 });
 
 /**
- * Factory helper to create a category node.
- * @param {Object} options - The category configuration properties.
- * @param {string} options.id - Unique identifier for the node (URL segment).
- * @param {string} options.title - Fallback human-readable title.
- * @param {string} options.mapId - The file path identifier for the map config and sprites.
- * @param {Array<ContentNode>} [options.children=[]] - Child nodes (used if `type === category`)
- * @returns {ContentNode} a standardized content node object.
+ * Create a category node.
+ * @param {Object} options - Category configuration properties.
+ * @param {string} options.id - Unique ID for the node (URL segment).
+ * @param {string} options.title - The title (label fallback).
+ * @param {string} options.mapId - The file path identifier for the map and sprites config files (for `type === 'category'`).
+ * @param {Array<ContentNode>} [options.children=[]] - Child nodes (for `type === 'category'`)
+ * @returns {ContentNode} a content node object.
  */
 const category = ({ id, title, mapId, children = [] }) => ({
 	id,
 	title,
 	type: 'category',
 	mapId,
-	mapData: null, // Will be filled by init()
+	mapData: null, // filled by init()
 	children,
 });
 
 /**
- * Factory helper to create a visual separator node.
- * @returns {ContentNode} a standardized separator node object.
+ * Create a visual separator node used in menus.
+ * @returns {ContentNode} a separator node object.
  */
 const separator = () => ({
 	type: 'separator',
 });
 
 /**
- * The static definition of the application's content hierarchy.
- * This constant serves as the single source of truth for routing, game level layout, and navigation menus. It is built using factory functions to ensure structural consistency.
+ * The static content hierarchy for the site.  
+ * Source of truth for routing, game level layout, and navigation menus.
+ *
+ * MUST USE the above factory functions.
  * @type {ContentNode}
  */
 export const ContentTree = category({

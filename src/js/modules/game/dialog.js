@@ -6,37 +6,54 @@ import { Interaction } from './interaction.js';
 
 /**
  * @typedef {Object} DialogChoice
- * @property {string} label - The fallback text displayed on the button.
- * @property {string} [langKey] - Optional translation key for the label.
- * @property {Function} [action] - The callback when the choice is selected.
+ * @property {string} label - Button text.
+ * @property {string} [langKey=''] - The label's translation key.
+ * @property {string} [title=''] - The button's title property.
+ * @property {string} [titleLangKey=''] - The title's translation key.
+ * @property {() => void} [onSelected=undefined] - Callback when a choice is selected.
  */
 
 /**
  * @typedef {Object} DialogStep
- * @property {string} [text] - Fallback string or raw text to display.
- * @property {string} [textLangKey] - Optional translation key for the text.
- * @property {HTMLElement} [element] - Optional DOM element to display instead of text.
- * @property {Function} [onEnter] - Logic to fire when step starts.
- * @property {Function} [onExit] - Logic to fire when step completes.
- * @property {Array<DialogChoice>} [choices] - Array of choice buttons to present.
+ * @property {string} [text=''] - Dialog text to display; or fallback string when using `element`.
+ * @property {string} [textLangKey=''] - The dialog text's translation key.
+ * @property {HTMLElement|null} [element=undefined] - DOM element to display (overrides `text`).
+ * @property {() => void} [onEnter=undefined] - Event that fires at the start of the step.
+ * @property {() => void} [onExit=undefined] - Event that fires when step completes.
+ * @property {Array<DialogChoice>} [choices=[]] - Array of choice buttons.
  */
 
 /**
- * Manages the in-game dialogue system, executing step-by-step sequences.
+ * Game-mode dialogue system as a basic step machine.
  */
 class DialogController {
-	/** @type {boolean} */
+	/**
+	 * Whether a dialogue sequence is ongoing.
+	 * @type {boolean}
+	 */
 	isActive;
-	/** @type {Array<DialogStep>} */
-	#steps;
-	/** @type {number} */
-	#currentStepIndex;
-	/** @type {number} */
-	#lastAdvanceTime;
 
 	/**
-	 * Creates an instance of DialogController.
+	 * The current sequence of dialogue steps.
+	 * @type {Array<DialogStep>}
+	 * @private
 	 */
+	#steps;
+
+	/**
+	 * The current dialogue step.
+	 * @type {number}
+	 * @private
+	 */
+	#currentStepIndex;
+
+	/**
+	 * (miliseconds) Timestamp of the last step change for input debouncing.
+	 * @type {number}
+	 * @private
+	 */
+	#lastAdvanceTime;
+
 	constructor() {
 		this.isActive = false;
 		this.#steps = [];
@@ -45,7 +62,8 @@ class DialogController {
 	}
 
 	/**
-	 * Updates the dialogue state each frame, handling user interactions.
+	 * Game loop update.  
+	 * Handles input debouncing and standard touch inputs when in dialog mode.
 	 */
 	update() {
 		if (!this.isActive) {
@@ -67,7 +85,7 @@ class DialogController {
 	}
 
 	/**
-	 * Executes the current step in the dialogue sequence.
+	 * Executes the current dialog step.
 	 * @private
 	 */
 	#executeStep() {
@@ -91,12 +109,14 @@ class DialogController {
 			};
 
 			if (step.choices) {
-				payload.choices = step.choices.map((c) => ({
-					label: c.label,
-					langKey: c.langKey,
-					action: () => {
-						if (typeof c.action === 'function') {
-							c.action();
+				payload.choices = step.choices.map((choice) => ({
+					label: choice.label,
+					langKey: choice.langKey,
+					title: choice.title,
+					titleLangKey: choice.titleLangKey,
+					onSelected: () => {
+						if (typeof choice.onSelected === 'function') {
+							choice.onSelected();
 						}
 
 						if (this.isActive) {
@@ -111,12 +131,15 @@ class DialogController {
 	}
 
 	/**
-	 * Starts playing a new dialogue sequence.
-	 * @param {Array<DialogStep>} sequence - The array of dialogue steps to play.
+	 * Starts a dialogue sequence.
+	 * @param {Array<DialogStep>} sequence - The sequence of dialogue steps.
 	 */
 	play(sequence) {
 		if (!sequence || sequence.length === 0) {
 			return;
+		}
+		if (this.isActive) {
+			this.end();
 		}
 		this.#steps = sequence;
 		this.#currentStepIndex = 0;
@@ -138,32 +161,38 @@ class DialogController {
 	}
 
 	/**
-	 * Ends the current dialogue sequence and hides the interface.
+	 * Ends the current dialogue sequence.  
+	 * Hides the dialog interface.
 	 */
 	end() {
+		if (!this.isActive) {
+			return;
+		}
+		const currentStep = this.#steps[this.#currentStepIndex];
+		if (typeof currentStep?.onExit === 'function') {
+			currentStep.onExit();
+		}
 		this.isActive = false;
 		Events.emit('dialog:hide');
-		// Prevent accidental world interaction immediately after closing
-		Interaction.setBlock();
+		Interaction.setInputDebounce();
 	}
 
 	/**
-	 * Intro Cinematic sequence.
-	 * @param {Object} player - The player instance to animate.
-	 * @param {Function} setModeCallback - Callback to transition the app mode.
+	 * Site/game intro sequence.
+	 * @param {Object} player - The player instance.
+	 * @param {(gameMode: string) => void} onModeSet - Callback to change the app mode.
 	 */
-	playIntro(player, setModeCallback) {
+	playIntro(player, onModeSet) {
 		this.play([
 			{
 				textLangKey: 'ui.welcome.d1',
 				text: 'Hi there! My name is Eric Lowry, welcome to my interactive portfolio!\nYou can start by pressing that button over there 🢆',
 				onEnter: () => {
-					Camera.setZoom(
-						100,
-						5,
-						Engine.LJS.Ease.OUT(Engine.LJS.Ease.POWER(2)),
-						Engine.LJS.Ease.LINEAR()
-					);
+					Camera.setZoom(100, {
+						duration: 5,
+						ease: Engine.LJS.Ease.OUT(Engine.LJS.Ease.POWER(2)),
+						panEase: Engine.LJS.Ease.LINEAR(),
+					});
 					if (player) {
 						player.setState('wave');
 					}
@@ -179,17 +208,21 @@ class DialogController {
 				text: 'Accessibility is important on the web! So if you prefer to explore my portfolio as a standard website, please select "Text Mode", otherwise you can continue this interactive experience:',
 				choices: [
 					{
-						langKey: 'ui.welcome.btnText',
-						label: 'Text Mode',
-						action: () => {
-							Camera.setZoom();
-							setModeCallback('text');
-							this.end();
-						},
-					},
-					{
 						langKey: 'ui.welcome.btnGame',
 						label: 'Interactive Mode',
+						title: 'Continue the interactive experience.',
+						titleLangKey: 'ui.welcome.btnGameTitle',
+					},
+					{
+						langKey: 'ui.welcome.btnText',
+						label: 'Text Mode',
+						title: 'Browse the site in a standard accessible web format.',
+						titleLangKey: 'ui.welcome.btnTextTitle',
+						onSelected: () => {
+							Camera.setZoom();
+							onModeSet('text');
+							this.end();
+						},
 					},
 				],
 			},
@@ -208,13 +241,14 @@ class DialogController {
 					{
 						langKey: 'ui.welcome.btnContinue',
 						label: 'Start Exploring',
-						action: () => {
-							Camera.setZoom(
-								Camera.DEFAULT_SCALE,
-								4,
-								Engine.LJS.Ease.BEZIER(0.15, 0.05, 0.3, 1),
-								Engine.LJS.Ease.LINEAR()
-							);
+						title: 'Start exploring the portfolio environment',
+						titleLangKey: 'ui.welcome.btnContinueTitle',
+						onSelected: () => {
+							Camera.setZoom(Camera.DEFAULT_SCALE, {
+								duration: 4,
+								ease: Engine.LJS.Ease.BEZIER(0.15, 0.05, 0.3, 1),
+								panEase: Engine.LJS.Ease.LINEAR(),
+							});
 						},
 					},
 				],

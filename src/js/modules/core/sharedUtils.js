@@ -1,19 +1,19 @@
 /**
  * Parses an image string to find the optimal variant for Open Graph tags.
  * Seeks the smallest image that is at least 1200x630, preferring standard formats over WebP.
- * @param {string} imageStr - The raw image filename string.
+ * @param {string} imageFileName - The raw image filename string.
  * @returns {Object} an object containing the formatted url, width, and height.
  */
-export function parseImageVariant(imageStr) {
+export function parseImageVariant(imageFileName) {
 	let imgWidth = '1200';
 	let imgHeight = '630';
-	let finalImageUrl = `/assets/images/${imageStr}`;
+	let finalImageUrl = `/assets/images/${imageFileName}`;
 
-	if (imageStr.includes('__')) {
-		const extensionIndex = imageStr.lastIndexOf('.');
-		const originalExt = extensionIndex !== -1 ? imageStr.substring(extensionIndex) : '';
+	if (imageFileName.includes('__')) {
+		const extensionIndex = imageFileName.lastIndexOf('.');
+		const originalExt = extensionIndex !== -1 ? imageFileName.substring(extensionIndex) : '';
 		const withoutExtension =
-			extensionIndex !== -1 ? imageStr.substring(0, extensionIndex) : imageStr;
+			extensionIndex !== -1 ? imageFileName.substring(0, extensionIndex) : imageFileName;
 
 		const parts = withoutExtension.split('__');
 
@@ -55,7 +55,7 @@ export function parseImageVariant(imageStr) {
 
 			if (!bestToken.isWebp && bestToken.w === maxAvailableW) {
 				// The largest fallback image always uses the full tokenized filename
-				finalImageUrl = `/assets/images/${imageStr}`;
+				finalImageUrl = `/assets/images/${imageFileName}`;
 			} else {
 				// All other variants (and all WebPs) use the short token name
 				let sExt = originalExt;

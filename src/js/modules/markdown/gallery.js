@@ -104,11 +104,9 @@ export class Gallery {
 								renderedImg = `<img src="${img.href}" alt="${img.text}" title="${img.title || ''}" />`;
 							}
 
-							const ariaLabel = Lang.getHtmlString(
-								'ui.gallery.imageOpenModal',
-								null,
-								'Open image in fullscreen modal'
-							);
+							const ariaLabel = Lang.getHtmlString('ui.gallery.imageOpenModal', {
+								fallback: 'Open image in fullscreen modal',
+							});
 							galleryHtml += `\t<figure class="${config.itemClass}" tabindex="0" role="button" aria-label="${ariaLabel}">\n\t\t${renderedImg}\n\t</figure>\n`;
 						}
 					}
@@ -183,7 +181,7 @@ export class GalleryDisplay {
 		document.addEventListener('click', (e) => this.#handleClick(e));
 		document.addEventListener('keydown', (e) => this.#handleKeyDown(e));
 
-		Events.on('route:changed', () => {
+		Events.subscribe('route:changed', () => {
 			if (this.#activeModal) {
 				this.#activeModal.close();
 			}

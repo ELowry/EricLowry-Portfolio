@@ -5,20 +5,224 @@ import { Blog } from './blog.js';
 import { Content } from './content.js';
 import { Projects } from './projects.js';
 
+/** @typedef {import('./contentTree.js').ContentNode} ContentNode */
+
 /**
- * MetaController manages page metadata, updating document title, descriptions, and Open Graph tags.
- * Also provides metadata retrieval for UI preview cards.
+ * @typedef {Object} PageMetadata
+ * @property {string} pageTitle - The title text.
+ * @property {string|null} pageDescription - The meta description.
+ * @property {string} pageImage - Path to the full-size OG preview image.
+ * @property {string} pageImageAlt - Alt text for the OG preview image.
+ * @property {string} previewImage - Path to the image used in UI preview cards.
+ * @property {string} imgWidth - (px) OG preview image width.
+ * @property {string} imgHeight - (px) OG preview image height.
+ * @property {string} markdownUrl - Path to the underlying markdown content file.
+ */
+
+/**
+ * Manages page metadata.  
+ * Updates document titles, descriptions, and Open Graph tags.
+ *
+ * Provides metadata retrieval for UI preview cards.
  */
 class MetaController {
-	/** @type {Node[]} */
+	/**
+	 * Node list of the existing Open Graph image tags.
+	 * @type {Node[]}
+	 * @private
+	 */
 	#originalOgNodes = [];
 
-	/** @type {boolean} */
+	/**
+	 * Whether the meta tags have been overridden.
+	 * @type {boolean}
+	 * @private
+	 */
 	#hasOverriddenMeta = false;
 
 	/**
-	 * Constructor for MetaController.
+	 * @returns {string} "1200"
+	 * @constant
 	 */
+	static get DEFAULT_IMAGE_WIDTH() {
+		return '1200';
+	}
+
+	/**
+	 * @returns {string} "630"
+	 * @constant
+	 */
+	static get DEFAULT_IMAGE_HEIGHT() {
+		return '630';
+	}
+
+	/**
+	 * @returns {string} the default page title.
+	 * @constant
+	 */
+	static get DEFAULT_META_TITLE() {
+		return 'Eric Lowry';
+	}
+
+	/**
+	 * @returns {string} the suffix to append to all page titles
+	 * @constant
+	 */
+	static get META_TITLE_SUFFIX() {
+		return ' – Eric Lowry';
+	}
+
+	/**
+	 * @returns {string} the default page description.
+	 * @constant
+	 */
+	static get DEFAULT_META_DESCRIPTION() {
+		return 'Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, environment design, and interactive tech.';
+	}
+
+	/**
+	 * @returns {string} job title for JSON-LD.
+	 * @constant
+	 */
+	static get JSONLD_JOB_TITLE() {
+		return 'Systems-driven UX/UI Designer & Entrepreneur';
+	}
+
+	/**
+	 * @returns {string} the image path for the person entity in JSON-LD.
+	 * @constant
+	 */
+	static get JSONLD_IMAGE_PATH() {
+		return '/assets/images/eric_lowry_portrait__240-240.webp';
+	}
+
+	/**
+	 * @returns {Array<string>} list of social profile URLs for JSON-LD.
+	 * @constant
+	 */
+	static get JSONLD_SAME_AS() {
+		return ['https://github.com/ELowry'];
+	}
+
+	/**
+	 * @returns {string} description for llms.txt in JSON-LD.
+	 * @constant
+	 */
+	static get LLMS_TXT_DESCRIPTION() {
+		return 'A comprehensive index of portfolio content optimized for Large Language Models.';
+	}
+
+	/**
+	 * Blog markdown file path template.
+	 * @param {string} lang - Language code.
+	 * @param {string} date - Blog post date.
+	 * @returns {string} the full local path to the markdown file.
+	 * @private
+	 */
+	static #getBlogMarkdownPath(lang, date) {
+		return `/content/${lang}/blog/${date}.md`;
+	}
+
+	/**
+	 * Blog poster image path template.
+	 * @param {string} datePath - Blog post date without dashes.
+	 * @returns {string} the full local path to the image file.
+	 * @private
+	 */
+	static #getBlogImagePath(datePath) {
+		return `/assets/images/blog/${datePath}/poster.jpg`;
+	}
+
+	/**
+	 * Project markdown file path template.
+	 * @param {string} lang - Language code.
+	 * @param {string} projectId - Project ID (GitHub url ID).
+	 * @returns {string} the full local path to the markdown file.
+	 * @private
+	 */
+	static #getProjectMarkdownPath(lang, projectId) {
+		return `/content/${lang}/projects/${projectId}.md`;
+	}
+
+	/**
+	 * Project preview image path template.
+	 * @param {string} projectId - Project ID (GitHub url ID).
+	 * @returns {string} the full local path to the image file.
+	 * @private
+	 */
+	static #getProjectImagePath(projectId) {
+		return `/assets/images/projects/${projectId}/poster.jpg`;
+	}
+
+	/**
+	 *` llms.txt` JSON-LD reference.
+	 * @param {string} origin - `window.location.origin`.
+	 * @returns {Object} JSON-LD representation of the `llms.txt`.
+	 * @private
+	 */
+	static #getLlmsTxtJsonLd(origin) {
+		return {
+			'@type': 'CreativeWork',
+			name: 'Machine-readable index (llms.txt)',
+			description: MetaController.LLMS_TXT_DESCRIPTION,
+			encodingFormat: 'text/markdown',
+			url: `${origin}/llms.txt`,
+		};
+	}
+
+	/**
+	 * Raw markdown JSON-LD reference.
+	 * @param {string} origin - `window.location.origin`.
+	 * @param {string} markdownUrl - Path to the underlying markdown content file.
+	 * @returns {Object} JSON-LD representation of the markdown content file.
+	 * @private
+	 */
+	static #getMarkdownSourceJsonLd(origin, markdownUrl) {
+		return {
+			'@type': 'CreativeWork',
+			name: 'Raw Markdown source',
+			description: 'The raw markdown content source for this page.',
+			encodingFormat: 'text/markdown',
+			url: `${origin}${markdownUrl}`,
+		};
+	}
+
+	/**
+	 * Person reference for JSON-LD.
+	 * @param {string} origin - `window.location.origin`.
+	 * @returns {Object} JSON-LD representation of "moi".
+	 * @private
+	 */
+	static #getPersonJsonLd(origin) {
+		return {
+			'@type': 'Person',
+			'@id': `${origin}/#person`,
+			name: MetaController.DEFAULT_META_TITLE,
+			jobTitle: MetaController.JSONLD_JOB_TITLE,
+			url: `${origin}/`,
+			image: `${origin}${MetaController.JSONLD_IMAGE_PATH}`,
+			sameAs: MetaController.JSONLD_SAME_AS,
+		};
+	}
+
+	/**
+	 * Generates a default page metadata structure.
+	 * @returns {PageMetadata} a metadata object.
+	 * @private
+	 */
+	static #getDefaultMeta() {
+		return {
+			pageTitle: '',
+			pageDescription: null,
+			pageImage: '',
+			pageImageAlt: '',
+			previewImage: '',
+			imgWidth: MetaController.DEFAULT_IMAGE_WIDTH,
+			imgHeight: MetaController.DEFAULT_IMAGE_HEIGHT,
+			markdownUrl: '',
+		};
+	}
+
 	constructor() {
 		this.#originalOgNodes = Array.from(
 			document.querySelectorAll('meta[property^="og:image"]')
@@ -26,66 +230,49 @@ class MetaController {
 			return el.cloneNode(true);
 		});
 
-		Events.on('route:changed', (payload) => {
+		Events.subscribe('route:changed', (payload) => {
 			this.update(payload);
 		});
 
-		Events.on('lang:changed', () => {
+		Events.subscribe('lang:changed', () => {
 			this.#updateLanguageTags();
 		});
 	}
 
 	/**
-	 * Generates the base metadata structure with default values.
-	 * @returns {Object} The default metadata object.
-	 * @private
-	 */
-	#getDefaultMeta() {
-		return {
-			pageTitle: '',
-			pageDescription: null,
-			pageImage: '',
-			previewImage: '',
-			pageImageAlt: '',
-			imgWidth: '1200',
-			imgHeight: '630',
-			markdownUrl: '',
-		};
-	}
-
-	/**
-	 * Retrieves metadata for blog routes (both single blog post and blog index).
-	 * @param {string} path - The blog route path.
-	 * @returns {Promise<Object>} An object containing the formatted metadata.
+	 * Retrieves blog route metadata (blog index or individual posts).
+	 * @param {string} path - Path to the blog route.
+	 * @returns {Promise<PageMetadata>} the formatted metadata.
 	 * @private
 	 */
 	async #getBlogMeta(path) {
-		const meta = this.#getDefaultMeta();
+		const meta = MetaController.#getDefaultMeta();
 
 		if (path === 'blog') {
-			meta.pageTitle = Lang.getString('content.blog.title', null, null);
-			meta.pageDescription = Lang.getString('content.blog.description', null, null);
+			meta.pageTitle = Lang.getString('content.blog.title', { fallback: null });
+			meta.pageDescription = Lang.getString('content.blog.description', { fallback: null });
 		} else if (path.startsWith('blog/')) {
 			const date = path.substring(5);
 			try {
 				const blogIndex = await Blog.getIndex();
-				const entry = blogIndex.find((e) => e.date === date);
+				const blogPost = blogIndex.find((x) => x.date === date);
 
-				if (entry) {
-					meta.pageTitle = entry.title;
-					meta.pageImageAlt = entry.title;
-					if (entry.description) {
-						meta.pageDescription = entry.description;
+				if (blogPost) {
+					meta.pageTitle = blogPost.title;
+					meta.pageImageAlt = blogPost.title;
+					if (blogPost.description) {
+						meta.pageDescription = blogPost.description;
 					}
-					const datePath = entry.date.replace(/-/g, '');
-					meta.pageImage = `/assets/images/blog/${datePath}/poster.png`;
+					meta.pageImage = MetaController.#getBlogImagePath(
+						blogPost.date.replace(/-/g, '')
+					);
 					meta.previewImage = meta.pageImage;
 
-					const lang = entry.language || Lang.langCode || 'en_US';
-					meta.markdownUrl = `/content/${lang}/blog/${date}.md`;
+					const lang = blogPost.language || Lang.langCode || 'en_US';
+					meta.markdownUrl = MetaController.#getBlogMarkdownPath(lang, date);
 				}
 			} catch (error) {
-				console.error('Failed to get blog entry title:', error);
+				console.error('MetaController: Failed to get blog entry title:', error);
 			}
 		}
 
@@ -93,22 +280,24 @@ class MetaController {
 	}
 
 	/**
-	 * Retrieves metadata for project routes (both single project and project index).
-	 * @param {string} path - The project route path.
-	 * @returns {Promise<Object>} An object containing the formatted metadata.
+	 * Retrieves metadata for project routes (project index and individual single projects).
+	 * @param {string} path - Path to the project route.
+	 * @returns {Promise<PageMetadata>} the formatted metadata.
 	 * @private
 	 */
 	async #getProjectMeta(path) {
-		const meta = this.#getDefaultMeta();
+		const meta = MetaController.#getDefaultMeta();
 
 		if (path === 'projects') {
-			meta.pageTitle = Lang.getString('content.projects.title', null, 'Projects');
-			meta.pageDescription = Lang.getString('content.projects.description', null, null);
+			meta.pageTitle = Lang.getString('content.projects.title', { fallback: 'Projects' });
+			meta.pageDescription = Lang.getString('content.projects.description', {
+				fallback: null,
+			});
 		} else if (path.startsWith('projects/')) {
 			const repoName = path.substring(9);
 			try {
 				const projectIndex = await Projects.getIndex();
-				const project = projectIndex.find((p) => p.id === repoName);
+				const project = projectIndex.find((x) => x.id === repoName);
 
 				if (project) {
 					meta.pageTitle = project.title;
@@ -117,17 +306,17 @@ class MetaController {
 						meta.pageDescription = project.description;
 					}
 
-					meta.pageImage = `/assets/images/projects/${project.id}/poster.jpg`;
+					meta.pageImage = MetaController.#getProjectImagePath(project.id);
 					meta.previewImage = meta.pageImage;
 
-					meta.imgWidth = project.ogImageWidth || '1200';
-					meta.imgHeight = project.ogImageHeight || '630';
+					meta.imgWidth = project.ogImageWidth || MetaController.DEFAULT_IMAGE_WIDTH;
+					meta.imgHeight = project.ogImageHeight || MetaController.DEFAULT_IMAGE_HEIGHT;
 
 					const lang = Lang.langCode || 'en_US';
-					meta.markdownUrl = `/content/${lang}/projects/${project.id}.md`;
+					meta.markdownUrl = MetaController.#getProjectMarkdownPath(lang, project.id);
 				}
 			} catch (error) {
-				console.error('Failed to get project title:', error);
+				console.error('MetaController: Failed to get project title:', error);
 			}
 		}
 
@@ -135,14 +324,14 @@ class MetaController {
 	}
 
 	/**
-	 * Retrieves metadata for content tree nodes or standard pages.
-	 * @param {string} path - The content path.
-	 * @param {Object|null} [node=null] - Optional pre-resolved content node.
-	 * @returns {Object} An object containing the formatted metadata.
+	 * Retrieves tree node and standard page metadata.
+	 * @param {string} path - Path to the content.
+	 * @param {ContentNode|null} [node=null] - Pre-resolved content node.
+	 * @returns {PageMetadata} the formatted metadata.
 	 * @private
 	 */
 	#getStandardMeta(path, node = null) {
-		const meta = this.#getDefaultMeta();
+		const meta = MetaController.#getDefaultMeta();
 
 		if (path === '' || path === 'index.html') {
 			meta.markdownUrl = `/content/${Lang.langCode || 'en_US'}/index.md`;
@@ -161,23 +350,20 @@ class MetaController {
 			effectiveNode =
 				targetNode.type === 'content'
 					? targetNode
-					: targetNode.children?.find((child) => child.id === targetNode.id)
-						|| targetNode;
+					: targetNode.children?.find((x) => x.id === targetNode.id) || targetNode;
 		}
 
-		meta.pageTitle = Lang.getString(
-			titleKey,
-			null,
-			effectiveNode ? effectiveNode.title : path.split('/').pop()
-		);
-		meta.pageDescription = Lang.getString(descKey, null, null);
+		meta.pageTitle = Lang.getString(titleKey, {
+			fallback: effectiveNode ? effectiveNode.title : path.split('/').pop() || '',
+		});
+		meta.pageDescription = Lang.getString(descKey, { fallback: null });
 
 		if (effectiveNode && effectiveNode.file) {
 			meta.markdownUrl = `/content/${Lang.langCode || 'en_US'}/${effectiveNode.file}`;
 		}
 
 		if (effectiveNode && effectiveNode.image) {
-			meta.pageImageAlt = Lang.getString(altKey, null, meta.pageTitle);
+			meta.pageImageAlt = Lang.getString(altKey, { fallback: meta.pageTitle });
 			meta.pageImage = `/assets/images/${effectiveNode.image}`;
 
 			const parsedImg = parseImageVariant(effectiveNode.image);
@@ -190,12 +376,14 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the document and Open Graph titles.
-	 * @param {string} pageTitle - The specific page title, if any.
+	 * Updates the document title and Open Graph title.
+	 * @param {string|null} [pageTitle=null] - The page title.
 	 * @private
 	 */
-	#updateTitle(pageTitle) {
-		const siteName = Lang.getString('meta.title', null, 'Eric Lowry – Portfolio');
+	#updateTitle(pageTitle = null) {
+		const siteName = Lang.getString('meta.title', {
+			fallback: MetaController.DEFAULT_META_TITLE,
+		});
 
 		const ogSiteName = document.querySelector('meta[property="og:site_name"]');
 		if (ogSiteName) {
@@ -203,7 +391,7 @@ class MetaController {
 		}
 
 		if (pageTitle) {
-			document.title = `${pageTitle} – Eric Lowry`;
+			document.title = `${pageTitle}${MetaController.META_TITLE_SUFFIX}`;
 			const ogTitle = document.querySelector('meta[property="og:title"]');
 			if (ogTitle) {
 				ogTitle.setAttribute('content', pageTitle);
@@ -218,17 +406,16 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the document and Open Graph descriptions.
-	 * @param {string|null} pageDescription - The specific page description, if any.
+	 * Updates the document description and Open Graph description.
+	 * @param {string|null} [pageDescription=null] - The page description.
 	 * @private
 	 */
-	#updateDescription(pageDescription) {
-		const defaultDesc = Lang.getString(
-			'meta.description',
-			null,
-			'Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, environment design, and interactive tech.'
-		);
-		const finalDesc = pageDescription || defaultDesc;
+	#updateDescription(pageDescription = null) {
+		const finalDesc =
+			pageDescription
+			|| Lang.getString('meta.description', {
+				fallback: MetaController.DEFAULT_META_DESCRIPTION,
+			});
 
 		const descMeta = document.querySelector('meta[name="description"]');
 		if (descMeta) {
@@ -242,7 +429,7 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the canonical link tag and Open Graph URL tag to reflect the current page URL.
+	 * Updates the canonical link tag and Open Graph URL tag to the current page URL.
 	 * @private
 	 */
 	#updateCanonical() {
@@ -263,64 +450,43 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the JSON-LD structured data script tag to reflect current page title, description, URL, and raw markdown source.
-	 * @param {string} pageTitle - The specific page title.
-	 * @param {string|null} pageDescription - The specific page description.
-	 * @param {string} [markdownUrl=''] - Relative path to the page's raw markdown content.
+	 * Updates the JSON-LD structured data script tag to reflect page metadata.
+	 * @param {string} pageTitle - The page title.
+	 * @param {string|null} pageDescription - The page description.
+	 * @param {string} [markdownUrl=''] - Path to the underlying markdown content file.
 	 * @private
 	 */
 	#updateJsonLd(pageTitle, pageDescription, markdownUrl = '') {
 		const currentUrl = `${window.location.origin}${window.location.pathname}`;
-		const siteName = Lang.getString('meta.title', null, 'Eric Lowry – Portfolio');
-		const finalTitle = pageTitle ? `${pageTitle} – Eric Lowry` : siteName;
+		const siteName = Lang.getString('meta.title', {
+			fallback: MetaController.DEFAULT_META_TITLE,
+		});
+		const title = pageTitle ? `${pageTitle}${MetaController.META_TITLE_SUFFIX}` : siteName;
 
-		const defaultDesc = Lang.getString(
-			'meta.description',
-			null,
-			'Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, spatial logic, and interactive tech.'
-		);
-		const finalDesc = pageDescription || defaultDesc;
-
-		let scriptEl = document.querySelector('script[type="application/ld+json"]');
-
-		const subjectOfList = [
-			{
-				'@type': 'CreativeWork',
-				name: 'Machine-readable index (llms.txt)',
-				description:
-					'A comprehensive index of portfolio content optimized for Large Language Models.',
-				encodingFormat: 'text/markdown',
-				url: `${window.location.origin}/llms.txt`,
-			},
-		];
-
-		if (markdownUrl) {
-			subjectOfList.push({
-				'@type': 'CreativeWork',
-				name: 'Raw Markdown source',
-				description: 'The raw markdown content source for this page.',
-				encodingFormat: 'text/markdown',
-				url: `${window.location.origin}${markdownUrl}`,
+		const description =
+			pageDescription
+			|| Lang.getString('meta.description', {
+				fallback: MetaController.DEFAULT_META_DESCRIPTION,
 			});
+
+		let scriptElement = document.querySelector('script[type="application/ld+json"]');
+
+		const subjectOfList = [MetaController.#getLlmsTxtJsonLd(window.location.origin)];
+		if (markdownUrl) {
+			subjectOfList.push(
+				MetaController.#getMarkdownSourceJsonLd(window.location.origin, markdownUrl)
+			);
 		}
 
 		const jsonLdData = {
 			'@context': 'https://schema.org',
 			'@graph': [
-				{
-					'@type': 'Person',
-					'@id': `${window.location.origin}/#person`,
-					name: 'Eric Lowry',
-					jobTitle: 'Systems-driven UX/UI Designer & Entrepreneur',
-					url: `${window.location.origin}/`,
-					image: `${window.location.origin}/assets/images/eric_lowry_portrait__240-240.webp`,
-					sameAs: ['https://github.com/ELowry'],
-				},
+				MetaController.#getPersonJsonLd(window.location.origin),
 				{
 					'@type': 'WebPage',
 					'@id': `${currentUrl}#webpage`,
-					name: finalTitle,
-					description: finalDesc,
+					name: title,
+					description: description,
 					url: currentUrl,
 					author: {
 						'@id': `${window.location.origin}/#person`,
@@ -330,24 +496,32 @@ class MetaController {
 			],
 		};
 
-		if (!scriptEl) {
-			scriptEl = document.createElement('script');
-			scriptEl.setAttribute('type', 'application/ld+json');
-			document.head.appendChild(scriptEl);
+		if (!scriptElement) {
+			scriptElement = document.createElement('script');
+			scriptElement.setAttribute('type', 'application/ld+json');
+			document.head.appendChild(scriptElement);
 		}
 
-		scriptEl.textContent = JSON.stringify(jsonLdData, null, 2);
+		scriptElement.textContent = JSON.stringify(jsonLdData, null, 2);
 	}
 
 	/**
-	 * Updates the Open Graph image tags with a single, highly-compatible fallback image.
-	 * @param {string} pageImage - The relative path to the image, if any.
-	 * @param {string} pageImageAlt - The localized alt text for the image.
-	 * @param {string} width - The parsed width of the image.
-	 * @param {string} height - The parsed height of the image.
+	 * Updates the Open Graph image tags.
+	 * @param {Object} options - OPTIONS WRAPPER.
+	 * @param {string|null} [options.pageImage=null] - Image path.
+	 * @param {string|null} [options.pageImageAlt=null] - Image alt text.
+	 * @param {string|null} [options.width=null] - Image width.
+	 * @param {string|null} [options.height=null] - Image height.
 	 * @private
 	 */
-	#updateImage(pageImage, pageImageAlt, width, height) {
+	#updateImage({ pageImage = null, pageImageAlt = null, width = null, height = null } = {}) {
+		if (pageImage || this.#hasOverriddenMeta) {
+			const currentOgImageTags = document.querySelectorAll('meta[property^="og:image"]');
+			currentOgImageTags.forEach((imageTag) => {
+				imageTag.remove();
+			});
+		}
+
 		if (pageImage) {
 			const imageUrl =
 				pageImage.startsWith('http://')
@@ -356,12 +530,12 @@ class MetaController {
 					? pageImage
 					: `${window.location.origin}${pageImage}`;
 
-			const currentOgTags = document.querySelectorAll('meta[property^="og:image"]');
-			currentOgTags.forEach((el) => {
-				el.remove();
-			});
-
-			const head = document.head;
+			/**
+			 * Create a meta tag element.
+			 * @param {string} property - The meta tag.
+			 * @param {string} content - Its value.
+			 * @returns {HTMLMetaElement} the meta element.
+			 */
 			const createMeta = (property, content) => {
 				const meta = document.createElement('meta');
 				meta.setAttribute('property', property);
@@ -398,22 +572,22 @@ class MetaController {
 				}
 			}
 
-			head.appendChild(createMeta('og:image', imageUrl));
-			head.appendChild(createMeta('og:image:type', mimeType));
-			head.appendChild(createMeta('og:image:width', width));
-			head.appendChild(createMeta('og:image:height', height));
-			head.appendChild(createMeta('og:image:alt', pageImageAlt || 'Portfolio image'));
+			document.head.appendChild(createMeta('og:image', imageUrl));
+			document.head.appendChild(createMeta('og:image:type', mimeType));
+			if (width) {
+				document.head.appendChild(createMeta('og:image:width', width));
+			}
+			if (height) {
+				document.head.appendChild(createMeta('og:image:height', height));
+			}
+			document.head.appendChild(
+				createMeta('og:image:alt', pageImageAlt || 'Portfolio image')
+			);
 
 			this.#hasOverriddenMeta = true;
 		} else if (this.#hasOverriddenMeta) {
-			const currentOgTags = document.querySelectorAll('meta[property^="og:image"]');
-			currentOgTags.forEach((el) => {
-				el.remove();
-			});
-
-			const head = document.head;
 			this.#originalOgNodes.forEach((node) => {
-				head.appendChild(node.cloneNode(true));
+				document.head.appendChild(node.cloneNode(true));
 			});
 
 			this.#hasOverriddenMeta = false;
@@ -421,7 +595,7 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the document's language attributes for accessibility and translation tools.
+	 * Updates the document's language attributes.
 	 * @private
 	 */
 	#updateLanguageTags() {
@@ -442,10 +616,8 @@ class MetaController {
 	}
 
 	/**
-	 * Updates the document metadata based on the current route.
-	 * @param {Object} payload - The route:changed event payload.
-	 * @param {string} payload.path - The current route path.
-	 * @param {Object|null} payload.node - The current route's node.
+	 * Updates the document metadata.
+	 * @param {{ path: string, node: ContentNode|null }} payload - `route:changed` event payload.
 	 * @returns {Promise<void>}
 	 */
 	async update({ path, node }) {
@@ -458,21 +630,21 @@ class MetaController {
 		this.#updateDescription(metaData.pageDescription);
 		this.#updateCanonical();
 		this.#updateJsonLd(metaData.pageTitle, metaData.pageDescription, metaData.markdownUrl);
-		this.#updateImage(
-			metaData.pageImage,
-			metaData.pageImageAlt,
-			metaData.imgWidth,
-			metaData.imgHeight
-		);
+		this.#updateImage({
+			pageImage: metaData.pageImage,
+			pageImageAlt: metaData.pageImageAlt,
+			width: metaData.imgWidth,
+			height: metaData.imgHeight,
+		});
 		this.#updateLanguageTags();
 	}
 
 	/**
-	 * Retrieves formatted metadata for a given content path.
+	 * Get the metadata for a specific content path.
 	 *
-	 * @param {string} path - The route path to look up.
-	 * @param {Object|null} [node=null] - Optional node to skip the tree lookup if already known.
-	 * @returns {Promise<Object>} An object containing the page title, description, and image data.
+	 * @param {string} path - Path to the content.
+	 * @param {ContentNode|null} [node=null] - Skip the tree lookup by providing the node data.
+	 * @returns {Promise<PageMetadata>} the full page metadata object.
 	 */
 	async getMetadataForPath(path, node = null) {
 		if (path === 'blog' || path.startsWith('blog/')) {

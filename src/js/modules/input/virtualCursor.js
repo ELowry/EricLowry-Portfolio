@@ -60,13 +60,13 @@ class VirtualCursorController {
 		// Subscribe to events instead of polling
 		const activeLayers = [LayeredInput.LAYER_GAME_MODAL, LayeredInput.LAYER_TEXT];
 
-		Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
+		Events.subscribe(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
 			if (activeLayers.includes(layerId)) {
 				this.isLayerActive = true;
 			}
 		});
 
-		Events.on(LayeredInput.LAYER_DEACTIVATION_EVENT, (layerId) => {
+		Events.subscribe(LayeredInput.LAYER_DEACTIVATION_EVENT, (layerId) => {
 			if (activeLayers.includes(layerId)) {
 				// Fallback check in case active layers are stacked
 				this.isLayerActive = activeLayers.some((layer) =>

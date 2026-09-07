@@ -25,7 +25,7 @@ export class TextRenderer {
 			breadcrumbTemplate || document.getElementById('template-breadcrumb-item');
 		this.lastMode = null;
 
-		Events.on('route:changed', (payload) => {
+		Events.subscribe('route:changed', (payload) => {
 			const isTextToText = this.lastMode === 'text' && payload.mode === 'text';
 			this.lastMode = payload.mode;
 			this.#handleTextContent(payload, isTextToText);
@@ -132,7 +132,7 @@ export class TextRenderer {
 
 				this.app.executeViewTransition(() => {
 					this.render(path, node);
-					const loadingText = Lang.getHtmlString('ui.loading', null, 'Loading');
+					const loadingText = Lang.getHtmlString('ui.loading', { fallback: 'Loading' });
 					this.app.uiManager.elements.textContent.innerHTML = `
 						<div class="local-loading-indicator" role="status" aria-live="polite">
 							<div>
@@ -276,7 +276,9 @@ export class TextRenderer {
 			let finalHtml = '<div class="blog-index">';
 
 			if (enEntries.length === 0 && localEntries.length === 0) {
-				const noArticlesText = Lang.getHtmlString('blog.empty', null, 'No articles found.');
+				const noArticlesText = Lang.getHtmlString('blog.empty', {
+					fallback: 'No articles found.',
+				});
 				finalHtml += `<p class="blog-empty">${noArticlesText}</p>`;
 			} else {
 				if (currentLang === 'en_US') {
@@ -294,11 +296,9 @@ export class TextRenderer {
 						const separatorFallback = hasLocal
 							? 'Articles in English'
 							: 'Articles only available in English';
-						const separatorText = Lang.getHtmlString(
-							separatorKey,
-							null,
-							separatorFallback
-						);
+						const separatorText = Lang.getHtmlString(separatorKey, {
+							fallback: separatorFallback,
+						});
 
 						finalHtml += `
 							${hasLocal ? '<hr class="blog-separator" />' : ''}
@@ -315,11 +315,9 @@ export class TextRenderer {
 			this.#hydrateBlogLinks(this.app.uiManager.elements.textContent);
 		} catch (error) {
 			console.error('Failed to load blog index:', error);
-			const errorText = Lang.getHtmlString(
-				'blog.errorLoading',
-				null,
-				'Failed to load blog index.'
-			);
+			const errorText = Lang.getHtmlString('blog.errorLoading', {
+				fallback: 'Failed to load blog index.',
+			});
 			this.app.uiManager.displayContentInTextView(`<p class="error">${errorText}</p>`);
 		} finally {
 			if (needsLoading && !suppressLoading) {
@@ -359,7 +357,7 @@ export class TextRenderer {
 			const projects = await Projects.getIndex(abortSignal);
 
 			const projectsIntro = Lang.formatString(
-				Lang.getHtmlString('projects.intro', null, null),
+				Lang.getHtmlString('projects.intro', { fallback: null }),
 				[
 					'<a href="https://github.com/ELowry" class="md-external-link" target="_blank" rel="noopener noreferrer">',
 					'</a>',
@@ -390,11 +388,9 @@ export class TextRenderer {
 				});
 				finalHtml += '</ul>';
 			} else {
-				const noProjectsText = Lang.getHtmlString(
-					'projects.empty',
-					null,
-					'No projects found.'
-				);
+				const noProjectsText = Lang.getHtmlString('projects.empty', {
+					fallback: 'No projects found.',
+				});
 				finalHtml += `<p class="projects-empty">${noProjectsText}</p>`;
 			}
 
@@ -404,11 +400,9 @@ export class TextRenderer {
 			this.#hydrateProjectLinks(this.app.uiManager.elements.textContent);
 		} catch (error) {
 			console.error('Failed to load projects index:', error);
-			const errorText = Lang.getHtmlString(
-				'projects.errorLoading',
-				null,
-				'Failed to load projects index.'
-			);
+			const errorText = Lang.getHtmlString('projects.errorLoading', {
+				fallback: 'Failed to load projects index.',
+			});
 			this.app.uiManager.displayContentInTextView(`<p class="error">${errorText}</p>`);
 		} finally {
 			if (needsLoading && !suppressLoading) {
@@ -460,7 +454,7 @@ export class TextRenderer {
 		breadcrumbList.className = 'breadcrumbs';
 		breadcrumbList.setAttribute(
 			'aria-label',
-			Lang.getString('ui.breadcrumbsAria', null, 'Breadcrumb')
+			Lang.getString('ui.breadcrumbsAria', { fallback: 'Breadcrumb' })
 		);
 
 		let crumbIndex = 0;
@@ -492,7 +486,7 @@ export class TextRenderer {
 		};
 
 		// Root Crumb
-		const rootLabel = Lang.getHtmlString('portfolio.rootTitle', null, 'Welcome');
+		const rootLabel = Lang.getHtmlString('portfolio.rootTitle', { fallback: 'Welcome' });
 		createCrumb(rootLabel, '', currentNode ? currentNode.id === 'root' : false);
 
 		// Path Crumbs
@@ -507,11 +501,11 @@ export class TextRenderer {
 
 			if (currNode) {
 				const langKey = `content.${currentPath.replace(/\//g, '.')}.title`;
-				label = Lang.getHtmlString(langKey, null, currNode.title);
+				label = Lang.getHtmlString(langKey, { fallback: currNode.title });
 			} else if (part === 'blog') {
-				label = Lang.getHtmlString('blog.title', null, 'Blog');
+				label = Lang.getHtmlString('blog.title', { fallback: 'Blog' });
 			} else if (part === 'projects') {
-				label = Lang.getHtmlString('projects.title', null, 'Projects');
+				label = Lang.getHtmlString('projects.title', { fallback: 'Projects' });
 			}
 
 			createCrumb(label, currentPath, index === pathParts.length - 1);
@@ -540,7 +534,7 @@ export class TextRenderer {
 		navContainer.setAttribute('role', 'menu');
 		navContainer.setAttribute(
 			'aria-label',
-			Lang.getString('ui.categoryOptionsAria', null, 'Category options')
+			Lang.getString('ui.categoryOptionsAria', { fallback: 'Category options' })
 		);
 
 		let focusableIndex = 0;
@@ -556,7 +550,7 @@ export class TextRenderer {
 
 			// Label Logic
 			const langKey = `content.${childPath.replace(/\//g, '.')}.title`;
-			const label = Lang.getHtmlString(langKey, null, child.title);
+			const label = Lang.getHtmlString(langKey, { fallback: child.title });
 
 			// Create Element
 			const link = document.createElement('a');

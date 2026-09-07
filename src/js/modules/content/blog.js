@@ -3,14 +3,22 @@ import { escapeHtml, getCacheBuster } from '../core/sharedUtils.js';
 import { Lang } from '../ui/lang.js';
 
 /**
- * BlogController manages the fetching and caching of blog data.
- * It provides a centralized way to access the blog index.
+ * Manages blog data fetching and caching; is the centralized way to access the blog index.
  */
 class BlogController {
-	/** @type {Object[]|null} */
+	/**
+	 * The cached index of blog entries.
+	 * @type {Array<Object>|null}
+	 * @private
+	 */
 	#indexCache = null;
 
-	/** @type {Promise<Object[]>|null} */
+	/**
+	 * Pending fetch request promise.  
+	 * Used to deduplicate concurrent requests.
+	 * @type {Promise<Array<Object>>|null}
+	 * @private
+	 */
 	#fetchPromise = null;
 
 	/**
@@ -21,14 +29,55 @@ class BlogController {
 	}
 
 	/**
-	 * Internal method to perform the fetch operation.
-	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
-	 * @returns {Promise<Object[]>} The blog index data.
+	 * Get the blog index file path.
+	 * @param {string} cacheBuster - Cache buster value.
+	 * @returns {string} the local path to the blog index JSON.
+	 * @private
+	 */
+	static #getBlogIndexFilePath(cacheBuster) {
+		return `/content/blog-index.json?v=${cacheBuster}`;
+	}
+
+	/**
+	 * Get the giscus HTML code (https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md#isetconfigmessage).
+	 * @param {string} term - Giscus discussion term.
+	 * @param {string} themeUrl - Giscus theme URL.
+	 * @param {string} languageCode - Giscus widget language code.
+	 * @returns {string} the configured Giscus HTML code.
+	 */
+	static #getGiscusConfig(term, themeUrl, languageCode) {
+		return `
+			<hr />
+			<h2 id="Comments">${Lang.getHtmlString('blog.commentsTitle', { fallback: 'Comments' })}</h2>
+			<div style="margin-bottom: 2rem">
+				<giscus-widget
+					repo="ELowry/EricLowry-Portfolio"
+					repoid="R_kgDOQ0_lKQ"
+					category="Comments"
+					categoryid="DIC_kwDOQ0_lKc4C-Z28"
+					mapping="specific"
+					term="${term}"
+					strict="1"
+					reactionsenabled="1"
+					emitmetadata="0"
+					inputposition="bottom"
+					theme="${themeUrl}"
+					lang="${languageCode}"
+					loading="lazy"
+				></giscus-widget>
+			</div>
+		`;
+	}
+
+	/**
+	 * Perform the fetch operation.
+	 * @param {AbortSignal} [abortSignal=undefined] - Signal to cancel the fetch request.
+	 * @returns {Promise<Array<Object>>} the blog index data promise.
 	 * @private
 	 */
 	async #fetchIndexData(abortSignal) {
 		try {
-			const response = await fetch(`/content/blog-index.json?v=${getCacheBuster()}`, {
+			const response = await fetch(BlogController.#getBlogIndexFilePath(getCacheBuster()), {
 				signal: abortSignal,
 			});
 
@@ -46,10 +95,10 @@ class BlogController {
 	}
 
 	/**
-	 * Fetches the blog index JSON and caches it.
-	 * Concurrent calls will share the same promise to prevent multiple network requests.
-	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
-	 * @returns {Promise<Object[]>} The parsed blog index.
+	 * Fetch and cache the blog index JSON.  
+	 * Concurrent calls share a promise to avoid multiple network requests.
+	 * @param {AbortSignal} [abortSignal=undefined] - Signal to cancel the request.
+	 * @returns {Promise<Array<Object>>} The parsed blog index.
 	 */
 	async getIndex(abortSignal) {
 		if (this.#indexCache) {
@@ -72,12 +121,11 @@ class BlogController {
 	}
 
 	/**
-	 * Injects the Giscus comment widget at the end of the provided container.
-	 * Checks for user consent before loading third-party scripts.
-	 *
-	 * @param {HTMLElement} container - The element to append the comments to.
-	 * @param {string} term - The Giscus discussion term (e.g., "YYYY-MM-DD - Post Title").
-	 * @param {string} language - The language code of the blog post.
+	 * Injects a Giscus comment widget at the end of the provided container.  
+	 * Requires user concent to load.
+	 * @param {HTMLElement} container - The parent container.
+	 * @param {string} term - The Giscus discussion term (https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md#isetconfigmessage).
+	 * @param {string} language - The blog post's language code.
 	 */
 	async injectComments(container, term, language) {
 		const consentKey = 'giscusConsent';
@@ -87,13 +135,12 @@ class BlogController {
 		commentsContainer.className = 'blog-comments-section';
 		container.appendChild(commentsContainer);
 
+		/**
+		 * Renders the Giscus widget.
+		 */
 		const renderGiscus = async () => {
 			// Show a loading state while fetching Giscus
-			commentsContainer.innerHTML = `<p>${Lang.getHtmlString(
-				'blog.loadingComments',
-				null,
-				'Loading comments…'
-			)}</p>`;
+			commentsContainer.innerHTML = `<p>${Lang.getHtmlString('blog.loadingComments', { fallback: 'Loading comments…' })}</p>`;
 
 			// Load Giscus
 			await import('giscus');
@@ -102,27 +149,11 @@ class BlogController {
 			const escapedTerm = escapeHtml(term);
 			const escapedLang = escapeHtml(language.substring(0, 2));
 
-			commentsContainer.innerHTML = `
-				<hr />
-				<h2 id="Comments">${Lang.getHtmlString('blog.commentsTitle', null, 'Comments')}</h2>
-				<div style="margin-bottom: 2rem">
-					<giscus-widget
-						repo="ELowry/EricLowry-Portfolio"
-						repoid="R_kgDOQ0_lKQ"
-						category="Comments"
-						categoryid="DIC_kwDOQ0_lKc4C-Z28"
-						mapping="specific"
-						term="${escapedTerm}"
-						strict="1"
-						reactionsenabled="1"
-						emitmetadata="0"
-						inputposition="bottom"
-						theme="${themeUrl}"
-						lang="${escapedLang}"
-						loading="lazy"
-					></giscus-widget>
-				</div>
-			`;
+			commentsContainer.innerHTML = BlogController.#getGiscusConfig(
+				escapedTerm,
+				themeUrl,
+				escapedLang
+			);
 		};
 
 		if (hasConsent) {
@@ -132,20 +163,20 @@ class BlogController {
 			const template = document.getElementById('template-giscus-consent');
 
 			if (template) {
-				const clone = template.content.cloneNode(true);
+				const templateClone = template.content.cloneNode(true);
 
-				// Automatically populate localized text
-				Lang.performTranslation(clone);
+				// Automatic translation pass
+				Lang.performTranslation(templateClone);
 
-				const loadBtn = clone.querySelector('#load-comments-btn');
-				if (loadBtn) {
-					loadBtn.addEventListener('click', () => {
+				const loadButton = templateClone.querySelector('#load-comments-btn');
+				if (loadButton) {
+					loadButton.addEventListener('click', () => {
 						localStorage.setItem(consentKey, 'true');
 						renderGiscus();
 					});
 				}
 
-				commentsContainer.appendChild(clone);
+				commentsContainer.appendChild(templateClone);
 			} else {
 				console.error('Giscus consent template not found.');
 			}

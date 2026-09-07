@@ -112,7 +112,7 @@ class InputPromptsController {
 	async init() {
 		await this.#detectKeyboardLayout();
 
-		Events.on('input:typeChanged', (type) => {
+		Events.subscribe('input:typeChanged', (type) => {
 			this.currentType = type;
 			if (type === 'gamepad') {
 				this.#detectGamepadType();
@@ -127,7 +127,7 @@ class InputPromptsController {
 			}
 		});
 
-		Events.on('lang:changed', () => this.refresh());
+		Events.subscribe('lang:changed', () => this.refresh());
 
 		this.currentType = Input.lastInputType || 'mnk';
 		if (this.currentType === 'gamepad') {
@@ -214,7 +214,7 @@ class InputPromptsController {
 	 */
 	#applyTranslation(content) {
 		if (content.includes('.')) {
-			return Lang.getHtmlString(content, null, content);
+			return Lang.getHtmlString(content, { fallback: content });
 		}
 		return content;
 	}

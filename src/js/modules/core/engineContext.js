@@ -1,40 +1,48 @@
 /**
- * EngineContext holds the LittleJS engine reference and shared game engine state.
- * Decouples game subsystems from the main application controller.
+ * Holds the LittleJS engine reference and shared game engine state.  
+ * Decouples game code from `app.js`.
  */
 class EngineContext {
-	/** @type {Object|null} The LittleJS engine namespace. */
+	/**
+	 * The LittleJS engine.
+	 * @type {Object|null}
+	 */
 	LJS = null;
 
-	/** @type {boolean} Whether the game is currently paused. */
+	/**
+	 * Whether the game is currently paused.
+	 * @type {boolean}
+	 */
 	isPaused = false;
 
-	/** @type {{x: number, y: number}|null} Pending player start position. */
-	pendingStartPos = null;
-
-	/** @type {Function|null} Callback to handle input from the main application. */
-	onHandleInput = null;
+	/**
+	 * Pending player start position.
+	 * @type {{x: number, y: number}|null}
+	 */
+	pendingStartPosition = null;
 
 	/**
-	 * Creates an instance of EngineContext.
+	 * Callback to handle input from the main application.
+	 * @type {Function|null}
 	 */
+	onHandleInput = null;
+
 	constructor() {
 		this.LJS = null;
 		this.isPaused = false;
-		this.pendingStartPos = null;
+		this.pendingStartPosition = null;
 		this.onHandleInput = null;
 	}
 
 	/**
-	 * `true` if the game engine is actively updating and rendering.
-	 * @returns {boolean} whether the game engine is running.
+	 * @returns {boolean} whether the game engine is actively updating and rendering.
 	 */
 	get isRunning() {
 		return !this.isPaused;
 	}
 
 	/**
-	 * Sets the active LittleJS engine namespace.
+	 * Sets the active LittleJS engine.
 	 * @param {Object} engine - The LittleJS engine instance.
 	 */
 	setEngine(engine) {

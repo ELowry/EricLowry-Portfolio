@@ -56,7 +56,7 @@ class PropManagerController {
 			inputPrompt: InputPromptEntity,
 		};
 
-		Events.on('route:changed', (payload) => {
+		Events.subscribe('route:changed', (payload) => {
 			this.#handleRouteChanged(payload);
 		});
 	}
@@ -226,7 +226,7 @@ class PropManagerController {
 		}
 		this.#activeProps = [];
 
-		const mapNode = Content.getParentMapNode(path);
+		const mapNode = Content.getParentCategoryMapNode(path);
 		if (!mapNode) {
 			return;
 		}

@@ -21,19 +21,19 @@ export class TutorialManager {
 	 * Initialize touch-detection listeners required by the tutorial manager.
 	 */
 	init() {
-		Events.on('input:typeChanged', (type) => {
+		Events.subscribe('input:typeChanged', (type) => {
 			if (type === 'touch') {
 				this.tryShowTouchTutorial();
 			}
 		});
 
 		// Check for tutorial visibility on layer change events
-		Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
+		Events.subscribe(LayeredInput.LAYER_ACTIVATION_EVENT, (layerId) => {
 			if (layerId === LayeredInput.LAYER_GAME) {
 				this.tryShowTouchTutorial();
 			}
 		});
-		Events.on(LayeredInput.LAYER_DEACTIVATION_EVENT, () => {
+		Events.subscribe(LayeredInput.LAYER_DEACTIVATION_EVENT, () => {
 			this.tryShowTouchTutorial();
 		});
 	}

@@ -212,12 +212,12 @@ class AppController {
 			await InputPrompts.init();
 
 			// Listen for navigation and modal requests
-			Events.on('request:navigate', (path) => this.navigate(path));
-			Events.on('request:modal', (file) => this.loadContentInModal(file));
-			Events.on('request:entryX', (x) => {
+			Events.subscribe('request:navigate', (path) => this.navigate(path));
+			Events.subscribe('request:modal', (file) => this.loadContentInModal(file));
+			Events.subscribe('request:entryX', (x) => {
 				this.pendingEntryX = x;
 			});
-			Events.on('request:loading', ({ show, isModal }) => {
+			Events.subscribe('request:loading', ({ show, isModal }) => {
 				if (show) {
 					this.uiManager.showLoading(true, isModal);
 				} else {
@@ -226,13 +226,13 @@ class AppController {
 			});
 
 			// Listen for route changes
-			Events.on('route:changed', async (payload) => {
+			Events.subscribe('route:changed', async (payload) => {
 				if (payload.mode === 'game') {
 					await this.#handleGameTransition(payload);
 				}
 			});
 
-			Events.on('lang:changed', () => {
+			Events.subscribe('lang:changed', () => {
 				this.contentCache.clear();
 				const node = Content.findNodeByPath(Router.currentPath);
 				Events.emit('route:changed', {
@@ -435,7 +435,7 @@ class AppController {
 						};
 						this.pendingEntryX = undefined;
 					}
-					Engine.pendingStartPos = desiredStart;
+					Engine.pendingStartPosition = desiredStart;
 					this.teleportPlayer(desiredStart);
 				}
 			}

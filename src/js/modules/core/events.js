@@ -1,75 +1,54 @@
 /**
- * EventBus - lightweight pub/sub dispatcher for app-wide events.
- *
- * Methods:
- *  - on(event, handler)
- *  - off(event, handler)
- *  - emit(event, ...args)
- *  - once(event, handler)
+ * App-wide event dispatcher.
  */
 class EventBus {
 	/**
-	 * @property {Map<string, Set<Function>>} listeners - Registry of events and their subscriber callbacks.
+	 * Events and their subscriber callbacks.
+	 * @type {Map<string, Set<Function>>}
 	 */
-	constructor() {
-		this.listeners = new Map();
-	}
+	#listeners = new Map();
 
 	/**
 	 * Registers a handler for an event.
-	 * @param {string} event - The name of the event.
-	 * @param {Function} handler - The callback function to execute when the event is emitted.
+	 * @param {string} event - Event name.
+	 * @param {Function} onEmitted - Function to execute when the event is emitted.
 	 */
-	on(event, handler) {
-		if (!this.listeners.has(event)) {
-			this.listeners.set(event, new Set());
+	subscribe(event, onEmitted) {
+		if (!this.#listeners.has(event)) {
+			this.#listeners.set(event, new Set());
 		}
-		this.listeners.get(event).add(handler);
+		this.#listeners.get(event).add(onEmitted);
 	}
 
 	/**
 	 * Unregisters a handler for an event.
-	 * @param {string} event - The name of the event.
-	 * @param {Function} handler - The callback function to remove.
+	 * @param {string} event - Event name.
+	 * @param {Function} onEmitted - Function to unregister.
 	 */
-	off(event, handler) {
-		if (!this.listeners.has(event)) {
+	unsubscribe(event, onEmitted) {
+		if (!this.#listeners.has(event)) {
 			return;
 		}
-		const handlers = this.listeners.get(event);
-		for (const h of handlers) {
-			if (h === handler || h.original === handler) {
-				handlers.delete(h);
+		const subscribers = this.#listeners.get(event);
+		for (const subscriber of subscribers) {
+			if (subscriber === onEmitted || subscriber.original === onEmitted) {
+				subscribers.delete(subscriber);
 			}
 		}
 	}
 
 	/**
-	 * Emits an event to all registered handlers.
-	 * @param {string} event - The name of the event.
-	 * @param {...any} args - Arguments to pass to the handlers.
+	 * Emits an event to all registered subscribers.
+	 * @param {string} event - Event name.
+	 * @param {...any} args - Arguments to pass to subscriber functions.
 	 */
 	emit(event, ...args) {
-		if (!this.listeners.has(event)) {
+		if (!this.#listeners.has(event)) {
 			return;
 		}
-		for (const h of Array.from(this.listeners.get(event))) {
-			h(...args);
+		for (const subscriberFunction of Array.from(this.#listeners.get(event))) {
+			subscriberFunction(...args);
 		}
-	}
-
-	/**
-	 * Registers a handler for an event that will only be executed once.
-	 * @param {string} event - The name of the event.
-	 * @param {Function} handler - The callback function to execute when the event is emitted.
-	 */
-	once(event, handler) {
-		const wrapper = (...args) => {
-			handler(...args);
-			this.off(event, wrapper);
-		};
-		wrapper.original = handler;
-		this.on(event, wrapper);
 	}
 }
 

@@ -1,24 +1,50 @@
 import { Lang } from '../ui/lang.js';
 import { ContentTree } from './contentTree.js';
 
+/** @typedef {import('./contentTree.js').ContentNode} ContentNode */
+
 /**
- * ContentController provides utility methods for navigating and manipulating the `ContentTree`.
+ * @typedef {Object} InteractiveMapObject - Runtime representation of an interactive map object.
+ * @property {string} id - Unique ID (matches the destination child node ID).
+ * @property {{ x: number, y: number }} pos - Coordinates at which to spawn the object.
+ * @property {number} radius - The object's collision radius for interactions.
+ * @property {string} label - The localized label text.
+ * @property {boolean} below - Whether this object is 'below' the camera.
+ * @property {string} path - Slash-separated path in the content tree.
+ * @property {'category'|'content'|'separator'} type - Whether the node is a category, content, or visual separator.
+ * @property {string} [file=undefined] - Path to the markdown file relative to the content root.
+ */
+
+/**
+ * Utility methods for navigating and manipulating the `ContentTree`.
  */
 class ContentController {
-	/** @type {Map<string, string[]>} Internal mapping of markdown files to their tree paths. */
-	#fileToPaths = new Map();
+	/**
+	 * The content hierarchy tree's root node.
+	 * @type {ContentNode}
+	 */
+	tree;
 
 	/**
-	 * @property {import('./contentTree.js').ContentNode} tree - The root of the content hierarchical tree.
-	 * @property {boolean} isReady - True if the content tree has been fully processed.
+	 * Whether the content tree has been fully processed.
+	 * @type {boolean}
 	 */
+	isReady;
+
+	/**
+	 * Map of markdown files to their tree paths.
+	 * @type {Map<string, string[]>}
+	 * @private
+	 */
+	#fileToPaths = new Map();
+
 	constructor() {
 		this.tree = ContentTree;
 		this.isReady = false;
 	}
 
 	/**
-	 * @returns {number} the default padding added to the furthest objects when auto-calculating map bounds.
+	 * @returns {number} the default map bounds padding added beyond the furthers objects at either end.
 	 * @constant
 	 */
 	static get DEFAULT_BOUNDS_MARGIN() {
@@ -42,8 +68,8 @@ class ContentController {
 	}
 
 	/**
-	 * Walks the tree and loads all map configurations, auto-calculating bounds where missing.
-	 * @returns {Promise<void>}
+	 * Walks the tree and loads all map configurations.
+	 * @returns {Promise<void>} the compiled map data.
 	 */
 	async init() {
 		const promises = [];
@@ -51,6 +77,11 @@ class ContentController {
 		const mapConfigs = ContentController.MAP_CONFIGS;
 		const spriteConfigs = ContentController.SPRITE_CONFIGS;
 
+		/**
+		 * @param {ContentNode} node - The node to traverse.
+		 * @param {Array<string>} [pathSegments=[]] - The current path segments.
+		 * @returns {void}
+		 */
 		const traverse = (node, pathSegments = []) => {
 			if (node.type === 'separator') {
 				return;
@@ -70,8 +101,8 @@ class ContentController {
 			if (node.mapId) {
 				const loadMapData = async () => {
 					const expectedConfigPath = `${node.mapId}.config.js`;
-					const configKey = Object.keys(mapConfigs).find((k) =>
-						k.endsWith(expectedConfigPath)
+					const configKey = Object.keys(mapConfigs).find((x) =>
+						x.endsWith(expectedConfigPath)
 					);
 
 					if (!configKey) {
@@ -82,8 +113,8 @@ class ContentController {
 					const mapData = configModule.default || configModule;
 
 					const expectedSpritePath = `${node.mapId}.sprites.js`;
-					const spriteKey = Object.keys(spriteConfigs).find((k) =>
-						k.endsWith(expectedSpritePath)
+					const spriteKey = Object.keys(spriteConfigs).find((x) =>
+						x.endsWith(expectedSpritePath)
 					);
 
 					if (spriteKey) {
@@ -106,9 +137,7 @@ class ContentController {
 			}
 
 			if (node.children) {
-				node.children.forEach((child) => {
-					traverse(child, newPathSegments);
-				});
+				node.children.forEach((child) => traverse(child, newPathSegments));
 			}
 		};
 
@@ -148,70 +177,72 @@ class ContentController {
 			});
 
 			this.isReady = true;
-		} catch (err) {
-			console.error('Failed to load map configurations:', err);
+		} catch (error) {
+			console.error('Failed to load map configurations:', error);
 		}
 	}
 
 	/**
-	 * Finds a node in the ContentTree by its path.
-	 * @param {string} path - Path segments joined by `/` (e.g., `about/bio`)
-	 * @returns {Object|null} the matching node or null if not found
+	 * Finds a node in the `ContentTree` based on its path.
+	 * @param {string} path - Path segments joined by `/`.
+	 * @returns {ContentNode|null} the matching node, null if not found, or the full tree if no path is given.
 	 */
 	findNodeByPath(path) {
 		if (!path) {
 			return this.tree;
 		}
 
-		const parts = path.split('/').filter((p) => p);
-		let current = this.tree;
+		const parts = path.split('/').filter((x) => x);
+		let currentNode = this.tree;
 
 		for (const part of parts) {
-			if (!current.children) {
+			if (!currentNode.children) {
 				return null;
 			}
 
 			const partLower = part.toLowerCase();
-			const found = current.children.find((c) => c.id && c.id.toLowerCase() === partLower);
+			const found = currentNode.children.find(
+				(x) => x.id && x.id.toLowerCase() === partLower
+			);
 			if (!found) {
 				return null;
 			}
 
-			current = found;
+			currentNode = found;
 		}
 
-		return current;
+		return currentNode;
 	}
 
 	/**
-	 * Returns all tree paths associated with a specific markdown file.
-	 * @param {string} file - The markdown file path (e.g., `gaming/Unstant.md`)
-	 * @returns {string[]} an array of tree paths (e.g., `['gaming/Unstant', 'architecture/projects/Unstant']`)
+	 * Find all tree paths associated with a specific markdown file.
+	 * @param {string} filePath - The markdown file path relative to the contents folder.
+	 * @returns {Arrray<string>} an array of tree paths.
 	 */
-	findPathsByFile(file) {
-		if (!file) {
+	findPathsByFile(filePath) {
+		if (!filePath) {
 			return [];
 		}
 
-		// Normalize file path to remove leading/trailing slashes if any
-		const cleanFile = file.replace(/^\/|\/$/g, '');
+		const cleanFile = filePath.replace(/^\/|\/$/g, ''); // Remove leading/trailing slashes
+
 		return this.#fileToPaths.get(cleanFile) || [];
 	}
 
 	/**
-	 * Gets the parent map node (category) for a given path.
-	 * If the path points to content, returns the parent category.
-	 * If the path points to a category, returns that category.
-	 * @param {string} path - Path of the content or category
-	 * @returns {Object} the parent category node or the node itself
+	 * Get the nearest parent map category node for a given path.
+	 * If the node is content, returns the parent category.
+	 * If the node is a category, returns it directly.
+	 * @param {string} contentPath - Content or category path.
+	 * @returns {ContentNode} the parent category node or the node itself.
 	 */
-	getParentMapNode(path) {
-		if (!path) {
+	getParentCategoryMapNode(contentPath) {
+		if (!contentPath) {
 			return this.tree;
 		}
 
-		const parts = path.split('/').filter((p) => p);
-		const node = this.findNodeByPath(path);
+		const parts = contentPath.split('/').filter((p) => p);
+		const node = this.findNodeByPath(contentPath);
 
 		if (!node) {
 			return this.tree;
@@ -226,11 +257,10 @@ class ContentController {
 	}
 
 	/**
-	 * Builds interactive objects array for a map by combining children data with position data.
-	 * This is the bridge between content structure and game world layout.
-	 * @param {Object} mapNode - Category node with `mapData` and `children`
+	 * Get the interactive objects from given map node.
+	 * @param {ContentNode} mapNode - The category map node.
 	 * @param {string} currentPath - Current path in content tree
-	 * @returns {Array} an array of interactive objects with `pos`, `radius`, `file`, `label`, `path`, `id`
+	 * @returns {Array<InteractiveMapObject>} an array of interactive objects.
 	 */
 	buildMapObjects(mapNode, currentPath) {
 		if (!mapNode || !mapNode.mapData || !mapNode.children) {
@@ -245,36 +275,34 @@ class ContentController {
 				continue;
 			}
 
-			const posData = positions[child.id];
-			if (!posData) {
+			const currentPosition = positions[child.id];
+			if (!currentPosition) {
 				continue;
 			}
 
 			const keyBase = currentPath ? `${currentPath.replace('/', '.')}.${child.id}` : child.id;
-			const title = Lang.getString(`content.${keyBase}.title`, null, child.title || '');
+			const title = Lang.getString(`content.${keyBase}.title`, { fallback: child.title });
 
-			let label;
-			if (posData.label) {
-				label = Lang.getString(posData.label, null, posData.label);
-			} else {
-				label = Lang.getString(`content.${keyBase}.label`, null, title);
+			let label = Lang.getString(`content.${keyBase}.label`, { fallback: title });
+			if (currentPosition.label) {
+				label = Lang.getString(currentPosition.label, { fallback: currentPosition.label });
 			}
 
-			const obj = {
+			const newObject = {
 				id: child.id,
-				pos: { x: posData.x, y: posData.y },
-				radius: posData.radius || 1.5,
+				pos: { x: currentPosition.x, y: currentPosition.y },
+				radius: currentPosition.radius || 1.5,
 				label,
-				below: posData.below === true,
+				below: currentPosition.below === true,
 				path: currentPath ? `${currentPath}/${child.id}` : child.id,
 				type: child.type,
 			};
 
 			if (child.type === 'content' && child.file) {
-				obj.file = child.file;
+				newObject.file = child.file;
 			}
 
-			objects.push(obj);
+			objects.push(newObject);
 		}
 
 		return objects;

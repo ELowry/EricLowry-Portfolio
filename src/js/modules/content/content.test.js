@@ -40,24 +40,26 @@ describe('ContentController', () => {
 		});
 	});
 
-	describe('getParentMapNode', () => {
+	describe('getParentCategoryMapNode', () => {
 		it('should return the category node if the path points to a content node', () => {
-			const parent = Content.getParentMapNode('websites/lightweight-static/thenextmind');
+			const parent = Content.getParentCategoryMapNode(
+				'websites/lightweight-static/thenextmind'
+			);
 			expect(parent).not.toBeNull();
 			expect(parent.id).toBe('lightweight-static');
 			expect(parent.type).toBe('category');
 		});
 
 		it('should return the node itself if the path already points to a category', () => {
-			const node = Content.getParentMapNode('coaching-business/CinQ');
+			const node = Content.getParentCategoryMapNode('coaching-business/CinQ');
 			expect(node).not.toBeNull();
 			expect(node.id).toBe('CinQ');
 			expect(node.type).toBe('category');
 		});
 
 		it('should return the root tree for empty paths or failed lookups', () => {
-			expect(Content.getParentMapNode('').id).toBe('root');
-			expect(Content.getParentMapNode('invalid/path').id).toBe('root');
+			expect(Content.getParentCategoryMapNode('').id).toBe('root');
+			expect(Content.getParentCategoryMapNode('invalid/path').id).toBe('root');
 		});
 	});
 

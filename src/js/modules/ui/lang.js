@@ -128,11 +128,10 @@ class LangController {
 			}
 			this.data = await dataResponse.json();
 
-			document.documentElement.lang = this.getString(
-				'meta.lang',
-				this.data,
-				this.code.lang
-			).toLowerCase();
+			document.documentElement.lang = this.getString('meta.lang', {
+				data: this.data,
+				fallback: this.code.lang,
+			}).toLowerCase();
 
 			this.performTranslation();
 			this.setupLanguageSwitchers(availableLangs, bestLang);
@@ -337,7 +336,7 @@ class LangController {
 					}
 				}
 
-				const target = this.getString(config.path, data);
+				const target = this.getString(config.path, { data });
 				if (target === 'notFound') {
 					continue;
 				}
@@ -345,8 +344,10 @@ class LangController {
 				const translated = config.props
 					? this.formatString(
 							target,
-							config.props.map((p) => {
-								return typeof p === 'object' ? this.getString(p.path, data) : p;
+							config.props.map((prop) => {
+								return typeof prop === 'object'
+									? this.getString(prop.path, { data })
+									: prop;
 							})
 						)
 					: target;
@@ -378,7 +379,7 @@ class LangController {
 				continue;
 			}
 
-			const target = this.getString(path, data);
+			const target = this.getString(path, { data });
 
 			if (target === 'notFound') {
 				el.classList.add('langHide');
@@ -422,7 +423,7 @@ class LangController {
 					continue;
 				}
 
-				const target = this.getString(path, data);
+				const target = this.getString(path, { data });
 
 				if (target === 'notFound') {
 					el.classList.add('langHide');
@@ -462,18 +463,21 @@ class LangController {
 	/**
 	 * Returns a translated string from the loaded data object using a dot-path.
 	 * @param {string} pathString - Dot-separated path to the target string.
-	 * @param {Object} [data] - Data object to search (defaults to current data).
-	 * @param {string} [fallback] - Optional fallback string if the target path is not found.
+	 * @param {Object} options - OPTIONS WRAPPER.
+	 * @param {Object} [options.data=null] - Data object to search (defaults to current data).
+	 * @param {string} [options.fallback='notFound'] - Optional fallback string if the target path is not found.
 	 * @returns {string} the translated string, fallback, or `notFound`.
 	 */
-	getString(pathString, data = this.data, fallback = 'notFound') {
-		const searchData = data || this.data;
+	getString(pathString, { data = null, fallback = 'notFound' } = {}) {
+		if (!data) {
+			data = this.data;
+		}
 
 		const failSymbol = Symbol('fail');
-		const result = resolveDotPath(pathString, searchData, failSymbol);
+		const result = resolveDotPath(pathString, data, failSymbol);
 
 		if (result === failSymbol) {
-			if (searchData) {
+			if (data) {
 				console.warn(`Translation: no translation for "${pathString}"`);
 			}
 			return fallback;
@@ -485,13 +489,18 @@ class LangController {
 	/**
 	 * Returns a translated string processed and safe for HTML insertion.
 	 * @param {string} pathString - Dot-separated path to the target string.
-	 * @param {Object} [data] - Data object to search (defaults to current data).
-	 * @param {string} [fallback] - Optional fallback string if the target path is not found.
-	 * @param {boolean} [isPre=false] - Whether the target element is a <pre> block.
+	 * @param {Object} options - OPTIONS WRAPPER.
+	 * @param {Object} [options.data=null] - Data object to search (defaults to current data).
+	 * @param {string} [options.fallback='notFound'] - Optional fallback string if the target path is not found.
+	 * @param {boolean} [options.isPre=false] - Whether the target element is a <pre> block.
 	 * @returns {string} the translated and HTML-formatted string.
 	 */
-	getHtmlString(pathString, data = this.data, fallback = 'notFound', isPre = false) {
-		const rawString = this.getString(pathString, data, fallback);
+	getHtmlString(pathString, { data = null, fallback = 'notFound', isPre = false } = {}) {
+		if (!data) {
+			data = this.data;
+		}
+
+		const rawString = this.getString(pathString, { data, fallback });
 
 		if (rawString === 'notFound') {
 			return rawString;
@@ -530,7 +539,7 @@ class LangController {
 					button.setAttribute('tabindex', '-1');
 					button.setAttribute('lang', code.split('_')[0]);
 
-					const langName = this.getString(`languages.${code}`, null, code);
+					const langName = this.getString(`languages.${code}`, { fallback: code });
 					const switchTemplate = this.getString('ui.btnSwitchLanguage');
 
 					if (switchTemplate !== 'notFound') {

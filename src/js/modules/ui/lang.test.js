@@ -72,7 +72,9 @@ describe('LangController', () => {
 		});
 
 		it('should return a custom fallback if path is not found', () => {
-			expect(Lang.getString('ui.doesnt_exist', null, 'Fallback Text')).toBe('Fallback Text');
+			expect(Lang.getString('ui.doesnt_exist', { fallback: 'Fallback Text' })).toBe(
+				'Fallback Text'
+			);
 		});
 
 		it('should return "notFound" if no fallback is provided', () => {

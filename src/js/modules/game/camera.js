@@ -72,17 +72,15 @@ class CameraController {
 	/**
 	 * Sets the target zoom scale and pan behavior for the camera over time.
 	 * @param {number} scale - Target scale (e.g., 64 for close up, 32 for default).
-	 * @param {number} [duration=1] - Duration of the zoom in seconds.
-	 * @param {Function|null} [ease=null] - Easing function (defaults to smoothStep).
-	 * @param {number|null} [baselineY=null] - Target Y offset relative to player. If null, centers on player when zoomed in.
-	 * @param {Function|null} [panEase=null] - Easing function for the Y panning (defaults to the zoom ease).
+	 * @param {Object} options - OPTIONS WRAPPER.
+	 * @param {number} [options.duration=1] - Duration of the zoom in seconds.
+	 * @param {number|null} [options.baselineY=null] - Target Y offset relative to player. If null, centers on player when zoomed in.
+	 * @param {Function|null} [options.ease=null] - Easing function (defaults to smoothStep).
+	 * @param {Function|null} [options.panEase=null] - Easing function for the Y panning (defaults to the zoom ease).
 	 */
 	setZoom(
 		scale = CameraController.DEFAULT_SCALE,
-		duration = 1.0,
-		ease = null,
-		baselineY = null,
-		panEase = null
+		{ duration = 1.0, baselineY = null, ease = null, panEase = null }
 	) {
 		this.#targetScale = scale;
 		this.#startScale = Engine.LJS.cameraScale;
