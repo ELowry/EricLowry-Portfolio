@@ -140,6 +140,13 @@ Designer, développeur et entrepreneur avec plus de 10 ans d'expérience; spéci
 - **Recherche**:  
   Travail d'étude approfondi sur la logique spatiale des mondes virtuels et ses potentielles applications dans la conception architecturale du monde réel.
 
+### Édition et traduction
+
+- **Édition**:
+  _Change Has an Interest in You: It's not the who or the what, it's the who that determines your future_, Toby Coop, publié par Disruptive Learning Solutions en 2026.
+- **Traduction**:
+  _The Ogooué Delta_ (Édition anglophone), Jean Pierre Vande Weghe & Tariq Stévart, publié par Missouri Botanical Garden Press en 2021.
+
 ---
 
 ## Informations complémentaires
