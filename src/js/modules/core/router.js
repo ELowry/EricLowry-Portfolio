@@ -1,28 +1,31 @@
 import { sanitizePath, scrollToHash } from './sharedUtils.js';
 
 /**
- * RouterController handles application state via URL paths and the History API.
- * Manages clean path-based routing (e.g., `/game/about` instead of `?mode=game&path=about`).
+ * Handles application state based on URL paths and using the History API.
  */
 class RouterController {
-	/** @type {Object} The internal application state { mode, path }. */
+	/**
+	 * The internal application state { mode, path }.
+	 * @type {Object}
+	 */
 	state = {
 		mode: 'game',
 		path: '',
 	};
-	/** @type {Function|null} Callback triggered when the URL or state changes. */
-	onStateChange = null;
 
 	/**
-	 * Constructor for `RouterController`
+	 * URL or state change challback.
+	 * @type {Function|null}
 	 */
+	onStateChange = null;
+
 	constructor() {
-		window.addEventListener('popstate', (e) => {
-			if (e.state) {
-				if (e.state.mode === this.state.mode && e.state.path === this.state.path) {
+		window.addEventListener('popstate', (event) => {
+			if (event.state) {
+				if (event.state.mode === this.state.mode && event.state.path === this.state.path) {
 					return;
 				}
-				this.applyState(e.state);
+				this.applyState(event.state);
 			} else {
 				const parsed = this.#parsePathname(window.location.pathname);
 				if (parsed.mode === this.state.mode && parsed.path === this.state.path) {
@@ -36,32 +39,28 @@ class RouterController {
 	}
 
 	/**
-	 * Gets the current content path.
-	 * @returns {string} the current path
+	 * @returns {string} the current path.
 	 */
 	get currentPath() {
 		return this.state.path;
 	}
 
 	/**
-	 * Gets the current mode.
-	 * @returns {string} the current mode (`game` or `text`)
+	 * @returns {string} the current mode (`game` or `text`).
 	 */
 	get currentMode() {
 		return this.state.mode;
 	}
 
 	/**
-	 * Determines if the current path belongs to the dynamic blog system.
-	 * @returns {boolean} true if the path starts with `blog`.
+	 * @returns {boolean} hether the current path is for a blog page.
 	 */
 	get isBlogRoute() {
 		return this.state.path.startsWith('blog');
 	}
 
 	/**
-	 * Determines if the current path belongs to the dynamic project system.
-	 * @returns {boolean} true if the path starts with `projects`.
+	 * @returns {boolean} Whether the current path is for a project page.
 	 */
 	get isProjectRoute() {
 		return this.state.path.startsWith('projects');
@@ -78,9 +77,9 @@ class RouterController {
 	}
 
 	/**
-	 * Parses a window pathname into mode and path.
+	 * Get the mode and path from a pathname.
 	 * @param {string} rawPathname - The pathname to parse.
-	 * @returns {Object} the parsed state containing `{ mode, path }`.
+	 * @returns {Object} the parsed `{ mode, path }`.
 	 * @private
 	 */
 	#parsePathname(rawPathname) {
@@ -111,7 +110,7 @@ class RouterController {
 	 * Builds a standardized URL pathname for the given mode and clean path.
 	 * @param {string} mode - The active mode (`game` or `text`).
 	 * @param {string} cleanPath - The sanitized content path.
-	 * @returns {string} The formatted URL path.
+	 * @returns {string} the formatted URL path.
 	 * @private
 	 */
 	#buildUrl(mode, cleanPath) {
@@ -135,7 +134,7 @@ class RouterController {
 			let id = hash.substring(1);
 			try {
 				id = decodeURIComponent(id);
-			} catch (e) {
+			} catch {
 				// Malformed URI
 			}
 			const targetEl = document.getElementById(id);
@@ -172,11 +171,11 @@ class RouterController {
 	}
 
 	/**
-	 * Navigates to a specific mode and path.
+	 * Navigates to a specific mode and path.  
 	 * Pushes a new history entry and updates the URL.
 	 * @param {string} mode - `game` or `text`
-	 * @param {string} path - Content path (e.g., `about/bio`)
-	 * @param {string} [hash=''] - Optional anchor hash fragment (e.g., `#my-anchor`)
+	 * @param {string} path - Content path (e.g., `about/bio`).
+	 * @param {string} [hash=''] - Optional anchor hash fragment (e.g., `#anchor`).
 	 * @returns {Promise<void>}
 	 */
 	async go(mode, path, hash = '') {
@@ -208,8 +207,8 @@ class RouterController {
 
 	/**
 	 * Applies state to the application and triggers callback.
-	 * @param {Object} state - State object with mode and path
-	 * @param {boolean} updateApp - Whether to trigger the onStateChange callback
+	 * @param {Object} state - State object with mode and path.
+	 * @param {boolean} updateApp - Whether to trigger the onStateChange callback..
 	 * @returns {Promise<void>}
 	 */
 	async applyState(state, updateApp = true) {

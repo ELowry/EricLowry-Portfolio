@@ -134,7 +134,7 @@ describe('AnimatedEntity', () => {
 	it('should transition states and reset timer when setState is called', () => {
 		const timerSetSpy = vi.spyOn(entity.animTimer, 'set');
 
-		entity.setState('running', 0.5);
+		entity.setState('running', { delay: 0.5 });
 
 		expect(entity.prevState).toBe('idle');
 		expect(entity.currentState).toBe('running');
