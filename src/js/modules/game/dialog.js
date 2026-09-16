@@ -179,6 +179,10 @@ class DialogController {
 				text: 'Accessibility is important on the web! So if you prefer to explore my portfolio as a standard website, please select "Text Mode", otherwise you can continue this interactive experience:',
 				choices: [
 					{
+						langKey: 'ui.welcome.btnGame',
+						label: 'Interactive Mode',
+					},
+					{
 						langKey: 'ui.welcome.btnText',
 						label: 'Text Mode',
 						action: () => {
@@ -186,10 +190,6 @@ class DialogController {
 							setModeCallback('text');
 							this.end();
 						},
-					},
-					{
-						langKey: 'ui.welcome.btnGame',
-						label: 'Interactive Mode',
 					},
 				],
 			},
