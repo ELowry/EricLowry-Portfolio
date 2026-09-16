@@ -218,9 +218,9 @@ class DialogController {
 						label: 'Text Mode',
 						title: 'Browse the site in a standard accessible web format.',
 						titleLangKey: 'ui.welcome.btnTextTitle',
-						onSelected: () => {
+						action: () => {
 							Camera.setZoom();
-							onModeSet('text');
+							setModeCallback('text');
 							this.end();
 						},
 					},

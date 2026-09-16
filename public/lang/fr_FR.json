@@ -295,12 +295,14 @@
 		"welcome": {
 			"header": "Bienvenue sur le portfolio d'Eric Lowry",
 			"title": "Bienvenue",
-			"p1": "J'ai mis en place une petite expérience interactive qui vous permet d'explorer mon travail à travers un petit jeu ludique.",
-			"p2": "Toutefois, pour des raisons d'accessibilité ou d'efficacité, une interface simplifiée est disponible avec toutes les mêmes informations.",
-			"modeSelection": "Choissisez un mode d'affichage",
-			"btnGame": "Mode Exploration",
-			"btnText": "Mode Texte",
-			"note": "En mode exploration, vous pouvez appuyer sur la touche {0} à tout moment pour ouvrir un menu vous permettant de revenir au mode texte."
+			"d1": "Bonjour! Je m'appelle Eric Lowry, et je vous souhhaite la bienvenue sur ce portfolio interactif!\nPour commencer, je vous invite à cliquer sur ce bouton 🢆",
+			"d2": "Je tiens à ce que cette expérience soit accessible à tous·tes; donc si vous préférez naviguer sur un site web statique standard, veuillez choisir le \"Mode texte\". Sinon, vous pouvez continuer cette expérience interactive!",
+			"d3": "Si vous souhaitez changer de mode ou consulter les contrpoles du monde intéractif, appuiez sur <kbd data-prompt=\"menu\">[Esc]</kbd>.",
+			"d4": "⚠ ATTENTION: Je dessine actuellement des éléments graphiques de ce mode 🛠 donc l'expérience est un peu vide pour le moment. Cependant, l'ensemble des informations du portfolio sont bien présentes!",
+			"d5": "Malgré les graphismes temporaires, vous pourrez pouvoir vous déplacer librement, ouvrir les portes, et lire des informations du portfolio sur les panneaux après avoic cliqué ci-dessous:",
+			"btnText": "Mode texte",
+			"btnGame": "Mode interactif",
+			"btnContinue": "Démarrer"
 		},
 		"gameMenu": {
 			"header": "Menu",
