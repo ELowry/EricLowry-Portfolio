@@ -31,7 +31,7 @@ Le tour de magie de cette approche est que malgré des noms de fichiers un peu c
 
 ## Entre simplicité et fiabilité
 
-Comme j'ai rapidement décidé de rendre l'extension publique et _open source_, j'ai souhaité la rendre aussi simple d'usage que possible tout en m'assurant qu'elle soit adaptable, stable et respectueuse des standards modernes.
+Ayant rapidement décidé de rendre l'extension publique et _open source_, j'ai souhaité la rendre aussi simple d'usage que possible tout en m'assurant qu'elle reste adaptable, stable et respectueuse des standards modernes.
 
 Le fonctionnement de l'extension et la manière dont elle est codée et distribuée visent à réduire au minimum le besoin de maintenance tout en garantissant son bon fonctionnement et sa sécurité.
 

@@ -16,7 +16,7 @@
 
 ### Contexte
 
-J'ai créé cette page pour un partenaire commercial [CinQ](/content/fr_FR/gaming/CinQ.md). Il voulait un portfolio en ligne pour mettre en avant ses 25 ans d'expérience en leadership, en _data_ et en psychologie. Il souhaitait aussi commencer à développer son activité de conseil.
+J'ai créé cette page pour un partenaire commercial [CinQ](/content/fr_FR/gaming/CinQ.md). Celui-ci voulait un portfolio en ligne pour mettre en avant ses 25 ans d'expérience en leadership, en _data_ et en psychologie. Il souhaitait aussi commencer à développer son activité de conseil.
 
 L'objectif principal du site est de présenter ses compétences tout en offrant un moyen simple et direct aux client·e·s potentiel·le·s de le contacter.
 
@@ -44,4 +44,4 @@ Pour marquer le passage d'un domaine d'expertise à un autre, chaque section du 
 
 ### Architecture du site
 
-Ce site a été construit sur mon [framework statique léger](/content/fr_FR/websites/lightweight-static/lightweight-static.md) avec un peu de CSS et JavaScript moderne en complément pour gérer les effets de défilement dynamiques et le design visuel de la page.
+Ce site a été construit sur mon [framework statique léger](/content/fr_FR/websites/lightweight-static/lightweight-static.md) avec une petite part de CSS et de JavaScript moderne en complément pour gérer les effets de défilement dynamiques et le design visuel de la page.

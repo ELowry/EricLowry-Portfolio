@@ -16,15 +16,15 @@
 
 ### Contexte
 
-J'ai créé ce site pour une artiste qui voulait une vitrine pour ses services de commissions.  
-L'artiste souhaitait avoir un moyen direct de lier ses réseaux sociaux, de présenter ses tarifs et ses conditions de service, mais également un formulaire de contact pour commissionner son travail.  
+J'ai élaboré ce site pour une artiste qui voulait une vitrine pour ses services de commissions.  
+L'artiste souhaitait avoir un moyen direct de lier ses réseaux sociaux, de présenter ses tarifs et ses conditions de service de même qu'un formulaire de contact pour commissionner son travail.  
 De plus, le site et les formulaires devaient être entièrement bilingues (anglais et français).
 
 ### UX et design
 
-L'artiste avait déjà une identité visuelle et une palette de couleurs correspondante, mais m'a commandé un nouveau logo pour renforcer l'image de marque du site.
+L'artiste avait déjà une identité visuelle et une palette de couleurs correspondante, mais ielle m'a commandé un nouveau logo pour renforcer l'image de marque du site.
 
-J'ai conçu l'interface pour qu'elle soit aussi épurée et minimaliste que possible. En gardant le contenu discret, l'attention reste entièrement focalisée sur le travail et le message de l'artiste; ainsi, le logo et les photos de son travail restent les éléments visuels principaux de chaque page.
+J'ai conçu l'interface pour qu'elle soit aussi épurée et minimaliste que possible. En gardant le contenu discret, l'attention reste complètement focalisée sur le travail et le message de l'artiste; ainsi, le logo et les photos de son travail restent les éléments visuels principaux de chaque page.
 
 ### Architecture du site
 

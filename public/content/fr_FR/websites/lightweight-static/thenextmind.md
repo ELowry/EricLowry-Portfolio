@@ -24,7 +24,7 @@ Vu que les offres de l'entreprise sont conçues comme des expériences immersive
 
 ![Un collage d'images d'inspiration  ](/assets/images/websites/thenextmind/inspiration__240-270-webp_240-270_400-450-webp_400-450_480-540-webp_480-540.jpg)
 
-Pour capter l'identité de marque du cabinet, j'ai conçu l'interface en utilisant un subtil mélange de graphismes inspirés du terminal informatique et de design d'interfaces moderne, épuré et coloré. Pour ce faire, je me suis fortement inspiré d'œuvres de science-fiction et des esthétiques rétrofuturistes qu'on y retrouve.
+Pour capter l'identité de marque du cabinet, j'ai conçu l'interface par un subtil mélange de graphismes inspirés du terminal informatique et de design d'interfaces moderne, épuré et coloré. Pour ce faire, je me suis fortement inspiré d'œuvres de science-fiction et des esthétiques rétrofuturistes qu'on y retrouve.
 
 Le parcours utilisateur·rice commence par une simulation de chat dans un terminal interactif qui demande à l'utilisateur·ice si iel est "prêt·e pour le futur", puis lui demande son prénom. Ce prénom est ensuite injecté dynamiquement dans les textes tout au long du site pour créer un ton très personnalisé et conversationnel.
 

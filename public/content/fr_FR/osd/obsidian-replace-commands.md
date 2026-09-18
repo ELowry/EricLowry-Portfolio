@@ -17,14 +17,14 @@
 
 ![Le logo Obsidian et le texte Replace Commands, et trois bulles lisant plug-in, plugin et amazing plugin](/assets/images/osd/obsidian-replace-commands/cover__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1200-800-webp_1200-800.jpg)
 
-Dans le cadre de la correction, de la mise en page et de l'édition de plus de 300 articles pour CinQ [sur Medium](https://medium.com/odile-ai), j'ai décidé d'utiliser Obsidian afin de pouvoir mieux organiser et cataloguer l'ensemble. Rapidement, j'ai adopté Obsidian comme outil d'édition principal. Un des avantages du format Markdown utilisé par le logiciel est qu'il permet d'utiliser efficacement les expressions régulières (regex) pour automatiser la mise ne forme, corriger les tics d'écriture récurrents et nettoyer la structure des documents.
+Dans le cadre de la correction, de la mise en page et de l'édition de plus de 300 articles pour CinQ [sur Medium](https://medium.com/odile-ai), j'ai décidé d'utiliser Obsidian afin de pouvoir mieux organiser et cataloguer l'ensemble. Rapidement, j'ai adopté Obsidian comme outil d'édition principal. L'un des avantages du format Markdown utilisé par le logiciel est qu'il permet d'utiliser efficacement les expressions régulières (regex) pour automatiser la mise en forme, corriger les tics d'écriture récurrents et nettoyer la structure des documents.
 
 J'ai initialement utilisé la fonction de recherche avancée, mais à force de répéter d'innombrable fois les mêmes actions, j'ai décidé de chercher un outil permettant d'automatiser ce processus.  
 N'ayant pas trouvé d'outil intégré à Obsidian servant cette fonction, j'ai choisi de coder moi-même un plugin Obsidian adapté à mes besoins. Ce qui a commencé comme un outil codé de manière approximative pour mon usage personnel est rapidement devenu indispensable. J'ai donc choisi d'en peaufiner l'interface et la maniabilité afin de le publier sur la plateforme communautaire officielle d'Obsidian.
 
 ## Le concept
 
-Plutôt que d'entrer d'innombrables recherches et remplacements isolés l'une après l'autre, Obsidian Replace Commands permet aux utilisateur·rice·s de créer et de sauvegarder une séquence complète de commandes à exécuter en un seul clic. L'outil vise la simplicité, la flexibilité et peut être configuré très simplement.
+Plutôt que d'entrer d'innombrables recherches et remplacements isolés l'un après l'autre, Obsidian Replace Commands permet aux utilisateur·rice·s de créer et de sauvegarder une séquence complète de commandes à exécuter en un seul clic. L'outil vise la simplicité, la flexibilité et il peut être configuré très simplement.
 
 <!-- prettier-ignore -->
 | Gallery |  |  |
@@ -47,12 +47,12 @@ Obsidian Replace Commands gère l'ensemble des fonctionnalités des expressions 
 
 ## Expérience utilisateur·rice
 
-Dans l'optique de publier le plugin, j'ai prêté une attention toute particulière ) l'expérience utilisateur·rice d'Obsidian Replace Commands.  
+Dans l'optique de publier le plugin, j'ai prêté une attention toute particulière à l'expérience utilisateur·rice d'Obsidian Replace Commands.  
 Le système d'expressions régulières est connu pour sa complexité, et nécessite un ensemble d'éléments de contextualisation pour faire sens.
 
 ### Prévisualiser les résultats
 
-J'ai inclus une zone qui permet de rédiger un texte de vérification qui est transformé à chaque étape de la commande afin d'illustrer comment chaque étape fonctionne. Ceci permet à la fois de vérifier le bon fonctionnement de l'ensemble de la commande séquentielle, mais également de débusquer les étapes qui présentent des erreurs.
+J'ai inclus une zone permettant de rédiger un texte de vérification qui est transformé à chaque étape de la commande afin d'illustrer comment chaque étape fonctionne. Ceci permet à la fois de vérifier le bon fonctionnement de l'ensemble de la commande séquentielle, mais également de débusquer les étapes qui présentent des erreurs.
 
 ### Transformer en toute sécurité
 

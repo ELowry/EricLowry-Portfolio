@@ -27,7 +27,7 @@ InputLayers est un système de filtrage par calques qui s'ajoute à l'_Input Sys
 
 ![Conception graphique représentant comment InputLayers filtre les inputs pour que seuls les systèmes et les interfaces que vous voulez réagissent aux commandes entrantes](/assets/images/osd/inputlayers/concept__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
 
-Pour ce faire, je remplace les `InputActions` par défaut par des `LayeredActions`. Ces actions font toujours appel au système d'inputs standards d'Unity, mais filtrent chaque appel: elles n'enregistrent un input que si le calque qui est spécifiquement assigné est actuellement actif.Le système repose sur une hiérarchie en pile (stack):
+Pour ce faire, je remplace les `InputActions` par défaut par des `LayeredActions`. Ces actions font toujours appel au système d'inputs standards d'Unity, mais filtrent chaque appel: elles n'enregistrent un input que si le calque qui lui est spécifiquement assigné est actuellement actif. Le système repose sur une hiérarchie en pile (stack):
 
 ### La pile
 
@@ -35,7 +35,7 @@ Quand un élément d'interface ou un système de jeu passe au premier plan, son 
 
 ### Priorités
 
-Afin de servir aux jeux plus complexes, les calques sont organisés en niveaux de Priorité. Ceci garantit que les systèmes critiques prennent toujours le pas sur ceux de moindre priorité, quel que soit l'ordre dans lequel leurs calques sont activés.
+Afin d’être utile dans le cas de jeux plus complexes, les calques sont organisés en niveaux de Priorité. Ceci garantit que les systèmes critiques prennent toujours le pas sur ceux de moindre priorité, quel que soit l'ordre dans lequel leurs calques sont activés.
 
 ## Un outil pour les dévelopeur·euse·s
 
@@ -43,7 +43,7 @@ Pour qu'InputLayers soit utilisable par autrui, j'ai voulu soigner l'expérience
 
 ![Capture d'écran d'une fenêtre de l'éditeur Unity avec le menu de configuration d'InputLayers ouvert](/assets/images/osd/inputlayers/menu__240-130-webp_240-130_400-216-webp_400-216_600-324-webp_600-324_820-443-webp_820-443_1400-756-webp_1400-756_1920-1037-webp_1920-1037.jpg)
 
-L'utilisation d'un modèle `SingletonScriptableObject` comme colonne vertébrale pour toute la gestion d'états, la validation de la hiérarchie et la diffusion des événements permet d'utiliser l'asset facilement et simultanément avec deux métodes:
+L'utilisation d'un modèle `SingletonScriptableObject` comme colonne vertébrale pour toute la gestion d'états, la validation de la hiérarchie et la diffusion des événements permet d'utiliser l'asset facilement et simultanément avec deux méthodes:
 
 ![Conception graphique indiquant qu'InputLayers est entièrement fonctionnel via l'éditeur Unity ou via le code](/assets/images/osd/inputlayers/usability__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
 
@@ -53,11 +53,11 @@ Pour les game designers, les concepteurs d'interfaces, et le prototypage rapide,
 
 ### En codant
 
-Pour une architecture plus optimisée, il suffit d'utiliser la structure sérialisée `LayeredAction` dans un script. Ceci expose un _property drawer_ personnalisé dans l'_inspecteur_ qui permet facilement de choisir un calque et un input auquel réagir, tout en permettant au code de réagir programmatiquement aux _delegates_ C# (comme `onPerformedEvent` par exemple).
+Pour une architecture plus optimisée, il suffit d'utiliser la structure sérialisée `LayeredAction` dans un script. Ceci expose un _property drawer_ personnalisé dans l'_inspecteur_ qui permet facilement de choisir un calque et un input auxquels réagir, tout en permettant au code de réagir programmatiquement aux _delegates_ C# (comme `onPerformedEvent` par exemple).
 
 ### Robustesse
 
-Bien que le cœur d'InputLayers soit sa pile et son système d'événements, garantir un code stable et fiable a nécessité de développer quelques utilitaires spécialisés. J'ai codé des structures de données sur mesure, comme un `PseudoSerializableDictionary` pour étendre les caprices de sérialisation d'Unity, et une `StackableList` qui encadre l'ajout ou le retrait des calques sur la pile. J'ai aussi intégré un système de log étendu qui injecte des en-têtes colorés et formate les objets en JSON de manière lisible, ce qui simplifie grandement le débogage.
+Bien que le cœur d'InputLayers soit sa pile et son système d'événements, garantir un code stable et fiable a nécessité de développer quelques utilitaires spécialisés. J'ai alors codé des structures de données sur mesure, comme un `PseudoSerializableDictionary` pour étendre les caprices de sérialisation d'Unity, et une `StackableList` qui encadre l'ajout ou le retrait des calques sur la pile. J'ai aussi intégré un système de log étendu qui injecte des en-têtes colorés et formate les objets en JSON de manière lisible, ce qui simplifie grandement le débogage.
 
 ## Prise en main
 

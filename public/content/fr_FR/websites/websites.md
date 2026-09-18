@@ -2,7 +2,7 @@
 
 J'ai commencé le développement web dans les années 2000. Initialement, je modifiais des thèmes Myspace, Blogspot et phpBB, puis j'ai rapidement appris à coder en PHP pour créer des sites web complets, avec un peu de gestion de base de données.
 
-Déjà avec ces premiers travaux, la majorité de mes efforts était portée sur la qualité des interfaces et l'expérience utilisateur·rice. De nombreuses considérations fondamentales de la discipline sont comparables à celles que l'on doit se poser en architecture, ce qui s'est avéré avoir un impact majeur sur mon approche du web design sur le long terme. Alors que l'on utilise la technologie dans un nombre grandissant d'aspects de notre quotidien, je suis convaincu que comprendre comment les utilisateur·rice·s naviguent les espaces numériques est essentiel pour assurer le succès de la quasi-totalité des projets et systèmes avec lesquels on interagit.
+Déjà avec ces premiers travaux, la majorité de mes efforts était portée sur la qualité des interfaces et l'expérience utilisateur·rice. De nombreuses considérations fondamentales de la discipline sont comparables à celles que l'on doit se poser en architecture, ce qui s'est avéré avoir un impact majeur sur mon approche du web design sur le long terme. Alors que l'on utilise la technologie dans un nombre grandissant d'aspects de notre quotidien, je suis convaincu que comprendre comment les utilisateur·rice·s naviguent les espaces numériques est un point essentiel pour assurer le succès de la quasi-totalité des projets et systèmes avec lesquels on interagit.
 
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |
@@ -11,12 +11,12 @@ Déjà avec ces premiers travaux, la majorité de mes efforts était portée sur
 
 <!-- prettier-ignore end -->
 
-J'ai créé et maintenu un nombre important de sites pour des projets personnels et des clients en freelance. J'ai souvent utilisé WordPress, ainsi que codé des pages statiques à la maison. Récemment, cependant, j'ai concentré mes efforts de développement web sur la maîtrise de frameworks modernes et un plus grand contrôle sur ce que je déploie, ce qui a entraîné deux changements majeurs dans ma manière de travailler:
+J'ai créé et maintenu un nombre important de sites pour des projets personnels et des clients en freelance. J'ai souvent utilisé WordPress, ainsi que codé des pages statiques à la main. Récemment, cependant, j'ai concentré mes efforts de développement web sur la maîtrise de frameworks modernes et un plus grand contrôle sur ce que je déploie, ce qui a entraîné deux changements majeurs dans ma manière de travailler:
 
 - **Architecture statique réutilisable:**  
-  Pour les petits sites statiques, j'ai progressivement construit un ensemble de modules légers et d'outils structurels en `HTML`/`CSS`/`JavaScript`. Ce site web est en réalité la concrétisation de l'ensemble de ces éléments, que j'ai progressivement rassemblés et étendus pour former un [framework statique léger](/content/fr_FR/websites/lightweight-static/lightweight-static.md).
+  Pour les petits sites statiques, j'ai progressivement construit un ensemble de modules légers et d'outils structurels en `HTML`/`CSS`/`JavaScript`. Ce site web est en réalité la concrétisation de l'ensemble de ces éléments, que j'ai graduellement rassemblés et étendus pour former un [framework statique léger](/content/fr_FR/websites/lightweight-static/lightweight-static.md).
 - **Un CMS plus moderne:**  
-  Pour les sites dynamiques plus importants, j'ai délaissé WordPress au profit de [Statamic](https://statamic.com/). C'est un outil qui offre un bien meilleur contrôle sur l'ensemble de l'architecture du site et sur son design. Statamic élimine le besoin de s'appuyer sur des thèmes tiers, souvent trop lourds, et permet ainsi de designer avec bien plus de précision et de maitrise, tout en améliorant l'expérience des contributeur·rice·s au site. J'ai aussi profité de ce changement pour approfondir mes connaissances en matière d'administration système et de gestion du backend.
+  Pour les sites dynamiques plus importants, j'ai délaissé WordPress au profit de [Statamic](https://statamic.com/). C'est un outil qui offre un bien meilleur contrôle sur l'ensemble de l'architecture du site et sur son design. Statamic élimine le besoin de s'appuyer sur des thèmes tiers, habituellement trop lourds, et permet ainsi de designer avec bien plus de précision et de maitrise, tout en améliorant l'expérience des contributeur·rice·s au site. J'ai aussi profité de ce changement pour approfondir mes connaissances en matière d'administration système et de gestion du backend.
 
 L'un des plus grands avantages de ces deux approches est que je peux enfin garantir que les sites web que je crée respectent strictement les bonnes pratiques en matière de performances et d'accessibilité. Comme j'espère que ce portfolio le démontre, je pense qu'il est indispensable que la technologie reste fiable, rapide et accessible à tous·tes.
 

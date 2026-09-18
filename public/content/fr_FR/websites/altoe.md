@@ -30,10 +30,10 @@ La première étape a consisté à concevoir le logo et l'identité de marque. L
 
 ### Design UX
 
-En termes d'expérience utilisateur·rice, le principal défi était de structurer la longue liste de services de Daniel sans surcharger d'informations:
+En termes d'expérience utilisateur·rice, le principal défi était de structurer la longue liste de services de Daniel sans surcharger le site d'informations:
 
 - **Exploration progressive:**  
-  J'ai construit le site pour qu'il présente d'abord des concepts larges, puis permette aux utilisateur·rice·s d'entrer progressivement dans les détails à mesure qu'iels explorent les sous-pages et les menus.
+  J'ai construit le site pour qu'il présente d'abord des concepts larges, puis qu'il permette aux utilisateur·rice·s d'entrer progressivement dans les détails à mesure qu'iels explorent les sous-pages et les menus.
 - **_Landing pages_ ciblées:**  
   Avec le temps, nous avons adapté le cheminement pour que certaines sous-pages servent aussi de landing pages. Daniel peut ainsi envoyer ces liens spécifiques lorsqu'il initie un contact avec des prospects, en s'appuyant sur des formulaires de contact configurés sur mesure pour chaque séminaire ou offre.
 
@@ -51,6 +51,6 @@ En termes d'expérience utilisateur·rice, le principal défi était de structur
 - **Base du site:**  
   J'ai choisi un thème de base utilisant le constructeur de pages Elementor pour accélérer la mise en place initiale.
 - **Thème "enfant" sur mesure:**  
-  J'ai ensuite codé un thème "enfant" sur mesure pour gérer toute la personnalisation. Ceci m'a permis un niveau de contrôle qui aurait été difficile, voire impossible, avec un simple constructeurs de pages. Ce code sur mesure garantit que l'image de marque reste strictement cohérente sur chaque composant, applique un style graphique spécifique (comme des séparateurs en dégradé CSS personnalisés), et me permet de créer des éléments d'interface détaillés, comme des systèmes complexes d'accordéons pour afficher plus de contenu.
+  J'ai ensuite codé un thème "enfant" sur mesure pour gérer toute la personnalisation. Ceci m'a permis un niveau de contrôle qui aurait été difficile, voire impossible, avec un simple constructeurs de pages. Ce code sur mesure garantit que l'image de marque reste strictement cohérente sur chaque composant, applique un style graphique spécifique (comme des séparateurs en dégradé CSS personnalisés) et qu'il me permet de créer des éléments d'interface détaillés, comme des systèmes complexes d'accordéons pour afficher plus de contenu.
 - **Localisation:**  
-  J'ai implémenté et configuré Polylang pour rendre le site bilingue anglais-français, et j'ai personnellement relu les traductions anglaises pour m'assurer que le ton reste naturel et professionnel.
+  J'ai implémenté et configuré Polylang pour rendre le site bilingue anglais-français, et j'ai personnellement relu les traductions vers l'anglais pour veiller à ce que le ton reste naturel et professionnel.

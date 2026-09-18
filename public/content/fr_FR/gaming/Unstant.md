@@ -13,7 +13,7 @@
 
 Aujourd'hui encore, je suis convaincu que les aspects créatifs de la conception de jeux vidéo (_game design_) et de l'architecture ont bien plus en commun qu'on ne l'admet généralement. Les deux nécessitent de composer avec un ensemble de règles et de contraintes relativement rigides, dans le but de créer des espaces et des environnements destinés à être expérimentés, explorés et habités.
 
-C'était d'ailleurs le sujet central de mon [mémoire de fin d'études](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing), qui portait sur ce que le jeu vidéo peut apporter à l'architecture et aux architectes. Tout naturellement, pour mon projet de fin d'études (PFE) en architecture, je me suis associé à un camarade de promotion avec un intérêt partagé pour ces thématiques afin de mettre la théorie en pratique: nous avons créé un jeu vidéo de A à Z.
+C'était d'ailleurs le sujet central de mon [mémoire de fin d'études](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing), qui portait sur ce que le jeu vidéo peut apporter à l'architecture et aux architectes. Tout naturellement, pour ce projet de fin d'études (PFE) en architecture, je me suis associé à un camarade de promotion avec un intérêt partagé pour ces thématiques et, afin de mettre la théorie en pratique, nous avons créé un jeu vidéo de A à Z.
 
 À mi-chemin entre l'essai architectural et l'exercice de développement et de _game design_, Unstant était notre tentative d'appliquer les méthodes et les concepts de la conception spatiale au monde virtuel.
 
@@ -21,9 +21,9 @@ C'était d'ailleurs le sujet central de mon [mémoire de fin d'études](https://
 
 ## Le concept
 
-L'année 2015 était déjà fortement marquée par la transition de la société due aux réseaux sociaux et par une perception hyper-connectée, "caméra au poing", de l'espace et du quotidien (Instagram, Vine, vlogs, etc.). Unstant se voulait être une exploration viscérale de la façon dont notre esprit occulte les routines banales et les espaces de transition, pour plutôt compresser le temps autour de grands moments hypercondensés et irréels, liés à des lieux ou à des expériences mémorables. Comment créer des espaces et des expériences qui attirent l'attention sur ces "Unstants" (instants perdus ou oubliés de la vie quotidienne qui ne resteront pas gravés dans notre mémoire)?
+L'année 2015 était déjà fortement marquée par la transition de la société due aux réseaux sociaux et par une perception hyper-connectée, "caméra au poing", de l'espace et du quotidien (Instagram, Vine, vlogs, etc.). Unstant se voulait être une exploration viscérale de la façon dont notre esprit occulte les routines banales et les espaces de transition, pour plutôt compresser le temps autour de grands moments hypercondensés et irréels, liés à des lieux ou à des expériences mémorables. Comment créer des espaces et des expériences qui attirent l'attention sur ces "Unstants" (instants de la vie quotidienne perdus ou oubliés qui ne resteront pas gravés dans notre mémoire)?
 
-Nous avons donc créé un _walking simulator_ à la première personne qui explore des espaces banals du quotidien (une chambre, un salon, une cave, une gare…) pour les transformer en expériences virtuelles surréalistes et exceptionnelles. En jouant sur l'écoulement du temps et la contiguïté des espaces, le jeu pousse le joueur à questionner la façon dont notre esprit recoud des souvenirs isolés pour donner du sens à la réalité.
+Nous avons donc créé un _walking simulator_ à la première personne qui explore des espaces banals du quotidien (une chambre, un salon, une cave, une gare…) pour les transformer en expériences virtuelles surréalistes et exceptionnelles. En jouant sur l'écoulement du temps et la contiguïté des espaces, le jeu pousse le joueur à questionner la manière dont notre esprit recoud des souvenirs isolés pour donner du sens à la réalité.
 
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |
@@ -80,7 +80,7 @@ S'agissant d'un projet de fin d'études (PFE) en architecture, une part importan
 
 <!-- prettier-ignore end -->
 
-Ces documents ont exigé un effort particulier pour adapter le langage traditionnel du dessin d'architecture aux spécificités de la conception d'environnements 3D pour le jeu vidéo, telles que le chevauchement d'espaces, la téléportation du joueur, ou les boucles spatiales.
+Ces documents ont exigé un effort particulier pour adapter le langage traditionnel du dessin d'architecture aux spécificités de la conception d'environnements 3D pour le jeu vidéo, telles que le chevauchement d'espaces, la téléportation du joueur ou les boucles spatiales.
 
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |
