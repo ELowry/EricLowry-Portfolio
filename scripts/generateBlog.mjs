@@ -1,6 +1,7 @@
-import { createCanvas } from 'canvas';
+import { GlobalFonts, createCanvas } from '@napi-rs/canvas';
 import fs from 'fs';
 import { marked } from 'marked';
+import { fileURLToPath } from 'node:url';
 import path from 'path';
 
 import { escapeHtml, resolveDotPath } from '../src/js/modules/core/sharedUtils.js';
@@ -11,6 +12,10 @@ const CONTENT_DIR = 'public/content';
 const OUTPUT_FILE = 'public/content/blog-index.json';
 const BASE_URL = 'https://eric-lowry.com';
 const IMAGE_BASE_DIR = 'public/assets/images/blog';
+
+const __DIRNAME = path.dirname(fileURLToPath(import.meta.url));
+GlobalFonts.registerFromPath(path.join(__DIRNAME, 'SpaceGrotesk-Bold.ttf'), 'Space Grotesk');
+GlobalFonts.registerFromPath(path.join(__DIRNAME, 'VT323-Regular.ttf'), 'VT323');
 
 // Canvas configuration
 const CANVAS_WIDTH = 1200;

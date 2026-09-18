@@ -34,6 +34,7 @@ class ProjectGenerator {
 			'WinGet-Updater',
 			'obsidian-replace-commands',
 			'Qwant-Results-Filter',
+			'Site-specific-Email-Generator',
 			'obsidian-format-with-prettier',
 			'EricLowry-Portfolio',
 		];

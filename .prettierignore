@@ -24,6 +24,9 @@
 # Vite build output
 /dist
 
+# Fallow
+.fallow/
+
 # Logs
 *.log
 npm-debug.log*
@@ -49,6 +52,10 @@ yarn-error.log*
 /public/.obsidian/
 /public/obsidian/
 /public/.vault-nickname
+
+# Local note taking
+/public/LOCAL/
+/LOCAL/
 
 # Third-party vendor files
 /public/vendor/
