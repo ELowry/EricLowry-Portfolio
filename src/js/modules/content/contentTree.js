@@ -105,10 +105,10 @@ export const ContentTree = category({
 		content({ id: 'cv', title: 'Curriculum Vitae', file: 'cv.md' }),
 		content({ id: 'about', title: 'About Me', file: 'about.md' }),
 
-		// COACHING & BUSINESS
+		// COACHING & BUSINESS
 		category({
 			id: 'coaching-business',
-			title: 'Coaching & Business',
+			title: 'Coaching & Business',
 			mapId: 'coaching-business',
 			children: [
 				content({
@@ -120,7 +120,7 @@ export const ContentTree = category({
 				}),
 				category({
 					id: 'CinQ',
-					title: 'CinQ – Operations & Coaching',
+					title: 'CinQ – Operations & Coaching',
 					mapId: 'coaching-business/CinQ',
 					children: [
 						content({
@@ -146,7 +146,7 @@ export const ContentTree = category({
 				}),
 				content({
 					id: 'multimedia',
-					title: 'Content & Multimedia',
+					title: 'Content & Multimedia',
 					file: 'coaching-business/multimedia.md',
 					image: 'websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
@@ -168,7 +168,7 @@ export const ContentTree = category({
 				}),
 				content({
 					id: 'CinQ',
-					title: 'CinQ – corporate team training video game',
+					title: 'CinQ – corporate team training video game',
 					file: 'gaming/CinQ.md',
 					image: 'gaming/cinq/van__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
@@ -241,19 +241,19 @@ export const ContentTree = category({
 		// WEBSITES
 		category({
 			id: 'websites',
-			title: 'Web Development & Design',
+			title: 'Web Development & Design',
 			mapId: 'websites',
 			children: [
 				content({
 					id: 'websites',
-					title: 'Web Development & Design',
+					title: 'Web Development & Design',
 					file: 'websites/websites.md',
 					hidden: true,
 					image: 'websites/luzech/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
 				content({
 					id: 'CinQ',
-					title: 'CinQ – corporate team training video game',
+					title: 'CinQ – corporate team training video game',
 					file: 'websites/CinQ.md',
 					image: 'websites/CinQ/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
 				}),
@@ -318,7 +318,7 @@ export const ContentTree = category({
 			children: [
 				content({
 					id: 'architecture',
-					title: 'ENSA-V & ENSP-V',
+					title: 'ENSA-V & ENSP-V',
 					file: 'architecture/architecture.md',
 					hidden: true,
 					image: '/architecture/station/3D2__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg',
@@ -338,7 +338,7 @@ export const ContentTree = category({
 						content({ id: 'Unstant', title: 'Unstant', file: 'gaming/Unstant.md' }),
 						content({
 							id: 'BASELAND',
-							title: 'BASELAND – Virtual Lanscape',
+							title: 'BASELAND – Virtual Lanscape',
 							file: 'architecture/projects/BASELAND.md',
 							image: '/architecture/BASELAND/plaza__240-180-webp_240-180_400-300-webp_400-300_600-450-webp_600-450_800-600-webp_800-600.jpg',
 						}),

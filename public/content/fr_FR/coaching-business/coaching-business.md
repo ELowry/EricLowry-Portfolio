@@ -13,7 +13,7 @@ Cette expérience pratique, à la croisée de plusieurs disciplines, m’a permi
 
 Vous pourrez découvrir ci-dessous mon travail en gestion d'entreprise, coaching et marketing:
 
-- **[CinQ – Opérations et coaching](/content/fr_FR/coaching-business/CinQ.md):**  
+- **[CinQ – Opérations et coaching](/content/fr_FR/coaching-business/CinQ.md):**  
   Une présentation approfondie de mon rôle dans la création de Disruptive Learning Solutions, le processus de production en mode agile et l’animation de formations d'équipes exécutives.
 - **[Stratégie de contenu et multimédia](/content/fr_FR/coaching-business/multimedia.md):**  
   Un aperçu de mon travail sur la création d'un podcast, la publication d'ouvrages numériques et le pilotage de la stratégie de _content marketing_ B2B.

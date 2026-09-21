@@ -49,6 +49,7 @@ export default [
 				},
 			],
 			'no-useless-assignment': 'warn',
+			'no-irregular-whitespace': 'off',
 
 			'jsdoc/check-types': 'off',
 			'jsdoc/no-defaults': 'off',

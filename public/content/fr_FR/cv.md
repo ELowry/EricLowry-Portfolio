@@ -24,7 +24,7 @@ Designer, développeur et entrepreneur avec plus de 10 ans d'expérience; spéci
 
 ### CinQ (Disruptive Learning Solutions)
 
-**Co-fondateur et directeur UX / UI** (2016 – présent)  
+**Co-fondateur et directeur UX / UI** (2016 – présent)  
 **[fr.playcinq.com](https://fr.playcinq.com)**
 
 - **Stratégie produit**:  

@@ -354,9 +354,9 @@ function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 	const safeTitle = escapeHtml(entry.title);
 
 	const replacementMeta = `<!-- OG_META_START -->
-		<title>${safeTitle} – Eric Lowry</title>
+		<title>${safeTitle} – Eric Lowry</title>
 		
-		<meta name="description" content="${safeTitle} – Published on ${entry.date}." />
+		<meta name="description" content="${safeTitle} – Published on ${entry.date}." />
 		<meta name="author" content="Eric Lowry" />
 		<meta name="language" content="${entry.language === 'en_US' ? 'EN' : 'FR'}" />
 
@@ -365,12 +365,12 @@ function generateStaticBlogHtml(entry, baseHtmlContent, content) {
 
 		<link rel="canonical" href="https://eric-lowry.com/blog/${entry.date}" />
 
-		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
 		<meta property="og:locale" content="${entry.language}" />
 		<meta property="og:title" content="${safeTitle}" />
 		<meta property="og:type" content="article" />
 		<meta property="og:url" content="https://eric-lowry.com/blog/${entry.date}" />
-		<meta property="og:description" content="${safeTitle} – Published on ${entry.date}." />
+		<meta property="og:description" content="${safeTitle} – Published on ${entry.date}." />
 		<meta property="og:image" content="${imageUrl}" />
 		<meta property="og:image:type" content="image/png" />
 		<meta property="og:image:width" content="1200" />

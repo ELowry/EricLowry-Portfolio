@@ -1,4 +1,4 @@
-# CinQ – Operations & Coaching
+# CinQ – Operations & Coaching
 
 > [!SUMMARY]
 >

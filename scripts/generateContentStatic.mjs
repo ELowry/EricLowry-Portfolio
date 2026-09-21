@@ -138,7 +138,7 @@ async function generateStaticPage(node, routePath) {
 	}
 
 	const replacementMeta = `<!-- OG_META_START -->
-		<title>${safeTitle} – Eric Lowry</title>
+		<title>${safeTitle} – Eric Lowry</title>
 		
 		<meta name="description" content="${safeDesc}" />
 		<meta name="author" content="Eric Lowry" />
@@ -151,7 +151,7 @@ async function generateStaticPage(node, routePath) {
 		${hrefLangs}
 		<link rel="alternate" hreflang="x-default" href="${BASE_URL}/__MODE__/${routePath}" />
 
-		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
 		<meta property="og:locale" content="en_US" />
 		<meta property="og:title" content="${safeTitle}" />
 		<meta property="og:type" content="article" />

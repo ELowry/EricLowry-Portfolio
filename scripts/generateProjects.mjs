@@ -173,7 +173,7 @@ class ProjectGenerator {
 		const safeDesc = escapeHtml(data.description);
 
 		const replacementMeta = `<!-- OG_META_START -->
-		<title>${safeTitle} – Eric Lowry</title>
+		<title>${safeTitle} – Eric Lowry</title>
 		
 		<meta name="description" content="${safeDesc}" />
 		<meta name="author" content="Eric Lowry" />
@@ -184,7 +184,7 @@ class ProjectGenerator {
 
 		<link rel="canonical" href="https://eric-lowry.com/projects/${data.id}" />
 
-		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
 		<meta property="og:locale" content="en_US" />
 		<meta property="og:title" content="${safeTitle}" />
 		<meta property="og:type" content="article" />

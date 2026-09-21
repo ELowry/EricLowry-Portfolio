@@ -195,7 +195,7 @@ class MetaController {
 	 * @private
 	 */
 	#updateTitle(pageTitle) {
-		const siteName = Lang.getString('meta.title', null, 'Eric Lowry – Portfolio');
+		const siteName = Lang.getString('meta.title', null, 'Eric Lowry – Portfolio');
 
 		const ogSiteName = document.querySelector('meta[property="og:site_name"]');
 		if (ogSiteName) {
@@ -203,7 +203,7 @@ class MetaController {
 		}
 
 		if (pageTitle) {
-			document.title = `${pageTitle} – Eric Lowry`;
+			document.title = `${pageTitle} – Eric Lowry`;
 			const ogTitle = document.querySelector('meta[property="og:title"]');
 			if (ogTitle) {
 				ogTitle.setAttribute('content', pageTitle);
@@ -271,8 +271,8 @@ class MetaController {
 	 */
 	#updateJsonLd(pageTitle, pageDescription, markdownUrl = '') {
 		const currentUrl = `${window.location.origin}${window.location.pathname}`;
-		const siteName = Lang.getString('meta.title', null, 'Eric Lowry – Portfolio');
-		const finalTitle = pageTitle ? `${pageTitle} – Eric Lowry` : siteName;
+		const siteName = Lang.getString('meta.title', null, 'Eric Lowry – Portfolio');
+		const finalTitle = pageTitle ? `${pageTitle} – Eric Lowry` : siteName;
 
 		const defaultDesc = Lang.getString(
 			'meta.description',

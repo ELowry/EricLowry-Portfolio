@@ -1,4 +1,4 @@
-# CinQ – Opérations et Coaching
+# CinQ – Opérations et Coaching
 
 > [!RÉSUMÉ]
 >

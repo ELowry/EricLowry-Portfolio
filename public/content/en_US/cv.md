@@ -24,7 +24,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 
 ### CinQ (Disruptive Learning Solutions)
 
-**Founding Partner / UX/UI Director** (2016 – Present)  
+**Founding Partner / UX/UI Director** (2016–Present)  
 **[playcinq.com](https://playcinq.com)**
 
 - **Product Strategy**:  

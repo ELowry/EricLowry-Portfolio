@@ -42,7 +42,7 @@ I am a strong advocate for open-source development, actively building tools and 
 
 ### CinQ (Disruptive Learning Solutions)
 
-**Founding Partner / Director of Product & Operations** (2016 – 2026)  
+**Founding Partner / Director of Product & Operations** (2016 – 2026)  
 **[playcinq.com](https://playcinq.com)**
 
 - **Product Strategy**:  

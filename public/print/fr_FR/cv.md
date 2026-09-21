@@ -42,7 +42,7 @@ Enfin, fervent défenseur du développement open source, je crée activement des
 
 ### CinQ (Disruptive Learning Solutions)
 
-**Co-fondateur et directeur produit et opérations** (2016 – présent)  
+**Co-fondateur et directeur produit et opérations** (2016 – présent)  
 **[fr.playcinq.com](https://fr.playcinq.com)**
 
 - **Stratégie produit**:  
