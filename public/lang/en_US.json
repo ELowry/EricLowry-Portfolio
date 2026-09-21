@@ -1,6 +1,6 @@
 {
 	"meta": {
-		"title": "Eric Lowry – Portfolio",
+		"title": "Eric Lowry – Portfolio",
 		"description": "Systems-driven UX/UI designer and entrepreneur with 10+ years of experience. Specializing in Unity3D immersive training, environment design, and interactive tech.",
 		"lang": "EN",
 		"rss": "/feed-en_US.xml",
@@ -63,7 +63,7 @@
 					"imageAlt": "A screenshot from the game Unstant showing an artistically rendered view of a yellow desert with a red buoy"
 				},
 				"BASELAND": {
-					"title": "'BASELAND – Virtual Lanscape",
+					"title": "'BASELAND – Virtual Lanscape",
 					"label": "BASELAND",
 					"description": "Learn how I overhauled a massive, collaborative digital landscape model by engineering a stylized visual identity and an automated 3D asset workflow.",
 					"imageAlt": "A stylized 3D render of a plaza with trees growing out of a large pool"
@@ -106,7 +106,7 @@
 			},
 
 			"CinQ": {
-				"title": "CinQ – Operations & Coaching",
+				"title": "CinQ – Operations & Coaching",
 				"label": "CinQ Business",
 				"description": "An overview of my role as co-founder of Disruptive Learning Solutions, managing agile product cycles, B2B sales, and executive team coaching.",
 				"imageAlt": "Photos of in-person The Heist events with people using physical maps to navigate",
@@ -386,6 +386,10 @@
 		"intro": "This is a slection of repositories from my {0}GitHub page{1} that I have mirrored, providing convenient clutter-free pages.",
 		"errorLoading": "Failed to load projects index.",
 		"btnViewGitHub": "View in GitHub"
+	},
+	"documents": {
+		"cv": "Eric Lowry - Full CV",
+		"cvShort": "Eric Lowry - Condensed CV"
 	},
 	"alerts": {
 		"warning": "Warning"

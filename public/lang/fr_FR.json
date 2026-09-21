@@ -1,6 +1,6 @@
 {
 	"meta": {
-		"title": "Eric Lowry – Portfolio",
+		"title": "Eric Lowry – Portfolio",
 		"description": "Designer UX/UI et entrepreneur orienté systèmes (10+ ans d'exp). Spécialiste en formation, Unity3D, le design d'espaces et la technologie interactive.",
 		"lang": "FR",
 		"rss": "/feed-fr_FR.xml",
@@ -67,7 +67,7 @@
 					"imageAlt": "Capture d'écran du jeu Unstant montrant une vue artistique d'un désert jaune avec une bouée rouge"
 				},
 				"BASELAND": {
-					"title": "'BASELAND – Paysage Virtuel",
+					"title": "'BASELAND – Paysage Virtuel",
 					"label": "BASELAND",
 					"description": "Découvrez comment j'ai repensé un vaste modèle paysager numérique collaboratif à l'aide d'une identité visuelle stylisée et d'une méthode de travail 3D collective semi-automatisée.",
 					"imageAlt": "Rendu 3D stylisé d'une place avec des arbres poussant dans un grand bassin"
@@ -103,7 +103,7 @@
 				"label": "Business & coaching"
 			},
 			"CinQ": {
-				"title": "CinQ – Opérations & Coaching",
+				"title": "CinQ – Opérations & Coaching",
 				"label": "CinQ",
 				"description": "Aperçu de mon rôle de co-fondateur chez Disruptive Learning Solutions, gérant le déploiement en mode agile, les ventes B2B et le coaching d'équipes de direction.",
 				"imageAlt": "Photos d'événements présentiels The Heist avec des participants utilisant des cartes physiques pour naviguer",
@@ -143,7 +143,7 @@
 				"label": "Mon travail de dev jeu vidéo"
 			},
 			"CinQ": {
-				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
+				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
 				"label": "CinQ",
 				"description": "Un jeu immersif multijoueur développé sous Unity3D pour la formation professionnelle aux compétences comportementales, au leadership et au travail d'équipe.",
 				"imageAlt": "Capture d'écran des personnages de CinQ planifiant leur mission à l'intérieur d'un van."
@@ -218,7 +218,7 @@
 				"label": "Mon travail de dev web"
 			},
 			"CinQ": {
-				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
+				"title": "CinQ – jeu vidéo de formation d'équipe en entreprise",
 				"label": "CinQ",
 				"description": "Découvrez l'architecture du double écosystème web de CinQ: une plateforme marketing construite avec Statamic et un portail applicatif PHP sur mesure.",
 				"imageAlt": "Capture d'écran du site web CinQ conçu et codé par Eric Lowry"
@@ -378,6 +378,10 @@
 		"intro": "Voici une sélection de projets de {0}ma page GitHub{1}.\nLe contenu de ces pages est uniquement disponible en Anglais conformément aux standards de la platforme GitHub. Elles ont toutefois été dupliqués ici afin de les rendre plus pratiques faciles d'accès.",
 		"errorLoading": "Impossible de charger l'index des projets.",
 		"btnViewGitHub": "Ouvrir dans GitHub"
+	},
+	"documents": {
+		"cv": "Eric Lowry - CV complet",
+		"cvShort": "Eric Lowry - CV"
 	},
 	"alerts": {
 		"warning": "Attention"
