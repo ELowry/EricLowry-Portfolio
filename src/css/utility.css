@@ -1,5 +1,16 @@
-[hidden] {
+[hidden],
+.hidden {
 	display: none !important;
+
+	@media (forced-colors: active) or (prefers-contrast: more) or (prefers-reduced-motion: reduce) {
+		&.accessible-forced {
+			display: revert !important;
+		}
+	}
+
+	:root.readability-mode &.accessible-forced {
+		display: revert !important;
+	}
 }
 
 .sr-only {
@@ -13,7 +24,7 @@
 	border-width: 0;
 	white-space: nowrap;
 
-	@media (forced-colors: active) or (prefers-contrast: more) or (prefers-reduced-data: reduce) {
+	@media (forced-colors: active) or (prefers-contrast: more) or (prefers-reduced-motion: reduce) {
 		&.accessible-forced {
 			position: static;
 			margin: unset;

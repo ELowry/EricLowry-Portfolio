@@ -908,28 +908,37 @@
 	}
 }
 
-/* Style the trigger button to look like a link if in text nav */
-#text-navbar button[aria-haspopup='menu'] {
-	&::before {
-		content: unset !important;
-	}
+#text-navbar {
+	.print-icon,
+	button[aria-haspopup='menu'] {
+		cursor: pointer;
 
-	.menuitem-icon {
-		display: inline-block;
-		transition:
-			var(--transition-base),
-			rotate var(--transition-duration-long) var(--transition-easing);
-	}
-	&[aria-expanded='true'] .menuitem-icon {
-		rotate: 67.5deg;
-	}
+		&::before {
+			content: unset !important;
+		}
 
-	.accessible-forced {
-		margin-left: 0.2ch;
+		.menuitem-icon {
+			display: inline-block;
+			transition:
+				var(--transition-base),
+				rotate var(--transition-duration-long) var(--transition-easing);
+			pointer-events: none;
+			line-height: 1;
+		}
+		&[aria-expanded='true'] .menuitem-icon {
+			rotate: 67.5deg;
+		}
+
+		&:hover {
+			color: oklch(from var(--color-accent) calc(l + 0.16) c h);
+		}
+
+		.accessible-forced {
+			margin-left: 0.2ch;
+		}
 	}
 }
 
-/* Game Mode Specifics for Options */
 #game-menu button[aria-haspopup='menu'] {
 	&::before {
 		padding-right: 1ch !important;

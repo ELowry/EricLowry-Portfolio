@@ -294,6 +294,7 @@
 		"loading": "Loading",
 		"submenuOptions": "Options Submenu",
 		"btnOptions": "Options",
+		"btnPrint": "Print this page",
 		"btnReadability": "Increase Readability",
 		"btnPrivacy": "Privacy Policy",
 		"submenuLanguage": "Language selection",
@@ -362,8 +363,7 @@
 			"next": "Next image"
 		},
 		"cv": {
-			"btnDownloadPdf": "Download PDF",
-			"btnPrintCv": "Print CV"
+			"btnDownloadPdf": "Download PDF"
 		}
 	},
 	"keys": {

@@ -395,7 +395,6 @@ class AppController {
 							null,
 							'Download PDF'
 						)}</button></a>
-						<button onclick="window.print()">${this.Lang.getString('ui.cv.btnPrintCv', null, 'Print CV')}</button>
 					</div>\n\n`;
 					rawMarkdown = buttons + rawMarkdown;
 				}

@@ -286,6 +286,7 @@
 		"loading": "Chargement",
 		"submenuOptions": "Sous-menu Options",
 		"btnOptions": "Options",
+		"btnPrint": "Imprimer cette page",
 		"btnReadability": "Améliorer la lisibilité",
 		"btnPrivacy": "Politique de confidentialité",
 		"submenuLanguage": "Changer de Langue",
@@ -354,8 +355,7 @@
 			"next": "Image suivante"
 		},
 		"cv": {
-			"btnDownloadPdf": "Télécharger le PDF",
-			"btnPrintCv": "Imprimer le CV"
+			"btnDownloadPdf": "Télécharger le PDF"
 		}
 	},
 	"keys": {

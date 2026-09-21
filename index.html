@@ -414,8 +414,12 @@
 						aria-haspopup="menu"
 						aria-expanded="false"
 						aria-controls="text-options-submenu"
+						class="langAttr"
+						data-langAttr="title"
+						data-langTitle="ui.btnOptions"
+						title="Options"
 						><span class="menuitem-icon" aria-hidden="true">⚙</span
-						><span class="lang sr-only accessible-forced" data-lang="ui.btnOptions"
+						><span class="lang hidden accessible-forced" data-lang="ui.btnOptions"
 							>Options</span
 						></button
 					>
@@ -447,6 +451,18 @@
 							aria-label="Language selection"
 						></div>
 					</div>
+					<button
+						class="print-icon langAttr"
+						data-langAttr="title"
+						data-langTitle="ui.btnPrint"
+						title="Print this page"
+						role="menuitem"
+						onclick="window.print()"
+						><span class="menuitem-icon" aria-hidden="true">🖶</span
+						><span class="lang hidden accessible-forced" data-lang="ui.btnPrint"
+							>Print this page</span
+						></button
+					>
 				</div>
 			</nav>
 			<div class="text-layout">
