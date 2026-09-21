@@ -604,3 +604,14 @@
 		}
 	}
 }
+
+.document-actions {
+	display: flex;
+	justify-content: right;
+	gap: 0.6rem;
+	margin-bottom: 1rem;
+
+	@media print {
+		display: none;
+	}
+}

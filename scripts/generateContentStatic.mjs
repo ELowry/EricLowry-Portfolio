@@ -123,7 +123,16 @@ async function generateStaticPage(node, routePath) {
 	if (effectiveNode.file) {
 		const mdPath = path.join(CONTENT_DIR, defaultLang, effectiveNode.file);
 		try {
-			const rawMd = await fs.readFile(mdPath, 'utf-8');
+			let rawMd = await fs.readFile(mdPath, 'utf-8');
+
+			if (effectiveNode.file === 'cv.md') {
+				const pdfBtn = `<div class="document-actions">
+					<a href="/cv-${defaultLang}.pdf" target="_blank" rel="noopener noreferrer"><button>${getTranslation('ui.cv.btnDownloadPdf', 'Download PDF')}</button></a>
+					<button onclick="window.print()">${getTranslation('ui.cv.btnPrintCv', 'Print CV')}</button>
+				</div>\n\n`;
+				rawMd = pdfBtn + rawMd;
+			}
+
 			markdownContent = marked.parse(rawMd);
 		} catch (error) {}
 	}

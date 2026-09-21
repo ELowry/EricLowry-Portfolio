@@ -9,7 +9,7 @@
 > &#8203;PWZRWmxSbVZ6SEtNaDUyQmtSR1p3TGxCMHBRcndMRk1sZ3daMHQzVnpmR0EwWnZXeWdtTDJ0M1Z6ZlFNbHQzVnpmR0IzdDNWejQyQjNMUXJ3TEZuMGdRWmtSbVZ6ZndNMnQzVnpmUU0wdDNWemZRWmx0M1Z6ZlFabXQzVnp0bUI1RG1WemZRQm10M1Z6ZkdBMVp2Vw==&#8203;,  
 > &#8203;PWZHQjJadldRNUhEN1ZRQndMdkU=&#8203;
 
-- [LinkedIn](https://www.linkedin.com/in/ericlowry14/ "Ouvrir le profil LinkedIn d'Eric Lowry")
+- [LinkedIn](https://www.linkedin.com/in/ericlowry14 "Ouvrir le profil LinkedIn d'Eric Lowry")
 - [GitHub](https://github.com/ELowry "Ouvrir la page GitHub d'Eric Lowry")
 
 ---
@@ -40,12 +40,12 @@ Designer, développeur et entrepreneur avec plus de 10 ans d'expérience; spéci
 
 ### Développeur et webdesigner indépendant
 
-- [thenextmind.ai](https://stephane-next-mind.web.app/) _(version archivée)_
-- [luzech.co.uk](https://luzech.co.uk/)
-- [koalakrash.com](https://koalakrash.com/)
-- [altoe.net](https://altoe.net/)
+- [thenextmind.ai](https://stephane-next-mind.web.app) _(version archivée)_
+- [luzech.co.uk](https://luzech.co.uk)
+- [koalakrash.com](https://koalakrash.com)
+- [altoe.net](https://altoe.net)
 - [oobpdx.com](https://oobpdx.com)
-- [pennsardinpdx.com](https://web.archive.org/web/20190812100600/http://pennsardinpdx.com/sardinehead/) _(archive)_
+- [pennsardinpdx.com](https://web.archive.org/web/20190812100600/http://pennsardinpdx.com/sardinehead) _(archive)_
 
 ### Digital Skin
 
@@ -66,7 +66,7 @@ Designer, développeur et entrepreneur avec plus de 10 ans d'expérience; spéci
 - **BASE** (2014), Paris:  
   Contribution au projet d'aménagement urbain et paysager virtuel "[BASE 2050](https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2014/537530006.pdf "Ouvrir la déclaration d'intention initiale du projet BASE 2050")".
 - **Palleroni Leite Design Partnership** Portland, Oregon (USA) (2010–2011):  
-  Conception de diagrammes techniques, coupes, élévations et rendus 3D pour le projet [SAGE Classroom](https://sageclassroom.com/) (Oregon, USA), axé sur la conception d'enveloppes durables et la gestion thermique.
+  Conception de diagrammes techniques, coupes, élévations et rendus 3D pour le projet [SAGE Classroom](https://sageclassroom.com) (Oregon, USA), axé sur la conception d'enveloppes durables et la gestion thermique.
 - **JM Couverture** (2010), Verrières-le-Buisson:  
   Expérience de terrain en construction, charpente et toiture.
 
@@ -113,23 +113,26 @@ Designer, développeur et entrepreneur avec plus de 10 ans d'expérience; spéci
   HTML, CSS, PHP, JavaScript, Statamic, WordPress (création de thèmes et de plugins).
 - **Projets web**:
     - [playcinq.com](https://playcinq.com)
-    - [altoe.net](https://altoe.net/)
-    - [luzech.co.uk](https://luzech.co.uk/)
-    - [thenextmind.ai](https://stephane-next-mind.web.app/) _(version archivée)_
-    - [koalakrash.com](https://koalakrash.com/)
-    - [maia-archi.com](http://www.maia-archi.com/)
+    - [altoe.net](https://altoe.net)
+    - [luzech.co.uk](https://luzech.co.uk)
+    - [thenextmind.ai](https://stephane-next-mind.web.app) _(version archivée)_
+    - [koalakrash.com](https://koalakrash.com)
+    - [maia-archi.com](http://www.maia-archi.com)
     - [oobpdx.com](https://oobpdx.com)
-    - [pennsardinpdx.com](https://web.archive.org/web/20180103153941/http://pennsardinpdx.com/) _(archive internet)_
+    - [pennsardinpdx.com](https://web.archive.org/web/20180103153941/http://pennsardinpdx.com) _(archive internet)_
 
 ### Outils et open source
 
-- **Projets GitHub**:
-    - [WinGet-Updater](https://github.com/ELowry/WinGet-Updater 'Ouvrir le projet Github WinGet-Updater') (utilitaire).
-    - [StadiaIcons](https://elowry.github.io/StadiaIcons/ 'Ouvrir la page web StadiaIcons') (automatisation d'assets graphiques).
-    - [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 'Ouvrir la page du projet InputLayers sur le Unity Asset Store') (extension de gestion des inputs Unity).
-    - [Marked Responsive Images](https://github.com/ELowry/MarkedResponsiveImages 'Ouvrir le projet Github Marked Responsive Images') (extension Marked.js intégrant l'attribut srcset)
-    - [Obsidian Replace Commands](https://github.com/ELowry/obsidian-replace-commands 'Ouvrir le projet Github Obsidian Replace Commands') (plugin Obsidian pour configurer des chaînes de remplacements)
-    - [DNS Toggle](https://github.com/ELowry/DNSToggle 'Ouvrir le projet Github DNS Toggle') (application Android pour facilement activer / désactiver le DNS privé)
+**Projets GitHub**:
+
+- [DNS Toggle](https://github.com/ELowry/DNSToggle 'Ouvrir le projet Github DNS Toggle') (application Android pour facilement activer / désactiver le DNS privé)
+- [Marked Responsive Images](https://github.com/ELowry/MarkedResponsiveImages 'Ouvrir le projet Github Marked Responsive Images') (extension Marked.js intégrant l'attribut srcset)
+- [WinGet-Updater](https://github.com/ELowry/WinGet-Updater 'Ouvrir le projet Github WinGet-Updater') (utilitaire de mise à jour automatique pour les applications Windows).
+- [InputLayers](https://assetstore.unity.com/packages/tools/gui/inputlayers-beta-259582 'Ouvrir la page du projet InputLayers sur le Unity Asset Store') (extension de gestion des inputs Unity).
+- [Obsidian Replace Commands](https://github.com/ELowry/obsidian-replace-commands 'Ouvrir le projet Github Obsidian Replace Commands') (plugin Obsidian pour configurer des chaînes de remplacements)
+- [Qwant Results Filter](https://github.com/ELowry/Qwant-Results-Filter 'Ouvrir la page GitHub du projet Qwant Results Filter') (extension Firefox pour filtrer les résultats de recherche Qwant).
+- [Site-specific Email Generator](https://github.com/ELowry/Site-specific-Email-Generator 'Ouvrir la page GitHub du projet Site-specific Email Generator') (extension Firefox pour remplir automatiquement les adresses e-mail en utilisant un domaine personnalisé).
+- [StadiaIcons](https://elowry.github.io/StadiaIcons 'Ouvrir la page web StadiaIcons') (automatisation d'assets graphiques).
 
 ---
 

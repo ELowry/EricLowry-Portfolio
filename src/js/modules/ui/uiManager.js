@@ -1102,6 +1102,8 @@ export class UIManager {
 
 		this.elements.gameModalContent.innerHTML = html;
 
+		Lang.performTranslation(this.elements.gameModalContent);
+
 		const scrollables = this.elements.gameModalContent.querySelectorAll(
 			'pre code, .embed-container'
 		);
@@ -1139,6 +1141,8 @@ export class UIManager {
 	 */
 	displayContentInTextView(html) {
 		this.elements.textContent.innerHTML = html;
+
+		Lang.performTranslation(this.elements.textContent);
 
 		const scrollables = this.elements.textContent.querySelectorAll(
 			'pre code, .embed-container'

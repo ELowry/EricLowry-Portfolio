@@ -352,6 +352,10 @@
 			"imageOpenModal": "Ouvrir l'image en plein écran",
 			"prev": "Image précédente",
 			"next": "Image suivante"
+		},
+		"cv": {
+			"btnDownloadPdf": "Télécharger le PDF",
+			"btnPrintCv": "Imprimer le CV"
 		}
 	},
 	"keys": {
@@ -372,7 +376,8 @@
 	},
 	"projects": {
 		"intro": "Voici une sélection de projets de {0}ma page GitHub{1}.\nLe contenu de ces pages est uniquement disponible en Anglais conformément aux standards de la platforme GitHub. Elles ont toutefois été dupliqués ici afin de les rendre plus pratiques faciles d'accès.",
-		"errorLoading": "Impossible de charger l'index des projets."
+		"errorLoading": "Impossible de charger l'index des projets.",
+		"btnViewGitHub": "Ouvrir dans GitHub"
 	},
 	"alerts": {
 		"warning": "Attention"

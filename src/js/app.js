@@ -386,7 +386,20 @@ class AppController {
 					throw new Error(`File "${filename}" not found or returned invalid content.`);
 				}
 
-				const rawMarkdown = await response.text();
+				let rawMarkdown = await response.text();
+
+				if (filename === 'cv.md') {
+					const buttons = `<div class="document-actions">
+						<a href="/cv-${langCode}.pdf" target="_blank" rel="noopener noreferrer"><button>${this.Lang.getString(
+							'ui.cv.btnDownloadPdf',
+							null,
+							'Download PDF'
+						)}</button></a>
+						<button onclick="window.print()">${this.Lang.getString('ui.cv.btnPrintCv', null, 'Print CV')}</button>
+					</div>\n\n`;
+					rawMarkdown = buttons + rawMarkdown;
+				}
+
 				const html = this.marked ? await this.marked.parse(rawMarkdown) : rawMarkdown;
 
 				this.contentCache.set(cacheKey, html);

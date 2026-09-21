@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Eric Lowry - CV</title>
+		<meta name="color-scheme" content="light" />
+		<meta name="darkreader-lock" content="true" />
+		<link rel="stylesheet" href="../../src/css/main.css" />
+		<style>
+			@media print {
+				@page {
+					margin: 15mm;
+					size: A4;
+				}
+
+				/* Fix image zooming in print */
+				img {
+					zoom: 0.5;
+				}
+
+				:root {
+					font-size: 12px;
+
+					--h1-size: 1.73rem;
+					--h2-size: 1.5rem;
+					--h3-size: 1.31rem;
+					--h4-size: 1.14rem;
+					--h5-size: 0.99rem;
+				}
+
+				/* `<hr>` -> page break */
+				hr {
+					display: inline-block;
+					break-after: page;
+					visibility: hidden;
+					margin: 0;
+					border: none;
+					width: 0;
+					height: 0;
+					line-height: 0;
+				}
+
+				h1,
+				h2,
+				h3,
+				h4 {
+					break-after: avoid;
+				}
+
+				h2 {
+					border-top: 1px solid var(--color-border);
+					padding-top: 1rem;
+				}
+
+				hr + h2 {
+					border-top: none;
+				}
+
+				p,
+				li,
+				.cv-entry,
+				blockquote {
+					break-inside: avoid;
+				}
+
+				p {
+					orphans: 3;
+					widows: 3;
+				}
+
+				.obf-part {
+					all: unset;
+					display: inline;
+				}
+
+				main .row {
+					display: flex;
+					align-items: center;
+					gap: 1rem;
+
+					> .grow {
+						flex: 1;
+					}
+				}
+
+				.end-qr {
+					margin-top: 4rem;
+					text-align: center;
+
+					a::after {
+						content: unset;
+					}
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="marked"> </main>
+	</body>
+</html>

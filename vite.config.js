@@ -237,7 +237,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		plugins: [
-			excludePublicFolders(['obsidian', '.obsidian', 'LOCAL']),
+			excludePublicFolders(['obsidian', '.obsidian', 'LOCAL', 'print']),
 			watchPublicMarkdown(),
 			firebaseRewritesPlugin(),
 			staticHtmlPlugin(),
@@ -257,6 +257,7 @@ export default defineConfig(({ mode }) => {
 					'*.{crt,pem}',
 					'**/obsidian/**',
 					'**/.obsidian/**',
+					'**/print/**',
 					'**/LOCAL/**',
 					'.vault-nickname',
 				],

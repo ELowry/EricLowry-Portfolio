@@ -255,7 +255,10 @@ class ProjectGenerator {
 		}
 
 		let readmeText = await readmeRes.text();
-		readmeText = ProjectGenerator.#rewriteRelativeUrls(readmeText, repo, branch);
+
+		const viewInGithubButton = `<div class="document-actions"><a href="${meta.html_url}" target="_blank" rel="noopener noreferrer"><button class="lang" data-lang="projects.btnViewGitHub">View in GitHub</button></a></div>\n\n`;
+		readmeText =
+			viewInGithubButton + ProjectGenerator.#rewriteRelativeUrls(readmeText, repo, branch);
 
 		// Get Open Graph image from GitHub
 		const htmlRes = await fetch(`https://github.com/${ProjectGenerator.GITHUB_USER}/${repo}`);

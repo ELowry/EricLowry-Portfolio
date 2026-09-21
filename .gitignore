@@ -43,6 +43,8 @@ yarn-error.log*
 /public/sitemap.xml
 /public/feed-*.xml
 
+/public/*.pdf
+
 /.static-html/
 
 /public/content/blog-index.json
