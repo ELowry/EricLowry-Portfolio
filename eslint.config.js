@@ -97,6 +97,7 @@ export default [
 			'markdown/no-missing-label-refs': 'off',
 			'markdown/fenced-code-language': 'off',
 			'markdown/no-empty-links': 'off',
+			'markdown/no-missing-link-fragments': 'off',
 		},
 	},
 	// Scripts inside Markdown files
