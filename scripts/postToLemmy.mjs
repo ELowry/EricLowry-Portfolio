@@ -176,41 +176,61 @@ class LemmySynchronizer {
 		Log.info('0. Skip this post completely');
 
 		const primaryInput = await this.#readlineInterface.question(
-			`\nSelect PRIMARY community (0-${availableCommunities.length}): `
+			`\nSelect PRIMARY community (0-${availableCommunities.length}, or #<id> for custom ID): `
 		);
-		const primaryIndex = parseInt(primaryInput, 10) - 1;
 
-		if (
-			primaryInput === '0'
-			|| isNaN(primaryIndex)
-			|| primaryIndex < 0
-			|| primaryIndex >= availableCommunities.length
-		) {
+		let primaryCommunity = null;
+		const trimmedPrimary = primaryInput.trim();
+
+		if (trimmedPrimary.startsWith('#')) {
+			const customId = parseInt(trimmedPrimary.slice(1), 10);
+			if (!isNaN(customId) && customId > 0) {
+				primaryCommunity = { name: `Community ID ${customId}`, id: customId };
+			}
+		} else {
+			const primaryIndex = parseInt(trimmedPrimary, 10) - 1;
+			if (
+				!isNaN(primaryIndex)
+				&& primaryIndex >= 0
+				&& primaryIndex < availableCommunities.length
+			) {
+				primaryCommunity = availableCommunities[primaryIndex];
+			}
+		}
+
+		if (!primaryCommunity) {
 			Log.info('Skipping post...');
 			return;
 		}
 
-		const primaryCommunity = availableCommunities[primaryIndex];
 		const crossInput = await this.#readlineInterface.question(
-			'Select CROSSPOST communities (comma-separated e.g., 1,3 or press Enter for none): '
+			'Select CROSSPOST communities (comma-separated list e.g., 1,3,#70243, or press Enter for none): '
 		);
 
-		const crossCommunities = crossInput
-			.split(',')
-			.map((string) => {
-				return parseInt(string.trim(), 10) - 1;
-			})
-			.filter((index) => {
-				return (
-					!isNaN(index)
-					&& index >= 0
-					&& index < availableCommunities.length
-					&& index !== primaryIndex
-				);
-			})
-			.map((index) => {
-				return availableCommunities[index];
-			});
+		const crossCommunities = [];
+		const seenIds = new Set([primaryCommunity.id]);
+
+		crossInput.split(',').forEach((string) => {
+			const trimmed = string.trim();
+			let community = null;
+
+			if (trimmed.startsWith('#')) {
+				const customId = parseInt(trimmed.slice(1), 10);
+				if (!isNaN(customId) && customId > 0) {
+					community = { name: `Community ID ${customId}`, id: customId };
+				}
+			} else {
+				const index = parseInt(trimmed, 10) - 1;
+				if (!isNaN(index) && index >= 0 && index < availableCommunities.length) {
+					community = availableCommunities[index];
+				}
+			}
+
+			if (community && !seenIds.has(community.id)) {
+				seenIds.add(community.id);
+				crossCommunities.push(community);
+			}
+		});
 
 		const customBody = await this.#readMultiLine(
 			'\nEnter a summary for this Lemmy post (write/paste markdown text, then type EOF on a new line and press Enter to submit): '
@@ -232,11 +252,16 @@ class LemmySynchronizer {
 				customThumbnail
 			);
 			Log.success('Success!');
+		} catch (error) {
+			Log.error(`Failed primary post for ${post.title}:`, error.message);
+			return;
+		}
 
-			for (const crossCommunity of crossCommunities) {
-				Log.info('Waiting 3 seconds to avoid rate limits...');
-				await this.#sleep(3000);
+		for (const crossCommunity of crossCommunities) {
+			Log.info('Waiting 3 seconds to avoid rate limits...');
+			await this.#sleep(3000);
 
+			try {
 				Log.info(`Crossposting to: ${crossCommunity.name}...`);
 				await this.#postToCommunity(
 					crossCommunity.id,
@@ -247,15 +272,13 @@ class LemmySynchronizer {
 					customThumbnail
 				);
 				Log.success('Success!');
+			} catch (error) {
+				Log.error(`Failed to crosspost to ${crossCommunity.name}:`, error.message);
 			}
-
-			history.push(post.date);
-			this.#saveHistory(history);
-		} catch (error) {
-			Log.error(`Failed to post ${post.title}:`, error.message);
-			console.log('Stopping synchronization to prevent duplicate errors.');
-			throw error;
 		}
+
+		history.push(post.date);
+		this.#saveHistory(history);
 	}
 
 	/**
