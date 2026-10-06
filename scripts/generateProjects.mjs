@@ -6,7 +6,7 @@ import path from 'path';
 import util from 'util';
 
 import { escapeHtml } from '../src/js/modules/core/sharedUtils.js';
-import { injectIntoMain } from './buildUtils.mjs';
+import { injectIntoMain, loadEnv } from './buildUtils.mjs';
 import { Log } from './logger.mjs';
 
 const execAsync = util.promisify(exec);
@@ -16,7 +16,7 @@ const execAsync = util.promisify(exec);
  */
 class ProjectGenerator {
 	/**
-	 * @returns {string} the GitHub username.
+	 * @returns {string} The GitHub username.
 	 * @constant
 	 */
 	static get GITHUB_USER() {
@@ -24,7 +24,31 @@ class ProjectGenerator {
 	}
 
 	/**
-	 * @returns {Array<string>} the list of repositories to fetch.
+	 * @returns {number} The timeout in milliseconds for network requests.
+	 * @constant
+	 */
+	static get FETCH_TIMEOUT_MS() {
+		return 10000;
+	}
+
+	/**
+	 * @returns {number} The delay in milliseconds between API requests to prevent secondary rate limiting.
+	 * @constant
+	 */
+	static get API_DELAY_MS() {
+		return 300;
+	}
+
+	/**
+	 * @returns {string} The default User-Agent for network requests.
+	 * @constant
+	 */
+	static get USER_AGENT() {
+		return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0';
+	}
+
+	/**
+	 * @returns {Array<string>} The list of repositories to fetch.
 	 * @constant
 	 */
 	static get REPOSITORIES() {
@@ -41,7 +65,7 @@ class ProjectGenerator {
 	}
 
 	/**
-	 * @returns {string} the target directory for the markdown files.
+	 * @returns {string} The target directory for the markdown files.
 	 * @constant
 	 */
 	static get CONTENT_DIR() {
@@ -49,7 +73,7 @@ class ProjectGenerator {
 	}
 
 	/**
-	 * @returns {string} the target path for the JSON index.
+	 * @returns {string} The target path for the JSON index.
 	 * @constant
 	 */
 	static get INDEX_PATH() {
@@ -57,7 +81,7 @@ class ProjectGenerator {
 	}
 
 	/**
-	 * @returns {string} the base directory for generated images.
+	 * @returns {string} The base directory for generated images.
 	 * @constant
 	 */
 	static get IMAGE_BASE_DIR() {
@@ -173,7 +197,7 @@ class ProjectGenerator {
 		const safeDesc = escapeHtml(data.description);
 
 		const replacementMeta = `<!-- OG_META_START -->
-		<title>${safeTitle} – Eric Lowry</title>
+		<title>${safeTitle} – Eric Lowry</title>
 		
 		<meta name="description" content="${safeDesc}" />
 		<meta name="author" content="Eric Lowry" />
@@ -184,7 +208,7 @@ class ProjectGenerator {
 
 		<link rel="canonical" href="https://eric-lowry.com/projects/${data.id}" />
 
-		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
+		<meta property="og:site_name" content="Eric Lowry – Portfolio" />
 		<meta property="og:locale" content="en_US" />
 		<meta property="og:title" content="${safeTitle}" />
 		<meta property="og:type" content="article" />
@@ -216,17 +240,37 @@ class ProjectGenerator {
 	 * Fetches repository metadata and raw README markdown from the GitHub API.
 	 *
 	 * @param {string} repo - The name of the repository to fetch.
-	 * @param {Object|undefined} cachedEntry - The previous metadata entry from the JSON index.
+	 * @param {Object} [cachedEntry=undefined] - The previous metadata entry from the JSON index.
 	 * @returns {Promise<Object>} An object containing the repository's metadata and README text (if fetched).
 	 * @private
 	 */
-	static async #fetchRepoData(repo, cachedEntry) {
+	static async #fetchRepoData(repo, cachedEntry = undefined) {
+		const apiHeaders = {
+			'User-Agent': ProjectGenerator.USER_AGENT,
+			Accept: 'application/vnd.github.v3+json',
+		};
+
+		if (process.env.GITHUB_BASIC_TOKEN) {
+			apiHeaders['Authorization'] = `Bearer ${process.env.GITHUB_BASIC_TOKEN}`;
+		}
+
 		const apiRes = await fetch(
-			`https://api.github.com/repos/${ProjectGenerator.GITHUB_USER}/${repo}`
+			`https://api.github.com/repos/${ProjectGenerator.GITHUB_USER}/${repo}`,
+			{
+				headers: apiHeaders,
+				signal: AbortSignal.timeout(ProjectGenerator.FETCH_TIMEOUT_MS),
+			}
 		);
 
 		if (!apiRes.ok) {
-			throw new Error(`API fetch failed for ${repo}: ${apiRes.statusText}`);
+			let errorMsg = apiRes.statusText;
+			try {
+				const err = await apiRes.json();
+				if (err.message) {
+					errorMsg = err.message;
+				}
+			} catch (e) {}
+			throw new Error(`API fetch failed for ${repo}: ${apiRes.status} ${errorMsg}`);
 		}
 
 		const meta = await apiRes.json();
@@ -240,14 +284,24 @@ class ProjectGenerator {
 			const imgPath = path.join(ProjectGenerator.IMAGE_BASE_DIR, repo, `poster.jpg`);
 			try {
 				await fs.access(mdPath);
-				await fs.access(imgPath); // Verify the local image actually exists
+				await fs.access(imgPath);
 				return { ...cachedEntry, skipWrite: true };
 			} catch (error) {}
 		}
 
 		const branch = meta.default_branch || 'main';
+
+		const rawHeaders = { 'User-Agent': ProjectGenerator.USER_AGENT };
+		if (process.env.GITHUB_BASIC_TOKEN) {
+			rawHeaders['Authorization'] = `Bearer ${process.env.GITHUB_BASIC_TOKEN}`;
+		}
+
 		const readmeRes = await fetch(
-			`https://raw.githubusercontent.com/${ProjectGenerator.GITHUB_USER}/${repo}/${branch}/README.md`
+			`https://raw.githubusercontent.com/${ProjectGenerator.GITHUB_USER}/${repo}/${branch}/README.md`,
+			{
+				headers: rawHeaders,
+				signal: AbortSignal.timeout(ProjectGenerator.FETCH_TIMEOUT_MS),
+			}
 		);
 
 		if (!readmeRes.ok) {
@@ -260,24 +314,18 @@ class ProjectGenerator {
 		readmeText =
 			viewInGithubButton + ProjectGenerator.#rewriteRelativeUrls(readmeText, repo, branch);
 
-		// Get Open Graph image from GitHub
-		const htmlRes = await fetch(`https://github.com/${ProjectGenerator.GITHUB_USER}/${repo}`);
-		// Fallback to GitHub's auto-generator
-		let ogImageUrl = `https://opengraph.githubassets.com/1/${ProjectGenerator.GITHUB_USER}/${repo}`;
-
-		if (htmlRes.ok) {
-			const htmlText = await htmlRes.text();
-			const match = htmlText.match(/<meta property="og:image" content="([^"]+)"/i);
-			if (match) {
-				ogImageUrl = match[1];
-			}
-		}
+		const ogImageUrl = `https://opengraph.githubassets.com/1/${ProjectGenerator.GITHUB_USER}/${repo}`;
 
 		let localImagePath = null;
 		let imgWidth = 1200;
 		let imgHeight = 630;
+
 		try {
-			const imgRes = await fetch(ogImageUrl);
+			const imgRes = await fetch(ogImageUrl, {
+				headers: { 'User-Agent': ProjectGenerator.USER_AGENT },
+				signal: AbortSignal.timeout(ProjectGenerator.FETCH_TIMEOUT_MS),
+			});
+
 			if (imgRes.ok) {
 				const arrayBuffer = await imgRes.arrayBuffer();
 				const buffer = Buffer.from(arrayBuffer);
@@ -330,12 +378,15 @@ class ProjectGenerator {
 	}
 
 	/**
-	 * Executes the fetch sequence, writes markdown files, and generates the index JSON.
+	 * Executes the fetch sequence sequentially to avoid bursting, writes files, and generates the index.
 	 *
 	 * @returns {Promise<void>}
 	 */
 	static async run() {
-		Log.info('\nGenerating GitHub projects content...');
+		console.log('\n');
+		loadEnv();
+
+		Log.info('Generating GitHub projects content...');
 
 		await fs.mkdir(ProjectGenerator.CONTENT_DIR, { recursive: true });
 
@@ -345,8 +396,9 @@ class ProjectGenerator {
 			previousIndex = JSON.parse(rawIndex);
 		} catch (error) {}
 
-		// Map repositories to an array of concurrent promises
-		const promises = ProjectGenerator.REPOSITORIES.map(async (repo) => {
+		const indexData = [];
+
+		for (const repo of ProjectGenerator.REPOSITORIES) {
 			try {
 				Log.info(`Fetching data for ${repo}...`);
 
@@ -366,11 +418,10 @@ class ProjectGenerator {
 					data.readme = await fs.readFile(mdPath, 'utf-8');
 
 					await ProjectGenerator.#generateStaticProjectHtml(data);
-
 					Log.info(`Skipped README download (no changes) for ${repo}`);
 				}
 
-				return {
+				indexData.push({
 					id: data.id,
 					title: data.title,
 					description: data.description,
@@ -382,19 +433,13 @@ class ProjectGenerator {
 					ogImage: data.ogImage,
 					ogImageWidth: data.ogImageWidth,
 					ogImageHeight: data.ogImageHeight,
-				};
+				});
+
+				await new Promise((resolve) => setTimeout(resolve, ProjectGenerator.API_DELAY_MS));
 			} catch (error) {
 				Log.error(`Error processing ${repo}: ${error.message}`);
-				return null;
 			}
-		});
-
-		const results = await Promise.all(promises);
-
-		// Filter out failed repositories
-		const indexData = results.filter((entry) => {
-			return entry !== null;
-		});
+		}
 
 		await fs.writeFile(
 			ProjectGenerator.INDEX_PATH,
