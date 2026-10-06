@@ -373,7 +373,7 @@ export class UIManager {
 						this.elements.interactionLabelText.textContent = '';
 					}
 					this.interactionOverlayTimeout = null;
-				}, 240);
+				}, UIManager.INTERACTION_FADE_CLEAR_MS);
 				return;
 			}
 
@@ -393,12 +393,17 @@ export class UIManager {
 	 * @private
 	 */
 	#setupBackdropClick(dialog) {
+		let pointerDownTarget = null;
+
+		dialog.addEventListener('pointerdown', (e) => {
+			pointerDownTarget = e.target;
+		});
+
 		dialog.addEventListener('click', (e) => {
-			// If the click target is the dialog itself (the backdrop), close it.
-			// Clicks inside the .modal-box will have e.target as the box or its children.
-			if (e.target === dialog) {
+			if (e.target === dialog && pointerDownTarget === dialog) {
 				dialog.close();
 			}
+			pointerDownTarget = null;
 		});
 	}
 

@@ -472,7 +472,6 @@ export class Player extends AnimatedEntity {
 	 * @param {number} [duration=500] - milliseconds to wait while animation plays.
 	 * @returns {Promise<void>} Resolves when the duration has elapsed.
 	 */
-	// fallow-ignore-next-line unused-class-member
 	playBehindInteract(duration = 500) {
 		if (this.currentState !== 'behind_interact') {
 			this.setState('behind_interact');
@@ -485,7 +484,6 @@ export class Player extends AnimatedEntity {
 	 * @param {number} [duration=800] - milliseconds to wait while animation plays.
 	 * @returns {Promise<void>} Resolves when the duration has elapsed.
 	 */
-	// fallow-ignore-next-line unused-class-member
 	playFrontInteract(duration = 800) {
 		if (this.currentState === 'walk' || this.currentState === 'stopping') {
 			if (this.currentState !== 'front_interact_stopping') {

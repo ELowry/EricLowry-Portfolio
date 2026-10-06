@@ -1,5 +1,6 @@
 import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
+import { LayeredInput } from '../core/layeredInputs.js';
 import { Input } from '../input/input.js';
 import { Camera } from './camera.js';
 import { Interaction } from './interaction.js';
@@ -27,6 +28,8 @@ import { Interaction } from './interaction.js';
 class DialogController {
 	/** @type {boolean} */
 	isActive;
+	/** @type {boolean} */
+	isPausedForTextMode;
 	/** @type {Array<DialogStep>} */
 	#steps;
 	/** @type {number} */
@@ -39,16 +42,27 @@ class DialogController {
 	 */
 	constructor() {
 		this.isActive = false;
+		this.isPausedForTextMode = false;
 		this.#steps = [];
 		this.#currentStepIndex = 0;
 		this.#lastAdvanceTime = 0;
+
+		Events.on('route:changed', (payload) => {
+			if (payload.mode === 'text' && this.isActive) {
+				this.isPausedForTextMode = true;
+				LayeredInput.deactivate(LayeredInput.LAYER_DIALOG);
+			} else if (payload.mode === 'game' && this.isPausedForTextMode) {
+				this.isPausedForTextMode = false;
+				this.#executeStep();
+			}
+		});
 	}
 
 	/**
 	 * Updates the dialogue state each frame, handling user interactions.
 	 */
 	update() {
-		if (!this.isActive) {
+		if (!this.isActive || this.isPausedForTextMode) {
 			return;
 		}
 
@@ -142,6 +156,7 @@ class DialogController {
 	 */
 	end() {
 		this.isActive = false;
+		this.isPausedForTextMode = false;
 		Events.emit('dialog:hide');
 		// Prevent accidental world interaction immediately after closing
 		Interaction.setBlock();
@@ -187,8 +202,8 @@ class DialogController {
 						label: 'Text Mode',
 						action: () => {
 							Camera.setZoom();
-							setModeCallback('text');
 							this.end();
+							setModeCallback('text');
 						},
 					},
 				],

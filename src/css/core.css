@@ -50,6 +50,13 @@ body {
 	content: '';
 }
 
+button,
+input,
+select,
+textarea {
+	font-family: inherit;
+}
+
 button {
 	cursor: pointer;
 	border: var(--border-width) solid var(--color-accent);
