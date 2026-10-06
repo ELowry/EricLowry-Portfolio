@@ -487,13 +487,16 @@ export class GalleryDisplay {
 		let galleryIsMultiple = this.#currentGalleryItems.length > 1;
 
 		if (prevBtn) {
-			prevBtn.classList.toggle('disabled', !(galleryIsMultiple && this.#currentIndex > 0));
+			const isDisabled = !(galleryIsMultiple && this.#currentIndex > 0);
+			prevBtn.classList.toggle('disabled', isDisabled);
+			prevBtn.disabled = isDisabled;
 		}
 		if (nextBtn) {
-			nextBtn.classList.toggle(
-				'disabled',
-				!(galleryIsMultiple && this.#currentIndex < this.#currentGalleryItems.length - 1)
+			const isDisabled = !(
+				galleryIsMultiple && this.#currentIndex < this.#currentGalleryItems.length - 1
 			);
+			nextBtn.classList.toggle('disabled', isDisabled);
+			nextBtn.disabled = isDisabled;
 		}
 
 		const announcer = this.#activeModal.querySelector('.gallery-modal-announcer');

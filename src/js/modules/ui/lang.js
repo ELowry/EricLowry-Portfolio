@@ -141,8 +141,8 @@ class LangController {
 			document.body.classList.add('translated');
 
 			return this.data;
-		} catch (err) {
-			console.error('Language initialization failed:', err);
+		} catch (error) {
+			console.error('Language initialization failed:', error);
 			document.body.classList.add('translated');
 			this.isLoaded = true;
 			return null;

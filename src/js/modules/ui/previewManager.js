@@ -171,6 +171,7 @@ export class PreviewManager {
 			}
 			const clone = template.content.cloneNode(true);
 			this.previewElement = clone.querySelector('.preview-card');
+			this.previewElement.inert = true;
 		}
 
 		const activeDialog = Array.from(document.querySelectorAll('dialog[open]')).pop();
@@ -249,6 +250,7 @@ export class PreviewManager {
 		this.#populatePreviewCard(metaData, link);
 
 		requestAnimationFrame(() => {
+			this.previewElement.inert = false;
 			this.previewElement.classList.add('visible');
 		});
 	}
@@ -259,6 +261,7 @@ export class PreviewManager {
 	 */
 	#hidePreview() {
 		if (this.previewElement) {
+			this.previewElement.inert = true;
 			this.previewElement.classList.remove('visible');
 			this.lastHideTime = Date.now();
 

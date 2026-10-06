@@ -81,6 +81,14 @@ export class UIManager {
 	}
 
 	/**
+	 * @returns {number} the duration in milliseconds for the interaction label to fade out before clearing text.
+	 * @constant
+	 */
+	static get INTERACTION_FADE_CLEAR_MS() {
+		return 240;
+	}
+
+	/**
 	 * @returns {number} the standard duration for screen transitions and UI fades.
 	 * @constant
 	 */
@@ -116,6 +124,13 @@ export class UIManager {
 	 * Binds global DOM events and initializes interactive UI components.
 	 */
 	init() {
+		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.inert = true;
+		}
+		if (this.elements.interactionOverlay) {
+			this.elements.interactionOverlay.inert = true;
+		}
+
 		// Virtual Cursor
 		VirtualCursor.init(this.elements.virtualCursorTemplate);
 
@@ -351,6 +366,7 @@ export class UIManager {
 			}
 
 			if (!text) {
+				this.elements.interactionOverlay.inert = true;
 				this.elements.interactionOverlay.classList.remove('shown');
 				this.interactionOverlayTimeout = setTimeout(() => {
 					if (this.elements.interactionLabelText) {
@@ -366,6 +382,7 @@ export class UIManager {
 				this.interactionOverlayTimeout = null;
 			}
 			this.elements.interactionLabelText.textContent = text;
+			this.elements.interactionOverlay.inert = false;
 			this.elements.interactionOverlay.classList.add('shown');
 		});
 	}
@@ -397,10 +414,12 @@ export class UIManager {
 			this.elements.gameModal.close();
 		}
 		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.inert = true;
 			this.elements.dialogOverlay.classList.remove('shown');
 		}
 
 		if (this.elements.interactionOverlay) {
+			this.elements.interactionOverlay.inert = true;
 			this.elements.interactionOverlay.classList.remove('shown');
 			if (this.elements.interactionLabelText) {
 				this.elements.interactionLabelText.textContent = '';
@@ -890,6 +909,7 @@ export class UIManager {
 		LayeredInput.activate(LayeredInput.LAYER_DIALOG);
 
 		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.inert = false;
 			this.elements.dialogOverlay.classList.add('shown');
 		}
 
@@ -961,6 +981,7 @@ export class UIManager {
 		LayeredInput.deactivate(LayeredInput.LAYER_DIALOG);
 
 		if (this.elements.dialogOverlay) {
+			this.elements.dialogOverlay.inert = true;
 			this.elements.dialogOverlay.classList.remove('shown');
 		}
 
