@@ -133,7 +133,7 @@ async function generateStaticPage(node, routePath) {
 			}
 
 			markdownContent = marked.parse(rawMd);
-		} catch (error) {}
+		} catch {}
 	}
 
 	const replacementMeta = `<!-- OG_META_START -->

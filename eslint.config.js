@@ -44,8 +44,8 @@ export default [
 			'no-unused-vars': [
 				'error',
 				{
+					args: 'all',
 					argsIgnorePattern: '^_',
-					caughtErrors: 'none',
 				},
 			],
 			'no-useless-assignment': 'warn',

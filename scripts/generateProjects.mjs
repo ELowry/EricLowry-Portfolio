@@ -269,7 +269,7 @@ class ProjectGenerator {
 				if (err.message) {
 					errorMsg = err.message;
 				}
-			} catch (e) {}
+			} catch {}
 			throw new Error(`API fetch failed for ${repo}: ${apiRes.status} ${errorMsg}`);
 		}
 
@@ -286,7 +286,7 @@ class ProjectGenerator {
 				await fs.access(mdPath);
 				await fs.access(imgPath);
 				return { ...cachedEntry, skipWrite: true };
-			} catch (error) {}
+			} catch {}
 		}
 
 		const branch = meta.default_branch || 'main';
@@ -394,7 +394,7 @@ class ProjectGenerator {
 		try {
 			const rawIndex = await fs.readFile(ProjectGenerator.INDEX_PATH, 'utf-8');
 			previousIndex = JSON.parse(rawIndex);
-		} catch (error) {}
+		} catch {}
 
 		const indexData = [];
 

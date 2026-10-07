@@ -135,7 +135,7 @@ class RouterController {
 			let id = hash.substring(1);
 			try {
 				id = decodeURIComponent(id);
-			} catch (e) {
+			} catch {
 				// Malformed URI
 			}
 			const targetEl = document.getElementById(id);

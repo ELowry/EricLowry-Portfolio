@@ -10,12 +10,12 @@ vi.mock('../core/engineContext.js', () => {
 		/**
 		 * @param {Object} pos - World position.
 		 * @param {Object} size - Physical size.
-		 * @param {Object} tileInfo - Sprite data.
-		 * @param {number} angle - Rotation angle.
-		 * @param {Object} color - Applied color.
+		 * @param {Object} _tileInfo - Sprite data.
+		 * @param {number} _angle - Rotation angle.
+		 * @param {Object} _color - Applied color.
 		 * @param {number} renderOrder - Z-index sorting.
 		 */
-		constructor(pos, size, tileInfo, angle, color, renderOrder) {
+		constructor(pos, size, _tileInfo, _angle, _color, renderOrder) {
 			this.pos = pos;
 			this.size = size;
 			this.renderOrder = renderOrder;

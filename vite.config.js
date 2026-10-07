@@ -61,7 +61,7 @@ function firebaseRewritesPlugin() {
 	return {
 		name: 'firebase-rewrites',
 		configureServer(server) {
-			server.middlewares.use((request, response, next) => {
+			server.middlewares.use((request, _response, next) => {
 				if (request.url === '/rss' || request.url === '/feed') {
 					request.url = '/feed-en_US.xml';
 				} else if (request.url.startsWith('/content/') && !request.url.includes('.')) {

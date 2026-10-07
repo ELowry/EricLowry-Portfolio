@@ -7,12 +7,8 @@ import { TextRenderer } from './textRenderer.js';
 vi.mock('./lang.js', () => {
 	return {
 		Lang: {
-			getString: vi.fn((key, data, fallback) => {
-				return fallback;
-			}),
-			getHtmlString: vi.fn((key, data, fallback) => {
-				return fallback;
-			}),
+			getString: vi.fn((_key, _data, fallback) => fallback),
+			getHtmlString: vi.fn((_key, _data, fallback) => fallback),
 		},
 	};
 });

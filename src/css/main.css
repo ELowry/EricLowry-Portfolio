@@ -878,14 +878,57 @@
 	max-width: 90dvw;
 	font-family: var(--font-mono);
 
-	> span[data-prompt] {
+	> [data-prompt] {
 		margin-left: 1ch;
 	}
 }
 
 .fake-prompt,
-*[data-prompt] {
+kbd[data-prompt] {
 	color: var(--color-accent);
+
+	&.kbd-brackets,
+	&[data-active-device='mnk'],
+	&[data-active-device='touch'] {
+		&:not(
+			[data-prompt='galleryClose'],
+			[data-prompt='galleryPrev'],
+			[data-prompt='galleryNext']
+		) {
+			&::before {
+				content: '[';
+			}
+			&::after {
+				content: ']';
+			}
+		}
+	}
+
+	&.kbd-parentheses,
+	&[data-active-device='gamepad'] {
+		&::before {
+			content: '(';
+		}
+		&::after {
+			content: ')';
+		}
+
+		&:is(
+			[data-prompt='up'],
+			[data-prompt='down'],
+			[data-prompt='left'],
+			[data-prompt='right'],
+			[data-prompt='galleryPrev'],
+			[data-prompt='galleryNext']
+		) {
+			&::before {
+				content: '[';
+			}
+			&::after {
+				content: ']';
+			}
+		}
+	}
 }
 
 /* --- OPTIONS MENU --- */

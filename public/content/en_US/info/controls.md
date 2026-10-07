@@ -2,21 +2,21 @@
 
 ## 🖦 Mouse & Keyboard
 
-- **Move:** <span data-prompt="left" data-input-force="mnk">[A]</span> <span data-prompt="right" data-input-force="mnk">[D]</span> or <span class="fake-prompt">[◁]</span> <span class="fake-prompt">[▷]</span>.
-- **Interact:** <span data-prompt="interact" data-input-force="mnk"></span>, <span class="fake-prompt">[Space]</span>, or <span class="fake-prompt">[Enter]</span>.
-- **Open Menu:** <span data-prompt="menu" data-input-force="mnk">[Esc]</span>
-- **Close / Back:** <span data-prompt="back" data-input-force="mnk">[Esc]</span>
+- **Move:** <kbd data-prompt="left" data-input-force="mnk">A</kbd> <kbd data-prompt="right" data-input-force="mnk">D</kbd> or <kbd class="fake-prompt kbd-brackets">◁</kbd> <kbd class="fake-prompt kbd-brackets">▷</kbd>.
+- **Interact:** <kbd data-prompt="interact" data-input-force="mnk">E</kbd>, <kbd class="fake-prompt kbd-brackets">Space</kbd>, or <kbd class="fake-prompt kbd-brackets">Enter</kbd>.
+- **Open Menu:** <kbd data-prompt="menu" data-input-force="mnk">Esc</kbd>
+- **Close / Back:** <kbd data-prompt="back" data-input-force="mnk">Esc</kbd>
 
 ## 🖢 Touch Device
 
-- **Move:** touch the left <span class="fake-prompt">[◧]</span> or right <span class="fake-prompt">[◨]</span> sides of the screen.
-- **Interact:** tap the center <span class="fake-prompt">[◫]</span> of the screen.
-- **Open Menu:** <span data-prompt="menu" data-input-force="touch">[≡]</span> (top right).
-- **Close / Back:** <span data-prompt="back" data-input-force="touch">[×]</span>.
+- **Move:** touch the left <kbd class="fake-prompt kbd-brackets">◧</kbd> or right <kbd class="fake-prompt kbd-brackets">◨</kbd> sides of the screen.
+- **Interact:** tap the center <kbd class="fake-prompt kbd-brackets">◫</kbd> of the screen.
+- **Open Menu:** <kbd data-prompt="menu" data-input-force="touch">≡</kbd> (top right).
+- **Close / Back:** <kbd data-prompt="back" data-input-force="touch">×</kbd>.
 
 ## 🎮 Controller
 
-- **Move:** <span data-prompt="left" data-input-force="gamepad">[◁]</span> and <span data-prompt="right" data-input-force="gamepad">[▷]</span> on the left stick or d-pad.
-- **Interact:** <span data-prompt="interact" data-input-force="gamepad">(A)</span>
-- **Open Menu:** <span data-prompt="menu" data-input-force="gamepad">(≡)</span>
-- **Close / Back:** <span data-prompt="back" data-input-force="gamepad">(B)</span>
+- **Move:** <kbd data-prompt="left" data-input-force="gamepad">◁</kbd> and <kbd data-prompt="right" data-input-force="gamepad">▷</kbd> on the left stick or d-pad.
+- **Interact:** <kbd data-prompt="interact" data-input-force="gamepad">A</kbd>
+- **Open Menu:** <kbd data-prompt="menu" data-input-force="gamepad">≡</kbd>
+- **Close / Back:** <kbd data-prompt="back" data-input-force="gamepad">B</kbd>

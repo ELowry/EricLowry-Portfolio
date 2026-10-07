@@ -367,7 +367,7 @@
 		}
 	},
 	"keys": {
-		"escape": "[Esc]"
+		"escape": "Esc"
 	},
 	"blog": {
 		"title": "Blog",

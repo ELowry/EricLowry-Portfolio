@@ -51,18 +51,12 @@ class PdfGenerator {
 		let decoded = ObfuscatorClass.deobfuscate(encodedText);
 
 		decoded = decoded
-			.replace(/&#(\d+);/g, (match, dec) => {
-				return String.fromCharCode(dec);
-			})
-			.replace(/&#x([0-9a-f]+);/gi, (match, hex) => {
-				return String.fromCharCode(parseInt(hex, 16));
-			});
+			.replace(/&#(\d+);/g, (_match, num) => String.fromCharCode(num))
+			.replace(/&#x([0-9a-f]+);/gi, (_match, hex) => String.fromCharCode(parseInt(hex, 16)));
 
-		if (decoded.includes(ObfuscatorClass.EPOCH_TOKEN)) {
-			decoded = decoded.split(ObfuscatorClass.EPOCH_TOKEN).join(Date.now().toString(36));
-		}
-
-		return decoded;
+		return decoded.includes(ObfuscatorClass.EPOCH_TOKEN)
+			? decoded.split(ObfuscatorClass.EPOCH_TOKEN).join(Date.now().toString(36))
+			: decoded;
 	}
 
 	/**
@@ -308,7 +302,7 @@ class PdfGenerator {
 		let baseHtml;
 		try {
 			baseHtml = await fs.readFile(PdfGenerator.TEMPLATE_PATH, 'utf-8');
-		} catch (error) {
+		} catch {
 			Log.error(`Template not found at ${PdfGenerator.TEMPLATE_PATH}`);
 			await vite.close();
 			return;

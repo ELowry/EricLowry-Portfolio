@@ -66,7 +66,7 @@ export class VideoEmbeds {
 								url.searchParams.delete('aspect');
 								cleanHref = url.toString();
 							}
-						} catch (e) {
+						} catch {
 							// If URL is malformed, fall back to default
 							return false;
 						}

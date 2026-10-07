@@ -2,21 +2,21 @@
 
 ## 🖦 Clavier et souris
 
-- **Déplacement:** <span data-prompt="left" data-input-force="mnk">[A]</span> <span data-prompt="right" data-input-force="mnk">[D]</span> ou <span class="fake-prompt">[◁]</span> <span class="fake-prompt">[▷]</span>.
-- **Interagir:** <span data-prompt="interact" data-input-force="mnk"></span>, <span class="fake-prompt">[Espace]</span>, ou <span class="fake-prompt">[Entrée]</span>.
-- **Ouvrir le menu:** <span data-prompt="menu" data-input-force="mnk">[Échap]</span>
-- **Fermer / Retour:** <span data-prompt="back" data-input-force="mnk">[Échap]</span>
+- **Déplacement:** <kbd data-prompt="left" data-input-force="mnk">A</kbd> <kbd data-prompt="right" data-input-force="mnk">D</kbd> ou <kbd class="fake-prompt kbd-brackets">◁</kbd> <kbd class="fake-prompt kbd-brackets">▷</kbd>.
+- **Interagir:** <kbd data-prompt="interact" data-input-force="mnk">E</kbd>, <kbd class="fake-prompt kbd-brackets">Espace</kbd>, ou <kbd class="fake-prompt kbd-brackets">Entrée</kbd>.
+- **Ouvrir le menu:** <kbd data-prompt="menu" data-input-force="mnk">Échap</kbd>
+- **Fermer / Retour:** <kbd data-prompt="back" data-input-force="mnk">Échap</kbd>
 
 ## 🖢 Écran tactile
 
-- **Déplacement:** touchez le côté gauche <span class="fake-prompt">[◧]</span> ou droit <span class="fake-prompt">[◨]</span> de l'écran.
-- **Interagir:** touchez le centre <span class="fake-prompt">[◫]</span> de l'écran.
-- **Ouvrir le menu:** <span data-prompt="menu" data-input-force="touch">[≡]</span> (en haut à droite).
-- **Fermer / Retour:** <span data-prompt="back" data-input-force="touch">[×]</span>.
+- **Déplacement:** touchez le côté gauche <kbd class="fake-prompt kbd-brackets">◧</kbd> ou droit <kbd class="fake-prompt kbd-brackets">◨</kbd> de l'écran.
+- **Interagir:** touchez le centre <kbd class="fake-prompt kbd-brackets">◫</kbd> de l'écran.
+- **Ouvrir le menu:** <kbd data-prompt="menu" data-input-force="touch">≡</kbd> (en haut à droite).
+- **Fermer / Retour:** <kbd data-prompt="back" data-input-force="touch">×</kbd>.
 
 ## 🎮 Manette
 
-- **Déplacement:** <span data-prompt="left" data-input-force="gamepad">[◁]</span> et <span data-prompt="right" data-input-force="gamepad">[▷]</span> sur le stick gauche ou la croix directionnelle.
-- **Interagir:** <span data-prompt="interact" data-input-force="gamepad">(A)</span>
-- **Ouvrir le menu:** <span data-prompt="menu" data-input-force="gamepad">(≡)</span>
-- **Fermer / Retour:** <span data-prompt="back" data-input-force="gamepad">(B)</span>
+- **Déplacement:** <kbd data-prompt="left" data-input-force="gamepad">◁</kbd> et <kbd data-prompt="right" data-input-force="gamepad">▷</kbd> sur le stick gauche ou la croix directionnelle.
+- **Interagir:** <kbd data-prompt="interact" data-input-force="gamepad">A</kbd>
+- **Ouvrir le menu:** <kbd data-prompt="menu" data-input-force="gamepad">≡</kbd>
+- **Fermer / Retour:** <kbd data-prompt="back" data-input-force="gamepad">(B)</kbd>

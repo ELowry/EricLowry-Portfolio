@@ -8,6 +8,20 @@ import { Input } from './input.js';
  */
 class InputPromptsController {
 	/**
+	 * @typedef {Object} GamepadPrompts
+	 * @property {string} [default] - Default Xbox-style prompt.
+	 * @property {string} [ps] - PlayStation-style prompt.
+	 * @property {string} [switch] - Nintendo Switch-style prompt.
+	 */
+
+	/**
+	 * @typedef {Object} DevicePrompts
+	 * @property {string} mnk - Mouse and keyboard prompt or translation key.
+	 * @property {string|GamepadPrompts} gamepad - Gamepad prompt string or mapped object.
+	 * @property {string|null} touch - Touch prompt string, or null if hidden.
+	 */
+
+	/**
 	 * @property {'mnk'|'touch'|'gamepad'} currentType - The active input device group.
 	 * @property {'default'|'ps'|'switch'} gamepadType - The variant of the gamepad/controller.
 	 * @property {Map<string, string>} layoutMap - Mapping for keyboard localized labels.
@@ -19,86 +33,72 @@ class InputPromptsController {
 	}
 
 	/**
-	 * Structure:
-	 * ```
-	 * {
-	 * 	[action: string]: {
-	 * 		mnk: string,
-	 * 		gamepad: string | {
-	 * 			default?: string,
-	 * 			ps?: string,
-	 * 			switch?: string
-	 * 		},
-	 * 		touch: string | null
-	 * 	}
-	 * }
-	 * ```
-	 *
-	 * @returns {Object} a mapping of input actions to their corresponding prompt representations for different input devices: mouse & keyboard (mnk), gamepad, and touch
+	 * Provides the mapping of input actions to their corresponding prompt representations.
+	 * @returns {Object<string, DevicePrompts>} The mapped input actions.
 	 * @constant
 	 */
 	static get PROMPT_MAPPING() {
 		return {
 			menu: {
 				mnk: 'keys.escape',
-				gamepad: '(≡)',
-				touch: '[≡]',
+				gamepad: '≡',
+				touch: '≡',
 			},
 			back: {
 				mnk: 'keys.escape',
 				gamepad: {
-					default: '(B)',
-					ps: '(○)',
-					switch: '(A)',
+					default: 'B',
+					ps: '○',
+					switch: 'A',
 				},
-				touch: '[×]',
+				touch: '×',
 			},
 			interact: {
 				mnk: 'E',
 				gamepad: {
-					default: '(A)',
-					ps: '(x)',
-					switch: '(B)',
+					default: 'A',
+					ps: 'x',
+					switch: 'B',
 				},
-				touch: '[🖢]',
+				touch: '🖢',
 			},
 			up: {
 				mnk: 'W',
-				gamepad: '[△]',
+				gamepad: '△',
 				touch: null,
 			},
 			left: {
 				mnk: 'A',
-				gamepad: '[◁]',
+				gamepad: '◁',
 				touch: null,
 			},
 			down: {
 				mnk: 'S',
-				gamepad: '[▽]',
+				gamepad: '▽',
 				touch: null,
 			},
 			right: {
 				mnk: 'D',
-				gamepad: '[▷]',
+				gamepad: '▷',
 				touch: null,
 			},
 			galleryClose: {
 				mnk: 'x',
 				gamepad: {
-					default: '(B)',
-					ps: '(○)',
-					switch: '(A)',
+					default: 'B',
+					ps: '○',
+					switch: 'A',
 				},
 				touch: 'x',
 			},
 			galleryPrev: {
 				mnk: '‹',
-				gamepad: '[◁]',
+				gamepad: '◁',
 				touch: '‹',
 			},
 			galleryNext: {
 				mnk: '›',
-				gamepad: '[▷]',
+				gamepad: '▷',
 				touch: '›',
 			},
 		};
@@ -106,7 +106,6 @@ class InputPromptsController {
 
 	/**
 	 * Initializes the input prompt module by detecting the current layout, setting up event listeners for input type and language changes, and refreshing the prompt state accordingly.
-	 *
 	 * @returns {Promise<void>} (resolves) when initialization is complete.
 	 */
 	async init() {
@@ -137,7 +136,7 @@ class InputPromptsController {
 	}
 
 	/**
-	 * Scans the document for `[data-prompt]` elements and updates them.
+	 * Scans the document for `[data-prompt]` elements and updates them.  
 	 * Call manually when modifying HTML contents susceptible of displaying inputs.
 	 * @param {HTMLElement} [root=document] - The root element to scan for prompt elements. Defaults to the main document.
 	 * @returns {void} nothing
@@ -157,6 +156,7 @@ class InputPromptsController {
 			}
 
 			prompt.style.display = '';
+			prompt.dataset.activeDevice = typeToUse;
 
 			if (typeToUse === 'mnk') {
 				content = this.#applyKeyboardLayout(content);
@@ -243,25 +243,19 @@ class InputPromptsController {
 	}
 
 	/**
-	 * Detects the user's keyboard layout to properly display `WASD`/`ZQSD`/…
+	 * Detects the user's keyboard layout to properly display `WASD`/`ZQSD`/…  
 	 * Prioritizes the native API, falls back to browser language.
 	 */
 	async #detectKeyboardLayout() {
-		this.layoutMap.set('A', '[A]');
-		this.layoutMap.set('D', '[D]');
-		this.layoutMap.set('E', '[E]');
-		this.layoutMap.set('S', '[S]');
-		this.layoutMap.set('W', '[W]');
-
 		if (navigator.keyboard && navigator.keyboard.getLayoutMap) {
 			try {
 				const map = await navigator.keyboard.getLayoutMap();
-				// Map physical codes to the actual label on the user's key
-				this.layoutMap.set('A', '[' + map.get('KeyA')?.toUpperCase() + ']' || '[A]');
-				this.layoutMap.set('D', '[' + map.get('KeyD')?.toUpperCase() + ']' || '[D]');
-				this.layoutMap.set('E', '[' + map.get('KeyE')?.toUpperCase() + ']' || '[E]');
-				this.layoutMap.set('S', '[' + map.get('KeyS')?.toUpperCase() + ']' || '[S]');
-				this.layoutMap.set('W', '[' + map.get('KeyW')?.toUpperCase() + ']' || '[W]');
+				['A', 'D', 'E', 'S', 'W'].forEach((key) => {
+					const mapped = map.get(`Key${key}`)?.toUpperCase();
+					if (mapped && mapped !== key) {
+						this.layoutMap.set(key, mapped);
+					}
+				});
 				return;
 			} catch (e) {
 				console.warn('Layout detection failed, using fallback.', e);
@@ -271,17 +265,11 @@ class InputPromptsController {
 		// Fallback
 		const langs =
 			navigator.languages || (navigator.language ? [navigator.language] : ['en_US']);
-		const lang = langs.map((x) => {
-			const y = x.split(/[-_]/);
-			if (y.length <= 1) {
-				return y[0].toLowerCase();
-			}
-			return y[0].toLowerCase();
-		});
-		const primaryLang = lang[0];
-		if (primaryLang === 'fr' || primaryLang === 'be' || primaryLang === 'ch') {
-			this.layoutMap.set('A', '[Q]');
-			this.layoutMap.set('W', '[Z]');
+		const primaryLang = langs[0].split(/[-_]/)[0].toLowerCase();
+
+		if (['fr', 'be', 'ch'].includes(primaryLang)) {
+			this.layoutMap.set('A', 'Q');
+			this.layoutMap.set('W', 'Z');
 		}
 	}
 }

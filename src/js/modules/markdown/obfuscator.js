@@ -276,7 +276,7 @@ export class Obfuscator {
 					link.removeAttribute('data-text-enc');
 					link.removeAttribute('data-type');
 				}
-			} catch (e) {
+			} catch {
 				console.error('Failed to decode contact information');
 			}
 		}
@@ -293,8 +293,8 @@ export class Obfuscator {
 		}
 		try {
 			let output = btoa(
-				encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
-					String.fromCharCode(Number('0x' + p1))
+				encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_match, hexPair) =>
+					String.fromCharCode(Number('0x' + hexPair))
 				)
 			);
 			output = Obfuscator.#reverse(output);
@@ -328,10 +328,10 @@ export class Obfuscator {
 					.join('')
 			);
 			return output;
-		} catch (e) {
+		} catch {
 			try {
 				return atob(str);
-			} catch (inner) {
+			} catch {
 				return str;
 			}
 		}
@@ -358,7 +358,7 @@ export class Obfuscator {
 				decodedText = text;
 				text = Obfuscator.obfuscate(text);
 			}
-		} catch (e) {
+		} catch {
 			decodedText = text;
 		}
 

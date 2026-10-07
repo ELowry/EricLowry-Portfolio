@@ -382,7 +382,7 @@ class ExternalLinksGenerator {
 							const stateLabel = issueData.state === 'closed' ? 'Closed' : 'Open';
 							description = `${stateLabel} issue in ${owner}/${repo}. ${description}`;
 						}
-					} catch (e) {
+					} catch {
 						// Suppress sub-fetch errors
 					}
 				}
@@ -407,7 +407,7 @@ class ExternalLinksGenerator {
 							const stateLabel = prData.state === 'closed' ? 'Closed' : 'Open';
 							description = `${stateLabel} pull request in ${owner}/${repo}. ${description}`;
 						}
-					} catch (e) {
+					} catch {
 						// Suppress sub-fetch errors
 					}
 				}
@@ -526,14 +526,14 @@ class ExternalLinksGenerator {
 					);
 
 					return `/assets/images/external-links/${filename}`;
-				} catch (imgError) {
+				} catch {
 					Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
 				} finally {
 					if (fs.existsSync(tempInputPath)) {
 						fs.unlinkSync(tempInputPath);
 					}
 				}
-			} catch (imgError) {
+			} catch {
 				Log.warn(`    -> Skipping unsupported or broken image format: ${imgUrl}`);
 			}
 		}
@@ -781,7 +781,7 @@ class ExternalLinksGenerator {
 						parsed.hash = '';
 						allUrls.add(parsed.toString());
 					}
-				} catch (e) {
+				} catch {
 					// Invalid URL, skip
 				}
 			});
