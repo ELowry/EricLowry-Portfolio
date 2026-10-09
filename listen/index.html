@@ -64,18 +64,22 @@
 
 			.ambient-backdrop {
 				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
 				opacity: 0;
 				mix-blend-mode: soft-light;
 				image-rendering: crisp-edges;
 				image-rendering: -moz-crisp-edges;
 				image-rendering: -o-crisp-edges;
 				image-rendering: -webkit-optimize-contrast;
+				width: calc(max(100vw, 100vh) * (16 / 9));
+				height: max(100vw, 100vh);
 				-ms-interpolation-mode: nearest-neighbor;
 				z-index: 0;
 				transition:
 					opacity 0.8s ease-in-out,
 					background-image 0.5s ease-in-out;
-				inset: 0 -38.89vw;
 				background-position: center;
 				background-size: cover;
 				pointer-events: none;
@@ -664,14 +668,8 @@
 				 * @returns {string} The constructed thumbnail URL.
 				 */
 				static #getThumbnailUrl(youtubeId, { quality = 'maxres', format = 'webp' } = {}) {
-					const qualityName =
-						quality === 'maxres'
-							? 'maxresdefault'
-							: quality === 'default'
-								? 'default'
-								: `${quality}default`;
 					const dir = format === 'webp' ? 'vi_webp' : 'vi';
-					return `https://i.ytimg.com/${dir}/${encodeURIComponent(youtubeId)}/${qualityName}.${format}`;
+					return `https://i.ytimg.com/${dir}/${encodeURIComponent(youtubeId)}/${quality}default.${format}`;
 				}
 
 				/**
@@ -725,10 +723,11 @@
 							const response = await fetch(
 								`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${encodeURIComponent(songData.yt)}`
 							);
-							const meta = await response.json();
-
-							songData.title = meta.title || 'Unknown Track';
-							songData.artist = meta.author_name || 'Unknown Artist';
+							if (response.ok) {
+								const meta = await response.json();
+								songData.title = meta.title || 'Unknown Track';
+								songData.artist = meta.author_name || 'Unknown Artist';
+							}
 						} catch (error) {
 							console.warn('Failed to fetch YouTube metadata client-side:', error);
 						}
@@ -882,7 +881,7 @@
 						: artUrl;
 					const backdropUrl = youtubeId
 						? ListenPageController.#getThumbnailUrl(youtubeId, {
-								quality: 'default',
+								quality: '',
 								format: 'jpg',
 							})
 						: artUrl;
