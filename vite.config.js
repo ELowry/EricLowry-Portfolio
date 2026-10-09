@@ -70,6 +70,11 @@ function firebaseRewritesPlugin() {
 					request.url = '/lang/langs.json';
 				} else if (request.url.startsWith('/blog/') && !request.url.includes('.')) {
 					request.url = `${request.url}/index.html`;
+				} else if (request.url.startsWith('/listen')) {
+					const query = request.url.includes('?')
+						? request.url.slice(request.url.indexOf('?'))
+						: '';
+					request.url = `/listen/index.html${query}`;
 				}
 
 				next();
@@ -274,6 +279,10 @@ export default defineConfig(({ mode }) => {
 			emptyOutDir: true,
 			cssMinify: 'lightningcss',
 			rollupOptions: {
+				input: {
+					main: path.resolve('index.html'),
+					listen: path.resolve('listen/index.html'),
+				},
 				output: {
 					manualChunks(id) {
 						if (id.includes('.config.js') || id.includes('.sprites.js')) {
