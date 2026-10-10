@@ -71,10 +71,10 @@ function firebaseRewritesPlugin() {
 				} else if (request.url.startsWith('/blog/') && !request.url.includes('.')) {
 					request.url = `${request.url}/index.html`;
 				} else if (request.url.startsWith('/listen')) {
-					const query = request.url.includes('?')
-						? request.url.slice(request.url.indexOf('?'))
-						: '';
-					request.url = `/listen/index.html${query}`;
+					const [pathname, search] = request.url.split('?');
+					if (pathname === '/listen' || pathname === '/listen/') {
+						request.url = `/listen/index.html${search ? `?${search}` : ''}`;
+					}
 				}
 
 				next();

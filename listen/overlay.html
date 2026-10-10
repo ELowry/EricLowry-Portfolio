@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Metrolist OBS Overlay</title>
+		<link rel="stylesheet" href="../src/css/main.css" />
+		<style>
+			/* latin-ext */
+			@font-face {
+				font-style: normal;
+				font-weight: 300 700;
+				src: url(../public/assets/fonts/space-grotesk-ext.woff2) format('woff2');
+				font-family: 'Space Grotesk';
+				font-display: swap;
+				unicode-range:
+					U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+					U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+					U+2113, U+2C60-2C7F, U+A720-A7FF;
+			}
+
+			/* latin */
+			@font-face {
+				font-style: normal;
+				font-weight: 300 700;
+				src: url(../public/assets/fonts/space-grotesk.woff2) format('woff2');
+				font-family: 'Space Grotesk';
+				font-display: swap;
+				unicode-range:
+					U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+					U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+					U+FEFF, U+FFFD;
+			}
+
+			/* latin-ext */
+			@font-face {
+				font-style: normal;
+				font-weight: 400;
+				src: url(../public/assets/fonts/vt323-ext.woff2) format('woff2');
+				font-family: 'VT323';
+				font-display: swap;
+				unicode-range:
+					U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+					U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+					U+2113, U+2C60-2C7F, U+A720-A7FF;
+			}
+			/* latin */
+			@font-face {
+				font-style: normal;
+				font-weight: 400;
+				src: url(../public/assets/fonts/vt323.woff2) format('woff2');
+				font-family: 'VT323';
+				font-display: swap;
+				unicode-range:
+					U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+					U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+					U+FEFF, U+FFFD;
+			}
+
+			/* symbols */
+			@font-face {
+				font-style: normal;
+				font-weight: 400;
+				src: url(../public/assets/fonts/symbols.woff2) format('woff2');
+				font-family: 'Noto Sans Symbols 2';
+				font-display: swap;
+				unicode-range:
+					U+0001-000C, U+000E-001F, U+007F-009F, U+20DD-20E0, U+20E2-20E4, U+2150-218F,
+					U+2190, U+2192, U+2194-2199, U+21AF, U+21E6-21F0, U+21F3, U+2218-2219, U+2299,
+					U+22C4-22C6, U+2300-243F, U+2440-244A, U+2460-24FF, U+25A0-27BF, U+2800-28FF,
+					U+2921-2922, U+2981, U+29BF, U+29EB, U+2B00-2BFF, U+4DC0-4DFF, U+FFF9-FFFB,
+					U+10140-1018E, U+10190-1019C, U+101A0, U+101D0-101FD, U+102E0-102FB,
+					U+10E60-10E7E, U+1D2C0-1D2D3, U+1D2E0-1D37F, U+1F000-1F0FF, U+1F100-1F1AD,
+					U+1F1E6-1F1FF, U+1F30D-1F30F, U+1F315, U+1F31C, U+1F31E, U+1F320-1F32C, U+1F336,
+					U+1F378, U+1F37D, U+1F382, U+1F393-1F39F, U+1F3A7-1F3A8, U+1F3AC-1F3AF, U+1F3C2,
+					U+1F3C4-1F3C6, U+1F3CA-1F3CE, U+1F3D4-1F3E0, U+1F3ED, U+1F3F1-1F3F3,
+					U+1F3F5-1F3F7, U+1F408, U+1F415, U+1F41F, U+1F426, U+1F43F, U+1F441-1F442,
+					U+1F444, U+1F446-1F449, U+1F44C-1F44E, U+1F453, U+1F46A, U+1F47D, U+1F4A3,
+					U+1F4B0, U+1F4B3, U+1F4B9, U+1F4BB, U+1F4BF, U+1F4C8-1F4CB, U+1F4D6, U+1F4DA,
+					U+1F4DF, U+1F4E3-1F4E6, U+1F4EA-1F4ED, U+1F4F7, U+1F4F9-1F4FB, U+1F4FD-1F4FE,
+					U+1F503, U+1F507-1F50B, U+1F50D, U+1F512-1F513, U+1F53E-1F54A, U+1F54F-1F5FA,
+					U+1F610, U+1F650-1F67F, U+1F687, U+1F68D, U+1F691, U+1F694, U+1F698, U+1F6AD,
+					U+1F6B2, U+1F6B9-1F6BA, U+1F6BC, U+1F6C6-1F6CF, U+1F6D3-1F6D7, U+1F6E0-1F6EA,
+					U+1F6F0-1F6F3, U+1F6F7-1F6FC, U+1F700-1F7FF, U+1F800-1F80B, U+1F810-1F847,
+					U+1F850-1F859, U+1F860-1F887, U+1F890-1F8AD, U+1F8B0-1F8BB, U+1F8C0-1F8C1,
+					U+1F900-1F90B, U+1F93B, U+1F946, U+1F984, U+1F996, U+1F9E9, U+1FA00-1FA6F,
+					U+1FA70-1FA7C, U+1FA80-1FA89, U+1FA8F-1FAC6, U+1FACE-1FADC, U+1FADF-1FAE9,
+					U+1FAF0-1FAF8, U+1FB00-1FBFF;
+			}
+
+			/* latin-ext */
+			@font-face {
+				font-style: italic;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-mono-ext-i.woff2)
+					format('woff2');
+				font-family: 'Atkinson Hyperlegible Mono';
+				font-display: swap;
+				unicode-range:
+					U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+					U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+					U+2113, U+2C60-2C7F, U+A720-A7FF;
+			}
+			/* latin */
+			@font-face {
+				font-style: italic;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-mono-i.woff2) format('woff2');
+				font-family: 'Atkinson Hyperlegible Mono';
+				font-display: swap;
+				unicode-range:
+					U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+					U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+					U+FEFF, U+FFFD;
+			}
+			/* latin-ext */
+			@font-face {
+				font-style: normal;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-mono-ext.woff2)
+					format('woff2');
+				font-family: 'Atkinson Hyperlegible Mono';
+				font-display: swap;
+				unicode-range:
+					U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+					U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+					U+2113, U+2C60-2C7F, U+A720-A7FF;
+			}
+			/* latin */
+			@font-face {
+				font-style: normal;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-mono.woff2) format('woff2');
+				font-family: 'Atkinson Hyperlegible Mono';
+				font-display: swap;
+				unicode-range:
+					U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+					U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+					U+FEFF, U+FFFD;
+			}
+
+			/* latin-ext */
+			@font-face {
+				font-style: italic;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-next-ext-i.woff2)
+					format('woff2');
+				font-family: 'Atkinson Hyperlegible Next';
+				font-display: swap;
+				unicode-range:
+					U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+					U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+					U+2113, U+2C60-2C7F, U+A720-A7FF;
+			}
+			/* latin */
+			@font-face {
+				font-style: italic;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-next-i.woff2) format('woff2');
+				font-family: 'Atkinson Hyperlegible Next';
+				font-display: swap;
+				unicode-range:
+					U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+					U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+					U+FEFF, U+FFFD;
+			}
+			/* latin-ext */
+			@font-face {
+				font-style: normal;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-next-ext.woff2)
+					format('woff2');
+				font-family: 'Atkinson Hyperlegible Next';
+				font-display: swap;
+				unicode-range:
+					U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+					U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+					U+2113, U+2C60-2C7F, U+A720-A7FF;
+			}
+			/* latin */
+			@font-face {
+				font-style: normal;
+				font-weight: 200 800;
+				src: url(../public/assets/fonts/atkinson-hyperlegible-next.woff2) format('woff2');
+				font-family: 'Atkinson Hyperlegible Next';
+				font-display: swap;
+				unicode-range:
+					U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+					U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+					U+FEFF, U+FFFD;
+			}
+
+			html,
+			body {
+				background-color: transparent;
+			}
+
+			#music-widget {
+				display: flex;
+				align-items: center;
+				gap: 1.5rem;
+				transform: translateY(12px);
+				opacity: 0;
+				transition:
+					opacity 1s var(--transition-easing),
+					transform 1s var(--transition-easing);
+				box-sizing: border-box;
+				border: var(--border-width) solid var(--color-background);
+				background-color: oklch(from var(--color-background) l c h / 98%);
+				width: 100%;
+				pointer-events: none;
+				color: var(--color-text);
+				font-family: var(--font-sans);
+
+				&.is-visible {
+					transform: translateY(0);
+					opacity: 1;
+					pointer-events: auto;
+				}
+
+				&.is-paused {
+					.progress-fill {
+						opacity: 0.5;
+					}
+					.marquee-track.scrolling {
+						animation-play-state: paused;
+					}
+					.art-pause-overlay {
+						opacity: 1 !important;
+					}
+				}
+
+				&[hidden] {
+					display: none !important;
+				}
+
+				.art-container {
+					position: relative;
+					flex-shrink: 0;
+					overflow: hidden;
+					line-height: 0;
+
+					img {
+						width: 120px;
+						height: 120px;
+						object-fit: cover;
+					}
+
+					.art-pause-overlay {
+						display: flex;
+						position: absolute;
+						justify-content: center;
+						align-items: center;
+						opacity: 0;
+						transition: opacity 1s var(--transition-easing);
+						inset: 0;
+						background-color: rgba(0, 0, 0, 0.5);
+						color: var(--color-text);
+					}
+				}
+
+				.text-container {
+					display: flex;
+					flex: 1 1 auto;
+					flex-direction: column;
+					justify-content: center;
+					min-width: 0;
+					overflow: hidden;
+
+					.marquee-row {
+						display: block;
+						position: relative;
+						width: 100%;
+						overflow: hidden;
+						white-space: nowrap;
+
+						.marquee-track {
+							display: flex;
+							align-items: center;
+							will-change: transform;
+							width: max-content;
+							white-space: nowrap;
+
+							&.scrolling {
+								animation: marquee-scroll linear infinite;
+							}
+
+							.marquee-group {
+								display: flex;
+								flex-shrink: 0;
+								align-items: center;
+								gap: 1.5rem;
+								padding-right: 1.5rem;
+
+								> * {
+									margin-right: 0;
+									margin-left: 0;
+								}
+							}
+
+							.marquee-spacer {
+								display: inline-block;
+								opacity: 0.6;
+								color: var(--color-accent);
+							}
+						}
+					}
+
+					.progress-bar {
+						margin-top: 0.75rem;
+						border-radius: 2px;
+						background-color: oklch(from var(--color-text) l c h / 20%);
+						width: 100%;
+						height: 4px;
+						overflow: hidden;
+
+						.progress-fill {
+							transform-origin: left;
+							transition: opacity 1s var(--transition-easing);
+							will-change: width;
+							background-color: var(--color-accent);
+							width: 0%;
+							height: 100%;
+						}
+					}
+
+					.track-name {
+						margin: 0 0 0.2em 0;
+						color: var(--color-text);
+						font-size: 1.4rem;
+						font-family: var(--font-sans);
+					}
+
+					.artist-name {
+						margin: 0 0 0.2em 0;
+						color: var(--color-accent);
+						font-family: var(--font-mono);
+					}
+
+					.album-name {
+						opacity: 0.8;
+						margin: 0;
+						color: var(--color-text);
+						font-family: var(--font-sans);
+					}
+				}
+
+				.qr-container {
+					flex-shrink: 0;
+
+					svg {
+						display: block;
+						shape-rendering: crispEdges;
+						background-color: var(--color-text);
+						padding: 0.4rem;
+						width: 120px;
+						height: 120px;
+
+						path {
+							fill: var(--color-background);
+						}
+					}
+				}
+			}
+
+			@keyframes marquee-scroll {
+				0% {
+					transform: translateX(0);
+				}
+				100% {
+					transform: translateX(-50%);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="music-widget" hidden>
+			<div class="art-container">
+				<img id="album-art" src="" alt="Album Art" />
+				<div class="art-pause-overlay" aria-hidden="true">
+					<svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+						<rect x="6" y="5" width="4" height="14" />
+						<rect x="14" y="5" width="4" height="14" />
+					</svg>
+				</div>
+			</div>
+			<div class="text-container">
+				<div class="marquee-row">
+					<div id="track-name-track" class="marquee-track">
+						<h2 id="track-name" class="track-name text-size-h3"></h2>
+					</div>
+				</div>
+				<div class="marquee-row">
+					<div id="artist-name-track" class="marquee-track">
+						<h3 id="artist-name" class="artist-name text-size-h4"></h3>
+					</div>
+				</div>
+				<div class="marquee-row">
+					<div id="album-name-track" class="marquee-track">
+						<h4 id="album-name" class="album-name text-caption"></h4>
+					</div>
+				</div>
+				<div class="progress-bar">
+					<div id="progress-fill" class="progress-fill"></div>
+				</div>
+			</div>
+			<div id="qr-container" class="qr-container"></div>
+		</div>
+
+		<script type="module">
+			import protobuf from 'https://esm.sh/protobufjs';
+			import QRCode from 'https://esm.sh/qrcode';
+
+			class ListenTogetherClient extends EventTarget {
+				#ws = null;
+				#protoRoot = null;
+				#roomCode;
+				#username;
+				#serverUrl;
+				#currentTrack = null;
+				#isPlaying = false;
+				#position = 0;
+				#lastUpdate = 0;
+				#reconnectTimer = null;
+				#pingInterval = null;
+				#pingSequence = 0;
+
+				constructor(
+					roomCode,
+					{ username = 'Widget', serverUrl = 'wss://metroserverx.meowery.eu/ws' } = {}
+				) {
+					super();
+					this.#roomCode = roomCode;
+					this.#username = username;
+					this.#serverUrl = serverUrl;
+				}
+
+				get playbackProgress() {
+					if (!this.#currentTrack) {
+						return null;
+					}
+
+					let livePosition = this.#position;
+
+					if (this.#isPlaying) {
+						livePosition += Date.now() - this.#lastUpdate;
+					}
+
+					const clampedPosition = Math.max(
+						0,
+						Math.min(livePosition, this.#currentTrack.duration)
+					);
+
+					return {
+						position: clampedPosition,
+						duration: this.#currentTrack.duration,
+						percent: Math.min(clampedPosition / this.#currentTrack.duration, 1),
+						isPlaying: this.#isPlaying,
+					};
+				}
+
+				get currentTrack() {
+					return this.#currentTrack;
+				}
+
+				static get PROTO_DEF() {
+					return `
+					syntax = "proto3";
+					package listentogether;
+
+					message Envelope {
+						string type = 1;
+						bytes payload = 2;
+						bool compressed = 3;
+					}
+					message TrackInfo {
+						string id = 1;
+						string title = 2;
+						string artist = 3;
+						string album = 4;
+						int64 duration = 5;
+						string thumbnail = 6;
+						string suggested_by = 7;
+					}
+					message RoomState {
+						string room_code = 1;
+						string host_id = 2;
+						TrackInfo current_track = 4;
+						bool is_playing = 5;
+						int64 position = 6;
+						int64 last_update = 7;
+						float volume = 8;
+						uint64 revision = 10;
+					}
+					message ClientCapabilities {
+						bool supports_protobuf = 1;
+						bool supports_compression = 2;
+						string client_version = 3;
+					}
+					message JoinRoomPayload {
+						string room_code = 1;
+						string username = 2;
+					}
+					message JoinApprovedPayload {
+						string room_code = 1;
+						string user_id = 2;
+						string session_token = 3;
+						RoomState state = 4;
+					}
+					message SyncStatePayload {
+						TrackInfo current_track = 1;
+						bool is_playing = 2;
+						int64 position = 3;
+						int64 last_update = 4;
+						float volume = 6;
+						uint64 revision = 7;
+					}
+					message PlaybackActionPayload {
+						string action = 1;
+						string track_id = 2;
+						int64 position = 3;
+						TrackInfo track_info = 4;
+						bool insert_next = 5;
+						repeated TrackInfo queue = 6;
+						string queue_title = 7;
+						float volume = 8;
+						int64 server_time = 9;
+						uint64 revision = 10;
+						int64 captured_at_server_time = 11;
+					}
+					message PingPayload {
+						int64 client_time = 1;
+						uint64 sequence = 2;
+					}
+					message ErrorPayload {
+						string code = 1;
+						string message = 2;
+					}`;
+				}
+
+				async init() {
+					if (this.#reconnectTimer) {
+						clearTimeout(this.#reconnectTimer);
+						this.#reconnectTimer = null;
+					}
+
+					// We do not use keepCase: true here. We map to the schema natively using camelCase property names in JS.
+					if (!this.#protoRoot) {
+						this.#protoRoot = protobuf.parse(ListenTogetherClient.PROTO_DEF).root;
+					}
+
+					return new Promise((resolve) => {
+						this.#ws = new WebSocket(this.#serverUrl);
+						this.#ws.binaryType = 'arraybuffer';
+
+						this.#ws.addEventListener('open', () => {
+							this.#sendHandshake();
+							this.#sendJoinRequest();
+
+							this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
+							resolve();
+						});
+
+						this.#ws.addEventListener('message', async (event) => {
+							await this.#handleMessage(event.data);
+						});
+
+						this.#ws.addEventListener('error', (err) => {
+							console.error('ListenTogether WebSocket Error:', err);
+						});
+
+						this.#ws.addEventListener('close', () => {
+							this.#handleDisconnect();
+						});
+					});
+				}
+
+				disconnect() {
+					if (this.#reconnectTimer) {
+						clearTimeout(this.#reconnectTimer);
+						this.#reconnectTimer = null;
+					}
+					if (this.#pingInterval) {
+						clearInterval(this.#pingInterval);
+						this.#pingInterval = null;
+					}
+
+					if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
+						this.#ws.close();
+					}
+				}
+
+				#toNumber(value, fallback = 0) {
+					if (value === null || value === undefined) return fallback;
+					if (typeof value.toNumber === 'function') return value.toNumber();
+					return Number(value);
+				}
+
+				async #decompressGzip(compressedBytes) {
+					const ds = new DecompressionStream('gzip');
+					const writer = ds.writable.getWriter();
+					writer.write(compressedBytes).catch(() => {});
+					writer.close();
+
+					const response = new Response(ds.readable);
+					const buffer = await response.arrayBuffer();
+					return new Uint8Array(buffer);
+				}
+
+				#sendMessage(msgType, payloadMessage, protoMessageName) {
+					if (!this.#ws || this.#ws.readyState !== WebSocket.OPEN) return;
+
+					const PayloadType = this.#protoRoot.lookupType(
+						`listentogether.${protoMessageName}`
+					);
+					// Using .create() ensures protobufjs natively translates JS camelCase to the schema's snake_case
+					const message = PayloadType.create(payloadMessage);
+					const payloadBytes = PayloadType.encode(message).finish();
+
+					const Envelope = this.#protoRoot.lookupType('listentogether.Envelope');
+					const envMessage = Envelope.create({
+						type: msgType,
+						payload: payloadBytes,
+						compressed: false,
+					});
+					const envelopeBytes = Envelope.encode(envMessage).finish();
+
+					this.#ws.send(envelopeBytes);
+				}
+
+				#sendHandshake() {
+					this.#sendMessage(
+						'client_capabilities',
+						{
+							supportsProtobuf: true,
+							supportsCompression: true,
+							clientVersion: '1',
+						},
+						'ClientCapabilities'
+					);
+				}
+
+				#sendJoinRequest() {
+					this.#sendMessage(
+						'join_room',
+						{
+							roomCode: this.#roomCode,
+							username: this.#username,
+						},
+						'JoinRoomPayload'
+					);
+				}
+
+				#sendPing() {
+					this.#sendMessage(
+						'ping',
+						{
+							clientTime: Date.now(),
+							sequence: ++this.#pingSequence,
+						},
+						'PingPayload'
+					);
+				}
+
+				async #handleMessage(buffer) {
+					const dataBytes = new Uint8Array(buffer);
+					const Envelope = this.#protoRoot.lookupType('listentogether.Envelope');
+
+					let envelope;
+					try {
+						envelope = Envelope.decode(dataBytes);
+					} catch (error) {
+						console.error('Failed to decode envelope:', error);
+						return;
+					}
+
+					let payloadBytes = envelope.payload;
+					if (envelope.compressed) {
+						try {
+							payloadBytes = await this.#decompressGzip(payloadBytes);
+						} catch (error) {
+							console.error('Failed to decompress gzip payload:', error);
+							return;
+						}
+					}
+
+					switch (envelope.type) {
+						case 'error': {
+							const ErrorType = this.#protoRoot.lookupType(
+								'listentogether.ErrorPayload'
+							);
+							const errorData = ErrorType.decode(payloadBytes);
+							console.error(`Server Error [${errorData.code}]:`, errorData.message);
+							this.dispatchEvent(
+								new CustomEvent('error-payload', { detail: errorData })
+							);
+							break;
+						}
+						case 'join_approved': {
+							const JoinType = this.#protoRoot.lookupType(
+								'listentogether.JoinApprovedPayload'
+							);
+							const joinData = JoinType.decode(payloadBytes);
+							if (joinData.state) {
+								this.#applySyncState(joinData.state);
+							}
+							break;
+						}
+						case 'sync_state': {
+							const SyncType = this.#protoRoot.lookupType(
+								'listentogether.SyncStatePayload'
+							);
+							const syncData = SyncType.decode(payloadBytes);
+							this.#applySyncState(syncData);
+							break;
+						}
+						case 'sync_playback': {
+							const PlaybackType = this.#protoRoot.lookupType(
+								'listentogether.PlaybackActionPayload'
+							);
+							const actionData = PlaybackType.decode(payloadBytes);
+							this.#applyPlaybackAction(actionData);
+							break;
+						}
+					}
+				}
+
+				#applySyncState(state) {
+					this.#isPlaying = state.isPlaying || false;
+					this.#position = this.#toNumber(state.position);
+					this.#lastUpdate = Date.now();
+
+					if (state.currentTrack) {
+						this.#currentTrack = {
+							id: state.currentTrack.id,
+							title: state.currentTrack.title,
+							artist: state.currentTrack.artist,
+							album: state.currentTrack.album,
+							duration: this.#toNumber(state.currentTrack.duration),
+							thumbnail: state.currentTrack.thumbnail,
+						};
+					} else {
+						this.#currentTrack = null;
+					}
+
+					this.dispatchEvent(new CustomEvent('state-synced'));
+					this.dispatchEvent(
+						new CustomEvent('track-changed', { detail: this.#currentTrack })
+					);
+				}
+
+				#applyPlaybackAction(actionData) {
+					this.#lastUpdate = Date.now();
+
+					switch (actionData.action) {
+						case 'play':
+							this.#isPlaying = true;
+							this.#position = this.#toNumber(actionData.position);
+							break;
+						case 'pause':
+							this.#isPlaying = false;
+							this.#position = this.#toNumber(actionData.position);
+							break;
+						case 'seek':
+						case 'change_track':
+						case 'sync_queue':
+							this.#position = this.#toNumber(actionData.position);
+							if (actionData.trackInfo) {
+								this.#currentTrack = {
+									id: actionData.trackInfo.id,
+									title: actionData.trackInfo.title,
+									artist: actionData.trackInfo.artist,
+									album: actionData.trackInfo.album,
+									duration: this.#toNumber(actionData.trackInfo.duration),
+									thumbnail: actionData.trackInfo.thumbnail,
+								};
+								this.dispatchEvent(
+									new CustomEvent('track-changed', { detail: this.#currentTrack })
+								);
+							} else if (actionData.action === 'change_track') {
+								this.#currentTrack = null;
+								this.dispatchEvent(
+									new CustomEvent('track-changed', { detail: null })
+								);
+							}
+							break;
+					}
+
+					this.dispatchEvent(
+						new CustomEvent('state-synced', { detail: this.playbackProgress })
+					);
+				}
+
+				#handleDisconnect() {
+					if (this.#pingInterval) {
+						clearInterval(this.#pingInterval);
+						this.#pingInterval = null;
+					}
+
+					console.warn('ListenTogether WebSocket closed. Reconnecting in 5s...');
+					this.#ws = null;
+					this.#reconnectTimer = setTimeout(() => {
+						this.init().catch(() => this.#handleDisconnect());
+					}, 5000);
+				}
+			}
+
+			class OverlayController {
+				#widgetElement;
+				#trackTrack;
+				#artistTrack;
+				#albumTrack;
+				#artElement;
+				#qrContainer;
+				#progressFill;
+				#listenCode;
+				#serverUrl;
+				#lastActivitySignature;
+				#hideTimeout;
+				#listenClient;
+				#wasPlaying;
+				#animationFrame;
+
+				constructor() {
+					this.#widgetElement = document.getElementById('music-widget');
+					this.#trackTrack = document.getElementById('track-name-track');
+					this.#artistTrack = document.getElementById('artist-name-track');
+					this.#albumTrack = document.getElementById('album-name-track');
+					this.#artElement = document.getElementById('album-art');
+					this.#qrContainer = document.getElementById('qr-container');
+					this.#progressFill = document.getElementById('progress-fill');
+
+					const params = this.#parseUrlParams();
+					this.#listenCode = params.code;
+					this.#serverUrl = params.server || 'wss://metroserverx.meowery.eu/ws';
+
+					this.#lastActivitySignature = '';
+					this.#hideTimeout = null;
+					this.#wasPlaying = null;
+					this.#animationFrame = null;
+
+					this.#listenClient = new ListenTogetherClient(this.#listenCode, {
+						serverUrl: this.#serverUrl,
+					});
+				}
+
+				static get HIDE_TRANSITION_MS() {
+					return 500;
+				}
+
+				static get LISTEN_PAGE_URL() {
+					return 'https://metrolist.cc/listen';
+				}
+
+				static #resolveListenBaseUrl() {
+					if (
+						window.location.hostname === 'localhost'
+						|| window.location.hostname === '127.0.0.1'
+					) {
+						return `${window.location.origin}/listen`;
+					}
+					return OverlayController.LISTEN_PAGE_URL;
+				}
+
+				static #scaleThumbnailUrl(url, size = 200) {
+					if (!url) {
+						return '';
+					}
+					if (url.includes('googleusercontent.com') || url.includes('yt3.ggpht.com')) {
+						return url.replace(/=(s|w)\d+.*$/, `=s${size}`);
+					}
+					return url;
+				}
+
+				async init() {
+					if (document.fonts) {
+						await document.fonts.ready;
+					}
+
+					await this.#generateQrCode();
+
+					this.#listenClient.addEventListener('track-changed', (e) => {
+						this.#updateUI(e.detail);
+					});
+
+					this.#listenClient.addEventListener('error-payload', (e) => {
+						if (e.detail.code === 'room_not_found') {
+							this.#setMarqueeText(
+								this.#trackTrack,
+								'Room Not Found',
+								'h2',
+								'track-name text-size-h3'
+							);
+							this.#setMarqueeText(
+								this.#artistTrack,
+								'Check the URL parameters',
+								'h3',
+								'artist-name text-size-h4'
+							);
+							this.#widgetElement.removeAttribute('hidden');
+							this.#widgetElement.classList.add('is-visible');
+						}
+					});
+
+					try {
+						await this.#listenClient.init();
+						this.#animateProgress();
+					} catch (error) {
+						console.error('Failed to initialize ListenTogetherClient:', error);
+					}
+				}
+
+				#parseUrlParams() {
+					const searchParams = new URLSearchParams(window.location.search);
+					let code = searchParams.get('code') || searchParams.get('c') || '';
+					let server = searchParams.get('server') || searchParams.get('s') || '';
+
+					if (!code && window.location.hash) {
+						const hashParams = new URLSearchParams(
+							window.location.hash.replace(/^#/, '')
+						);
+						code = hashParams.get('code') || hashParams.get('c') || '';
+						server = hashParams.get('server') || hashParams.get('s') || server;
+					}
+
+					return { code, server };
+				}
+
+				async #generateQrCode() {
+					if (!this.#listenCode) {
+						return;
+					}
+
+					try {
+						const targetUrl = new URL(OverlayController.#resolveListenBaseUrl());
+						targetUrl.searchParams.set('code', this.#listenCode);
+
+						if (
+							this.#serverUrl
+							&& this.#serverUrl !== 'wss://metroserverx.meowery.eu/ws'
+						) {
+							targetUrl.searchParams.set('server', this.#serverUrl);
+						}
+
+						const svgString = await QRCode.toString(targetUrl.toString(), {
+							type: 'svg',
+							margin: 0,
+							color: {
+								light: '#0000',
+								dark: '#000',
+							},
+						});
+
+						this.#qrContainer.innerHTML = svgString;
+					} catch (error) {
+						console.error('Failed to generate listen QR code:', error);
+					}
+				}
+
+				#animateProgress() {
+					if (this.#listenClient) {
+						const progress = this.#listenClient.playbackProgress;
+
+						if (progress && progress.duration > 0) {
+							this.#progressFill.style.width = `${progress.percent * 100}%`;
+
+							if (progress.isPlaying !== this.#wasPlaying) {
+								this.#wasPlaying = progress.isPlaying;
+								this.#widgetElement.classList.toggle(
+									'is-paused',
+									!progress.isPlaying
+								);
+							}
+						} else {
+							this.#progressFill.style.width = '0%';
+
+							if (this.#wasPlaying !== false) {
+								this.#wasPlaying = false;
+								this.#widgetElement.classList.remove('is-paused');
+							}
+						}
+					}
+
+					this.#animationFrame = requestAnimationFrame(() => this.#animateProgress());
+				}
+
+				#setMarqueeText(trackElement, text, tag, className) {
+					const row = trackElement ? trackElement.parentElement : null;
+					if (!trackElement || !row) {
+						return;
+					}
+
+					if (trackElement.dataset.currentText === text) {
+						return;
+					}
+					trackElement.dataset.currentText = text;
+
+					trackElement.classList.remove('scrolling');
+					trackElement.style.animationDuration = '0s';
+
+					if (!text) {
+						trackElement.replaceChildren();
+						return;
+					}
+
+					const singleItem = document.createElement(tag);
+					singleItem.className = className;
+					singleItem.textContent = text;
+					trackElement.replaceChildren(singleItem);
+
+					requestAnimationFrame(() => {
+						const isOverflowing = singleItem.scrollWidth > row.clientWidth;
+
+						if (isOverflowing) {
+							const group1 = document.createElement('div');
+							group1.className = 'marquee-group';
+
+							const heading = document.createElement(tag);
+							heading.className = className;
+							heading.textContent = text;
+
+							const spacer = document.createElement('span');
+							spacer.className = 'marquee-spacer';
+							spacer.setAttribute('aria-hidden', 'true');
+							spacer.textContent = '•';
+
+							group1.append(heading, spacer);
+
+							const group2 = group1.cloneNode(true);
+							group2.setAttribute('aria-hidden', 'true');
+
+							trackElement.replaceChildren(group1, group2);
+
+							const durationSeconds = Math.max(
+								12,
+								Math.round(group1.offsetWidth / 25)
+							);
+							trackElement.style.animationDuration = `${durationSeconds}s`;
+							trackElement.classList.add('scrolling');
+						}
+					});
+				}
+
+				#updateUI(trackData) {
+					clearTimeout(this.#hideTimeout);
+
+					if (!trackData) {
+						this.#hideUI();
+						return;
+					}
+
+					if (this.#widgetElement.hasAttribute('hidden')) {
+						this.#widgetElement.removeAttribute('hidden');
+						void this.#widgetElement.offsetHeight;
+					}
+					this.#widgetElement.classList.add('is-visible');
+
+					const title = trackData.title || 'Unknown Track';
+					const artist = trackData.artist || 'Unknown Artist';
+					const album = trackData.album || '';
+					const artUrl = trackData.thumbnail || '';
+					const scaledArtUrl = OverlayController.#scaleThumbnailUrl(artUrl, 240);
+
+					const activitySignature = `${title}|${artist}|${album}|${scaledArtUrl}`;
+
+					if (activitySignature === this.#lastActivitySignature) {
+						return;
+					}
+					this.#lastActivitySignature = activitySignature;
+
+					this.#setMarqueeText(this.#trackTrack, title, 'h2', 'track-name text-size-h3');
+					this.#setMarqueeText(
+						this.#artistTrack,
+						artist,
+						'h3',
+						'artist-name text-size-h4'
+					);
+					this.#setMarqueeText(this.#albumTrack, album, 'h4', 'album-name text-caption');
+
+					if (scaledArtUrl && this.#artElement.src !== scaledArtUrl) {
+						this.#artElement.src = scaledArtUrl;
+					}
+				}
+
+				#hideUI() {
+					if (
+						this.#widgetElement.hasAttribute('hidden')
+						&& !this.#widgetElement.classList.contains('is-visible')
+					) {
+						return;
+					}
+
+					this.#lastActivitySignature = '';
+					this.#widgetElement.classList.remove('is-visible');
+					clearTimeout(this.#hideTimeout);
+					this.#hideTimeout = setTimeout(() => {
+						if (!this.#widgetElement.classList.contains('is-visible')) {
+							this.#widgetElement.setAttribute('hidden', '');
+						}
+					}, OverlayController.HIDE_TRANSITION_MS);
+				}
+			}
+
+			export const App = new OverlayController();
+			App.init();
+		</script>
+	</body>
+</html>

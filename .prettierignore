@@ -60,6 +60,7 @@ yarn-error.log*
 # Third-party vendor files
 /public/vendor/
 /vendor/
+/listen/listen-proto.js
 
 # Robots.txt
 /public/robots.txt

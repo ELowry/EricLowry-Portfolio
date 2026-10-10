@@ -15,6 +15,7 @@ export default [
 			'public/assets/**',
 			'!public/assets/external-links.json',
 			'package-lock.json',
+			'listen/listen-proto.js',
 		],
 	},
 	// JAVASCRIPT
