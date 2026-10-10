@@ -20,7 +20,7 @@ import $root from './listen-proto.js';
 
 /**
  * Client for connecting to the Metrolist Listen Together WebSocket server.
- * Extends EventTarget to emit `track-changed`, `state-synced`, and `error-payload` events.
+ * Extends EventTarget to emit `track-changed`, `state-synced`, `error-payload`, and `kicked` events.
  */
 export class ListenTogetherClient extends EventTarget {
 	/**
@@ -294,6 +294,12 @@ export class ListenTogetherClient extends EventTarget {
 			case 'sync_playback': {
 				const actionData = $root.listentogether.PlaybackActionPayload.decode(payloadBytes);
 				this.#applyPlaybackAction(actionData);
+				break;
+			}
+			case 'kicked': {
+				const kickedData = $root.listentogether.KickedPayload.decode(payloadBytes);
+				console.warn(`Kicked from room: ${kickedData.reason}`);
+				this.dispatchEvent(new CustomEvent('kicked', { detail: kickedData }));
 				break;
 			}
 		}

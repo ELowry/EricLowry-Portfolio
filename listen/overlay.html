@@ -534,59 +534,10 @@
 					message ErrorPayload {
 						string code = 1;
 						string message = 2;
+					}
+					message KickedPayload {
+						string reason = 1;
 					}`;
-				}
-
-				async init() {
-					if (this.#reconnectTimer) {
-						clearTimeout(this.#reconnectTimer);
-						this.#reconnectTimer = null;
-					}
-
-					// We do not use keepCase: true here. We map to the schema natively using camelCase property names in JS.
-					if (!this.#protoRoot) {
-						this.#protoRoot = protobuf.parse(ListenTogetherClient.PROTO_DEF).root;
-					}
-
-					return new Promise((resolve) => {
-						this.#ws = new WebSocket(this.#serverUrl);
-						this.#ws.binaryType = 'arraybuffer';
-
-						this.#ws.addEventListener('open', () => {
-							this.#sendHandshake();
-							this.#sendJoinRequest();
-
-							this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
-							resolve();
-						});
-
-						this.#ws.addEventListener('message', async (event) => {
-							await this.#handleMessage(event.data);
-						});
-
-						this.#ws.addEventListener('error', (err) => {
-							console.error('ListenTogether WebSocket Error:', err);
-						});
-
-						this.#ws.addEventListener('close', () => {
-							this.#handleDisconnect();
-						});
-					});
-				}
-
-				disconnect() {
-					if (this.#reconnectTimer) {
-						clearTimeout(this.#reconnectTimer);
-						this.#reconnectTimer = null;
-					}
-					if (this.#pingInterval) {
-						clearInterval(this.#pingInterval);
-						this.#pingInterval = null;
-					}
-
-					if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
-						this.#ws.close();
-					}
 				}
 
 				#toNumber(value, fallback = 0) {
@@ -612,7 +563,6 @@
 					const PayloadType = this.#protoRoot.lookupType(
 						`listentogether.${protoMessageName}`
 					);
-					// Using .create() ensures protobufjs natively translates JS camelCase to the schema's snake_case
 					const message = PayloadType.create(payloadMessage);
 					const payloadBytes = PayloadType.encode(message).finish();
 
@@ -721,6 +671,15 @@
 							this.#applyPlaybackAction(actionData);
 							break;
 						}
+						case 'kicked': {
+							const KickedType = this.#protoRoot.lookupType(
+								'listentogether.KickedPayload'
+							);
+							const kickedData = KickedType.decode(payloadBytes);
+							console.warn(`Kicked from room: ${kickedData.reason}`);
+							this.dispatchEvent(new CustomEvent('kicked', { detail: kickedData }));
+							break;
+						}
 					}
 				}
 
@@ -802,6 +761,57 @@
 						this.init().catch(() => this.#handleDisconnect());
 					}, 5000);
 				}
+
+				async init() {
+					if (this.#reconnectTimer) {
+						clearTimeout(this.#reconnectTimer);
+						this.#reconnectTimer = null;
+					}
+
+					if (!this.#protoRoot) {
+						this.#protoRoot = protobuf.parse(ListenTogetherClient.PROTO_DEF).root;
+					}
+
+					return new Promise((resolve) => {
+						this.#ws = new WebSocket(this.#serverUrl);
+						this.#ws.binaryType = 'arraybuffer';
+
+						this.#ws.addEventListener('open', () => {
+							this.#sendHandshake();
+							this.#sendJoinRequest();
+
+							this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
+							resolve();
+						});
+
+						this.#ws.addEventListener('message', async (event) => {
+							await this.#handleMessage(event.data);
+						});
+
+						this.#ws.addEventListener('error', (err) => {
+							console.error('ListenTogether WebSocket Error:', err);
+						});
+
+						this.#ws.addEventListener('close', () => {
+							this.#handleDisconnect();
+						});
+					});
+				}
+
+				disconnect() {
+					if (this.#reconnectTimer) {
+						clearTimeout(this.#reconnectTimer);
+						this.#reconnectTimer = null;
+					}
+					if (this.#pingInterval) {
+						clearInterval(this.#pingInterval);
+						this.#pingInterval = null;
+					}
+
+					if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
+						this.#ws.close();
+					}
+				}
 			}
 
 			class OverlayController {
@@ -837,7 +847,10 @@
 					this.#hideTimeout = null;
 					this.#wasPlaying = null;
 					this.#animationFrame = null;
-					this.#listenClient = null;
+
+					this.#listenClient = new ListenTogetherClient(this.#listenCode, {
+						serverUrl: this.#serverUrl,
+					});
 				}
 
 				static get HIDE_TRANSITION_MS() {
@@ -866,59 +879,6 @@
 						return url.replace(/=(s|w)\d+.*$/, `=s${size}`);
 					}
 					return url;
-				}
-
-				async init() {
-					if (document.fonts) {
-						await document.fonts.ready;
-					}
-
-					if (!this.#listenCode) {
-						try {
-							const response = await fetch('./listen_key.txt');
-							if (response.ok) {
-								this.#listenCode = (await response.text()).trim();
-							}
-						} catch (error) {
-							console.error('Failed to load fallback listen_key.txt:', error);
-						}
-					}
-
-					this.#listenClient = new ListenTogetherClient(this.#listenCode, {
-						serverUrl: this.#serverUrl,
-					});
-
-					await this.#generateQrCode();
-
-					this.#listenClient.addEventListener('track-changed', (e) => {
-						this.#updateUI(e.detail);
-					});
-
-					this.#listenClient.addEventListener('error-payload', (e) => {
-						if (e.detail.code === 'room_not_found') {
-							this.#setMarqueeText(
-								this.#trackTrack,
-								'Room Not Found',
-								'h2',
-								'track-name text-size-h3'
-							);
-							this.#setMarqueeText(
-								this.#artistTrack,
-								'Check the URL parameters',
-								'h3',
-								'artist-name text-size-h4'
-							);
-							this.#widgetElement.removeAttribute('hidden');
-							this.#widgetElement.classList.add('is-visible');
-						}
-					});
-
-					try {
-						await this.#listenClient.init();
-						this.#animateProgress();
-					} catch (error) {
-						console.error('Failed to initialize ListenTogetherClient:', error);
-					}
 				}
 
 				#parseUrlParams() {
@@ -968,7 +928,7 @@
 					}
 				}
 
-				#animateProgress() {
+				#animateProgress = () => {
 					if (this.#listenClient) {
 						const progress = this.#listenClient.playbackProgress;
 
@@ -993,7 +953,7 @@
 					}
 
 					this.#animationFrame = requestAnimationFrame(() => this.#animateProgress());
-				}
+				};
 
 				#setMarqueeText(trackElement, text, tag, className) {
 					const row = trackElement ? trackElement.parentElement : null;
@@ -1109,6 +1069,41 @@
 							this.#widgetElement.setAttribute('hidden', '');
 						}
 					}, OverlayController.HIDE_TRANSITION_MS);
+				}
+
+				async init() {
+					if (document.fonts) {
+						await document.fonts.ready;
+					}
+
+					await this.#generateQrCode();
+
+					this.#listenClient.addEventListener('track-changed', (e) => {
+						this.#updateUI(e.detail);
+					});
+
+					this.#listenClient.addEventListener('error-payload', (e) => {
+						if (
+							e.detail.code === 'room_not_found'
+							|| e.detail.code === 'room_invalid'
+						) {
+							this.#listenClient.disconnect();
+							this.#hideUI();
+						}
+					});
+
+					this.#listenClient.addEventListener('kicked', () => {
+						this.#listenClient.disconnect();
+						this.#hideUI();
+					});
+
+					try {
+						await this.#listenClient.init();
+						this.#animateProgress();
+					} catch (error) {
+						console.error('Failed to initialize ListenTogetherClient:', error);
+						this.#hideUI();
+					}
 				}
 			}
 

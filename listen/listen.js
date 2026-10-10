@@ -84,6 +84,18 @@ class ListenPageController {
 
 	/**
 	 * @private
+	 * @type {HTMLElement|null}
+	 */
+	#emptyHeading;
+
+	/**
+	 * @private
+	 * @type {HTMLElement|null}
+	 */
+	#emptyText;
+
+	/**
+	 * @private
 	 * @type {ListenTogetherClient|null}
 	 */
 	#listenClient = null;
@@ -114,6 +126,8 @@ class ListenPageController {
 		this.#progressFill = document.getElementById('progress-fill');
 		this.#playbackStatusText = document.getElementById('playback-status-text');
 		this.#playbackIcon = document.getElementById('playback-icon');
+		this.#emptyHeading = document.getElementById('empty-heading');
+		this.#emptyText = document.getElementById('empty-text');
 	}
 
 	/**
@@ -376,13 +390,25 @@ class ListenPageController {
 	}
 
 	/**
-	 * Displays the fallback state when no track payload is available.
+	 * Displays the fallback state when no track payload is available or the room has ended.
 	 * @private
+	 * @param {string} [reason='default'] Indicates whether the room was not specified or ended.
 	 */
-	#renderEmpty() {
+	#renderEmpty(reason = 'default') {
 		this.#playerCard.setAttribute('hidden', '');
 		this.#playerCard.classList.remove('is-visible');
 		this.#ambientBackdrop.classList.remove('is-visible');
+
+		if (this.#emptyHeading && this.#emptyText) {
+			if (reason === 'ended') {
+				this.#emptyHeading.textContent = 'Stream Ended';
+				this.#emptyText.textContent = 'This listen together session is no longer active.';
+			} else {
+				this.#emptyHeading.textContent = 'No Track Specified';
+				this.#emptyText.textContent =
+					'Scan the QR code from the stream overlay or open a shared listen link to tune in together.';
+			}
+		}
 
 		this.#emptyCard.removeAttribute('hidden');
 		this.#emptyCard.classList.add('is-visible');
@@ -426,9 +452,15 @@ class ListenPageController {
 		});
 
 		this.#listenClient.addEventListener('error-payload', (e) => {
-			if (e.detail?.code === 'room_not_found') {
-				this.#renderEmpty();
+			if (e.detail?.code === 'room_not_found' || e.detail?.code === 'room_invalid') {
+				this.#listenClient.disconnect();
+				this.#renderEmpty('ended');
 			}
+		});
+
+		this.#listenClient.addEventListener('kicked', () => {
+			this.#listenClient.disconnect();
+			this.#renderEmpty('ended');
 		});
 
 		try {

@@ -3766,6 +3766,586 @@ export const listentogether = $root.listentogether = (() => {
         return PingPayload;
     })();
 
+    listentogether.ErrorPayload = (function() {
+
+        /**
+         * Properties of an ErrorPayload.
+         * @typedef {Object} listentogether.ErrorPayload.$Properties
+         * @property {string|null} [code] ErrorPayload code
+         * @property {string|null} [message] ErrorPayload message
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of an ErrorPayload.
+         * @memberof listentogether
+         * @interface IErrorPayload
+         * @augments listentogether.ErrorPayload.$Properties
+         * @deprecated Use listentogether.ErrorPayload.$Properties instead.
+         */
+
+        /**
+         * Shape of an ErrorPayload.
+         * @typedef {listentogether.ErrorPayload.$Properties} listentogether.ErrorPayload.$Shape
+         */
+
+        /**
+         * Constructs a new ErrorPayload.
+         * @memberof listentogether
+         * @classdesc Represents an ErrorPayload.
+         * @constructor
+         * @param {listentogether.ErrorPayload.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        const ErrorPayload = function (properties) {
+            if (properties)
+                for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ErrorPayload code.
+         * @member {string} code
+         * @memberof listentogether.ErrorPayload
+         * @instance
+         */
+        ErrorPayload.prototype.code = "";
+
+        /**
+         * ErrorPayload message.
+         * @member {string} message
+         * @memberof listentogether.ErrorPayload
+         * @instance
+         */
+        ErrorPayload.prototype.message = "";
+
+        /**
+         * Creates a new ErrorPayload instance using the specified properties.
+         * @function create
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {listentogether.ErrorPayload.$Properties=} [properties] Properties to set
+         * @returns {listentogether.ErrorPayload} ErrorPayload instance
+         * @type {{
+         *   (properties: listentogether.ErrorPayload.$Shape): listentogether.ErrorPayload & listentogether.ErrorPayload.$Shape;
+         *   (properties?: listentogether.ErrorPayload.$Properties): listentogether.ErrorPayload;
+         * }}
+         */
+        ErrorPayload.create = function(properties) {
+            return new ErrorPayload(properties);
+        };
+
+        /**
+         * Encodes the specified ErrorPayload message. Does not implicitly {@link listentogether.ErrorPayload.verify|verify} messages.
+         * @function encode
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {listentogether.ErrorPayload.$Properties} message ErrorPayload message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ErrorPayload.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.code != null && $Object.hasOwnProperty.call(message, "code") && message.code !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.code);
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message") && message.message !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (let i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ErrorPayload message, length delimited. Does not implicitly {@link listentogether.ErrorPayload.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {listentogether.ErrorPayload.$Properties} message ErrorPayload message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ErrorPayload.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes an ErrorPayload message from the specified reader or buffer.
+         * @function decode
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {listentogether.ErrorPayload & listentogether.ErrorPayload.$Shape} ErrorPayload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ErrorPayload.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            let end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.listentogether.ErrorPayload();
+            while (reader.pos < end) {
+                let start = reader.pos;
+                let tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                let wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.code = value;
+                        else
+                            delete message.code;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.message = value;
+                        else
+                            delete message.message;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes an ErrorPayload message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {listentogether.ErrorPayload & listentogether.ErrorPayload.$Shape} ErrorPayload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ErrorPayload.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an ErrorPayload message.
+         * @function verify
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ErrorPayload.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.code != null && $Object.hasOwnProperty.call(message, "code"))
+                if (!$util.isString(message.code))
+                    return "code: string expected";
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                if (!$util.isString(message.message))
+                    return "message: string expected";
+            return null;
+        };
+
+        /**
+         * Creates an ErrorPayload message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {listentogether.ErrorPayload} ErrorPayload
+         */
+        ErrorPayload.fromObject = function (object, _depth) {
+            if (object instanceof $root.listentogether.ErrorPayload)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".listentogether.ErrorPayload: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            let message = new $root.listentogether.ErrorPayload();
+            if (object.code != null)
+                if (typeof object.code !== "string" || object.code.length)
+                    message.code = $String(object.code);
+            if (object.message != null)
+                if (typeof object.message !== "string" || object.message.length)
+                    message.message = $String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an ErrorPayload message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {listentogether.ErrorPayload} message ErrorPayload
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ErrorPayload.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            let object = {};
+            if (options.defaults) {
+                object.code = "";
+                object.message = "";
+            }
+            if (message.code != null && $Object.hasOwnProperty.call(message, "code"))
+                object.code = message.code;
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this ErrorPayload to JSON.
+         * @function toJSON
+         * @memberof listentogether.ErrorPayload
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ErrorPayload.prototype.toJSON = function() {
+            return ErrorPayload.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ErrorPayload
+         * @function getTypeUrl
+         * @memberof listentogether.ErrorPayload
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ErrorPayload.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/listentogether.ErrorPayload";
+        };
+
+        return ErrorPayload;
+    })();
+
+    listentogether.KickedPayload = (function() {
+
+        /**
+         * Properties of a KickedPayload.
+         * @typedef {Object} listentogether.KickedPayload.$Properties
+         * @property {string|null} [reason] KickedPayload reason
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a KickedPayload.
+         * @memberof listentogether
+         * @interface IKickedPayload
+         * @augments listentogether.KickedPayload.$Properties
+         * @deprecated Use listentogether.KickedPayload.$Properties instead.
+         */
+
+        /**
+         * Shape of a KickedPayload.
+         * @typedef {listentogether.KickedPayload.$Properties} listentogether.KickedPayload.$Shape
+         */
+
+        /**
+         * Constructs a new KickedPayload.
+         * @memberof listentogether
+         * @classdesc Represents a KickedPayload.
+         * @constructor
+         * @param {listentogether.KickedPayload.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        const KickedPayload = function (properties) {
+            if (properties)
+                for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * KickedPayload reason.
+         * @member {string} reason
+         * @memberof listentogether.KickedPayload
+         * @instance
+         */
+        KickedPayload.prototype.reason = "";
+
+        /**
+         * Creates a new KickedPayload instance using the specified properties.
+         * @function create
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {listentogether.KickedPayload.$Properties=} [properties] Properties to set
+         * @returns {listentogether.KickedPayload} KickedPayload instance
+         * @type {{
+         *   (properties: listentogether.KickedPayload.$Shape): listentogether.KickedPayload & listentogether.KickedPayload.$Shape;
+         *   (properties?: listentogether.KickedPayload.$Properties): listentogether.KickedPayload;
+         * }}
+         */
+        KickedPayload.create = function(properties) {
+            return new KickedPayload(properties);
+        };
+
+        /**
+         * Encodes the specified KickedPayload message. Does not implicitly {@link listentogether.KickedPayload.verify|verify} messages.
+         * @function encode
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {listentogether.KickedPayload.$Properties} message KickedPayload message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        KickedPayload.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.reason != null && $Object.hasOwnProperty.call(message, "reason") && message.reason !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.reason);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (let i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified KickedPayload message, length delimited. Does not implicitly {@link listentogether.KickedPayload.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {listentogether.KickedPayload.$Properties} message KickedPayload message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        KickedPayload.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a KickedPayload message from the specified reader or buffer.
+         * @function decode
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {listentogether.KickedPayload & listentogether.KickedPayload.$Shape} KickedPayload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        KickedPayload.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            let end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.listentogether.KickedPayload();
+            while (reader.pos < end) {
+                let start = reader.pos;
+                let tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                let wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.reason = value;
+                        else
+                            delete message.reason;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a KickedPayload message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {listentogether.KickedPayload & listentogether.KickedPayload.$Shape} KickedPayload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        KickedPayload.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a KickedPayload message.
+         * @function verify
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        KickedPayload.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.reason != null && $Object.hasOwnProperty.call(message, "reason"))
+                if (!$util.isString(message.reason))
+                    return "reason: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a KickedPayload message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {listentogether.KickedPayload} KickedPayload
+         */
+        KickedPayload.fromObject = function (object, _depth) {
+            if (object instanceof $root.listentogether.KickedPayload)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".listentogether.KickedPayload: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            let message = new $root.listentogether.KickedPayload();
+            if (object.reason != null)
+                if (typeof object.reason !== "string" || object.reason.length)
+                    message.reason = $String(object.reason);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a KickedPayload message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {listentogether.KickedPayload} message KickedPayload
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        KickedPayload.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            let object = {};
+            if (options.defaults)
+                object.reason = "";
+            if (message.reason != null && $Object.hasOwnProperty.call(message, "reason"))
+                object.reason = message.reason;
+            return object;
+        };
+
+        /**
+         * Converts this KickedPayload to JSON.
+         * @function toJSON
+         * @memberof listentogether.KickedPayload
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        KickedPayload.prototype.toJSON = function() {
+            return KickedPayload.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for KickedPayload
+         * @function getTypeUrl
+         * @memberof listentogether.KickedPayload
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        KickedPayload.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/listentogether.KickedPayload";
+        };
+
+        return KickedPayload;
+    })();
+
     return listentogether;
 })();
 
