@@ -837,10 +837,7 @@
 					this.#hideTimeout = null;
 					this.#wasPlaying = null;
 					this.#animationFrame = null;
-
-					this.#listenClient = new ListenTogetherClient(this.#listenCode, {
-						serverUrl: this.#serverUrl,
-					});
+					this.#listenClient = null;
 				}
 
 				static get HIDE_TRANSITION_MS() {
@@ -875,6 +872,21 @@
 					if (document.fonts) {
 						await document.fonts.ready;
 					}
+
+					if (!this.#listenCode) {
+						try {
+							const response = await fetch('./listen_key.txt');
+							if (response.ok) {
+								this.#listenCode = (await response.text()).trim();
+							}
+						} catch (error) {
+							console.error('Failed to load fallback listen_key.txt:', error);
+						}
+					}
+
+					this.#listenClient = new ListenTogetherClient(this.#listenCode, {
+						serverUrl: this.#serverUrl,
+					});
 
 					await this.#generateQrCode();
 
