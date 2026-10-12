@@ -124,6 +124,12 @@ class ListenPageController {
 	 */
 	#cardHeader;
 
+	/**
+	 * @private
+	 * @type {HTMLElement|null}
+	 */
+	#progressBar;
+
 	constructor() {
 		this.#playerCard = document.getElementById('player-card');
 		this.#emptyCard = document.getElementById('empty-card');
@@ -142,6 +148,7 @@ class ListenPageController {
 		this.#emptyText = document.getElementById('empty-text');
 		this.#emptyActionBtn = document.querySelector('.empty-action');
 		this.#cardHeader = document.querySelector('.card-header');
+		this.#progressBar = document.querySelector('.progress-bar');
 	}
 
 	/**
@@ -342,6 +349,7 @@ class ListenPageController {
 				if (this.#wasPlaying !== false) {
 					this.#wasPlaying = false;
 					this.#playerCard?.classList.remove('is-paused');
+
 					if (this.#playbackStatusText) {
 						this.#playbackStatusText.textContent = 'Now Listening';
 					}
@@ -458,9 +466,11 @@ class ListenPageController {
 			this.#btnMetrolist.href = ListenPageController.#buildMetrolistUrl(roomCode);
 			this.#btnMetrolist.removeAttribute('hidden');
 			this.#cardHeader?.removeAttribute('hidden');
+			this.#progressBar?.removeAttribute('hidden');
 		} else {
 			this.#btnMetrolist.setAttribute('hidden', '');
 			this.#cardHeader?.setAttribute('hidden', '');
+			this.#progressBar?.setAttribute('hidden', '');
 		}
 
 		this.#updateMetadata(title, artist, scaledArtUrl);
@@ -470,9 +480,7 @@ class ListenPageController {
 
 		this.#playerCard.removeAttribute('hidden');
 		this.#playerCard.classList.add('is-visible');
-		if (this.#pageFooter) {
-			this.#pageFooter.classList.add('is-visible');
-		}
+		this.#pageFooter?.classList.add('is-visible');
 
 		if (this.#animationFrame === null) {
 			this.#animateProgress();
