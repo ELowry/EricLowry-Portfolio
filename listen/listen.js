@@ -251,7 +251,9 @@ class ListenPageController {
 			return;
 		}
 
-		const options = {};
+		const options = {
+			username: ListenPageController.#getOrGenerateUsername(),
+		};
 		if (params.server) {
 			options.serverUrl = params.server;
 		}
@@ -293,6 +295,21 @@ class ListenPageController {
 	}
 
 	/**
+	 * Retrieves an existing anonymous username or generates a new one.
+	 * @private
+	 * @returns {string} The anonymous username.
+	 */
+	static #getOrGenerateUsername() {
+		let username = localStorage.getItem('listen_username');
+		if (!username) {
+			const randomSuffix = Math.random().toString(36).substring(2, 7);
+			username = `Listener-${randomSuffix}`;
+			localStorage.setItem('listen_username', username);
+		}
+		return username;
+	}
+
+	/**
 	 * Extracts room code, optional server URL, and optional YouTube ID from parameters.
 	 * @private
 	 * @returns {{code: string, server: string, youtubeId: string}} The parsed URL parameters.
@@ -326,11 +343,15 @@ class ListenPageController {
 			const progress = this.#listenClient.playbackProgress;
 
 			if (progress && progress.duration > 0) {
-				this.#progressFill.style.width = `${progress.percent * 100}%`;
+				if (this.#progressFill) {
+					this.#progressFill.style.width = `${progress.percent * 100}%`;
+				}
 
 				if (progress.isPlaying !== this.#wasPlaying) {
 					this.#wasPlaying = progress.isPlaying;
-					this.#playerCard?.classList.toggle('is-paused', !progress.isPlaying);
+					if (this.#playerCard) {
+						this.#playerCard.classList.toggle('is-paused', !progress.isPlaying);
+					}
 
 					if (this.#playbackStatusText) {
 						this.#playbackStatusText.textContent = progress.isPlaying
@@ -344,11 +365,15 @@ class ListenPageController {
 					}
 				}
 			} else {
-				this.#progressFill.style.width = '0%';
+				if (this.#progressFill) {
+					this.#progressFill.style.width = '0%';
+				}
 
 				if (this.#wasPlaying !== false) {
 					this.#wasPlaying = false;
-					this.#playerCard?.classList.remove('is-paused');
+					if (this.#playerCard) {
+						this.#playerCard.classList.remove('is-paused');
+					}
 
 					if (this.#playbackStatusText) {
 						this.#playbackStatusText.textContent = 'Now Listening';
@@ -410,17 +435,23 @@ class ListenPageController {
 		const scaledArtUrl = ListenPageController.#scaleThumbnailUrl(artUrl, 800);
 		const backdropUrl = ListenPageController.#scaleThumbnailUrl(artUrl, 200);
 
-		this.#trackTitle.textContent = title;
-		this.#trackArtist.textContent = artist;
-
-		if (album) {
-			this.#trackAlbum.textContent = album;
-			this.#trackAlbum.removeAttribute('hidden');
-		} else {
-			this.#trackAlbum.setAttribute('hidden', '');
+		if (this.#trackTitle) {
+			this.#trackTitle.textContent = title;
+		}
+		if (this.#trackArtist) {
+			this.#trackArtist.textContent = artist;
 		}
 
-		if (backdropUrl) {
+		if (this.#trackAlbum) {
+			if (album) {
+				this.#trackAlbum.textContent = album;
+				this.#trackAlbum.removeAttribute('hidden');
+			} else {
+				this.#trackAlbum.setAttribute('hidden', '');
+			}
+		}
+
+		if (backdropUrl && this.#ambientBackdrop) {
 			this.#ambientBackdrop.style.backgroundImage = `url("${backdropUrl}")`;
 			const backdropImg = new Image();
 			backdropImg.src = backdropUrl;
@@ -437,7 +468,7 @@ class ListenPageController {
 			}
 		}
 
-		if (scaledArtUrl) {
+		if (scaledArtUrl && this.#albumArt) {
 			if (scaledArtUrl.includes('ytimg.com')) {
 				this.#albumArt.classList.add('fallback-crop');
 			} else {
@@ -448,39 +479,62 @@ class ListenPageController {
 			this.#albumArt.alt = `${title} by ${artist}`;
 		}
 
-		if (youtubeId) {
-			this.#linkAlbumArt.href = ListenPageController.#buildYouTubeMusicUrl(youtubeId);
-			this.#linkAlbumArt.removeAttribute('aria-disabled');
-			this.#linkAlbumArt.style.pointerEvents = 'auto';
-		} else if (title && artist) {
-			this.#linkAlbumArt.href = ListenPageController.#buildYouTubeSearchUrl(title, artist);
-			this.#linkAlbumArt.removeAttribute('aria-disabled');
-			this.#linkAlbumArt.style.pointerEvents = 'auto';
-		} else {
-			this.#linkAlbumArt.removeAttribute('href');
-			this.#linkAlbumArt.setAttribute('aria-disabled', 'true');
-			this.#linkAlbumArt.style.pointerEvents = 'none';
+		if (this.#linkAlbumArt) {
+			if (youtubeId) {
+				this.#linkAlbumArt.href = ListenPageController.#buildYouTubeMusicUrl(youtubeId);
+				this.#linkAlbumArt.removeAttribute('aria-disabled');
+				this.#linkAlbumArt.style.pointerEvents = 'auto';
+			} else if (title && artist) {
+				this.#linkAlbumArt.href = ListenPageController.#buildYouTubeSearchUrl(
+					title,
+					artist
+				);
+				this.#linkAlbumArt.removeAttribute('aria-disabled');
+				this.#linkAlbumArt.style.pointerEvents = 'auto';
+			} else {
+				this.#linkAlbumArt.removeAttribute('href');
+				this.#linkAlbumArt.setAttribute('aria-disabled', 'true');
+				this.#linkAlbumArt.style.pointerEvents = 'none';
+			}
 		}
 
 		if (roomCode) {
-			this.#btnMetrolist.href = ListenPageController.#buildMetrolistUrl(roomCode);
-			this.#btnMetrolist.removeAttribute('hidden');
-			this.#cardHeader?.removeAttribute('hidden');
-			this.#progressBar?.removeAttribute('hidden');
+			if (this.#btnMetrolist) {
+				this.#btnMetrolist.href = ListenPageController.#buildMetrolistUrl(roomCode);
+				this.#btnMetrolist.removeAttribute('hidden');
+			}
+			if (this.#cardHeader) {
+				this.#cardHeader.removeAttribute('hidden');
+			}
+			if (this.#progressBar) {
+				this.#progressBar.removeAttribute('hidden');
+			}
 		} else {
-			this.#btnMetrolist.setAttribute('hidden', '');
-			this.#cardHeader?.setAttribute('hidden', '');
-			this.#progressBar?.setAttribute('hidden', '');
+			if (this.#btnMetrolist) {
+				this.#btnMetrolist.setAttribute('hidden', '');
+			}
+			if (this.#cardHeader) {
+				this.#cardHeader.setAttribute('hidden', '');
+			}
+			if (this.#progressBar) {
+				this.#progressBar.setAttribute('hidden', '');
+			}
 		}
 
 		this.#updateMetadata(title, artist, scaledArtUrl);
 
-		this.#emptyCard.setAttribute('hidden', '');
-		this.#emptyCard.classList.remove('is-visible');
+		if (this.#emptyCard) {
+			this.#emptyCard.setAttribute('hidden', '');
+			this.#emptyCard.classList.remove('is-visible');
+		}
 
-		this.#playerCard.removeAttribute('hidden');
-		this.#playerCard.classList.add('is-visible');
-		this.#pageFooter?.classList.add('is-visible');
+		if (this.#playerCard) {
+			this.#playerCard.removeAttribute('hidden');
+			this.#playerCard.classList.add('is-visible');
+		}
+		if (this.#pageFooter) {
+			this.#pageFooter.classList.add('is-visible');
+		}
 
 		if (this.#animationFrame === null) {
 			this.#animateProgress();
@@ -499,9 +553,13 @@ class ListenPageController {
 			return;
 		}
 
-		this.#playerCard.setAttribute('hidden', '');
-		this.#playerCard.classList.remove('is-visible');
-		this.#ambientBackdrop.classList.remove('is-visible');
+		if (this.#playerCard) {
+			this.#playerCard.setAttribute('hidden', '');
+			this.#playerCard.classList.remove('is-visible');
+		}
+		if (this.#ambientBackdrop) {
+			this.#ambientBackdrop.classList.remove('is-visible');
+		}
 
 		if (this.#emptyHeading && this.#emptyText) {
 			if (reason === 'ended') {
@@ -524,8 +582,10 @@ class ListenPageController {
 			}
 		}
 
-		this.#emptyCard.removeAttribute('hidden');
-		this.#emptyCard.classList.add('is-visible');
+		if (this.#emptyCard) {
+			this.#emptyCard.removeAttribute('hidden');
+			this.#emptyCard.classList.add('is-visible');
+		}
 		if (this.#pageFooter) {
 			this.#pageFooter.classList.add('is-visible');
 		}
@@ -563,7 +623,6 @@ class ListenPageController {
 			console.error('Failed to fetch YouTube metadata:', error);
 		}
 
-		// Re-trigger the empty state without the ID to prevent loops and show the generic error
 		this.#renderEmpty(reason);
 		return false;
 	}

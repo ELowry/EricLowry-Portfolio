@@ -91,6 +91,12 @@ export class ListenTogetherClient extends EventTarget {
 
 	/**
 	 * @private
+	 * @type {number} Timestamp of the last received message to detect dead sockets.
+	 */
+	#lastMessageTime = 0;
+
+	/**
+	 * @private
 	 * @type {number} The maximum number of consecutive reconnection attempts.
 	 */
 	#maxRetries;
@@ -171,10 +177,22 @@ export class ListenTogetherClient extends EventTarget {
 			this.#ws.addEventListener('open', () => {
 				hasOpened = true;
 				this.#retryCount = 0;
+				this.#lastMessageTime = Date.now();
 				this.#sendHandshake();
 				this.#sendJoinRequest();
 
-				this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
+				this.#pingInterval = setInterval(() => {
+					if (Date.now() - this.#lastMessageTime > 45000) {
+						console.warn(
+							'ListenTogether WebSocket: Connection timed out. Forcing reconnect...'
+						);
+						if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
+							this.#ws.close();
+						}
+						return;
+					}
+					this.#sendPing();
+				}, 30000);
 				resolve();
 			});
 
@@ -328,6 +346,8 @@ export class ListenTogetherClient extends EventTarget {
 	 * @returns {Promise<void>}
 	 */
 	async #handleMessage(buffer) {
+		this.#lastMessageTime = Date.now();
+
 		const dataBytes = new Uint8Array(buffer);
 		const Envelope = $root.listentogether.Envelope;
 
@@ -450,7 +470,6 @@ export class ListenTogetherClient extends EventTarget {
 				break;
 		}
 
-		// Force the UI to reflect play/pause/seek changes immediately
 		this.dispatchEvent(new CustomEvent('state-synced', { detail: this.playbackProgress }));
 	}
 

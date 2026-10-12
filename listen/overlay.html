@@ -406,605 +406,18 @@
 			<div id="qr-container" class="qr-container"></div>
 		</div>
 
-		<script type="module">
-			import protobuf from 'https://esm.sh/protobufjs';
-			import QRCode from 'https://esm.sh/qrcode';
-
-			/**
-			 * Client for connecting to the Metrolist Listen Together WebSocket server via protobuf.
-			 * Extends EventTarget to emit playback and room state events.
-			 */
-			class ListenTogetherClient extends EventTarget {
-				/**
-				 * @private
-				 * @type {WebSocket|null} The active WebSocket connection instance.
-				 */
-				#ws = null;
-
-				/**
-				 * @private
-				 * @type {Object|null} The parsed protobuf root namespace.
-				 */
-				#protoRoot = null;
-
-				/**
-				 * @private
-				 * @type {string} The active room code.
-				 */
-				#roomCode;
-
-				/**
-				 * @private
-				 * @type {string} The username assigned to this client.
-				 */
-				#username;
-
-				/**
-				 * @private
-				 * @type {string} The WebSocket server endpoint URL.
-				 */
-				#serverUrl;
-
-				/**
-				 * @private
-				 * @type {Object|null} The currently active track metadata.
-				 */
-				#currentTrack = null;
-
-				/**
-				 * @private
-				 * @type {boolean} The current playback state.
-				 */
-				#isPlaying = false;
-
-				/**
-				 * @private
-				 * @type {number} The current playback position in milliseconds.
-				 */
-				#position = 0;
-
-				/**
-				 * @private
-				 * @type {number} The timestamp of the last state update.
-				 */
-				#lastUpdate = 0;
-
-				/**
-				 * @private
-				 * @type {number|null} The timeout ID for the automated reconnection sequence.
-				 */
-				#reconnectTimer = null;
-
-				/**
-				 * @private
-				 * @type {number|null} The interval ID for the protocol ping.
-				 */
-				#pingInterval = null;
-
-				/**
-				 * @private
-				 * @type {number} The sequential counter for ping messages.
-				 */
-				#pingSequence = 0;
-
-				/**
-				 * @private
-				 * @type {number} The maximum number of consecutive reconnection attempts.
-				 */
-				#maxRetries;
-
-				/**
-				 * @private
-				 * @type {number} The current count of consecutive reconnection attempts.
-				 */
-				#retryCount = 0;
-
-				/**
-				 * @private
-				 * @type {boolean} Flag indicating if the disconnection was explicitly requested.
-				 */
-				#intentionalDisconnect = false;
-
-				/**
-				 * @param {string} roomCode The room code to connect to.
-				 * @param {Object} [options={}] Configuration options for the client.
-				 * @param {string} [options.username='Widget'] The client username.
-				 * @param {string} [options.serverUrl='wss://metroserverx.meowery.eu/ws'] The WebSocket endpoint URL.
-				 * @param {number} [options.maxRetries=5] Maximum consecutive reconnection attempts.
-				 */
-				constructor(
-					roomCode,
-					{
-						username = 'Widget',
-						serverUrl = 'wss://metroserverx.meowery.eu/ws',
-						maxRetries = 5,
-					} = {}
-				) {
-					super();
-					this.#roomCode = roomCode;
-					this.#username = username;
-					this.#serverUrl = serverUrl;
-					this.#maxRetries = maxRetries;
-				}
-
-				/**
-				 * @returns {string} The raw protobuf definition string.
-				 * @constant
-				 */
-				static get PROTO_DEF() {
-					return `
-					syntax = "proto3";
-					package listentogether;
-
-					message Envelope {
-						string type = 1;
-						bytes payload = 2;
-						bool compressed = 3;
-					}
-					message TrackInfo {
-						string id = 1;
-						string title = 2;
-						string artist = 3;
-						string album = 4;
-						int64 duration = 5;
-						string thumbnail = 6;
-						string suggested_by = 7;
-					}
-					message RoomState {
-						string room_code = 1;
-						string host_id = 2;
-						TrackInfo current_track = 4;
-						bool is_playing = 5;
-						int64 position = 6;
-						int64 last_update = 7;
-						float volume = 8;
-						uint64 revision = 10;
-					}
-					message ClientCapabilities {
-						bool supports_protobuf = 1;
-						bool supports_compression = 2;
-						string client_version = 3;
-					}
-					message JoinRoomPayload {
-						string room_code = 1;
-						string username = 2;
-					}
-					message JoinApprovedPayload {
-						string room_code = 1;
-						string user_id = 2;
-						string session_token = 3;
-						RoomState state = 4;
-					}
-					message SyncStatePayload {
-						TrackInfo current_track = 1;
-						bool is_playing = 2;
-						int64 position = 3;
-						int64 last_update = 4;
-						float volume = 6;
-						uint64 revision = 7;
-					}
-					message PlaybackActionPayload {
-						string action = 1;
-						string track_id = 2;
-						int64 position = 3;
-						TrackInfo track_info = 4;
-						bool insert_next = 5;
-						repeated TrackInfo queue = 6;
-						string queue_title = 7;
-						float volume = 8;
-						int64 server_time = 9;
-						uint64 revision = 10;
-						int64 captured_at_server_time = 11;
-					}
-					message PingPayload {
-						int64 client_time = 1;
-						uint64 sequence = 2;
-					}
-					message ErrorPayload {
-						string code = 1;
-						string message = 2;
-					}
-					message KickedPayload {
-						string reason = 1;
-					}`;
-				}
-
-				/**
-				 * Establishes the WebSocket connection and registers listeners.
-				 * @returns {Promise<void>}
-				 */
-				async init() {
-					if (this.#reconnectTimer) {
-						clearTimeout(this.#reconnectTimer);
-						this.#reconnectTimer = null;
-					}
-
-					this.#intentionalDisconnect = false;
-
-					// Dynamically parse the protobuf definition for the inline overlay
-					if (!this.#protoRoot) {
-						this.#protoRoot = protobuf.parse(ListenTogetherClient.PROTO_DEF).root;
-					}
-
-					return new Promise((resolve, reject) => {
-						this.#ws = new WebSocket(this.#serverUrl);
-						this.#ws.binaryType = 'arraybuffer';
-
-						let hasOpened = false;
-
-						this.#ws.addEventListener('open', () => {
-							hasOpened = true;
-							this.#retryCount = 0;
-							this.#sendHandshake();
-							this.#sendJoinRequest();
-
-							this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
-							resolve();
-						});
-
-						this.#ws.addEventListener('message', async (event) => {
-							await this.#handleMessage(event.data);
-						});
-
-						this.#ws.addEventListener('error', (err) => {
-							console.error('ListenTogether WebSocket Error:', err);
-						});
-
-						this.#ws.addEventListener('close', () => {
-							if (!hasOpened) {
-								reject(new Error('WebSocket connection failed.'));
-							}
-							this.#handleDisconnect();
-						});
-					});
-				}
-
-				/**
-				 * Gracefully closes the underlying WebSocket connection and halts reconnection logic.
-				 */
-				disconnect() {
-					this.#intentionalDisconnect = true; // Add this line
-
-					if (this.#reconnectTimer) {
-						clearTimeout(this.#reconnectTimer);
-						this.#reconnectTimer = null;
-					}
-					if (this.#pingInterval) {
-						clearInterval(this.#pingInterval);
-						this.#pingInterval = null;
-					}
-
-					if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
-						this.#ws.close();
-					}
-				}
-
-				/**
-				 * Computes the real-time playback progress and state.
-				 * @returns {Object|null} The current playback progress details, or null if no track is active.
-				 */
-				get playbackProgress() {
-					if (!this.#currentTrack) {
-						return null;
-					}
-
-					let livePosition = this.#position;
-
-					if (this.#isPlaying) {
-						livePosition += Date.now() - this.#lastUpdate;
-					}
-
-					const clampedPosition = Math.max(
-						0,
-						Math.min(livePosition, this.#currentTrack.duration)
-					);
-
-					return {
-						position: clampedPosition,
-						duration: this.#currentTrack.duration,
-						percent: Math.min(clampedPosition / this.#currentTrack.duration, 1),
-						isPlaying: this.#isPlaying,
-					};
-				}
-
-				/**
-				 * Retrieves the currently playing track metadata.
-				 * @returns {Object|null} The current track data.
-				 */
-				get currentTrack() {
-					return this.#currentTrack;
-				}
-
-				/**
-				 * Extracts a JavaScript number safely from a protobuf Long object or native number.
-				 * @private
-				 * @param {Object|number} value The number or protobuf Long to parse.
-				 * @param {number} [fallback=0] The fallback number if value is null or undefined.
-				 * @returns {number} The resolved numeric value.
-				 */
-				#toNumber(value, fallback = 0) {
-					if (value === null || value === undefined) return fallback;
-					if (typeof value.toNumber === 'function') return value.toNumber();
-					return Number(value);
-				}
-
-				/**
-				 * Safely decompresses Gzip binary payloads using native browser streams.
-				 * @private
-				 * @param {Uint8Array} compressedBytes The gzipped binary data.
-				 * @returns {Promise<Uint8Array>} The uncompressed byte array.
-				 */
-				async #decompressGzip(compressedBytes) {
-					const ds = new DecompressionStream('gzip');
-					const writer = ds.writable.getWriter();
-					writer.write(compressedBytes).catch(() => {});
-					writer.close();
-
-					const response = new Response(ds.readable);
-					const buffer = await response.arrayBuffer();
-					return new Uint8Array(buffer);
-				}
-
-				/**
-				 * Packages and transmits a protobuf message within the system Envelope.
-				 * @private
-				 * @param {string} msgType The envelope message type string.
-				 * @param {Object} payloadMessage The payload instance to encode.
-				 * @param {string} protoMessageName The name of the protobuf message definition.
-				 */
-				#sendMessage(msgType, payloadMessage, protoMessageName) {
-					if (!this.#ws || this.#ws.readyState !== WebSocket.OPEN) return;
-
-					const PayloadType = this.#protoRoot.lookupType(
-						`listentogether.${protoMessageName}`
-					);
-					const message = PayloadType.create(payloadMessage);
-					const payloadBytes = PayloadType.encode(message).finish();
-
-					const Envelope = this.#protoRoot.lookupType('listentogether.Envelope');
-					const envMessage = Envelope.create({
-						type: msgType,
-						payload: payloadBytes,
-						compressed: false,
-					});
-					const envelopeBytes = Envelope.encode(envMessage).finish();
-
-					this.#ws.send(envelopeBytes);
-				}
-
-				/**
-				 * Broadcasts the initial client capabilities to define the structural boundaries of the session.
-				 * @private
-				 */
-				#sendHandshake() {
-					this.#sendMessage(
-						'client_capabilities',
-						{
-							supportsProtobuf: true,
-							supportsCompression: true,
-							clientVersion: '1',
-						},
-						'ClientCapabilities'
-					);
-				}
-
-				/**
-				 * Requests access to the specific room code.
-				 * @private
-				 */
-				#sendJoinRequest() {
-					this.#sendMessage(
-						'join_room',
-						{
-							roomCode: this.#roomCode,
-							username: this.#username,
-						},
-						'JoinRoomPayload'
-					);
-				}
-
-				/**
-				 * Sends a protocol ping to keep the WebSocket connection alive.
-				 * @private
-				 */
-				#sendPing() {
-					this.#sendMessage(
-						'ping',
-						{
-							clientTime: Date.now(),
-							sequence: ++this.#pingSequence,
-						},
-						'PingPayload'
-					);
-				}
-
-				/**
-				 * Decodes incoming WebSocket envelopes, decompresses payloads if necessary, and routes data.
-				 * @private
-				 * @param {ArrayBuffer} buffer The binary buffer received over the WebSocket.
-				 * @returns {Promise<void>}
-				 */
-				async #handleMessage(buffer) {
-					const dataBytes = new Uint8Array(buffer);
-					const Envelope = this.#protoRoot.lookupType('listentogether.Envelope');
-
-					let envelope;
-					try {
-						envelope = Envelope.decode(dataBytes);
-					} catch (error) {
-						console.error('Failed to decode envelope:', error);
-						return;
-					}
-
-					let payloadBytes = envelope.payload;
-					if (envelope.compressed) {
-						try {
-							payloadBytes = await this.#decompressGzip(payloadBytes);
-						} catch (error) {
-							console.error('Failed to decompress gzip payload:', error);
-							return;
-						}
-					}
-
-					switch (envelope.type) {
-						case 'error': {
-							const ErrorType = this.#protoRoot.lookupType(
-								'listentogether.ErrorPayload'
-							);
-							const errorData = ErrorType.decode(payloadBytes);
-							console.error(`Server Error [${errorData.code}]:`, errorData.message);
-							this.dispatchEvent(
-								new CustomEvent('error-payload', { detail: errorData })
-							);
-							break;
-						}
-						case 'join_approved': {
-							const JoinType = this.#protoRoot.lookupType(
-								'listentogether.JoinApprovedPayload'
-							);
-							const joinData = JoinType.decode(payloadBytes);
-							if (joinData.state) {
-								this.#applySyncState(joinData.state);
-							}
-							break;
-						}
-						case 'sync_state': {
-							const SyncType = this.#protoRoot.lookupType(
-								'listentogether.SyncStatePayload'
-							);
-							const syncData = SyncType.decode(payloadBytes);
-							this.#applySyncState(syncData);
-							break;
-						}
-						case 'sync_playback': {
-							const PlaybackType = this.#protoRoot.lookupType(
-								'listentogether.PlaybackActionPayload'
-							);
-							const actionData = PlaybackType.decode(payloadBytes);
-							this.#applyPlaybackAction(actionData);
-							break;
-						}
-						case 'kicked': {
-							const KickedType = this.#protoRoot.lookupType(
-								'listentogether.KickedPayload'
-							);
-							const kickedData = KickedType.decode(payloadBytes);
-							console.warn(`Kicked from room: ${kickedData.reason}`);
-							this.dispatchEvent(new CustomEvent('kicked', { detail: kickedData }));
-							break;
-						}
-					}
-				}
-
-				/**
-				 * Synchronizes the internal playback tracker with a full state payload.
-				 * @private
-				 * @param {Object} state The updated room state object from the server.
-				 */
-				#applySyncState(state) {
-					this.#isPlaying = state.isPlaying || false;
-					this.#position = this.#toNumber(state.position);
-					this.#lastUpdate = Date.now();
-
-					if (state.currentTrack) {
-						this.#currentTrack = {
-							id: state.currentTrack.id,
-							title: state.currentTrack.title,
-							artist: state.currentTrack.artist,
-							album: state.currentTrack.album,
-							duration: this.#toNumber(state.currentTrack.duration),
-							thumbnail: state.currentTrack.thumbnail,
-						};
-					} else {
-						this.#currentTrack = null;
-					}
-
-					this.dispatchEvent(new CustomEvent('state-synced'));
-					this.dispatchEvent(
-						new CustomEvent('track-changed', { detail: this.#currentTrack })
-					);
-				}
-
-				/**
-				 * Updates specific variables based on incremental actions to prevent overriding untargeted state.
-				 * @private
-				 * @param {Object} actionData The playback action event payload from the server.
-				 */
-				#applyPlaybackAction(actionData) {
-					this.#lastUpdate = Date.now();
-
-					switch (actionData.action) {
-						case 'play':
-							this.#isPlaying = true;
-							this.#position = this.#toNumber(actionData.position);
-							break;
-						case 'pause':
-							this.#isPlaying = false;
-							this.#position = this.#toNumber(actionData.position);
-							break;
-						case 'seek':
-						case 'change_track':
-						case 'sync_queue':
-							this.#position = this.#toNumber(actionData.position);
-							if (actionData.trackInfo) {
-								this.#currentTrack = {
-									id: actionData.trackInfo.id,
-									title: actionData.trackInfo.title,
-									artist: actionData.trackInfo.artist,
-									album: actionData.trackInfo.album,
-									duration: this.#toNumber(actionData.trackInfo.duration),
-									thumbnail: actionData.trackInfo.thumbnail,
-								};
-								this.dispatchEvent(
-									new CustomEvent('track-changed', { detail: this.#currentTrack })
-								);
-							} else if (actionData.action === 'change_track') {
-								this.#currentTrack = null;
-								this.dispatchEvent(
-									new CustomEvent('track-changed', { detail: null })
-								);
-							}
-							break;
-					}
-
-					this.dispatchEvent(
-						new CustomEvent('state-synced', { detail: this.playbackProgress })
-					);
-				}
-
-				/**
-				 * Triggers an automated reconnection sequence when the socket unexpectedly drops.
-				 * @private
-				 */
-				#handleDisconnect() {
-					if (this.#pingInterval) {
-						clearInterval(this.#pingInterval);
-						this.#pingInterval = null;
-					}
-
-					if (this.#intentionalDisconnect) {
-						return;
-					}
-
-					if (this.#retryCount >= this.#maxRetries) {
-						console.error(
-							'ListenTogether WebSocket: Maximum reconnection attempts reached.'
-						);
-						this.dispatchEvent(new CustomEvent('reconnect-failed'));
-						return;
-					}
-
-					this.#retryCount++;
-					console.warn(
-						`ListenTogether WebSocket closed. Reconnecting in 5s... (Attempt ${this.#retryCount}/${this.#maxRetries})`
-					);
-
-					this.#ws = null;
-					this.#reconnectTimer = setTimeout(() => {
-						this.init().catch(() => this.#handleDisconnect());
-					}, 5000);
+		<script type="importmap">
+			{
+				"imports": {
+					"protobufjs/minimal.js": "https://esm.sh/protobufjs/minimal.js"
 				}
 			}
+		</script>
+
+		<script type="module">
+			import QRCode from 'https://esm.sh/qrcode';
+
+			import { ListenTogetherClient } from './listen-client.js';
 
 			class OverlayController {
 				/**
@@ -1123,6 +536,7 @@
 					this.#animationFrame = null;
 
 					this.#listenClient = new ListenTogetherClient(this.#listenCode, {
+						username: 'Rouge Overlay',
 						serverUrl: this.#serverUrl,
 					});
 				}
@@ -1166,7 +580,10 @@
 						await document.fonts.ready;
 					}
 
-					await this.#generateQrCode();
+					const initialUrl = await this.#generateQrCode();
+					if (initialUrl) {
+						console.log(`🔗 Listen Link: ${initialUrl}`);
+					}
 
 					this.#listenClient.addEventListener('track-changed', (e) => {
 						this.#updateUI(e.detail);
@@ -1242,11 +659,11 @@
 				 * Generates and injects the QR code SVG for the listen together session.
 				 * @private
 				 * @param {string|null} [youtubeId=null] The YouTube video ID to append for the fallback state.
-				 * @returns {Promise<void>}
+				 * @returns {Promise<string|null>} The generated target URL, or null if generation fails.
 				 */
 				async #generateQrCode(youtubeId = null) {
 					if (!this.#listenCode) {
-						return;
+						return null;
 					}
 
 					try {
@@ -1264,9 +681,8 @@
 							targetUrl.searchParams.set('v', youtubeId);
 						}
 
-						console.log(targetUrl.toString());
-
-						const svgString = await QRCode.toString(targetUrl.toString(), {
+						const urlString = targetUrl.toString();
+						const svgString = await QRCode.toString(urlString, {
 							type: 'svg',
 							margin: 0,
 							color: {
@@ -1276,8 +692,10 @@
 						});
 
 						this.#qrContainer.innerHTML = svgString;
+						return urlString;
 					} catch (error) {
 						console.error('Failed to generate listen QR code:', error);
+						return null;
 					}
 				}
 
@@ -1290,21 +708,29 @@
 						const progress = this.#listenClient.playbackProgress;
 
 						if (progress && progress.duration > 0) {
-							this.#progressFill.style.width = `${progress.percent * 100}%`;
+							if (this.#progressFill) {
+								this.#progressFill.style.width = `${progress.percent * 100}%`;
+							}
 
 							if (progress.isPlaying !== this.#wasPlaying) {
 								this.#wasPlaying = progress.isPlaying;
-								this.#widgetElement.classList.toggle(
-									'is-paused',
-									!progress.isPlaying
-								);
+								if (this.#widgetElement) {
+									this.#widgetElement.classList.toggle(
+										'is-paused',
+										!progress.isPlaying
+									);
+								}
 							}
 						} else {
-							this.#progressFill.style.width = '0%';
+							if (this.#progressFill) {
+								this.#progressFill.style.width = '0%';
+							}
 
 							if (this.#wasPlaying !== false) {
 								this.#wasPlaying = false;
-								this.#widgetElement.classList.remove('is-paused');
+								if (this.#widgetElement) {
+									this.#widgetElement.classList.remove('is-paused');
+								}
 							}
 						}
 					}
@@ -1387,15 +813,21 @@
 
 					if (!trackData) {
 						this.#hideUI();
-						void this.#generateQrCode();
+						this.#generateQrCode().then((url) => {
+							if (url) {
+								console.log(`🔗 Listen Link: ${url}`);
+							}
+						});
 						return;
 					}
 
-					if (this.#widgetElement.hasAttribute('hidden')) {
+					if (this.#widgetElement && this.#widgetElement.hasAttribute('hidden')) {
 						this.#widgetElement.removeAttribute('hidden');
 						void this.#widgetElement.offsetHeight;
 					}
-					this.#widgetElement.classList.add('is-visible');
+					if (this.#widgetElement) {
+						this.#widgetElement.classList.add('is-visible');
+					}
 
 					const title = trackData.title || 'Unknown Track';
 					const artist = trackData.artist || 'Unknown Artist';
@@ -1411,7 +843,13 @@
 					}
 					this.#lastActivitySignature = activitySignature;
 
-					void this.#generateQrCode(youtubeId);
+					this.#generateQrCode(youtubeId).then((url) => {
+						if (url) {
+							console.log(
+								`${title} · ${album ? album + ' ' : ''}(${artist})\n${url}`
+							);
+						}
+					});
 
 					this.#setMarqueeText(this.#trackTrack, title, 'h2', 'track-name text-size-h3');
 					this.#setMarqueeText(
@@ -1422,7 +860,7 @@
 					);
 					this.#setMarqueeText(this.#albumTrack, album, 'h4', 'album-name text-caption');
 
-					if (scaledArtUrl && this.#artElement.src !== scaledArtUrl) {
+					if (scaledArtUrl && this.#artElement && this.#artElement.src !== scaledArtUrl) {
 						this.#artElement.src = scaledArtUrl;
 					}
 				}
@@ -1432,6 +870,10 @@
 				 * @private
 				 */
 				#hideUI() {
+					if (!this.#widgetElement) {
+						return;
+					}
+
 					if (
 						this.#widgetElement.hasAttribute('hidden')
 						&& !this.#widgetElement.classList.contains('is-visible')
@@ -1443,7 +885,10 @@
 					this.#widgetElement.classList.remove('is-visible');
 					clearTimeout(this.#hideTimeout);
 					this.#hideTimeout = setTimeout(() => {
-						if (!this.#widgetElement.classList.contains('is-visible')) {
+						if (
+							this.#widgetElement
+							&& !this.#widgetElement.classList.contains('is-visible')
+						) {
 							this.#widgetElement.setAttribute('hidden', '');
 						}
 					}, OverlayController.HIDE_TRANSITION_MS);

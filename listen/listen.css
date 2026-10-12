@@ -159,14 +159,18 @@ body {
 	position: relative;
 	transition: border-color var(--transition-duration) var(--transition-easing);
 	cursor: pointer;
-	margin-bottom: 0;
+	margin-bottom: 1.25rem;
 	border: var(--border-width) solid var(--color-border);
-	border-bottom: none;
 	background-color: var(--color-overlay);
 	aspect-ratio: 1 / 1;
 	width: 100%;
 	overflow: hidden;
 	text-decoration: none;
+
+	&:has(+ .progress-bar:not([hidden])) {
+		margin-bottom: 0;
+		border-bottom: none;
+	}
 
 	img {
 		display: block;
