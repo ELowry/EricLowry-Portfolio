@@ -19,7 +19,7 @@ import $root from './listen-proto.js';
  */
 
 /**
- * Client for connecting to the Metrolist Listen Together WebSocket server.
+ * Client for connecting to the Metrolist Listen Together WebSocket server.  
  * Extends EventTarget to emit `track-changed`, `state-synced`, `error-payload`, and `kicked` events.
  */
 export class ListenTogetherClient extends EventTarget {
@@ -90,19 +90,39 @@ export class ListenTogetherClient extends EventTarget {
 	#pingSequence = 0;
 
 	/**
+	 * @private
+	 * @type {number} The maximum number of consecutive reconnection attempts.
+	 */
+	#maxRetries;
+
+	/**
+	 * @private
+	 * @type {number} The current count of consecutive reconnection attempts.
+	 */
+	#retryCount = 0;
+
+	/**
+	 * @private
+	 * @type {boolean} Flag indicating if the disconnection was explicitly requested.
+	 */
+	#intentionalDisconnect = false;
+
+	/**
 	 * @param {string} roomCode The room code to connect to.
 	 * @param {Object} [options={}] Configuration options for the client.
 	 * @param {string} [options.username='Widget'] The client username.
 	 * @param {string} [options.serverUrl='wss://metroserverx.meowery.eu/ws'] The WebSocket endpoint URL.
+	 * @param {number} [options.maxRetries=5] Maximum consecutive reconnection attempts.
 	 */
 	constructor(
 		roomCode,
-		{ username = 'Widget', serverUrl = 'wss://metroserverx.meowery.eu/ws' } = {}
+		{ username = 'Widget', serverUrl = 'wss://metroserverx.meowery.eu/ws', maxRetries = 5 } = {}
 	) {
 		super();
 		this.#roomCode = roomCode;
 		this.#username = username;
 		this.#serverUrl = serverUrl;
+		this.#maxRetries = maxRetries;
 	}
 
 	/**
@@ -131,11 +151,68 @@ export class ListenTogetherClient extends EventTarget {
 	}
 
 	/**
-	 * Retrieves the current static track metadata.
-	 * @returns {TrackData|null} The currently loaded track data, or null.
+	 * Establishes the WebSocket connection and registers listeners.
+	 * @returns {Promise<void>}
 	 */
-	get currentTrack() {
-		return this.#currentTrack;
+	async init() {
+		if (this.#reconnectTimer) {
+			clearTimeout(this.#reconnectTimer);
+			this.#reconnectTimer = null;
+		}
+
+		this.#intentionalDisconnect = false;
+
+		return new Promise((resolve, reject) => {
+			this.#ws = new WebSocket(this.#serverUrl);
+			this.#ws.binaryType = 'arraybuffer';
+
+			let hasOpened = false;
+
+			this.#ws.addEventListener('open', () => {
+				hasOpened = true;
+				this.#retryCount = 0;
+				this.#sendHandshake();
+				this.#sendJoinRequest();
+
+				this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
+				resolve();
+			});
+
+			this.#ws.addEventListener('message', async (event) => {
+				await this.#handleMessage(event.data);
+			});
+
+			this.#ws.addEventListener('error', (err) => {
+				console.error('ListenTogether WebSocket Error:', err);
+			});
+
+			this.#ws.addEventListener('close', () => {
+				if (!hasOpened) {
+					reject(new Error('WebSocket connection failed.'));
+				}
+				this.#handleDisconnect();
+			});
+		});
+	}
+
+	/**
+	 * Gracefully closes the underlying WebSocket connection and halts reconnection logic.
+	 */
+	disconnect() {
+		this.#intentionalDisconnect = true;
+
+		if (this.#reconnectTimer) {
+			clearTimeout(this.#reconnectTimer);
+			this.#reconnectTimer = null;
+		}
+		if (this.#pingInterval) {
+			clearInterval(this.#pingInterval);
+			this.#pingInterval = null;
+		}
+
+		if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
+			this.#ws.close();
+		}
 	}
 
 	/**
@@ -387,64 +464,24 @@ export class ListenTogetherClient extends EventTarget {
 			this.#pingInterval = null;
 		}
 
-		console.warn('ListenTogether WebSocket closed. Reconnecting in 5s...');
+		if (this.#intentionalDisconnect) {
+			return;
+		}
+
+		if (this.#retryCount >= this.#maxRetries) {
+			console.error('ListenTogether WebSocket: Maximum reconnection attempts reached.');
+			this.dispatchEvent(new CustomEvent('reconnect-failed'));
+			return;
+		}
+
+		this.#retryCount++;
+		console.warn(
+			`ListenTogether WebSocket closed. Reconnecting in 5s... (Attempt ${this.#retryCount}/${this.#maxRetries})`
+		);
+
 		this.#ws = null;
 		this.#reconnectTimer = setTimeout(() => {
-			this.init().catch(() => this.#handleDisconnect());
+			this.init().catch(() => {});
 		}, 5000);
-	}
-
-	/**
-	 * Establishes the WebSocket connection and registers listeners.
-	 * @returns {Promise<void>}
-	 */
-	async init() {
-		if (this.#reconnectTimer) {
-			clearTimeout(this.#reconnectTimer);
-			this.#reconnectTimer = null;
-		}
-
-		return new Promise((resolve) => {
-			this.#ws = new WebSocket(this.#serverUrl);
-			this.#ws.binaryType = 'arraybuffer';
-
-			this.#ws.addEventListener('open', () => {
-				this.#sendHandshake();
-				this.#sendJoinRequest();
-
-				this.#pingInterval = setInterval(() => this.#sendPing(), 30000);
-				resolve();
-			});
-
-			this.#ws.addEventListener('message', async (event) => {
-				await this.#handleMessage(event.data);
-			});
-
-			this.#ws.addEventListener('error', (err) => {
-				console.error('ListenTogether WebSocket Error:', err);
-			});
-
-			this.#ws.addEventListener('close', () => {
-				this.#handleDisconnect();
-			});
-		});
-	}
-
-	/**
-	 * Gracefully closes the underlying WebSocket connection and halts reconnection logic.
-	 */
-	disconnect() {
-		if (this.#reconnectTimer) {
-			clearTimeout(this.#reconnectTimer);
-			this.#reconnectTimer = null;
-		}
-		if (this.#pingInterval) {
-			clearInterval(this.#pingInterval);
-			this.#pingInterval = null;
-		}
-
-		if (this.#ws && this.#ws.readyState === WebSocket.OPEN) {
-			this.#ws.close();
-		}
 	}
 }

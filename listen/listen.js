@@ -112,6 +112,18 @@ class ListenPageController {
 	 */
 	#animationFrame = null;
 
+	/**
+	 * @private
+	 * @type {HTMLAnchorElement|null}
+	 */
+	#emptyActionBtn;
+
+	/**
+	 * @private
+	 * @type {HTMLElement|null}
+	 */
+	#cardHeader;
+
 	constructor() {
 		this.#playerCard = document.getElementById('player-card');
 		this.#emptyCard = document.getElementById('empty-card');
@@ -128,6 +140,8 @@ class ListenPageController {
 		this.#playbackIcon = document.getElementById('playback-icon');
 		this.#emptyHeading = document.getElementById('empty-heading');
 		this.#emptyText = document.getElementById('empty-text');
+		this.#emptyActionBtn = document.querySelector('.empty-action');
+		this.#cardHeader = document.querySelector('.card-header');
 	}
 
 	/**
@@ -186,6 +200,16 @@ class ListenPageController {
 	}
 
 	/**
+	 * Generates a Noembed API URL to fetch YouTube video metadata.
+	 * @private
+	 * @param {string} youtubeId The unique YouTube video identifier.
+	 * @returns {string} The full Noembed API URL.
+	 */
+	static #buildNoembedUrl(youtubeId) {
+		return `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${encodeURIComponent(youtubeId)}`;
+	}
+
+	/**
 	 * Generates a Metrolist room join URL for a given room code.
 	 * @private
 	 * @param {string} code The Metrolist room code.
@@ -209,9 +233,62 @@ class ListenPageController {
 	}
 
 	/**
-	 * Extracts room code and optional server URL from parameters.
+	 * Initializes the page state and connects via ListenTogetherClient if a room code exists.
+	 * @returns {Promise<void>}
+	 */
+	async init() {
+		const params = this.#parseUrlParams();
+
+		if (!params.code) {
+			this.#renderEmpty('default', params.youtubeId);
+			return;
+		}
+
+		const options = {};
+		if (params.server) {
+			options.serverUrl = params.server;
+		}
+
+		this.#listenClient = new ListenTogetherClient(params.code, options);
+
+		this.#listenClient.addEventListener('track-changed', (e) => {
+			if (e.detail) {
+				this.#renderSong(e.detail, params.code);
+			} else {
+				this.#renderEmpty('default', params.youtubeId);
+			}
+		});
+
+		this.#listenClient.addEventListener('error-payload', (e) => {
+			if (e.detail?.code === 'room_not_found' || e.detail?.code === 'room_invalid') {
+				this.#listenClient.disconnect();
+				this.#renderEmpty('ended', params.youtubeId);
+			}
+		});
+
+		this.#listenClient.addEventListener('kicked', () => {
+			this.#listenClient.disconnect();
+			this.#renderEmpty('ended', params.youtubeId);
+		});
+
+		this.#listenClient.addEventListener('reconnect-failed', () => {
+			this.#renderEmpty('ended', params.youtubeId);
+		});
+
+		this.#animateProgress();
+
+		try {
+			await this.#listenClient.init();
+		} catch (error) {
+			console.error('Failed to initialize ListenTogetherClient:', error);
+			this.#renderEmpty('ended', params.youtubeId);
+		}
+	}
+
+	/**
+	 * Extracts room code, optional server URL, and optional YouTube ID from parameters.
 	 * @private
-	 * @returns {{code: string, server: string}} The parsed URL parameters containing room code and server URL.
+	 * @returns {{code: string, server: string, youtubeId: string}} The parsed URL parameters.
 	 */
 	#parseUrlParams() {
 		const searchParams = new URLSearchParams(window.location.search);
@@ -221,14 +298,16 @@ class ListenPageController {
 			|| searchParams.get('listenCode')
 			|| '';
 		let server = searchParams.get('server') || searchParams.get('s') || '';
+		let youtubeId = searchParams.get('v') || '';
 
 		if (!code && window.location.hash) {
 			const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
 			code = hashParams.get('code') || hashParams.get('c') || '';
 			server = hashParams.get('server') || hashParams.get('s') || server;
+			youtubeId = hashParams.get('v') || youtubeId;
 		}
 
-		return { code, server };
+		return { code, server, youtubeId };
 	}
 
 	/**
@@ -351,7 +430,12 @@ class ListenPageController {
 		}
 
 		if (scaledArtUrl) {
-			this.#albumArt.classList.remove('fallback-crop');
+			if (scaledArtUrl.includes('ytimg.com')) {
+				this.#albumArt.classList.add('fallback-crop');
+			} else {
+				this.#albumArt.classList.remove('fallback-crop');
+			}
+
 			this.#albumArt.src = scaledArtUrl;
 			this.#albumArt.alt = `${title} by ${artist}`;
 		}
@@ -373,8 +457,10 @@ class ListenPageController {
 		if (roomCode) {
 			this.#btnMetrolist.href = ListenPageController.#buildMetrolistUrl(roomCode);
 			this.#btnMetrolist.removeAttribute('hidden');
+			this.#cardHeader?.removeAttribute('hidden');
 		} else {
 			this.#btnMetrolist.setAttribute('hidden', '');
+			this.#cardHeader?.setAttribute('hidden', '');
 		}
 
 		this.#updateMetadata(title, artist, scaledArtUrl);
@@ -387,14 +473,24 @@ class ListenPageController {
 		if (this.#pageFooter) {
 			this.#pageFooter.classList.add('is-visible');
 		}
+
+		if (this.#animationFrame === null) {
+			this.#animateProgress();
+		}
 	}
 
 	/**
 	 * Displays the fallback state when no track payload is available or the room has ended.
 	 * @private
 	 * @param {string} [reason='default'] Indicates whether the room was not specified or ended.
+	 * @param {string} [youtubeId=''] The fallback YouTube video ID.
 	 */
-	#renderEmpty(reason = 'default') {
+	#renderEmpty(reason = 'default', youtubeId = '') {
+		if (youtubeId && (reason === 'ended' || reason === 'default')) {
+			void this.#fetchYouTubeMetadata(youtubeId, reason);
+			return;
+		}
+
 		this.#playerCard.setAttribute('hidden', '');
 		this.#playerCard.classList.remove('is-visible');
 		this.#ambientBackdrop.classList.remove('is-visible');
@@ -407,6 +503,16 @@ class ListenPageController {
 				this.#emptyHeading.textContent = 'No Track Specified';
 				this.#emptyText.textContent =
 					'Scan the QR code from the stream overlay or open a shared listen link to tune in together.';
+			}
+		}
+
+		if (this.#emptyActionBtn) {
+			if (youtubeId) {
+				this.#emptyActionBtn.href = ListenPageController.#buildYouTubeMusicUrl(youtubeId);
+				this.#emptyActionBtn.textContent = 'Listen on YouTube Music';
+			} else {
+				this.#emptyActionBtn.href = '/';
+				this.#emptyActionBtn.textContent = 'Back to Portfolio';
 			}
 		}
 
@@ -425,53 +531,35 @@ class ListenPageController {
 	}
 
 	/**
-	 * Initializes the page state and connects via ListenTogetherClient if a room code exists.
-	 * @returns {Promise<void>}
+	 * Fetches video metadata from Noembed and triggers the song render on success.
+	 * @private
+	 * @param {string} youtubeId The YouTube video ID to fetch metadata for.
+	 * @param {string} [reason='default'] The original reason code to restore on failure.
+	 * @returns {Promise<boolean>} Resolves to true if the metadata was successfully fetched and rendered.
 	 */
-	async init() {
-		const params = this.#parseUrlParams();
-
-		if (!params.code) {
-			this.#renderEmpty();
-			return;
-		}
-
-		const options = {};
-		if (params.server) {
-			options.serverUrl = params.server;
-		}
-
-		this.#listenClient = new ListenTogetherClient(params.code, options);
-
-		this.#listenClient.addEventListener('track-changed', (e) => {
-			if (e.detail) {
-				this.#renderSong(e.detail, params.code);
-			} else {
-				this.#renderEmpty();
-			}
-		});
-
-		this.#listenClient.addEventListener('error-payload', (e) => {
-			if (e.detail?.code === 'room_not_found' || e.detail?.code === 'room_invalid') {
-				this.#listenClient.disconnect();
-				this.#renderEmpty('ended');
-			}
-		});
-
-		this.#listenClient.addEventListener('kicked', () => {
-			this.#listenClient.disconnect();
-			this.#renderEmpty('ended');
-		});
-
+	async #fetchYouTubeMetadata(youtubeId, reason = 'default') {
 		try {
-			await this.#listenClient.init();
-			this.#animateProgress();
+			const response = await fetch(ListenPageController.#buildNoembedUrl(youtubeId));
+			const data = await response.json();
+
+			if (data.title) {
+				this.#renderSong({
+					id: youtubeId,
+					title: data.title,
+					artist: data.author_name || 'YouTube',
+					thumbnail: data.thumbnail_url || '',
+				});
+				return true;
+			}
 		} catch (error) {
-			console.error('Failed to initialize ListenTogetherClient:', error);
-			this.#renderEmpty();
+			console.error('Failed to fetch YouTube metadata:', error);
 		}
+
+		// Re-trigger the empty state without the ID to prevent loops and show the generic error
+		this.#renderEmpty(reason);
+		return false;
 	}
 }
 
-export const App = new ListenPageController();
+const App = new ListenPageController();
 App.init();
