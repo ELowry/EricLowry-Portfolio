@@ -36,6 +36,7 @@ yarn-error.log*
 
 # Environment files (local configs)
 /.env.*
+/listen/listen_key.txt
 
 # Generated on build
 /public/llms.txt
@@ -57,6 +58,8 @@ yarn-error.log*
 /public/assets/images/projects/
 /public/assets/external-links.json
 /public/assets/images/external-links/
+
+/listen/listen-proto.js
 
 # Obsidian
 /public/.obsidian/
