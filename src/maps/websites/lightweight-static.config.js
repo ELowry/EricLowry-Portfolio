@@ -1,6 +1,6 @@
 /**
  * Map configuration for Lightweight Static Sites.
- * @type {MapData}
+ * @type {import('../../js/modules/content/contentTree.js').MapConfig}
  */
 export default {
 	startPos: { x: 10, y: 10 },

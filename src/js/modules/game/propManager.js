@@ -62,6 +62,60 @@ class PropManagerController {
 	}
 
 	/**
+	 * Destroys current props, resolves the configuration cascade, and spawns the new map's props.
+	 * @param {Object} payload - The route payload.
+	 * @param {string} payload.mode - The application mode.
+	 * @param {string} payload.path - The active route path.
+	 * @private
+	 */
+	#handleRouteChanged({ mode, path }) {
+		if (mode !== 'game') {
+			return;
+		}
+
+		for (const prop of this.#activeProps) {
+			if (typeof prop.destroy === 'function') {
+				prop.destroy();
+			}
+		}
+		this.#activeProps = [];
+
+		const mapNode = Content.getParentMapNode(path);
+		if (!mapNode) {
+			return;
+		}
+
+		const configChain = [];
+		const pathParts = path.split('/').filter((p) => {
+			return p;
+		});
+
+		let currentPath = '';
+
+		if (Content.tree && Content.tree.mapData && Content.tree.mapData.sprites) {
+			configChain.push(Content.tree.mapData.sprites);
+		}
+
+		for (const part of pathParts) {
+			currentPath += (currentPath ? '/' : '') + part;
+			const n = Content.findNodeByPath(currentPath);
+			if (n && n.mapData && n.mapData.sprites) {
+				configChain.push(n.mapData.sprites);
+			}
+			if (n === mapNode) {
+				break;
+			}
+		}
+
+		this.buildRegistry(configChain);
+
+		if (mapNode.mapData && mapNode.mapData.props) {
+			const mapTexIndex = mapNode.mapData.textureIndex || 0;
+			this.#activeProps = this.spawnProps(mapNode.mapData.props, mapTexIndex);
+		}
+	}
+
+	/**
 	 * Clears and rebuilds the active prop definitions based on the provided cascading configs.
 	 * @param {Array<SpriteConfig>} configChain - Array of loaded sprite config objects from root to local node.
 	 * @returns {void}
@@ -208,57 +262,12 @@ class PropManagerController {
 	}
 
 	/**
-	 * Destroys current props, resolves the configuration cascade, and spawns the new map's props.
-	 * @param {Object} payload - The route payload.
-	 * @param {string} payload.mode - The application mode.
-	 * @param {string} payload.path - The active route path.
-	 * @private
+	 * Retrieves a registered property definition by its key.
+	 * @param {string} key - The property definition key.
+	 * @returns {import('./props/doors.js').DoorConfig|PropDefinition|undefined} The definition if found.
 	 */
-	#handleRouteChanged({ mode, path }) {
-		if (mode !== 'game') {
-			return;
-		}
-
-		for (const prop of this.#activeProps) {
-			if (typeof prop.destroy === 'function') {
-				prop.destroy();
-			}
-		}
-		this.#activeProps = [];
-
-		const mapNode = Content.getParentMapNode(path);
-		if (!mapNode) {
-			return;
-		}
-
-		const configChain = [];
-		const pathParts = path.split('/').filter((p) => {
-			return p;
-		});
-
-		let currentPath = '';
-
-		if (Content.tree && Content.tree.mapData && Content.tree.mapData.sprites) {
-			configChain.push(Content.tree.mapData.sprites);
-		}
-
-		for (const part of pathParts) {
-			currentPath += (currentPath ? '/' : '') + part;
-			const n = Content.findNodeByPath(currentPath);
-			if (n && n.mapData && n.mapData.sprites) {
-				configChain.push(n.mapData.sprites);
-			}
-			if (n === mapNode) {
-				break;
-			}
-		}
-
-		this.buildRegistry(configChain);
-
-		if (mapNode.mapData && mapNode.mapData.props) {
-			const mapTexIndex = mapNode.mapData.textureIndex || 0;
-			this.#activeProps = this.spawnProps(mapNode.mapData.props, mapTexIndex);
-		}
+	getDefinition(key) {
+		return this.#activeDefinitions.get(key);
 	}
 }
 

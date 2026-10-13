@@ -1,7 +1,51 @@
 import { Engine } from '../js/modules/core/engineContext.js';
 
 export default {
-	shared: {},
+	shared: {
+		doorFront: {
+			resolution: Engine.LJS.vec2(16, 35),
+			offset: Engine.LJS.vec2(0, 36),
+			cols: 5,
+			animDelayOpen: 24,
+			animSpeedOpen: 12,
+			yOffset: 1,
+			shadowBaselineOffset: 0.3,
+			framesOpening: [1, 2, 3],
+			framesOpen: [3],
+			highlightConfig: {
+				resolution: Engine.LJS.vec2(20, 35),
+				offset: Engine.LJS.vec2(72, 36),
+				renderOffset: Engine.LJS.vec2(0, 0.1),
+			},
+		},
+		doorBehind: {
+			resolution: Engine.LJS.vec2(21, 35),
+			offset: Engine.LJS.vec2(94, 36),
+			cols: 4,
+			animDelayOpen: 20,
+			animSpeedOpen: 10,
+			yOffset: 0.4,
+			shadowBaselineOffset: 0.3,
+			framesOpening: [1, 2, 3],
+			framesOpen: [3],
+			highlightConfig: {
+				resolution: Engine.LJS.vec2(20, 35),
+				offset: Engine.LJS.vec2(186, 36),
+				renderOffset: Engine.LJS.vec2(-0.2, -0.2),
+			},
+		},
+		sign: {
+			resolution: Engine.LJS.vec2(20, 19),
+			offset: Engine.LJS.vec2(230, 52),
+			yOffset: 0.2,
+			shadowType: 'floor',
+			highlightConfig: {
+				resolution: Engine.LJS.vec2(22, 11),
+				offset: Engine.LJS.vec2(252, 52),
+				renderOffset: Engine.LJS.vec2(0, 0.5),
+			},
+		},
+	},
 	local: {
 		boxes: {
 			isAnimated: false,
@@ -101,6 +145,32 @@ export default {
 				gamepad_ps: { frames: [0], speed: 0, loop: false },
 				gamepad_switch: { frames: [0], speed: 0, loop: false },
 				touch: { frames: [1], speed: 0, loop: false },
+			},
+		},
+		gameCenter: {
+			isAnimated: false,
+			get resolution() {
+				return Engine.LJS.vec2(127, 178);
+			},
+			get offset() {
+				return Engine.LJS.vec2(0, 73);
+			},
+		},
+		// Doors
+		slidingDouble: {
+			resolution: Engine.LJS.vec2(49, 44),
+			offset: Engine.LJS.vec2(129, 79),
+			cols: 4,
+			animDelayOpen: 24,
+			animSpeedOpen: 12,
+			yOffset: 1.74,
+			shadowType: 'none',
+			framesOpening: [1, 2, 3],
+			framesOpen: [3],
+			highlightConfig: {
+				resolution: Engine.LJS.vec2(20, 35),
+				offset: Engine.LJS.vec2(72, 36),
+				renderOffset: Engine.LJS.vec2(0, 0.1),
 			},
 		},
 	},

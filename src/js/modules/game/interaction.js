@@ -1,4 +1,3 @@
-// File: src/js/modules/game/interaction.js
 import { Content } from '../content/content.js';
 import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
@@ -131,8 +130,9 @@ class InteractionController {
 		let minDistSq = this.interactionRadius * this.interactionRadius;
 
 		for (const obj of this.activeObjects) {
-			const dx = playerPos.x - obj.pos.x;
-			const dy = playerPos.y - obj.pos.y;
+			const targetPos = obj.interactPos || obj.pos;
+			const dx = playerPos.x - targetPos.x;
+			const dy = playerPos.y - targetPos.y;
 			const distSq = dx * dx + dy * dy;
 
 			const radiusSq = obj.radius * obj.radius;
@@ -199,20 +199,35 @@ class InteractionController {
 			}
 
 			const { Door } = await import('./props/doors.js');
+			const { PropManager } = await import('./propManager.js');
 
 			const mapTexIndex = mapNode.mapData.textureIndex || 0;
 
 			const gameObjects = currentObjects.map((obj) => {
 				let variant = 'front';
-				if (obj.type === 'content') {
+				let spriteKey = 'doorFront';
+
+				if (obj.doorSpriteType) {
+					spriteKey = obj.doorSpriteType;
+					variant = obj.below ? 'behind' : 'front';
+				} else if (obj.type === 'content') {
 					variant = 'sign';
+					spriteKey = 'sign';
 				} else if (obj.below) {
 					variant = 'behind';
+					spriteKey = 'doorBehind';
 				}
 
-				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), variant, {
-					textureIndex: mapTexIndex,
-				});
+				const def = PropManager.getDefinition(spriteKey);
+				if (!def && import.meta.env.DEV) {
+					console.warn(
+						`InteractionController: Door sprite definition not found for key "${spriteKey}".`
+					);
+				}
+
+				const doorConfig = { ...(def || {}), textureIndex: mapTexIndex, variant };
+
+				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), doorConfig);
 
 				door.id = obj.id;
 				door.radius = obj.radius;
@@ -277,7 +292,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Sets the list of interactive objects for the current map.  
+	 * Sets the list of interactive objects for the current map.
 	 * @param {Array} objects - Array of interactive objects with `pos`, `file`, `label`, etc.
 	 */
 	setObjects(objects) {
@@ -292,7 +307,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Prevent interactions for a duration.  
+	 * Prevent interactions for a duration.
 	 * Useful when closing menus to prevent 'double interactions'.
 	 * @param {number} duration - Optionally set the duration to block interactions for in milliseconds. Defaults to 500ms.
 	 */

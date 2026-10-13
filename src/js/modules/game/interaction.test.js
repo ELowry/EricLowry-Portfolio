@@ -1,21 +1,52 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Engine } from '../core/engineContext.js';
 import { Events } from '../core/events.js';
 import { Input } from '../input/input.js';
 import { Interaction } from './interaction.js';
 
-Engine.setEngine({
-	vec2: (x, y) => ({ x, y }),
-	Color: class {
-		constructor(r, g, b, a) {
-			this.r = r;
-			this.g = g;
-			this.b = b;
-			this.a = a;
+vi.mock('../core/engineContext.js', () => {
+	/**
+	 * Mock representation of the LittleJS EngineObject base class.
+	 */
+	class MockEngineObject {
+		/**
+		 * @param {Object} pos - World position.
+		 * @param {Object} size - Physical size.
+		 */
+		constructor(pos, size) {
+			this.pos = pos;
+			this.size = size;
 		}
-	},
-	drawRect: vi.fn(),
+	}
+
+	return {
+		Engine: {
+			LJS: {
+				/**
+				 * @param {number} x - X coordinate.
+				 * @param {number} y - Y coordinate.
+				 * @returns {Object} A basic 2D vector object.
+				 */
+				vec2: (x, y) => ({ x, y }),
+				Color: class {
+					/**
+					 * @param {number} r - Red.
+					 * @param {number} g - Green.
+					 * @param {number} b - Blue.
+					 * @param {number} a - Alpha.
+					 */
+					constructor(r, g, b, a) {
+						this.r = r;
+						this.g = g;
+						this.b = b;
+						this.a = a;
+					}
+				},
+				drawRect: vi.fn(),
+				EngineObject: MockEngineObject,
+			},
+		},
+	};
 });
 
 vi.mock('../core/layeredInputs.js', () => ({
@@ -81,3 +112,4 @@ describe('InteractionController', () => {
 		expect(Input.spawnTapRipple).toHaveBeenCalled();
 	});
 });
+sù

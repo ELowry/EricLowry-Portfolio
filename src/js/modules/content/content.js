@@ -268,6 +268,7 @@ class ContentController {
 				below: posData.below === true,
 				path: currentPath ? `${currentPath}/${child.id}` : child.id,
 				type: child.type,
+				doorSpriteType: posData.doorSpriteType,
 			};
 
 			if (child.type === 'content' && child.file) {

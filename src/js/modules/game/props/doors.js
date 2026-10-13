@@ -11,7 +11,8 @@ import { AnimatedEntity } from '../animatedEntity.js';
 
 /**
  * @typedef {Object} DoorConfig
- * @property {Object} resolution - Pixel dimensions of a single frame.
+ * @property {string} [variant='front'] - The visual and interactive variant ('front', 'behind', 'sign').
+ * @property {Object} [resolution] - Pixel dimensions of a single frame.
  * @property {Object} [size=null] - Physical size in world units. Defaults to resolution / 10.
  * @property {number} [textureIndex=0] - Sprite sheet index.
  * @property {Object} [offset=null] - Pixel offset in the spritesheet.
@@ -56,30 +57,22 @@ export class Door extends AnimatedEntity {
 	/** @type {Object|null} */
 	#highlightTileInfo;
 
+	/** @type {Object} */
+	interactPos;
+
 	/**
 	 * @param {Object} pos - World space coordinates.
-	 * @param {string} [variant='front'] - The visual variant of the door ('front', 'behind', 'sign').
-	 * @param {DoorConfig} [customConfig={}] - Overrides for the default door configuration.
+	 * @param {DoorConfig} config - The configuration object for the door sprite and physics.
 	 */
-	constructor(pos, variant = 'front', customConfig = {}) {
-		let baseConfig;
-		if (variant === 'sign') {
-			baseConfig = Door.CONFIG_SIGN;
-		} else if (variant === 'behind') {
-			baseConfig = Door.CONFIG_BEHIND;
-		} else {
-			baseConfig = Door.CONFIG_FRONT;
-		}
-
-		const config = { ...baseConfig, ...customConfig };
-
+	constructor(pos, config) {
 		const texIndex = config.textureIndex || 0;
+		const variant = config.variant || 'front';
 		const zIndex = variant === 'behind' ? 1 : -1;
 
-		const calculatedSize =
-			config.size || Engine.LJS.vec2(config.resolution.x / 10, config.resolution.y / 10);
+		const resolution = config.resolution || Engine.LJS.vec2(16, 35);
+		const calculatedSize = config.size || Engine.LJS.vec2(resolution.x / 10, resolution.y / 10);
 
-		super(pos, calculatedSize, texIndex, config.resolution, zIndex);
+		super(pos, calculatedSize, texIndex, resolution, zIndex);
 
 		this.shadowType = config.shadowType !== undefined ? config.shadowType : 'wall-floor';
 		if (config.shadowDistance !== undefined) {
@@ -87,6 +80,7 @@ export class Door extends AnimatedEntity {
 		}
 		this.shadowBaselineOffset =
 			config.shadowBaselineOffset !== undefined ? config.shadowBaselineOffset : 0;
+
 		this.isHighlighted = false;
 		this.isFrontInteract = variant !== 'behind';
 		this.animDelayOpen = config.animDelayOpen || 0;
@@ -95,6 +89,8 @@ export class Door extends AnimatedEntity {
 
 		this.gridOffset = config.offset || Engine.LJS.vec2(0, 0);
 		this.gridCols = config.cols || 1;
+
+		this.interactPos = Engine.LJS.vec2(pos.x, pos.y);
 
 		this.pos.y += this.isFrontInteract ? this.yOffset : -this.yOffset;
 		this.setCollision(false, false);
@@ -128,70 +124,6 @@ export class Door extends AnimatedEntity {
 				padding
 			);
 		}
-	}
-
-	/**
-	 * @returns {DoorConfig} The configuration object for doors that are in front of the player.
-	 * @constant
-	 */
-	static get CONFIG_FRONT() {
-		return {
-			resolution: Engine.LJS.vec2(16, 35),
-			offset: Engine.LJS.vec2(0, 36),
-			cols: 5,
-			animDelayOpen: 24,
-			animSpeedOpen: 12,
-			yOffset: 1,
-			shadowBaselineOffset: 0.3,
-			framesOpening: [1, 2, 3],
-			framesOpen: [3],
-			highlightConfig: {
-				resolution: Engine.LJS.vec2(20, 35),
-				offset: Engine.LJS.vec2(72, 36),
-				renderOffset: Engine.LJS.vec2(0, 0.1),
-			},
-		};
-	}
-
-	/**
-	 * @returns {DoorConfig} The configuration object for doors that are behind the player.
-	 * @constant
-	 */
-	static get CONFIG_BEHIND() {
-		return {
-			resolution: Engine.LJS.vec2(21, 35),
-			offset: Engine.LJS.vec2(94, 36),
-			cols: 4,
-			animDelayOpen: 20,
-			animSpeedOpen: 10,
-			yOffset: 0.4,
-			shadowBaselineOffset: 0.3,
-			framesOpening: [1, 2, 3],
-			framesOpen: [3],
-			highlightConfig: {
-				resolution: Engine.LJS.vec2(20, 35),
-				offset: Engine.LJS.vec2(186, 36),
-				renderOffset: Engine.LJS.vec2(-0.2, -0.2),
-			},
-		};
-	}
-
-	/**
-	 * @returns {DoorConfig} The configuration object for static text-content signs.
-	 * @constant
-	 */
-	static get CONFIG_SIGN() {
-		return {
-			resolution: Engine.LJS.vec2(20, 19),
-			offset: Engine.LJS.vec2(230, 52),
-			yOffset: 0.2,
-			shadowType: 'floor',
-			highlightConfig: {
-				resolution: Engine.LJS.vec2(22, 11),
-				offset: Engine.LJS.vec2(252, 52),
-				renderOffset: Engine.LJS.vec2(0, 0.5),
-			},
-		};
 	}
 
 	/**

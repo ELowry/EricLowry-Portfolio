@@ -7,6 +7,10 @@ vi.mock('../core/engineContext.js', () => {
 	 * Mock representation of the LittleJS EngineObject base class.
 	 */
 	class MockEngineObject {
+		/**
+		 * @param {Object} pos - World position.
+		 * @param {Object} size - Physical size.
+		 */
 		constructor(pos, size) {
 			this.pos = pos;
 			this.size = size;
@@ -42,6 +46,11 @@ vi.mock('../core/engineContext.js', () => {
 					}
 				},
 				TileInfo: class {
+					/**
+					 * @param {Object} pos - Sprite position.
+					 * @param {Object} size - Sprite resolution.
+					 * @param {Object} textureInfo - Texture reference.
+					 */
 					constructor(pos, size, textureInfo) {
 						this.pos = pos;
 						this.size = size;
@@ -66,6 +75,10 @@ vi.mock('./props/inputPromptEntity.js', () => {
 	 * Mock representation of the InputPromptEntity class.
 	 */
 	class MockInputPromptEntity {
+		/**
+		 * @param {Object} pos - World position.
+		 * @param {Object} size - Physical size.
+		 */
 		constructor(pos, size) {
 			this.pos = pos;
 			this.size = size;
@@ -73,8 +86,19 @@ vi.mock('./props/inputPromptEntity.js', () => {
 			this.animations = {};
 		}
 
+		/**
+		 * Mock addAnimation method.
+		 */
 		addAnimation() {}
+
+		/**
+		 * Mock setState method.
+		 */
 		setState() {}
+
+		/**
+		 * Mock setLogicalKey method.
+		 */
 		setLogicalKey() {}
 	}
 
@@ -88,6 +112,10 @@ vi.mock('./animatedEntity.js', () => {
 	 * Mock representation of the AnimatedEntity class.
 	 */
 	class MockAnimatedEntity {
+		/**
+		 * @param {Object} pos - World position.
+		 * @param {Object} size - Physical size.
+		 */
 		constructor(pos, size) {
 			this.pos = pos;
 			this.size = size;
@@ -252,5 +280,25 @@ describe('PropManagerController', () => {
 		expect(spawned[0].shadowType).toBe('wall');
 		expect(spawned[0].shadowDistance).toBe(0.3);
 		expect(spawned[0].shadowBaselineOffset).toBe(0.3);
+	});
+
+	it('should retrieve a registered property definition by key', () => {
+		PropManager.buildRegistry([
+			{
+				local: {
+					'custom-door': {
+						entityType: 'animated',
+						cols: 4,
+						animDelayOpen: 24,
+					},
+				},
+			},
+		]);
+
+		const def = PropManager.getDefinition('custom-door');
+
+		expect(def).toBeDefined();
+		expect(def.cols).toBe(4);
+		expect(def.animDelayOpen).toBe(24);
 	});
 });

@@ -1,13 +1,13 @@
 /**
  * Map configuration for the Root level.
- * @type {MapData}
+ * @type {import('../js/modules/content/contentTree.js').MapConfig}
  */
 export default {
 	startPos: { x: 10, y: 10 },
 	positions: {
 		about: { x: 14, y: 10 },
 		cv: { x: 8, y: 10 },
-		gaming: { x: 16, y: 10 },
+		gaming: { x: 30, y: 10, doorSpriteType: 'slidingDouble' },
 		websites: { x: 4, y: 10 },
 		osd: { x: 2, y: 10 },
 		'coaching-business': { x: 6, y: 10 },
@@ -17,6 +17,7 @@ export default {
 	},
 	textureIndex: 0,
 	props: [
+		{ type: 'gameCenter', pos: { x: 30, y: 18.45 }, renderOrder: -2 },
 		{ type: 'boxWarning', pos: { x: 13.8, y: 6.7 }, renderOrder: -1 },
 		{ type: 'boxes', pos: { x: 23.2, y: 9.6 }, renderOrder: -1 },
 		{ type: 'signWarning', pos: { x: 0, y: 9.2 }, renderOrder: 1 },
