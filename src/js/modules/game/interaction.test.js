@@ -112,4 +112,3 @@ describe('InteractionController', () => {
 		expect(Input.spawnTapRipple).toHaveBeenCalled();
 	});
 });
-sù

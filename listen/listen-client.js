@@ -1,4 +1,8 @@
-import $root from './listen-proto.js';
+import protobuf from 'protobufjs/light.js';
+
+import protoJson from './listen-proto.json';
+
+const $root = protobuf.Root.fromJSON(protoJson);
 
 /**
  * @typedef {Object} TrackData
@@ -279,10 +283,10 @@ export class ListenTogetherClient extends EventTarget {
 			return;
 		}
 
-		const PayloadType = $root.listentogether[protoMessageName];
+		const PayloadType = $root.lookupType(`listentogether.${protoMessageName}`);
 		const payloadBytes = PayloadType.encode(payloadMessage).finish();
 
-		const Envelope = $root.listentogether.Envelope;
+		const Envelope = $root.lookupType('listentogether.Envelope');
 		const envelopeMessage = {
 			type: msgType,
 			payload: payloadBytes,
@@ -349,7 +353,7 @@ export class ListenTogetherClient extends EventTarget {
 		this.#lastMessageTime = Date.now();
 
 		const dataBytes = new Uint8Array(buffer);
-		const Envelope = $root.listentogether.Envelope;
+		const Envelope = $root.lookupType('listentogether.Envelope');
 
 		let envelope;
 		try {
@@ -371,30 +375,40 @@ export class ListenTogetherClient extends EventTarget {
 
 		switch (envelope.type) {
 			case 'error': {
-				const errorData = $root.listentogether.ErrorPayload.decode(payloadBytes);
+				const errorData = $root
+					.lookupType('listentogether.ErrorPayload')
+					.decode(payloadBytes);
 				console.error(`Server Error [${errorData.code}]:`, errorData.message);
 				this.dispatchEvent(new CustomEvent('error-payload', { detail: errorData }));
 				break;
 			}
 			case 'join_approved': {
-				const joinData = $root.listentogether.JoinApprovedPayload.decode(payloadBytes);
+				const joinData = $root
+					.lookupType('listentogether.JoinApprovedPayload')
+					.decode(payloadBytes);
 				if (joinData.state) {
 					this.#applySyncState(joinData.state);
 				}
 				break;
 			}
 			case 'sync_state': {
-				const syncData = $root.listentogether.SyncStatePayload.decode(payloadBytes);
+				const syncData = $root
+					.lookupType('listentogether.SyncStatePayload')
+					.decode(payloadBytes);
 				this.#applySyncState(syncData);
 				break;
 			}
 			case 'sync_playback': {
-				const actionData = $root.listentogether.PlaybackActionPayload.decode(payloadBytes);
+				const actionData = $root
+					.lookupType('listentogether.PlaybackActionPayload')
+					.decode(payloadBytes);
 				this.#applyPlaybackAction(actionData);
 				break;
 			}
 			case 'kicked': {
-				const kickedData = $root.listentogether.KickedPayload.decode(payloadBytes);
+				const kickedData = $root
+					.lookupType('listentogether.KickedPayload')
+					.decode(payloadBytes);
 				console.warn(`Kicked from room: ${kickedData.reason}`);
 				this.dispatchEvent(new CustomEvent('kicked', { detail: kickedData }));
 				break;

@@ -59,7 +59,7 @@ yarn-error.log*
 /public/assets/external-links.json
 /public/assets/images/external-links/
 
-/listen/listen-proto.js
+/listen/listen-proto.json
 
 # Obsidian
 /public/.obsidian/
