@@ -2,10 +2,11 @@
  * @typedef {Object} PositionData
  * @property {number} x - X coordinate
  * @property {number} y - Y coordinate
- * @property {number} [radius=1.5] - Collision/radius for interactions
+ * @property {number} [radius] - Collision/radius for interactions (overrides sprite default)
  * @property {boolean} [below=false] - If `true`, this position is 'below' the camera (affects animation)
  * @property {string} [label=null] - Optional translation key or fallback label
  * @property {string} [doorSpriteType=null] - Optional override key for the door/sign sprite configuration.
+ * @property {import('../game/props/doors.js').DoorHighlightConfig} [highlightConfig=null] - Optional override for door highlighting.
  */
 
 /**

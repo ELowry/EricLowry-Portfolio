@@ -127,7 +127,7 @@ export class PreviewManager {
 	/**
 	 * Fetches preview metadata for internal and external links.
 	 * @param {HTMLElement} link - The target anchor tag.
-	 * @returns {Promise<Object|null>} The metadata object, or null if unavailable.
+	 * @returns {Promise<import('../content/meta.js').PageMetadata|null>} The metadata object, or null if unavailable.
 	 * @private
 	 */
 	async #fetchPreviewData(link) {
@@ -184,7 +184,7 @@ export class PreviewManager {
 
 	/**
 	 * Injects metadata into the preview card DOM elements and applies anchor styling.
-	 * @param {Object} metaData - The preview metadata object.
+	 * @param {import('../content/meta.js').PageMetadata} metaData - The preview metadata object.
 	 * @param {HTMLElement} link - The target anchor tag.
 	 * @private
 	 */

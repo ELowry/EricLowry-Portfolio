@@ -115,16 +115,20 @@ describe('ContentController', () => {
 				path: 'parent/path/child-1',
 				type: 'content',
 				file: 'path/to/child1.md',
+				doorSpriteType: undefined,
+				highlightConfig: undefined,
 			});
 
 			expect(objects[1]).toEqual({
 				id: 'child-2',
 				pos: { x: 30, y: 40 },
-				radius: 1.5,
+				radius: undefined,
 				label: 'custom.label',
 				below: false,
 				path: 'parent/path/child-2',
 				type: 'category',
+				doorSpriteType: undefined,
+				highlightConfig: undefined,
 			});
 		});
 

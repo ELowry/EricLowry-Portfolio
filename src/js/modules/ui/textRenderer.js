@@ -34,10 +34,7 @@ export class TextRenderer {
 
 	/**
 	 * Handles text rendering and content loading based on the current route.
-	 * @param {Object} payload - The route:changed event payload.
-	 * @param {string} payload.mode - The content display mode.
-	 * @param {string} payload.path - The route's path.
-	 * @param {Object} payload.node - The route's node.
+	 * @param {import('../core/router.js').RoutePayload} payload - The route:changed event payload.
 	 * @param {boolean} isTextToText - True if navigating between text mode views.
 	 * @private
 	 */

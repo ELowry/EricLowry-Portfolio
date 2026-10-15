@@ -3,14 +3,22 @@ import { escapeHtml, getCacheBuster } from '../core/sharedUtils.js';
 import { Lang } from '../ui/lang.js';
 
 /**
+ * @typedef {Object} BlogEntry
+ * @property {string} language - The language code (e.g., 'en_US').
+ * @property {string} title - The parsed title of the blog post.
+ * @property {string} date - The date of the post (YYYY-MM-DD).
+ * @property {string} [description] - An optional description or excerpt.
+ */
+
+/**
  * BlogController manages the fetching and caching of blog data.
  * It provides a centralized way to access the blog index.
  */
 class BlogController {
-	/** @type {Object[]|null} */
+	/** @type {BlogEntry[]|null} */
 	#indexCache = null;
 
-	/** @type {Promise<Object[]>|null} */
+	/** @type {Promise<BlogEntry[]>|null} */
 	#fetchPromise = null;
 
 	/**
@@ -23,7 +31,7 @@ class BlogController {
 	/**
 	 * Internal method to perform the fetch operation.
 	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
-	 * @returns {Promise<Object[]>} The blog index data.
+	 * @returns {Promise<BlogEntry[]>} The blog index data.
 	 * @private
 	 */
 	async #fetchIndexData(abortSignal) {
@@ -49,7 +57,7 @@ class BlogController {
 	 * Fetches the blog index JSON and caches it.
 	 * Concurrent calls will share the same promise to prevent multiple network requests.
 	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
-	 * @returns {Promise<Object[]>} The parsed blog index.
+	 * @returns {Promise<BlogEntry[]>} The parsed blog index.
 	 */
 	async getIndex(abortSignal) {
 		if (this.#indexCache) {

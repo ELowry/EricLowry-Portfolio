@@ -1,5 +1,8 @@
 import { Engine } from '../js/modules/core/engineContext.js';
 
+/**
+ * @type {import('../js/modules/game/propManager.js').SpriteConfig}
+ */
 export default {
 	shared: {
 		doorFront: {
@@ -158,8 +161,9 @@ export default {
 		},
 		// Doors
 		slidingDouble: {
-			resolution: Engine.LJS.vec2(49, 44),
-			offset: Engine.LJS.vec2(129, 79),
+			resolution: Engine.LJS.vec2(49, 55),
+			radius: 2.8,
+			offset: Engine.LJS.vec2(129, 73),
 			cols: 4,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
@@ -168,9 +172,10 @@ export default {
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(20, 35),
-				offset: Engine.LJS.vec2(72, 36),
-				renderOffset: Engine.LJS.vec2(0, 0.1),
+				// Currently set for the Game arcade sign design, may need to create a generic version if reused and overwritten in the map's .config.js
+				resolution: Engine.LJS.vec2(50, 19),
+				offset: Engine.LJS.vec2(276, 52),
+				renderOffset: Engine.LJS.vec2(0.05, 3.56),
 			},
 		},
 	},

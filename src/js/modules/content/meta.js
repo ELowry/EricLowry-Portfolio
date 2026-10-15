@@ -6,6 +6,18 @@ import { Content } from './content.js';
 import { Projects } from './projects.js';
 
 /**
+ * @typedef {Object} PageMetadata
+ * @property {string} pageTitle - The localized page title.
+ * @property {string|null} pageDescription - The localized description or excerpt.
+ * @property {string} pageImage - The absolute URL to the Open Graph image.
+ * @property {string} previewImage - The parsed URL for UI preview cards.
+ * @property {string} pageImageAlt - The alt text for the image.
+ * @property {string} imgWidth - The pixel width of the image.
+ * @property {string} imgHeight - The pixel height of the image.
+ * @property {string} markdownUrl - The relative URL to the raw markdown source file.
+ */
+
+/**
  * MetaController manages page metadata, updating document title, descriptions, and Open Graph tags.
  * Also provides metadata retrieval for UI preview cards.
  */
@@ -37,7 +49,7 @@ class MetaController {
 
 	/**
 	 * Generates the base metadata structure with default values.
-	 * @returns {Object} The default metadata object.
+	 * @returns {PageMetadata} The default metadata object.
 	 * @private
 	 */
 	#getDefaultMeta() {
@@ -56,7 +68,7 @@ class MetaController {
 	/**
 	 * Retrieves metadata for blog routes (both single blog post and blog index).
 	 * @param {string} path - The blog route path.
-	 * @returns {Promise<Object>} An object containing the formatted metadata.
+	 * @returns {Promise<PageMetadata>} An object containing the formatted metadata.
 	 * @private
 	 */
 	async #getBlogMeta(path) {
@@ -95,7 +107,7 @@ class MetaController {
 	/**
 	 * Retrieves metadata for project routes (both single project and project index).
 	 * @param {string} path - The project route path.
-	 * @returns {Promise<Object>} An object containing the formatted metadata.
+	 * @returns {Promise<PageMetadata>} An object containing the formatted metadata.
 	 * @private
 	 */
 	async #getProjectMeta(path) {
@@ -138,7 +150,7 @@ class MetaController {
 	 * Retrieves metadata for content tree nodes or standard pages.
 	 * @param {string} path - The content path.
 	 * @param {Object|null} [node=null] - Optional pre-resolved content node.
-	 * @returns {Object} An object containing the formatted metadata.
+	 * @returns {PageMetadata} An object containing the formatted metadata.
 	 * @private
 	 */
 	#getStandardMeta(path, node = null) {
@@ -472,7 +484,7 @@ class MetaController {
 	 *
 	 * @param {string} path - The route path to look up.
 	 * @param {Object|null} [node=null] - Optional node to skip the tree lookup if already known.
-	 * @returns {Promise<Object>} An object containing the page title, description, and image data.
+	 * @returns {Promise<PageMetadata>} An object containing the page title, description, and image data.
 	 */
 	async getMetadataForPath(path, node = null) {
 		if (path === 'blog' || path.startsWith('blog/')) {

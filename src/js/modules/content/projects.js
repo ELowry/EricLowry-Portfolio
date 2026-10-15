@@ -1,14 +1,29 @@
 import { getCacheBuster } from '../core/sharedUtils.js';
 
 /**
- * ProjectsController manages the fetching and caching of GitHub project data.
+ * @typedef {Object} ProjectEntry
+ * @property {string} id - The GitHub repository name.
+ * @property {string} title - The project title.
+ * @property {string} [description] - The project description.
+ * @property {string} date - The last updated date (YYYY-MM-DD).
+ * @property {string} updatedAt - Full ISO timestamp of the last update.
+ * @property {number} stars - GitHub stargazer count.
+ * @property {string} tech - The primary language/technology used.
+ * @property {string} githubUrl - The absolute URL to the GitHub repository.
+ * @property {string} [ogImage] - The local path or external URL for the Open Graph image.
+ * @property {number|string} [ogImageWidth] - The pixel width of the Open Graph image.
+ * @property {number|string} [ogImageHeight] - The pixel height of the Open Graph image.
+ */
+
+/**
+ * ProjectsController manages the fetching and caching of GitHub project data.  
  * It provides a centralized way to access the projects index.
  */
 class ProjectsController {
-	/** @type {Object[]|null} */
+	/** @type {ProjectEntry[]|null} */
 	#indexCache = null;
 
-	/** @type {Promise<Object[]>|null} */
+	/** @type {Promise<ProjectEntry[]>|null} */
 	#fetchPromise = null;
 
 	/**
@@ -21,7 +36,7 @@ class ProjectsController {
 	/**
 	 * Internal method to perform the fetch operation.
 	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
-	 * @returns {Promise<Object[]>} The projects index data.
+	 * @returns {Promise<ProjectEntry[]>} The projects index data.
 	 * @private
 	 */
 	async #fetchIndexData(abortSignal) {
@@ -44,10 +59,10 @@ class ProjectsController {
 	}
 
 	/**
-	 * Fetches the projects index JSON and caches it.
+	 * Fetches the projects index JSON and caches it.  
 	 * Concurrent calls will share the same promise to prevent multiple network requests.
 	 * @param {AbortSignal} [abortSignal] - Optional abort signal to cancel the request.
-	 * @returns {Promise<Object[]>} The parsed projects index.
+	 * @returns {Promise<ProjectEntry[]>} The parsed projects index.
 	 */
 	async getIndex(abortSignal) {
 		if (this.#indexCache) {

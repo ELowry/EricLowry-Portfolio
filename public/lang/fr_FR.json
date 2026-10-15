@@ -293,6 +293,7 @@
 		"btnSwitchLanguage": "Afficher le site en {lang}",
 		"breadcrumbsAria": "Fil d'ariane",
 		"categoryOptionsAria": "Options des catégories",
+		"exitAreaLabel": "Quitter la zone",
 		"welcome": {
 			"header": "Bienvenue sur le portfolio d'Eric Lowry",
 			"title": "Bienvenue",

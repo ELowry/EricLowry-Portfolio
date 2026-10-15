@@ -2,6 +2,20 @@ import { Lang } from '../ui/lang.js';
 import { ContentTree } from './contentTree.js';
 
 /**
+ * @typedef {Object} InteractiveMapObject
+ * @property {string} id - The unique identifier for the child node.
+ * @property {{x: number, y: number}} pos - The world coordinates.
+ * @property {number} [radius=1.5] - The interaction radius.
+ * @property {string} label - The translated UI label.
+ * @property {boolean} below - Whether the object resides below the camera perspective.
+ * @property {string} path - The full route path to this object.
+ * @property {'category'|'content'|'separator'} type - The type of content node.
+ * @property {string} [doorSpriteType] - Optional override key for the door sprite configuration.
+ * @property {import('../game/props/doors.js').DoorHighlightConfig} [highlightConfig] - Optional override for the highlight UI.
+ * @property {string} [file] - The markdown file path (if type is 'content').
+ */
+
+/**
  * ContentController provides utility methods for navigating and manipulating the `ContentTree`.
  */
 class ContentController {
@@ -230,7 +244,7 @@ class ContentController {
 	 * This is the bridge between content structure and game world layout.
 	 * @param {Object} mapNode - Category node with `mapData` and `children`
 	 * @param {string} currentPath - Current path in content tree
-	 * @returns {Array} an array of interactive objects with `pos`, `radius`, `file`, `label`, `path`, `id`
+	 * @returns {InteractiveMapObject} an array of interactive objects
 	 */
 	buildMapObjects(mapNode, currentPath) {
 		if (!mapNode || !mapNode.mapData || !mapNode.children) {
@@ -263,12 +277,13 @@ class ContentController {
 			const obj = {
 				id: child.id,
 				pos: { x: posData.x, y: posData.y },
-				radius: posData.radius || 1.5,
+				radius: posData.radius,
 				label,
 				below: posData.below === true,
 				path: currentPath ? `${currentPath}/${child.id}` : child.id,
 				type: child.type,
 				doorSpriteType: posData.doorSpriteType,
+				highlightConfig: posData.highlightConfig,
 			};
 
 			if (child.type === 'content' && child.file) {

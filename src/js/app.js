@@ -419,9 +419,7 @@ class AppController {
 
 	/**
 	 * Handles high-level game mode transitions.
-	 * @param {Object} payload - The route:changed event payload.
-	 * @param {string} payload.path - The path of the route.
-	 * @param {Object} payload.node - The content node associated with the path.
+	 * @param {import('./modules/core/router.js').RoutePayload} payload - The route:changed event payload.
 	 * @private
 	 */
 	async #handleGameTransition({ path, node }) {

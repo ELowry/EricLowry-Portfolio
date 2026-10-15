@@ -1,9 +1,5 @@
 import protobuf from 'protobufjs/light.js';
 
-import protoJson from './listen-proto.json';
-
-const $root = protobuf.Root.fromJSON(protoJson);
-
 /**
  * @typedef {Object} TrackData
  * @property {string} id The unique identifier of the track.
@@ -32,6 +28,12 @@ export class ListenTogetherClient extends EventTarget {
 	 * @type {WebSocket|null}
 	 */
 	#ws = null;
+
+	/**
+	 * @private
+	 * @type {protobuf.Root|null}
+	 */
+	#root = null;
 
 	/**
 	 * @private
@@ -165,6 +167,17 @@ export class ListenTogetherClient extends EventTarget {
 	 * @returns {Promise<void>}
 	 */
 	async init() {
+		if (!this.#root) {
+			try {
+				const response = await fetch('./listen-proto.json');
+				const protoJson = await response.json();
+				this.#root = protobuf.Root.fromJSON(protoJson);
+			} catch (error) {
+				console.error('Failed to load protobuf descriptor:', error);
+				throw error;
+			}
+		}
+
 		if (this.#reconnectTimer) {
 			clearTimeout(this.#reconnectTimer);
 			this.#reconnectTimer = null;
@@ -283,10 +296,10 @@ export class ListenTogetherClient extends EventTarget {
 			return;
 		}
 
-		const PayloadType = $root.lookupType(`listentogether.${protoMessageName}`);
+		const PayloadType = this.#root.lookupType(`listentogether.${protoMessageName}`);
 		const payloadBytes = PayloadType.encode(payloadMessage).finish();
 
-		const Envelope = $root.lookupType('listentogether.Envelope');
+		const Envelope = this.#root.lookupType('listentogether.Envelope');
 		const envelopeMessage = {
 			type: msgType,
 			payload: payloadBytes,
@@ -352,6 +365,7 @@ export class ListenTogetherClient extends EventTarget {
 	async #handleMessage(buffer) {
 		this.#lastMessageTime = Date.now();
 
+		const $root = this.#root;
 		const dataBytes = new Uint8Array(buffer);
 		const Envelope = $root.lookupType('listentogether.Envelope');
 

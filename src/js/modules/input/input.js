@@ -3,6 +3,20 @@ import { Events } from '../core/events.js';
 import { Router } from '../core/router.js';
 
 /**
+ * @typedef {Object} TouchPointerData
+ * @property {string} zoneId - The ID of the HTML element acting as the touch zone.
+ * @property {number} startX - The initial X client coordinate.
+ * @property {number} startY - The initial Y client coordinate.
+ * @property {number} lastX - The most recent X client coordinate.
+ * @property {number} lastY - The most recent Y client coordinate.
+ * @property {number} startTime - The performance.now() timestamp of the initial touch.
+ * @property {number} lastPulseTime - The performance.now() timestamp of the last visual feedback pulse.
+ * @property {number} dist - The calculated distance the pointer has moved.
+ * @property {boolean} isActive - Whether the touch has passed the stationary time/distance validation.
+ * @property {boolean} triggered - Whether a one-shot interact action has already fired for this touch.
+ */
+
+/**
  * InputController manages physical keyboard, virtual touch, and gamepad inputs.
  * It translates raw hardware signals into game-specific actions (axis, interact, menu).
  */
@@ -19,7 +33,7 @@ class InputController {
 	 * @property {boolean} virtualState.right - Right virtual button state
 	 * @property {boolean} virtualState.interact - Interact virtual button state
 	 * @property {boolean} virtualState.menu - Menu virtual button state
-	 * @property {Map<number, Object>} activePointers - Active pointer tracking for multi-touch
+	 * @property {Map<number, TouchPointerData>} activePointers - Active pointer tracking for multi-touch
 	 * @property {'mnk'|'touch'|'gamepad'} lastInputType - Last input type used
 	 * @property {{x: number, y: number}} cursorPos - Current screen-space position of the virtual cursor
 	 */
@@ -456,7 +470,7 @@ class InputController {
 
 	/**
 	 * Evaluates the time elapsed since the last visual ring pulse and spawns a new one if needed.
-	 * @param {Object} data - The pointer tracking data.
+	 * @param {TouchPointerData} data - The pointer tracking data.
 	 * @param {number} now - The current performance.now() timestamp.
 	 * @private
 	 */
@@ -469,7 +483,7 @@ class InputController {
 
 	/**
 	 * Spawns a single outward-pulsing half-circle ring at the pointer's current position.
-	 * @param {Object} data - The pointer tracking data with lastX, lastY, and zoneId.
+	 * @param {TouchPointerData} data - The pointer tracking data with lastX, lastY, and zoneId.
 	 * @private
 	 */
 	#spawnDirectionRing(data) {

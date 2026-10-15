@@ -14,6 +14,7 @@ import { AnimatedEntity } from '../animatedEntity.js';
  * @property {string} [variant='front'] - The visual and interactive variant ('front', 'behind', 'sign').
  * @property {Object} [resolution] - Pixel dimensions of a single frame.
  * @property {Object} [size=null] - Physical size in world units. Defaults to resolution / 10.
+ * @property {number} [radius=1.5] - The interactive detection radius.
  * @property {number} [textureIndex=0] - Sprite sheet index.
  * @property {Object} [offset=null] - Pixel offset in the spritesheet.
  * @property {number} [cols=1] - Number of columns in the spritesheet grid.

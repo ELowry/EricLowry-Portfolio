@@ -165,7 +165,7 @@ class DialogController {
 	/**
 	 * Intro Cinematic sequence.
 	 * @param {Object} player - The player instance to animate.
-	 * @param {Function} setModeCallback - Callback to transition the app mode.
+	 * @param {(mode: string) => void} setModeCallback - Callback to transition the app mode.
 	 */
 	playIntro(player, setModeCallback) {
 		this.play([

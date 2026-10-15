@@ -336,7 +336,7 @@ function generateStaticImage(title, date) {
 
 /**
  * Generates a static HTML wrapper for open graph crawlers.
- * @param {Object} entry - The blog entry object from the index.
+ * @param {{title: string, date: string, language: string}} entry - The blog entry object from the index.
  * @param {string} baseHtmlContent - The raw content of the main index.html file.
  * @param {string} content - The raw markdown content of the blog post.
  */

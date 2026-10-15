@@ -241,7 +241,7 @@ class ProjectGenerator {
 	 *
 	 * @param {string} repo - The name of the repository to fetch.
 	 * @param {Object} [cachedEntry=undefined] - The previous metadata entry from the JSON index.
-	 * @returns {Promise<Object>} An object containing the repository's metadata and README text (if fetched).
+	 * @returns {Promise<{id: string, title: string, description: string, url: string, stars: number, tech: string, updatedAt: string, date: string, readme: string, ogImage: string, ogImageWidth: number, ogImageHeight: number, skipWrite: boolean}>} An object containing the repository's metadata and README text (if fetched).
 	 * @private
 	 */
 	static async #fetchRepoData(repo, cachedEntry = undefined) {

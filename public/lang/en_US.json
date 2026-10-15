@@ -301,6 +301,7 @@
 		"btnSwitchLanguage": "Display website in {lang}",
 		"breadcrumbsAria": "Breadcrumb",
 		"categoryOptionsAria": "Category options",
+		"exitAreaLabel": "Exit Area",
 		"welcome": {
 			"header": "Welcome to Eric Lowry's portfolio",
 			"title": "Welcome",

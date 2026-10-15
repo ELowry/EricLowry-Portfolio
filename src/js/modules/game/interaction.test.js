@@ -49,6 +49,12 @@ vi.mock('../core/engineContext.js', () => {
 	};
 });
 
+vi.mock('../ui/lang.js', () => ({
+	Lang: {
+		getString: vi.fn((_key, _data, fallback) => fallback),
+	},
+}));
+
 vi.mock('../core/layeredInputs.js', () => ({
 	LayeredInput: {
 		isActive: vi.fn().mockReturnValue(true),

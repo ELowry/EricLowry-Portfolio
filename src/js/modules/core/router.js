@@ -1,11 +1,18 @@
 import { sanitizePath, scrollToHash } from './sharedUtils.js';
 
 /**
+ * @typedef {Object} RoutePayload
+ * @property {string} mode - The application mode ('game' or 'text').
+ * @property {string} path - The sanitized content path.
+ * @property {import('../content/contentTree.js').ContentNode|null} [node] - The associated content tree node, if one exists.
+ */
+
+/**
  * RouterController handles application state via URL paths and the History API.
  * Manages clean path-based routing (e.g., `/game/about` instead of `?mode=game&path=about`).
  */
 class RouterController {
-	/** @type {Object} The internal application state { mode, path }. */
+	/** @type {RoutePayload} The internal application state { mode, path }. */
 	state = {
 		mode: 'game',
 		path: '',
@@ -69,7 +76,7 @@ class RouterController {
 
 	/**
 	 * Initializes the router and reads the initial URL.
-	 * @param {Function} onStateChangeCallback - Called when state changes
+	 * @param {(state: RoutePayload) => void} onStateChangeCallback - Called when state changes
 	 * @returns {Promise<void>}
 	 */
 	async init(onStateChangeCallback) {
@@ -80,7 +87,7 @@ class RouterController {
 	/**
 	 * Parses a window pathname into mode and path.
 	 * @param {string} rawPathname - The pathname to parse.
-	 * @returns {Object} the parsed state containing `{ mode, path }`.
+	 * @returns {RoutePayload} the parsed state containing `{ mode, path }`.
 	 * @private
 	 */
 	#parsePathname(rawPathname) {
@@ -208,7 +215,7 @@ class RouterController {
 
 	/**
 	 * Applies state to the application and triggers callback.
-	 * @param {Object} state - State object with mode and path
+	 * @param {RoutePayload} state - State object with mode and path
 	 * @param {boolean} updateApp - Whether to trigger the onStateChange callback
 	 * @returns {Promise<void>}
 	 */

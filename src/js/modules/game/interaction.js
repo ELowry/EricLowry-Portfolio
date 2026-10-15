@@ -4,6 +4,7 @@ import { Events } from '../core/events.js';
 import { LayeredInput } from '../core/layeredInputs.js';
 import { Router } from '../core/router.js';
 import { Input } from '../input/input.js';
+import { Lang } from '../ui/lang.js';
 import { GameBridge } from './gameBridge.js';
 
 /**
@@ -164,10 +165,7 @@ class InteractionController {
 
 	/**
 	 * Handles building and setting interactive objects based on the current route.
-	 * @param {Object} payload - The route:changed event payload.
-	 * @param {string} payload.mode - The mode of the new route.
-	 * @param {string} payload.path - The path of the new route.
-	 * @param {Object} payload.node - The node of the new route.
+	 * @param {import('../core/router.js').RoutePayload} payload - The route:changed event payload.
 	 * @private
 	 */
 	async #handleMapObjects({ mode, path, node }) {
@@ -186,15 +184,23 @@ class InteractionController {
 
 			if (mapNode.id !== 'root') {
 				const parentPath = mapPath.split('/').slice(0, -1).join('/');
+				const localExitData = mapNode.mapData.positions?.['parent_exit'];
 
 				currentObjects.push({
 					id: 'parent_exit',
-					pos: mapNode.mapData.startPos,
-					radius: 1.5,
-					label: 'Exit Area',
+					pos:
+						localExitData?.x !== undefined
+							? { x: localExitData.x, y: localExitData.y }
+							: mapNode.mapData.startPos,
+					radius: localExitData?.radius,
+					label: localExitData?.label
+						? Lang.getString(localExitData.label, null, localExitData.label)
+						: Lang.getString('ui.exitAreaLabel', null, 'Exit Area'),
 					path: parentPath,
 					below: true,
 					type: 'category',
+					doorSpriteType: localExitData?.doorSpriteType,
+					highlightConfig: localExitData?.highlightConfig,
 				});
 			}
 
@@ -227,10 +233,19 @@ class InteractionController {
 
 				const doorConfig = { ...(def || {}), textureIndex: mapTexIndex, variant };
 
+				if (obj.highlightConfig) {
+					doorConfig.highlightConfig = obj.highlightConfig;
+				}
+
 				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), doorConfig);
 
 				door.id = obj.id;
-				door.radius = obj.radius;
+				door.radius =
+					obj.radius !== undefined
+						? obj.radius
+						: def?.radius !== undefined
+							? def.radius
+							: 1.5;
 				door.file = obj.file;
 				door.label = obj.label;
 				door.path = obj.path;

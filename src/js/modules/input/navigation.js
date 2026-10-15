@@ -15,7 +15,7 @@ export class NavigationController {
 	 * @property {boolean} options.autoFocus - Whether to auto-focus the first element.
 	 * @property {number} lastMoveTime - Last time a navigation input was handled (for debouncing).
 	 * @property {Function|null} _onFocusIn - Local reference to the focusin listener for cleanup.
-	 * @property {Array<Object>} contextStack - Stack to store previous navigation contexts for submenus.
+	 * @property {Array<{container: HTMLElement, options: Object, focusedElement: Element|null}>} contextStack - Stack to store previous navigation contexts for submenus.
 	 */
 	constructor() {
 		this.activeContainer = null;
