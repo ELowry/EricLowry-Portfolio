@@ -15,14 +15,15 @@ class EngineContext {
 	/** @type {Function|null} Callback to handle input from the main application. */
 	onHandleInput = null;
 
-	/**
-	 * Creates an instance of EngineContext.
-	 */
+	/** @type {Function|null} Callback to update application-level input and cursor systems. */
+	onAppUpdate = null;
+
 	constructor() {
 		this.LJS = null;
 		this.isPaused = false;
 		this.pendingStartPos = null;
 		this.onHandleInput = null;
+		this.onAppUpdate = null;
 	}
 
 	/**
@@ -47,6 +48,15 @@ class EngineContext {
 	handleInput() {
 		if (typeof this.onHandleInput === 'function') {
 			this.onHandleInput();
+		}
+	}
+
+	/**
+	 * Invokes the registered application update callback if available.
+	 */
+	appUpdate() {
+		if (typeof this.onAppUpdate === 'function') {
+			this.onAppUpdate();
 		}
 	}
 }

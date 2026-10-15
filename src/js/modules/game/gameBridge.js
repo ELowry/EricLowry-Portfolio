@@ -10,6 +10,8 @@
 export const GameBridge = {
 	implementation: null,
 	mapBounds: null,
+	isGameModeActive: true,
+	shouldPreventInput: false,
 
 	/**
 	 * Register implementations for the bridge.
@@ -17,6 +19,22 @@ export const GameBridge = {
 	 */
 	init(implementations = {}) {
 		this.implementation = implementations;
+	},
+
+	/**
+	 * Sets whether game mode is currently active.
+	 * @param {boolean} state - The game mode active state.
+	 */
+	setGameModeActive(state) {
+		this.isGameModeActive = state;
+	},
+
+	/**
+	 * Sets whether input should be prevented.
+	 * @param {boolean} state - The input prevention state.
+	 */
+	setPreventInput(state) {
+		this.shouldPreventInput = state;
 	},
 
 	/**

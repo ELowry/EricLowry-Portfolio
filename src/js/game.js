@@ -1,13 +1,9 @@
 import { Engine } from './modules/core/engineContext.js';
-import { LayeredInput } from './modules/core/layeredInputs.js';
-import { Router } from './modules/core/router.js';
 import { Camera } from './modules/game/camera.js';
 import { Dialog } from './modules/game/dialog.js';
 import { GameBridge } from './modules/game/gameBridge.js';
 import { Interaction } from './modules/game/interaction.js';
 import { Player } from './modules/game/player.js';
-import { Input } from './modules/input/input.js';
-import { VirtualCursor } from './modules/input/virtualCursor.js';
 
 /** @type {Player|null} The player character instance. */
 let player;
@@ -87,7 +83,7 @@ function gameInit() {
  * Called each frame by LittleJS engine.
  */
 function gameUpdate() {
-	if (!document.hasFocus() || Router.currentMode !== 'game') {
+	if (!document.hasFocus() || !GameBridge.isGameModeActive) {
 		return;
 	}
 }
@@ -99,31 +95,24 @@ function gameUpdate() {
  */
 function gameUpdatePost() {
 	if (document.hasFocus()) {
-		Input.update();
-		VirtualCursor.update();
+		Engine.appUpdate();
 		Engine.handleInput();
 	}
 
-	Engine.LJS.setPaused(Router.currentMode !== 'game');
-	Engine.LJS.setInputPreventDefault(
-		LayeredInput.isActive(LayeredInput.LAYER_GAME)
-			|| LayeredInput.isActive(LayeredInput.LAYER_DIALOG)
-	);
+	Engine.LJS.setPaused(!GameBridge.isGameModeActive);
+	Engine.LJS.setInputPreventDefault(GameBridge.shouldPreventInput);
 
 	if (!player) {
 		return;
 	}
 
-	if (Router.currentMode === 'game' && Engine.isRunning) {
+	if (GameBridge.isGameModeActive && Engine.isRunning) {
 		Interaction.update(player.pos);
 		Camera.follow(player);
 	}
 
 	// Run the dialog system
 	Dialog.update();
-
-	// Clear virtual inputs at the end of the frame
-	Input.clearEvents();
 }
 
 /**
@@ -131,7 +120,7 @@ function gameUpdatePost() {
  * Called each frame by LittleJS engine.
  */
 function gameRender() {
-	if (Router.currentMode === 'text') {
+	if (!GameBridge.isGameModeActive) {
 		return;
 	}
 
@@ -150,10 +139,6 @@ function gameRender() {
 		gameLayerElement.style.setProperty('--horizon-pos', `${horizonPercent}%`);
 	}
 
-	if (Router.currentMode !== 'game') {
-		return;
-	}
-
 	Interaction.render();
 }
 
@@ -162,7 +147,7 @@ function gameRender() {
  * Called each frame by LittleJS engine after `gameRender`.
  */
 function gameRenderPost() {
-	if (Router.currentMode === 'text' || Engine.isPaused) {
+	if (!GameBridge.isGameModeActive || Engine.isPaused) {
 		return;
 	}
 	// These are not the renders you are looking for.

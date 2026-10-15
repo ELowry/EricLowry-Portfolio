@@ -13,6 +13,7 @@ import { Input } from './modules/input/input.js';
 import { InputPrompts } from './modules/input/inputPrompts.js';
 import { Navigation } from './modules/input/navigation.js';
 import { TutorialManager } from './modules/input/tutorialManager.js';
+import { VirtualCursor } from './modules/input/virtualCursor.js';
 import { GalleryDisplay } from './modules/markdown/gallery.js';
 import { MarkedExtensions } from './modules/markdown/markedExtensions.js';
 import { Lang } from './modules/ui/lang.js';
@@ -149,6 +150,10 @@ class AppController {
 			this.LJS = (littleModule && (littleModule.default || littleModule)) || null;
 			Engine.setEngine(this.LJS);
 			Engine.onHandleInput = () => this.handleInput();
+			Engine.onAppUpdate = () => {
+				this.Input.update();
+				VirtualCursor.update();
+			};
 
 			const contentPromise = Content.init();
 
@@ -210,6 +215,11 @@ class AppController {
 			this.Lang = Lang;
 			await Promise.all([langPromise, contentPromise, externalLinksPromise]);
 			await InputPrompts.init();
+
+			// Synchronize input prevention state
+			Events.on(LayeredInput.LAYER_ACTIVATION_EVENT, () => this.#syncInputPrevention());
+			Events.on(LayeredInput.LAYER_DEACTIVATION_EVENT, () => this.#syncInputPrevention());
+			this.#syncInputPrevention();
 
 			// Listen for navigation and modal requests
 			Events.on('request:navigate', (path) => this.navigate(path));
@@ -485,6 +495,17 @@ class AppController {
 	}
 
 	/**
+	 * Synchronizes input prevention state with GameBridge based on active input layers.
+	 * @private
+	 */
+	#syncInputPrevention() {
+		const prevent =
+			LayeredInput.isActive(LayeredInput.LAYER_GAME, true)
+			|| LayeredInput.isActive(LayeredInput.LAYER_DIALOG, true);
+		GameBridge.setPreventInput(prevent);
+	}
+
+	/**
 	 * Processes global input actions like menu toggling and back navigation.
 	 */
 	handleInput() {
@@ -527,6 +548,8 @@ class AppController {
 	 */
 	async onStateChange(state) {
 		const { mode, path } = state;
+
+		GameBridge.setGameModeActive(mode === 'game');
 
 		// Delegate mode switching to UI Manager
 		this.uiManager.setMode(mode);
