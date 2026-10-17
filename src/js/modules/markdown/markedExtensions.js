@@ -91,6 +91,9 @@ export class MarkedExtensions {
 			class: 'md-img',
 			decoding: 'async',
 			lazyLoadThreshold: '700',
+			autoFetchPriority: true,
+			fetchPriorityMinWidth: 800,
+			fetchPriorityThreshold: 500,
 		};
 	}
 
