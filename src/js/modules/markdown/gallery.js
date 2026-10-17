@@ -36,8 +36,7 @@ export class Gallery {
 	}
 
 	/**
-	 * The default keywords to place in the first table header cell to trigger the gallery render,
-	 * along with their configuration options.
+	 * The default keywords to place in the first table header cell to trigger the gallery render, along with their configuration options.
 	 * @returns {Object} the default trigger keywords configuration.
 	 * @constant
 	 */
@@ -65,7 +64,7 @@ export class Gallery {
 
 		return {
 			/**
-			 * Table renderer.
+			 * Table renderer.  
 			 * Converts tables with the trigger keyword into a div structure.
 			 * @param {Object} token - The marked token for the table.
 			 * @returns {string|boolean} the rendered HTML, or false to fall back to default table rendering.
@@ -93,24 +92,74 @@ export class Gallery {
 
 				for (const row of token.rows) {
 					for (const cell of row) {
-						const images = cell.tokens.filter((t) => t.type === 'image');
+						let beforeTextTokens = [];
+						let afterTextTokens = [];
+						let imgToken = null;
+						let foundImage = false;
 
-						for (const img of images) {
-							let renderedImg;
-
-							if (this.parser && typeof this.parser.parseInline === 'function') {
-								renderedImg = this.parser.parseInline([img]);
+						for (const t of cell.tokens) {
+							if (t.type === 'image') {
+								imgToken = t;
+								foundImage = true;
+							} else if (
+								t.type === 'link'
+								&& t.tokens?.length === 1
+								&& t.tokens[0].type === 'image'
+							) {
+								throw new Error(
+									'Gallery images cannot be wrapped in links. Place links in the surrounding text instead.'
+								);
 							} else {
-								renderedImg = `<img src="${img.href}" alt="${img.text}" title="${img.title || ''}" />`;
+								if (foundImage) {
+									afterTextTokens.push(t);
+								} else {
+									beforeTextTokens.push(t);
+								}
 							}
-
-							const ariaLabel = Lang.getHtmlString(
-								'ui.gallery.imageOpenModal',
-								null,
-								'Open image in fullscreen modal'
-							);
-							galleryHtml += `\t<figure class="${config.itemClass}" tabindex="0" role="button" aria-label="${ariaLabel}">\n\t\t${renderedImg}\n\t</figure>\n`;
 						}
+
+						if (!imgToken) {
+							continue;
+						}
+
+						const parseInline = (tokens) => {
+							if (!tokens || tokens.length === 0) {
+								return '';
+							}
+							if (this.parser && typeof this.parser.parseInline === 'function') {
+								return this.parser.parseInline(tokens).trim();
+							}
+							return tokens
+								.map((t) => t.raw)
+								.join('')
+								.trim();
+						};
+
+						const beforeText = parseInline(beforeTextTokens);
+						const afterText = parseInline(afterTextTokens);
+
+						let renderedImg;
+						if (this.parser && typeof this.parser.parseInline === 'function') {
+							renderedImg = this.parser.parseInline([imgToken]);
+						} else {
+							renderedImg = `<img src="${imgToken.href}" alt="${imgToken.text}" title="${imgToken.title || ''}" />`;
+						}
+
+						let captionsHtml = '';
+						if (beforeText) {
+							captionsHtml += `\t\t<figcaption class="gallery-caption gallery-caption-top">${beforeText}</figcaption>\n`;
+						}
+						if (afterText) {
+							captionsHtml += `\t\t<figcaption class="gallery-caption gallery-caption-bottom">${afterText}</figcaption>\n`;
+						}
+
+						const ariaLabel = Lang.getHtmlString(
+							'ui.gallery.imageOpenModal',
+							null,
+							'Open image in fullscreen modal'
+						);
+
+						galleryHtml += `\t<figure class="${config.itemClass}" tabindex="0" role="button" aria-label="${ariaLabel}">\n\t\t${renderedImg}\n${captionsHtml}\t</figure>\n`;
 					}
 				}
 
@@ -200,6 +249,10 @@ export class GalleryDisplay {
 		const galleryItem = target.closest(`.${Gallery.DEFAULT_ITEM_CLASS}`);
 
 		if (galleryItem) {
+			// Allow standard links within the caption to operate normally
+			if (target.closest('a')) {
+				return;
+			}
 			this.#openModal(galleryItem);
 		}
 	}
@@ -268,17 +321,17 @@ export class GalleryDisplay {
 
 		InputPrompts.refresh(this.#activeModal);
 
-		const prevBtn = this.#activeModal.querySelector('.gallery-modal-prev');
-		const nextBtn = this.#activeModal.querySelector('.gallery-modal-next');
+		const prevButton = this.#activeModal.querySelector('.gallery-modal-prev');
+		const nextButton = this.#activeModal.querySelector('.gallery-modal-next');
 
-		if (prevBtn) {
-			prevBtn.addEventListener('click', (e) => {
+		if (prevButton) {
+			prevButton.addEventListener('click', (e) => {
 				e.stopPropagation();
 				this.#navigate(-1);
 			});
 		}
-		if (nextBtn) {
-			nextBtn.addEventListener('click', (e) => {
+		if (nextButton) {
+			nextButton.addEventListener('click', (e) => {
 				e.stopPropagation();
 				this.#navigate(1);
 			});
@@ -293,6 +346,7 @@ export class GalleryDisplay {
 				e.target.tagName !== 'IMG'
 				&& !e.target.closest('.gallery-modal-prev')
 				&& !e.target.closest('.gallery-modal-next')
+				&& !e.target.closest('a')
 			) {
 				this.#activeModal.close();
 			}
@@ -470,6 +524,12 @@ export class GalleryDisplay {
 			itemContainer.appendChild(mediaClone);
 		}
 
+		const captions = currentItem.querySelectorAll('.gallery-caption');
+		captions.forEach((c) => {
+			const clone = c.cloneNode(true);
+			itemContainer.appendChild(clone);
+		});
+
 		return itemContainer;
 	}
 
@@ -482,26 +542,27 @@ export class GalleryDisplay {
 			return;
 		}
 
-		const prevBtn = this.#activeModal.querySelector('.gallery-modal-prev');
-		const nextBtn = this.#activeModal.querySelector('.gallery-modal-next');
+		const prevButton = this.#activeModal.querySelector('.gallery-modal-prev');
+		const nextButton = this.#activeModal.querySelector('.gallery-modal-next');
 		let galleryIsMultiple = this.#currentGalleryItems.length > 1;
 
-		if (prevBtn) {
+		if (prevButton) {
 			const isDisabled = !(galleryIsMultiple && this.#currentIndex > 0);
-			prevBtn.classList.toggle('disabled', isDisabled);
-			prevBtn.disabled = isDisabled;
+			prevButton.classList.toggle('disabled', isDisabled);
+			prevButton.disabled = isDisabled;
 		}
-		if (nextBtn) {
+		if (nextButton) {
 			const isDisabled = !(
 				galleryIsMultiple && this.#currentIndex < this.#currentGalleryItems.length - 1
 			);
-			nextBtn.classList.toggle('disabled', isDisabled);
-			nextBtn.disabled = isDisabled;
+			nextButton.classList.toggle('disabled', isDisabled);
+			nextButton.disabled = isDisabled;
 		}
 
-		const announcer = this.#activeModal.querySelector('.gallery-modal-announcer');
 		const currentItem = this.#currentGalleryItems[this.#currentIndex];
+		const announcer = this.#activeModal.querySelector('.gallery-modal-announcer');
 		const modalItems = this.#activeModal.querySelectorAll('.gallery-modal-item');
+
 		modalItems.forEach((item, index) => {
 			if (index === this.#currentIndex) {
 				item.removeAttribute('aria-hidden');
