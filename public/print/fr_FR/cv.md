@@ -38,6 +38,8 @@ Enfin, fervent défenseur du développement open source, je crée activement des
     - Mémoire: _« [L’Apport du Jeu Vidéo à l’Architecture et à l’Architecte](https://drive.google.com/file/d/1iyW6xYoxgSkLgeKn_l_UCIZwow0XkGu6/view?usp=sharing) »_
 - **Licence en architecture** (2009–2012)
 
+---
+
 ## Expérience professionnelle
 
 ### CinQ (Disruptive Learning Solutions)
@@ -46,7 +48,7 @@ Enfin, fervent défenseur du développement open source, je crée activement des
 **[fr.playcinq.com](https://fr.playcinq.com)**
 
 - **Stratégie produit**:  
-  Pilotage de la conception et du déploiement de plateformes d'apprentissage interactives pour plus de 100 cadres dirigeants de grandes entreprises internationales (AXA France, Leroy Merlin, SBM Offshore, Westminster City Council).
+  Pilotage de la conception et du déploiement de plateformes d'apprentissage interactives pour plus de 100 cadres dirigeants de grandes entreprises internationales (Bouygues, AXA France, Leroy Merlin, SBM Offshore, Westminster City Council).
 - **Game design et system design**:  
   Développement des mécaniques de puzzles collaboratifs et de _sandbox_ virtuels pour lesquels la réussite nécessite des compétences comportementales concrètes (leadership, communication, agilité).
 - **UX / UI et intégration technique**:  

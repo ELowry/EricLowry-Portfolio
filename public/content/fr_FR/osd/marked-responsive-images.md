@@ -27,7 +27,7 @@ En adoptant un format de nom de fichier spécifique, le script extrait les méta
 
 ### Garantir la compatibilité
 
-Le tour de magie de cette approche est que malgré des noms de fichiers un peu complexes (`image__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png` par exemple), l'extension permet d'en tirer toutes les informations nécessaires pour construire un ensemble complet de balises HTML à partir de ce seul nom de fichier autrement valide. Le système permet donc d'ajouter des fonctionnalités supplémentaires tout en restant du code Markdown parfaitement fonctionnel, sans ajout de complexité.
+Le tour de magie de cette approche est que malgré des noms de fichiers un peu complexes (`image__240-160-avif~webp~_400-267-avif~webp~_600-400-avif~webp~_820-546-avif~webp~_1400-933-avif~webp~_1920-1279-avif~webp~_1951-1300-avif~webp~.png` par exemple), l'extension permet d'en tirer toutes les informations nécessaires pour construire un ensemble complet de balises HTML à partir de ce seul nom de fichier autrement valide. Le système permet donc d'ajouter des fonctionnalités supplémentaires tout en restant du code Markdown parfaitement fonctionnel, sans ajout de complexité.
 
 ## Entre simplicité et fiabilité
 

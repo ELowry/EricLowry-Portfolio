@@ -46,7 +46,7 @@ I am a strong advocate for open-source development, actively building tools and 
 **[playcinq.com](https://playcinq.com)**
 
 - **Product Strategy**:  
-  Led the design and deployment of game-based training platforms for 100+ corporate leaders from Fortune 500 companies (AXA France, Leroy Merlin, SBM Offshore, Westminster City Council).
+  Led the design and deployment of game-based training platforms for 100+ corporate leaders from Fortune 500 companies (Bouygues, AXA France, Leroy Merlin, SBM Offshore, Westminster City Council).
 - **Game & System Design**:  
   Developed core mechanics for team-based puzzles and sandboxes that require demonstrable soft skills (leadership, communication, agility) to achieve objectives.
 - **Technical UX/UI**:  

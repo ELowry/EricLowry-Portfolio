@@ -28,7 +28,7 @@ Designer, développeur et entrepreneur avec plus de 10 ans d'expérience; spéci
 **[fr.playcinq.com](https://fr.playcinq.com)**
 
 - **Stratégie produit**:  
-  Pilotage de la conception et du déploiement de plateformes d'apprentissage interactives pour plus de 100 cadres dirigeants de grandes entreprises internationales (AXA France, Leroy Merlin, SBM Offshore, Westminster City Council).
+  Pilotage de la conception et du déploiement de plateformes d'apprentissage interactives pour plus de 100 cadres dirigeants de grandes entreprises internationales (Bouygues, AXA France, Leroy Merlin, SBM Offshore, Westminster City Council).
 - **Game design et system design**:  
   Développement des mécaniques de puzzles collaboratifs et de _sandbox_ virtuels pour lesquels la réussite nécessite des compétences comportementales concrètes (leadership, communication, agilité).
 - **UX / UI et intégration technique**:  

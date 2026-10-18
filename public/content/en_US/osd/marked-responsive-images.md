@@ -27,7 +27,7 @@ Using a custom pattern, the script extracts embedded metadata about the availabl
 
 ### Keeping Things Compatible
 
-The "magic" of this approach is that, although it will mean having files with overly complicated names (e.g., `image__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png`), it gets all the information necessary to build out a full set of HTML tags from this single, valid file name, effectively building capability on top of fully functional Markdown code without any messy tricks.
+The "magic" of this approach is that, although it will mean having files with overly complicated names (e.g., `image__240-160-avif~webp~_400-267-avif~webp~_600-400-avif~webp~_820-546-avif~webp~_1400-933-avif~webp~_1920-1279-avif~webp~_1951-1300-avif~webp~.png`), it gets all the information necessary to build out a full set of HTML tags from this single, valid file name, effectively building capability on top of fully functional Markdown code without any messy tricks.
 
 ## Balancing Simplicity and Reliability
 

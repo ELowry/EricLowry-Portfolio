@@ -7,7 +7,7 @@ Mes études en architecture m’avaient déjà habitué à la gestion de projets
 Participer à la création d'une petite structure agile implique une multitude de rôles couvrant la quasi-totalité des aspects opérationnels de l'entreprise. Pendant une dizaine d'années, j’ai contribué au développement de DLS et de la marque CinQ en intervenant aussi bien sur la stratégie commerciale et le pilotage de projets techniques que sur la préparation au déploiement et le marketing B2B.
 
 En parallèle, un collègue avec plus de dix ans d’expérience en coaching exécutif m’a formé au diagnostic comportemental et à l’animation d’ateliers de formation à haut niveau. Bien que je ne détienne pas de certification officielle de coaching, mon expertise reste pour autant le résultat d'une décennie de mentorat et de pratique auprès de cadres et d’experts en leadership.  
-J'ai personnellement accompagné des centaines d'équipes avec des rôles et des cultures variés. J'ai formé des équipes d'esport professionnels aux Pays-Bas, des dirigeant·e·s de grandes entreprises telles que SBM, Stellantis, Sanofi, Lacoste, Auchan et BNP Paribas, mais également plusieurs équipes de coachs professionnels.
+J'ai personnellement accompagné des centaines d'équipes avec des rôles et des cultures variés. J'ai formé des équipes d'esport professionnels aux Pays-Bas, des dirigeant·e·s de grandes entreprises telles que SBM, Stellantis, Sanofi, Bouygues, Lacoste, Auchan et BNP Paribas, mais également plusieurs équipes de coachs professionnels.
 
 Cette expérience pratique, à la croisée de plusieurs disciplines, m’a permis de développer une capacité concrète et approfondie à conduire une équipe, faire monter en charge un produit et piloter des changements comportementaux mesurables au sein d’un groupe.
 

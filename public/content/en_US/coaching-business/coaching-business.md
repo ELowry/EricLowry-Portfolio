@@ -7,7 +7,7 @@ My background studying Architecture had already required that I learned to focus
 Being a managing partner in a small and agile company means having responsibilities across the entire operational spectrum. Over the course of a decade, I co-developed the DLS business and the CinQ brand, navigating everything from brand strategy and technical project management to pre-sales engineering and B2B marketing.
 
 Simultaneously, a colleague with over a decade of high-level executive coaching initiated my training in behavioral diagnostics and executive facilitation. While I do not hold formal coaching certifications, my extensive expertise was forged through a decade of hands-on mentorship from veteran corporate executives and leadership experts.  
-I have since personally coached hundreds of teams across a very wide variety of cultures and roles, ranging from top-tier professional esports teams in the Netherlands to Fortune 500 business leaders from companies such as SBM, Stellantis, Sanofi, Lacoste, Auchan, and BNP Paribas.
+I have since personally coached hundreds of teams across a very wide variety of cultures and roles, ranging from top-tier professional esports teams in the Netherlands to Fortune 500 business leaders from companies such as SBM, Stellantis, Sanofi, Bouygues, Lacoste, Auchan, and BNP Paribas.
 
 This hands-on, multidisciplinary journey has given me a rich, practical understanding of how to run a team, scale a product, and drive measurable behavioral change in human teams.
 
