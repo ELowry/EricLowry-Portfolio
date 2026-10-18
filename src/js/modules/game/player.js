@@ -43,6 +43,7 @@ export class Player extends AnimatedEntity {
 
 		this.shadowType = 'floor';
 		this.shadowBaselineOffset = 0.15;
+		this.renderOffset = Engine.LJS.vec2(0, Player.RENDER_OFFSET_Y);
 
 		this.moveSpeed = Player.MOVE_SPEED;
 		this.color = new Engine.LJS.Color(1, 1, 1);
@@ -92,6 +93,14 @@ export class Player extends AnimatedEntity {
 		this.addAnimation('wave_start', [19, 33], Player.ANIM_SPEED_WAVE, false);
 		this.addAnimation('wave', [34, 35], Player.ANIM_SPEED_WAVE_LOOP, true);
 		this.addAnimation('wave_stop', [33, 19], Player.ANIM_SPEED_WAVE, false);
+	}
+
+	/**
+	 * @returns {number} the visual Y offset in world units to compensate for empty sprite margins.
+	 * @constant
+	 */
+	static get RENDER_OFFSET_Y() {
+		return -0.2;
 	}
 
 	/**

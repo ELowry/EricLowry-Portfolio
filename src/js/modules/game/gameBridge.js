@@ -12,6 +12,7 @@ export const GameBridge = {
 	mapBounds: null,
 	isGameModeActive: true,
 	shouldPreventInput: false,
+	debugGroups: null,
 
 	/**
 	 * Register implementations for the bridge.
@@ -43,6 +44,22 @@ export const GameBridge = {
 	 */
 	setMapBounds(bounds) {
 		this.mapBounds = bounds || null;
+	},
+
+	/**
+	 * Sets the Y coordinate for the background horizon line.
+	 * @param {number} y - The world Y coordinate.
+	 */
+	setHorizonY(y) {
+		this.horizonY = typeof y === 'number' ? y : 1;
+	},
+
+	/**
+	 * Sets the nested groups of the current map for debug visualization.
+	 * @param {Array<Object>|null} groups - The array of group objects or null.
+	 */
+	setDebugGroups(groups) {
+		this.debugGroups = groups || null;
 	},
 
 	/**

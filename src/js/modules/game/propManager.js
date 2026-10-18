@@ -18,6 +18,7 @@ import { StaticPropEntity } from './props/staticPropEntity.js';
  * @property {boolean} [isAnimated] - Legacy boolean for AnimatedEntity (superseded by entityType).
  * @property {Object} resolution - The pixel dimensions of a single frame (`vec2`).
  * @property {Object} [size=null] - The physical size in world units (`vec2`). Defaults to resolution / 10.
+ * @property {Object} [anchor=null] - The alignment anchor `{x, y}` from 0 to 1. Defaults to bottom center `{x: 0.5, y: 0}`.
  * @property {Object} [offset=null] - The pixel offset in the spritesheet (`vec2`).
  * @property {number} [cols=1] - The number of columns in the spritesheet grid.
  * @property {Object<string, PropAnimationData>} [animations=null] - Dictionary of animations.
@@ -164,10 +165,15 @@ class PropManagerController {
 				continue;
 			}
 
-			const pos = Engine.LJS.vec2(data.pos.x, data.pos.y);
-			const renderOrder = data.renderOrder !== undefined ? data.renderOrder : 0;
 			const propSize =
 				def.size || Engine.LJS.vec2(def.resolution.x / 10, def.resolution.y / 10);
+			const anchor = def.anchor || { x: 0.5, y: 0 };
+
+			const adjustedX = data.pos.x + (0.5 - anchor.x) * propSize.x;
+			const adjustedY = data.pos.y + (0.5 - anchor.y) * propSize.y;
+			const pos = Engine.LJS.vec2(adjustedX, adjustedY);
+
+			const renderOrder = data.renderOrder !== undefined ? data.renderOrder : 0;
 
 			let targetType = def.entityType || 'static';
 			if (def.isAnimated && !def.entityType) {
@@ -177,8 +183,10 @@ class PropManagerController {
 			const isAnimatedBase = targetType !== 'static';
 			const EntityClass = this.#entityMap[targetType] || this.#entityMap['static'];
 
+			let entity;
+
 			if (isAnimatedBase) {
-				const entity = new EntityClass(
+				entity = new EntityClass(
 					pos,
 					propSize,
 					mapTextureIndex,
@@ -237,7 +245,7 @@ class PropManagerController {
 					tileInfo = Engine.LJS.tile(0, def.resolution, mapTextureIndex, padding);
 				}
 
-				const entity = new EntityClass(
+				entity = new EntityClass(
 					pos,
 					propSize,
 					tileInfo,
@@ -255,6 +263,10 @@ class PropManagerController {
 				}
 
 				spawned.push(entity);
+			}
+
+			if (import.meta.env.DEV) {
+				entity.anchorPos = Engine.LJS.vec2(data.pos.x, data.pos.y);
 			}
 		}
 

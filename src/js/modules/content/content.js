@@ -134,6 +134,41 @@ class ContentController {
 			results.forEach((module, index) => {
 				const mapData = module.default || module;
 
+				if (mapData.groups) {
+					mapData.positions = mapData.positions || {};
+					mapData.props = mapData.props || [];
+
+					for (const group of mapData.groups) {
+						const groupX = group.pos?.x || 0;
+						const groupY = group.pos?.y || 0;
+
+						if (group.positions) {
+							for (const key in group.positions) {
+								if (Object.prototype.hasOwnProperty.call(group.positions, key)) {
+									const posData = group.positions[key];
+									mapData.positions[key] = {
+										...posData,
+										x: groupX + posData.x,
+										y: groupY + posData.y,
+									};
+								}
+							}
+						}
+
+						if (group.props) {
+							for (const prop of group.props) {
+								mapData.props.push({
+									...prop,
+									pos: {
+										x: groupX + prop.pos.x,
+										y: groupY + prop.pos.y,
+									},
+								});
+							}
+						}
+					}
+				}
+
 				if (!mapData.bounds) {
 					let minX = mapData.startPos ? mapData.startPos.x : 0;
 					let maxX = mapData.startPos ? mapData.startPos.x : 0;

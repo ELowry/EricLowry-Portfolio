@@ -121,7 +121,7 @@ class InteractionController {
 	}
 
 	/**
-	 * Finds the closest interactive object within range.
+	 * Finds the closest interactive object within range along the X axis.
 	 * @param {vec2} playerPos - Current player position
 	 * @returns {Object|null} the closest object or null
 	 * @private
@@ -133,8 +133,9 @@ class InteractionController {
 		for (const obj of this.activeObjects) {
 			const targetPos = obj.interactPos || obj.pos;
 			const dx = playerPos.x - targetPos.x;
-			const dy = playerPos.y - targetPos.y;
-			const distSq = dx * dx + dy * dy;
+			
+			// Ignore the Y axis entirely since this is a "flat" side-scroller
+			const distSq = dx * dx;
 
 			const radiusSq = obj.radius * obj.radius;
 
@@ -237,7 +238,16 @@ class InteractionController {
 					doorConfig.highlightConfig = obj.highlightConfig;
 				}
 
-				const door = new Door(Engine.LJS.vec2(obj.pos.x, obj.pos.y), doorConfig);
+				const resolution = doorConfig.resolution || Engine.LJS.vec2(16, 35);
+				const propSize =
+					doorConfig.size || Engine.LJS.vec2(resolution.x / 10, resolution.y / 10);
+
+				const anchor = doorConfig.anchor || { x: 0.5, y: 0 };
+				
+				const adjustedX = obj.pos.x + (0.5 - anchor.x) * propSize.x;
+				const adjustedY = obj.pos.y + (0.5 - anchor.y) * propSize.y;
+
+				const door = new Door(Engine.LJS.vec2(adjustedX, adjustedY), doorConfig);
 
 				door.id = obj.id;
 				door.radius =
@@ -251,6 +261,10 @@ class InteractionController {
 				door.path = obj.path;
 				door.below = obj.below;
 				door.type = obj.type;
+
+				if (import.meta.env.DEV) {
+					door.anchorPos = Engine.LJS.vec2(obj.pos.x, obj.pos.y);
+				}
 
 				return door;
 			});
@@ -324,7 +338,7 @@ class InteractionController {
 	/**
 	 * Prevent interactions for a duration.
 	 * Useful when closing menus to prevent 'double interactions'.
-	 * @param {number} duration - Optionally set the duration to block interactions for in milliseconds. Defaults to 500ms.
+	 * @param {number} [duration=500] - Optionally set the duration to block interactions for in milliseconds.
 	 */
 	setBlock(duration = InteractionController.BLOCK_INPUT_MS) {
 		this.blockTimer = performance.now() + duration;

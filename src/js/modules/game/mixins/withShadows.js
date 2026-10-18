@@ -4,7 +4,7 @@ import { Engine } from '../../core/engineContext.js';
 const floorSliceCache = new WeakMap();
 
 /**
- * Mixin that adds shadow rendering capabilities to a game entity.
+ * Mixin that adds shadow rendering capabilities to a game entity.  
  * Handles drop shadows, perspective floor shadows, and wall-floor clipping.
  * @param {typeof Engine.LJS.EngineObject} Base - The base class to extend.
  * @returns {typeof Engine.LJS.EngineObject} A new class augmented with shadow rendering logic.

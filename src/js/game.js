@@ -16,17 +16,27 @@ let gameLayerElement = null;
  * Called once by LittleJS engine on startup.
  */
 function gameInit() {
-	const startX = Engine.pendingStartPos ? Engine.pendingStartPos.x : 10;
-	const startY = Engine.pendingStartPos ? Engine.pendingStartPos.y : 10;
-	const startVec = Engine.LJS.vec2(startX, startY);
+	const startX = Engine.pendingStartPos ? Engine.pendingStartPos.x : 0;
+	const startY = Engine.pendingStartPos ? Engine.pendingStartPos.y : 0;
+
+	player = new Player(Engine.LJS.vec2(startX, startY));
+	const halfHeight = player.size.y / 2;
+	player.pos.y += halfHeight;
+
+	if (import.meta.env.DEV) {
+		player.anchorPos = Engine.LJS.vec2(startX, startY);
+	}
 
 	// LittleJS configuration
 	Engine.LJS.setEnablePhysicsSolver(false);
 	Engine.LJS.setGamepadDirectionEmulateStick(false);
 	Engine.LJS.setInputWASDEmulateDirection(true);
 
-	Engine.LJS.setCameraPos(startVec);
-	player = new Player(startVec);
+	Engine.LJS.setCameraPos(player.pos);
+
+	if (import.meta.env.DEV) {
+		player.anchorPos = Engine.LJS.vec2(startX, startY);
+	}
 
 	// Register game-level implementations with GameBridge so the rest of the app can delegate game-specific behavior without creating circular imports.
 	GameBridge.init(
@@ -35,13 +45,25 @@ function gameInit() {
 				if (!player) {
 					return;
 				}
-				player.pos = Engine.LJS.vec2(pos.x, pos.y);
+				const hHeight = player.size.y / 2;
+				player.pos = Engine.LJS.vec2(pos.x, pos.y + hHeight);
+
+				if (import.meta.env.DEV) {
+					player.anchorPos = Engine.LJS.vec2(pos.x, pos.y);
+				}
+
 				Engine.LJS.setCameraPos(player.pos);
 				if (typeof player.setState === 'function') {
 					player.setState('idle');
 				}
 			},
-			getPlayerPos: () => (player ? player.pos : null),
+			getPlayerPos: () => {
+				if (!player) {
+					return null;
+				}
+				const hHeight = player.size.y / 2;
+				return { x: player.pos.x, y: player.pos.y - hHeight };
+			},
 			setPlayerTexture: (index) => {
 				if (player) {
 					player.textureIndex = index;
@@ -124,7 +146,7 @@ function gameRender() {
 		return;
 	}
 
-	const groundY = player ? player.pos.y - 0.45 : 8.72;
+	const groundY = GameBridge.horizonY;
 	const horizonScreenPos = Engine.LJS.worldToScreen(Engine.LJS.vec2(0, groundY));
 	const horizonPercent = Math.max(
 		0,
@@ -150,7 +172,31 @@ function gameRenderPost() {
 	if (!GameBridge.isGameModeActive || Engine.isPaused) {
 		return;
 	}
-	// These are not the renders you are looking for.
+
+	// Debug anchor points
+	if (import.meta.env.DEV && Engine.LJS.debugOverlay) {
+		for (const obj of Engine.LJS.engineObjects) {
+			if (obj) {
+				const drawPos = obj.anchorPos || obj.pos;
+				if (drawPos) {
+					Engine.LJS.debugPoint(drawPos, new Engine.LJS.Color(1, 1, 0, 0.8));
+				}
+			}
+		}
+
+		if (GameBridge.debugGroups) {
+			for (const group of GameBridge.debugGroups) {
+				const pos = Engine.LJS.vec2(group.pos.x, group.pos.y);
+				Engine.LJS.debugPoint(pos, new Engine.LJS.Color(1, 0, 0, 1));
+				Engine.LJS.debugText(
+					'GROUP',
+					Engine.LJS.vec2(pos.x, pos.y + 0.8),
+					0.5,
+					new Engine.LJS.Color(1, 0, 0, 1)
+				);
+			}
+		}
+	}
 }
 
 /**

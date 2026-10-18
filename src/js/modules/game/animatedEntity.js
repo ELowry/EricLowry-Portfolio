@@ -30,6 +30,9 @@ export class AnimatedEntity extends WithShadows(Engine.LJS.EngineObject) {
 	/** @type {number} */
 	gridCols;
 
+	/** @type {Object|null} */
+	renderOffset;
+
 	/** @type {Array<Object>} */
 	#tileCache;
 
@@ -61,6 +64,7 @@ export class AnimatedEntity extends WithShadows(Engine.LJS.EngineObject) {
 		this.spriteResolution = spriteResolution;
 		this.gridOffset = Engine.LJS.vec2(0, 0);
 		this.gridCols = 1;
+		this.renderOffset = null;
 		this.shadowType = null;
 
 		this.#tileCache = [];
@@ -108,7 +112,11 @@ export class AnimatedEntity extends WithShadows(Engine.LJS.EngineObject) {
 
 		this.renderShadow(tileInfo);
 
-		Engine.LJS.drawTile(this.pos, this.size, tileInfo, this.color, this.angle, this.mirror);
+		const drawPos = this.renderOffset
+			? Engine.LJS.vec2(this.pos.x + this.renderOffset.x, this.pos.y + this.renderOffset.y)
+			: this.pos;
+
+		Engine.LJS.drawTile(drawPos, this.size, tileInfo, this.color, this.angle, this.mirror);
 	}
 
 	/**

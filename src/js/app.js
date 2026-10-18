@@ -438,6 +438,11 @@ class AppController {
 
 			if (mapNode && mapNode.mapData) {
 				GameBridge.setMapBounds(mapNode.mapData.bounds || null);
+				GameBridge.setHorizonY(mapNode.mapData.horizonY);
+
+				if (import.meta.env.DEV) {
+					GameBridge.setDebugGroups(mapNode.mapData.groups || null);
+				}
 
 				const texIndex = mapNode.mapData.textureIndex || 0;
 				GameBridge.setPlayerTexture(texIndex);

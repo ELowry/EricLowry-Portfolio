@@ -21,13 +21,22 @@
  */
 
 /**
+ * @typedef {Object} MapGroup
+ * @property {{x: number, y: number}} pos - The world origin coordinate for this group.
+ * @property {Object<string, PositionData>} [positions] - Interactive elements relative to the group origin.
+ * @property {Array<PropPlacement>} [props] - Props relative to the group origin.
+ */
+
+/**
  * @typedef {Object} MapConfig
  * @property {Vec2} startPos - Default player entry point
  * @property {Object<string, PositionData>} positions - Keyed by child node ID
  * @property {{minX: number, maxX: number}} [bounds=null] - Optional horizontal boundaries for the map
+ * @property {number} [horizonY=1] - The Y coordinate of the horizon line for this map.
  * @property {number} [textureIndex=0] - The spritesheet index to use for this map's player, doors, and props.
  * @property {import('../game/propManager.js').SpriteConfig} [sprites=null] - The imported `.sprites.js` configuration object containing regional prop definitions.
  * @property {Array<PropPlacement>} [props=null] - Declarative list of environmental props to spawn.
+ * @property {Array<MapGroup>} [groups=null] - Optional nested groups of elements to be flattened at runtime.
  */
 
 /**
