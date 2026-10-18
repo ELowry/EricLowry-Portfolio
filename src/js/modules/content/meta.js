@@ -190,7 +190,7 @@ class MetaController {
 
 		if (effectiveNode && effectiveNode.image) {
 			meta.pageImageAlt = Lang.getString(altKey, null, meta.pageTitle);
-			meta.pageImage = `/assets/images/${effectiveNode.image}`;
+			meta.pageImage = `/assets/images${effectiveNode.image}`;
 
 			const parsedImg = parseImageVariant(effectiveNode.image);
 			meta.previewImage = parsedImg.url;
