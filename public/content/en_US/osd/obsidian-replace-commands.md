@@ -15,7 +15,7 @@
 
 ## Automating Search & Replace
 
-![The Obsidian logo with the text Replace Commands and three boxes that read plug-in, plugin, and amazing plugin](/assets/images/osd/obsidian-replace-commands/cover__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1200-800-webp_1200-800.jpg)
+![The Obsidian logo with the text Replace Commands and three boxes that read plug-in, plugin, and amazing plugin](/assets/images/osd/obsidian-replace-commands/cover__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1200-800-webp~.jpg)
 
 While editing and publishing over 300 articles for [CinQ on Medium](https://medium.com/odile-ai) in a shared Obsidian vault, I found myself relying heavily on regex to automate formatting, fix recurring writing quirks, and clean up Markdown files. While there are plenty of search-and-replace tools available, I couldn't find one that allowed me to sequence and chain multiple commands together with ease.
 
@@ -28,7 +28,7 @@ Instead of running multiple, isolated search-and-replace queries one by one, Obs
 <!-- prettier-ignore -->
 | Gallery |  |  |
 | -- | -- | -- |
-| ![A screenshot of the Obsidian Replace Commands settings menu with a replace command being edited](/assets/images/osd/obsidian-replace-commands/options__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1400-933-webp_1400-933_1920-1280-webp_1920-1280.jpg) | ![A screenshot of the Obsidian Replace Commands settings menu with live previews and regex patterns](/assets/images/osd/obsidian-replace-commands/options2__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1400-933-webp_1400-933_1920-1280-webp_1920-1280.jpg) | ![A screenshot of Replace Commands accessible through the righ-click context menu](/assets/images/osd/obsidian-replace-commands/shortcut__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1400-933-webp_1400-933_1920-1280-webp_1920-1280.jpg) |
+| ![A screenshot of the Obsidian Replace Commands settings menu with a replace command being edited](/assets/images/osd/obsidian-replace-commands/options__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1400-933-webp~_1920-1280-webp~.jpg) | ![A screenshot of the Obsidian Replace Commands settings menu with live previews and regex patterns](/assets/images/osd/obsidian-replace-commands/options2__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1400-933-webp~_1920-1280-webp~.jpg) | ![A screenshot of Replace Commands accessible through the righ-click context menu](/assets/images/osd/obsidian-replace-commands/shortcut__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1400-933-webp~_1920-1280-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

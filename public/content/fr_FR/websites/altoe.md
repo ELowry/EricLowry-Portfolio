@@ -12,7 +12,7 @@
 >
 > 🌐 [altoe.net](https://altoe.net)
 
-![Capture d'écran de la page d'accueil d'Alto´e](/assets/images/websites/altoe/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Capture d'écran de la page d'accueil d'Alto´e](/assets/images/websites/altoe/home-page__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Contexte
 
@@ -24,7 +24,7 @@ Comme la grande majorité de l'activité de Daniel Eppling provient de son rése
 
 ### Identité de Marque
 
-![Idées de design de logo pour Alto´e  ](/assets/images/websites/altoe/logos__240-202-webp_240-202_266-224-webp_266-224.jpg)
+![Idées de design de logo pour Alto´e  ](/assets/images/websites/altoe/logos__240-202-webp~_266-224-webp~.jpg)
 
 La première étape a consisté à concevoir le logo et l'identité de marque. Le client souhaitait que celle-ci soit ancrée autour de quatre couleurs spécifiques représentant sa philosophie de coaching. Après un processus de design itératif et approfondi, un logo et une palette de couleurs spécifiques ont été sélectionnés.
 
@@ -40,7 +40,7 @@ En termes d'expérience utilisateur·rice, le principal défi était de structur
 <!-- prettier-ignore -->
 | Galerie |  |
 | -- | -- |
-| ![Capture d'écran d'une section de la page d'accueil montrant le design de la marque en situation](/assets/images/websites/altoe/design__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran d'une landing page](/assets/images/websites/altoe/landing__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran d'une section de la page d'accueil montrant le design de la marque en situation](/assets/images/websites/altoe/design__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran d'une landing page](/assets/images/websites/altoe/landing__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

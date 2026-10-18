@@ -190,7 +190,7 @@ function generateRssFeeds(entriesByLanguage, buildDate) {
 \t\t<link>${BASE_URL}/blog</link>
 \t\t<description>${feedDesc}</description>
 \t\t<image>
-\t\t\t<url>https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240-webp_240-240.jpg</url>
+\t\t\t<url>https://eric-lowry.com/assets/images/eric_lowry_portrait__240-240-webp~.jpg</url>
 \t\t\t<title>${feedTitle}</title>
 \t\t\t<link>${BASE_URL}/blog</link>
 \t\t\t<width>144</width>

@@ -15,7 +15,7 @@
 
 ## Remplacements automatiques
 
-![Le logo Obsidian et le texte Replace Commands, et trois bulles lisant plug-in, plugin et amazing plugin](/assets/images/osd/obsidian-replace-commands/cover__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1200-800-webp_1200-800.jpg)
+![Le logo Obsidian et le texte Replace Commands, et trois bulles lisant plug-in, plugin et amazing plugin](/assets/images/osd/obsidian-replace-commands/cover__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1200-800-webp~.jpg)
 
 Dans le cadre de la correction, de la mise en page et de l'édition de plus de 300 articles pour CinQ [sur Medium](https://medium.com/odile-ai), j'ai décidé d'utiliser Obsidian afin de pouvoir mieux organiser et cataloguer l'ensemble. Rapidement, j'ai adopté Obsidian comme outil d'édition principal. L'un des avantages du format Markdown utilisé par le logiciel est qu'il permet d'utiliser efficacement les expressions régulières (regex) pour automatiser la mise en forme, corriger les tics d'écriture récurrents et nettoyer la structure des documents.
 
@@ -29,7 +29,7 @@ Plutôt que d'entrer d'innombrables recherches et remplacements isolés l'un apr
 <!-- prettier-ignore -->
 | Gallery |  |  |
 | -- | -- | -- |
-| ![Une capture d'écran du menu de configuration d'Obsidian Replace Commands](/assets/images/osd/obsidian-replace-commands/options__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1400-933-webp_1400-933_1920-1280-webp_1920-1280.jpg) | ![Une capture d'écran du menu de configuration d'Obsidian Replace Commands avec des expressions régulières actives](/assets/images/osd/obsidian-replace-commands/options2__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1400-933-webp_1400-933_1920-1280-webp_1920-1280.jpg) | ![Une capture d'écran des commandes Obsidian Replace Commands accessibles via le menu clic droit](/assets/images/osd/obsidian-replace-commands/shortcut__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-547-webp_820-547_1400-933-webp_1400-933_1920-1280-webp_1920-1280.jpg) |
+| ![Une capture d'écran du menu de configuration d'Obsidian Replace Commands](/assets/images/osd/obsidian-replace-commands/options__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1400-933-webp~_1920-1280-webp~.jpg) | ![Une capture d'écran du menu de configuration d'Obsidian Replace Commands avec des expressions régulières actives](/assets/images/osd/obsidian-replace-commands/options2__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1400-933-webp~_1920-1280-webp~.jpg) | ![Une capture d'écran des commandes Obsidian Replace Commands accessibles via le menu clic droit](/assets/images/osd/obsidian-replace-commands/shortcut__240-160-webp~_400-267-webp~_600-400-webp~_820-547-webp~_1400-933-webp~_1920-1280-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

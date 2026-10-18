@@ -1,6 +1,6 @@
 # CV · Eric Lowry
 
-![Portrait d'Eric Lowry   ](/assets/images/eric_lowry_portrait__240-240-webp_240-240.jpg)
+![Portrait d'Eric Lowry   ](/assets/images/eric_lowry_portrait__240-240-webp~.jpg)
 
 > [!INFO]  
 > [PU53WnRwbVp0SG1adHhtQXRMUVZtWm1Y](tel:alZtQW1IbVo1cHdBbVptWA==)  

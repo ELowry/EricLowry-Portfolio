@@ -12,7 +12,7 @@
 >
 > 🌐 [altoe.net](https://altoe.net)
 
-![Screenshot of the Alto´e homepage](/assets/images/websites/altoe/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the Alto´e homepage](/assets/images/websites/altoe/home-page__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Context
 
@@ -24,7 +24,7 @@ Because the vast majority of Daniel's business is generated through networking a
 
 ### Brand Identity
 
-![Logo design ideas  for Alto´e  ](/assets/images/websites/altoe/logos__240-202-webp_240-202_266-224-webp_266-224.jpg)
+![Logo design ideas  for Alto´e  ](/assets/images/websites/altoe/logos__240-202-webp~_266-224-webp~.jpg)
 
 The first step involved designing the logo and broad brand identity. The client requested they be anchored around four specific colors that represent his core coaching philosophy. After an extensive, iterative design process, a logo and specific color palette were selected.
 
@@ -40,7 +40,7 @@ The main challenge regarding user experience was structuring Daniel's extensive 
 <!-- prettier-ignore -->
 | Gallery |  |
 | -- | -- |
-| ![Screenshot of a section of the home page showing the brand design in use](/assets/images/websites/altoe/design__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screeenshot from a landing page](/assets/images/websites/altoe/landing__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of a section of the home page showing the brand design in use](/assets/images/websites/altoe/design__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screeenshot from a landing page](/assets/images/websites/altoe/landing__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

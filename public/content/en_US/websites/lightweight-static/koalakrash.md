@@ -12,7 +12,7 @@
 >
 > 🌐 [koalakrash.com](https://koalakrash.com)
 
-![Screenshot of the KoalaKrash website's homepage](/assets/images/websites/koalakrash/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the KoalaKrash website's homepage](/assets/images/websites/koalakrash/home-page__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Context
 

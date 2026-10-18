@@ -9,7 +9,7 @@
 >
 > - 🎮 [Download Unstant](https://drive.google.com/file/d/0B7AmgjkhtydVRE5WREJLdUJCZTA/view?resourcekey=0-lW3gwxkJgPlf_Q5aSntzpA) (late development version).
 
-![Artistically rendered view of a yellow desert with a red buoy](/assets/images/gaming/unstant/header__240-135-webp_240-135_400-225-webp_400-225_600-337-webp_600-337_820-461-webp_820-461_1400-787-webp_1400-787_1875-1054-webp_1875-1054.jpg)
+![Artistically rendered view of a yellow desert with a red buoy](/assets/images/gaming/unstant/header__240-135-webp~_400-225-webp~_600-337-webp~_820-461-webp~_1400-787-webp~_1875-1054-webp~.jpg)
 
 I am convinced that the creative aspects of game design and architecture share significantly more than is usually acknowledged; both are about wrestling with a somewhat rigid set of rules and constraints to create spaces and environments that will be experienced, explored, lived-in.
 
@@ -28,7 +28,7 @@ We made a first person "walking simulator" that explored incredibly banal, every
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![A screenshot of the desert level](/assets/images/gaming/unstant/desert__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the bedroom level](/assets/images/gaming/unstant/room__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the living room level](/assets/images/gaming/unstant/livingroom__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the basement level](/assets/images/gaming/unstant/basement__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![A screenshot of the cemetery level](/assets/images/gaming/unstant/cemetary__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![A screenshot of the desert level](/assets/images/gaming/unstant/desert__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![A screenshot of the bedroom level](/assets/images/gaming/unstant/room__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![A screenshot of the living room level](/assets/images/gaming/unstant/livingroom__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![A screenshot of the basement level](/assets/images/gaming/unstant/basement__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![A screenshot of the cemetery level](/assets/images/gaming/unstant/cemetary__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -43,7 +43,7 @@ Building a full video game from the ground up, with barely any experience in gam
 
 As the developer of our project duo, I handled building Unstant in Unreal Engine 4, using the blueprint visual scripting system to code:
 
-![Screenshot of a section of the shader code blueprint  ](/assets/images/gaming/unstant/code__240-123-webp_240-123_400-205-webp_400-205.jpg)
+![Screenshot of a section of the shader code blueprint  ](/assets/images/gaming/unstant/code__240-123-webp~_400-205-webp~.jpg)
 
 - player movement and environmental interactions
 - the UI, including time-synced subtitles
@@ -54,13 +54,13 @@ As the developer of our project duo, I handled building Unstant in Unreal Engine
 
 Starting from extensive physical measurements and architectural surveys, I built and optimized 3D meshes for the game's environments and props.
 
-![Preview of various steps of the 3D modeling process for the game](/assets/images/gaming/unstant/3Dprocess__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Preview of various steps of the 3D modeling process for the game](/assets/images/gaming/unstant/3Dprocess__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Texture work and shaders
 
 Taking inspiration from the look of architectural diagrams and sketches, we decided to use a mix of hand-painted textures (digitized paint and pen drawings) with various shader tricks (Sobel and depth-based edge detection, and fading between textures' r/g/b/a channels based on depth/lighting) to create the distinctive style of the game.
 
-![Examples of the materials and shader work, including hand-painted textures, hatch texture maps, and hatched lighting effects](/assets/images/gaming/unstant/materials__240-73-webp_240-73_400-121-webp_400-121_600-181-webp_600-181_820-248-webp_820-248_1400-423-webp_1400-423_1920-580-webp_1920-580.jpg)
+![Examples of the materials and shader work, including hand-painted textures, hatch texture maps, and hatched lighting effects](/assets/images/gaming/unstant/materials__240-73-webp~_400-121-webp~_600-181-webp~_820-248-webp~_1400-423-webp~_1920-580-webp~.jpg)
 
 Particular effort was put into blending the screen-space "sketch" shading and per-object sketch materials to recreate a usually two-dimentional style in a fully explorable 3D space.
 
@@ -75,7 +75,7 @@ As a project for a master's thesis in Architecture, a significant portion of the
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |  |
 | -- | -- | -- | -- | -- | -- |
-| ![Architectural presentation of the introductory desert level](/assets/images/gaming/unstant/intro___240-339-webp_240-339_400-565-webp_400-565_600-848-webp_600-848_820-1159-webp_820-1159_1400-1978-webp_1400-1978_1600-2261-webp_1600-2261.jpg) | ![Architectural presentation of the bedroom level](/assets/images/gaming/unstant/bedroom___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) | ![Architectural presentation of the livingroom level](/assets/images/gaming/unstant/livingroom___240-339-webp_240-339_400-566-webp_400-566_600-849-webp_600-849_820-1160-webp_820-1160_1400-1980-webp_1400-1980_1600-2263-webp_1600-2263.jpg) | ![Architectural presentation of the basement level](/assets/images/gaming/unstant/basement___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) | ![Architectural presentation of the cemetary level](/assets/images/gaming/unstant/cemetary___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) | ![Architectural presentation of the train station level](/assets/images/gaming/unstant/station___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) |
+| ![Architectural presentation of the introductory desert level](/assets/images/gaming/unstant/intro___240-339-webp~_400-565-webp~_600-848-webp~_820-1159-webp~_1400-1978-webp~_1600-2261-webp~.jpg) | ![Architectural presentation of the bedroom level](/assets/images/gaming/unstant/bedroom___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) | ![Architectural presentation of the livingroom level](/assets/images/gaming/unstant/livingroom___240-339-webp~_400-566-webp~_600-849-webp~_820-1160-webp~_1400-1980-webp~_1600-2263-webp~.jpg) | ![Architectural presentation of the basement level](/assets/images/gaming/unstant/basement___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) | ![Architectural presentation of the cemetary level](/assets/images/gaming/unstant/cemetary___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) | ![Architectural presentation of the train station level](/assets/images/gaming/unstant/station___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -84,6 +84,6 @@ Special effort was needed in order to adapt the language of architectural diagra
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![Top view of the architectural plans for Unstant, printed on transparent sheets to account for overlapping spaces](/assets/images/gaming/unstant/plans1__240-239-webp_240-239_400-398-webp_400-398_600-596-webp_600-596_820-815-webp_820-815_1023-1017-webp_1023-1017.jpg) | ![Detailed photograph of the overlapping transparent plans for Unstant](/assets/images/gaming/unstant/plans2__240-238-webp_240-238_400-397-webp_400-397_600-595-webp_600-595_820-814-webp_820-814_1032-1024-webp_1032-1024.jpg) | ![Photo of the cylindrical section of Unstant levels, accounting for looping space](/assets/images/gaming/unstant/section__240-136-webp_240-136_400-226-webp_400-226_600-339-webp_600-339_820-464-webp_820-464_1400-792-webp_1400-792_1582-895-webp_1582-895.jpg) | ![Photo of the scale model of Unstant](/assets/images/gaming/unstant/model1__240-107-webp_240-107_400-179-webp_400-179_600-268-webp_600-268_820-366-webp_820-366_1400-626-webp_1400-626_1600-715-webp_1600-715.jpg) | ![Detailed of the scale model of Unstant, with transparent tubing representing player teleportation](/assets/images/gaming/unstant/model2__240-241-webp_240-241_400-402-webp_400-402_600-604-webp_600-604_682-686-webp_682-686.jpg) |
+| ![Top view of the architectural plans for Unstant, printed on transparent sheets to account for overlapping spaces](/assets/images/gaming/unstant/plans1__240-239-webp~_400-398-webp~_600-596-webp~_820-815-webp~_1023-1017-webp~.jpg) | ![Detailed photograph of the overlapping transparent plans for Unstant](/assets/images/gaming/unstant/plans2__240-238-webp~_400-397-webp~_600-595-webp~_820-814-webp~_1032-1024-webp~.jpg) | ![Photo of the cylindrical section of Unstant levels, accounting for looping space](/assets/images/gaming/unstant/section__240-136-webp~_400-226-webp~_600-339-webp~_820-464-webp~_1400-792-webp~_1582-895-webp~.jpg) | ![Photo of the scale model of Unstant](/assets/images/gaming/unstant/model1__240-107-webp~_400-179-webp~_600-268-webp~_820-366-webp~_1400-626-webp~_1600-715-webp~.jpg) | ![Detailed of the scale model of Unstant, with transparent tubing representing player teleportation](/assets/images/gaming/unstant/model2__240-241-webp~_400-402-webp~_600-604-webp~_682-686-webp~.jpg) |
 
 <!-- prettier-ignore end -->

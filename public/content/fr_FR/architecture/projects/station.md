@@ -19,7 +19,7 @@ Comme la construction de la gare était prévue comme point de départ pour la f
 <!-- prettier-ignore -->
 | Galerie: |  |  |
 | -- | -- | -- |
-| ![Plan de la place supérieure du projet](/assets/images/architecture/station/plan1__240-176-webp_240-176_400-293-webp_400-293_600-440-webp_600-440_820-602-webp_820-602_1400-1027-webp_1400-1027_1920-1409-webp_1920-1409.jpg) | ![Plan du rez-de-chaussée du projet avec le centre commercial et les activités publiques](/assets/images/architecture/station/plan2__240-176-webp_240-176_400-293-webp_400-293_600-440-webp_600-440_820-601-webp_820-601_1400-1027-webp_1400-1027_1920-1408-webp_1920-1408.jpg) | ![Vue de dessus de la maquette, place supérieure retirée, montrant le plan intérieur](/assets/images/architecture/station/model-plan__240-164-webp_240-164_400-273-webp_400-273_600-410-webp_600-410_820-560-webp_820-560_1400-956-webp_1400-956_1920-1311-webp_1920-1311.jpg) |
+| ![Plan de la place supérieure du projet](/assets/images/architecture/station/plan1__240-176-webp~_400-293-webp~_600-440-webp~_820-602-webp~_1400-1027-webp~_1920-1409-webp~.jpg) | ![Plan du rez-de-chaussée du projet avec le centre commercial et les activités publiques](/assets/images/architecture/station/plan2__240-176-webp~_400-293-webp~_600-440-webp~_820-601-webp~_1400-1027-webp~_1920-1408-webp~.jpg) | ![Vue de dessus de la maquette, place supérieure retirée, montrant le plan intérieur](/assets/images/architecture/station/model-plan__240-164-webp~_400-273-webp~_600-410-webp~_820-560-webp~_1400-956-webp~_1920-1311-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -30,7 +30,7 @@ Les trains surélevés forment le plus souvent des barrières physiques et visue
 <!-- prettier-ignore -->
 | Galerie: |  |  |
 | -- | -- | -- |
-| ![Vue axonométrique de l'entrée principale de la gare](/assets/images/architecture/station/axono__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Photo d'une maquette de l'entrée principale](/assets/images/architecture/station/model-entrance__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) | ![Vue 3D de l'entrée principale de la gare](/assets/images/architecture/station/3D1__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Vue axonométrique de l'entrée principale de la gare](/assets/images/architecture/station/axono__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Photo d'une maquette de l'entrée principale](/assets/images/architecture/station/model-entrance__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) | ![Vue 3D de l'entrée principale de la gare](/assets/images/architecture/station/3D1__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -42,7 +42,7 @@ Les trains surélevés forment le plus souvent des barrières physiques et visue
 <!-- prettier-ignore -->
 | Galerie |
 | -- |
-| ![Coupe transversale de l'ensemble du projet](/assets/images/architecture/station/section__240-40-webp_240-40_400-67-webp_400-67_600-100-webp_600-100_820-136-webp_820-136_1400-233-webp_1400-233_1920-319-webp_1920-319.jpg) |
+| ![Coupe transversale de l'ensemble du projet](/assets/images/architecture/station/section__240-40-webp~_400-67-webp~_600-100-webp~_820-136-webp~_1400-233-webp~_1920-319-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -52,7 +52,7 @@ Les trains surélevés forment le plus souvent des barrières physiques et visue
 <!-- prettier-ignore -->
 | Galerie: |  |
 | -- | -- |
-| ![Vue 3D de l'infrastructure du parc public intégrée au centre commercial et culturel](/assets/images/architecture/station/3D2__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Vue 3D des espaces publics ouverts depuis la place supérieure](/assets/images/architecture/station/3D3__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Vue 3D de l'infrastructure du parc public intégrée au centre commercial et culturel](/assets/images/architecture/station/3D2__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Vue 3D des espaces publics ouverts depuis la place supérieure](/assets/images/architecture/station/3D3__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -64,6 +64,6 @@ J'ai aussi participé à la fabrication de l'immense maquette que notre équipe 
 <!-- prettier-ignore -->
 | Galerie: |  |  |
 | -- | -- | -- |
-| ![Photo de la maquette complète du projet](/assets/images/architecture/station/model-full__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) | ![Photo de la maquette vue de l'intérieur de l'un des parcs publics](/assets/images/architecture/station/model-park__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) | ![Photo de la maquette sans la place supérieure, montrant l'agencement des espaces intérieurs](/assets/images/architecture/station/model-inside__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) |
+| ![Photo de la maquette complète du projet](/assets/images/architecture/station/model-full__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) | ![Photo de la maquette vue de l'intérieur de l'un des parcs publics](/assets/images/architecture/station/model-park__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) | ![Photo de la maquette sans la place supérieure, montrant l'agencement des espaces intérieurs](/assets/images/architecture/station/model-inside__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) |
 
 <!-- prettier-ignore end -->

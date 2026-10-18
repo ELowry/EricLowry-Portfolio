@@ -19,7 +19,7 @@ Because this station would be among the very first major pieces of infrastructur
 <!-- prettier-ignore -->
 | Gallery: |  |  |
 | -- | -- | -- |
-| ![Plan of the project's upper plaza](/assets/images/architecture/station/plan1__240-176-webp_240-176_400-293-webp_400-293_600-440-webp_600-440_820-602-webp_820-602_1400-1027-webp_1400-1027_1920-1409-webp_1920-1409.jpg) | ![Plan of the project's ground floor shopping and public activity center](/assets/images/architecture/station/plan2__240-176-webp_240-176_400-293-webp_400-293_600-440-webp_600-440_820-601-webp_820-601_1400-1027-webp_1400-1027_1920-1408-webp_1920-1408.jpg) | ![Top view of the scale model with the upper plaza removed, showing the interior plan](/assets/images/architecture/station/model-plan__240-164-webp_240-164_400-273-webp_400-273_600-410-webp_600-410_820-560-webp_820-560_1400-956-webp_1400-956_1920-1311-webp_1920-1311.jpg) |
+| ![Plan of the project's upper plaza](/assets/images/architecture/station/plan1__240-176-webp~_400-293-webp~_600-440-webp~_820-602-webp~_1400-1027-webp~_1920-1409-webp~.jpg) | ![Plan of the project's ground floor shopping and public activity center](/assets/images/architecture/station/plan2__240-176-webp~_400-293-webp~_600-440-webp~_820-601-webp~_1400-1027-webp~_1920-1408-webp~.jpg) | ![Top view of the scale model with the upper plaza removed, showing the interior plan](/assets/images/architecture/station/model-plan__240-164-webp~_400-273-webp~_600-410-webp~_820-560-webp~_1400-956-webp~_1920-1311-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -30,7 +30,7 @@ Traditional elevated train stations often act as physical and visual barriers wi
 <!-- prettier-ignore -->
 | Gallery: |  |  |
 | -- | -- | -- |
-| ![Axonometric view of the main station entrance](/assets/images/architecture/station/axono__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Photo of a scale model of the main entrance](/assets/images/architecture/station/model-entrance__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) | ![3D view of the main station entrance](/assets/images/architecture/station/3D1__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Axonometric view of the main station entrance](/assets/images/architecture/station/axono__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Photo of a scale model of the main entrance](/assets/images/architecture/station/model-entrance__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) | ![3D view of the main station entrance](/assets/images/architecture/station/3D1__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -42,7 +42,7 @@ Traditional elevated train stations often act as physical and visual barriers wi
 <!-- prettier-ignore -->
 | Gallery |
 | -- |
-| ![Cross-section of the entire project](/assets/images/architecture/station/section__240-40-webp_240-40_400-67-webp_400-67_600-100-webp_600-100_820-136-webp_820-136_1400-233-webp_1400-233_1920-319-webp_1920-319.jpg) |
+| ![Cross-section of the entire project](/assets/images/architecture/station/section__240-40-webp~_400-67-webp~_600-100-webp~_820-136-webp~_1400-233-webp~_1920-319-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -52,7 +52,7 @@ Traditional elevated train stations often act as physical and visual barriers wi
 <!-- prettier-ignore -->
 | Gallery: |  |
 | -- | -- |
-| ![3D view of public park infrastructure integrated into the shopping and cultural center](/assets/images/architecture/station/3D2__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![3D view of the open public spaces as viewed from the upper plaza](/assets/images/architecture/station/3D3__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![3D view of public park infrastructure integrated into the shopping and cultural center](/assets/images/architecture/station/3D2__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![3D view of the open public spaces as viewed from the upper plaza](/assets/images/architecture/station/3D3__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -64,6 +64,6 @@ Additionally, I contributed heavily to the physical construction of the massive 
 <!-- prettier-ignore -->
 | Gallery: |  |  |
 | -- | -- | -- |
-| ![Photo of the complete project scale model](/assets/images/architecture/station/model-full__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) | ![Photo of the scale model viewed from inside one of the public parks](/assets/images/architecture/station/model-park__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) | ![Photo of the scale model with the upper plaza removed, showing the arrangement of interior spaces](/assets/images/architecture/station/model-inside__240-161-webp_240-161_400-268-webp_400-268_600-402-webp_600-402_820-549-webp_820-549_1400-937-webp_1400-937_1920-1285-webp_1920-1285.jpg) |
+| ![Photo of the complete project scale model](/assets/images/architecture/station/model-full__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) | ![Photo of the scale model viewed from inside one of the public parks](/assets/images/architecture/station/model-park__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) | ![Photo of the scale model with the upper plaza removed, showing the arrangement of interior spaces](/assets/images/architecture/station/model-inside__240-161-webp~_400-268-webp~_600-402-webp~_820-549-webp~_1400-937-webp~_1920-1285-webp~.jpg) |
 
 <!-- prettier-ignore end -->

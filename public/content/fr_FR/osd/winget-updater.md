@@ -23,13 +23,13 @@ Ce simple script PowerShell que j'ai écrit sur mon temps libre est progressivem
 
 ## Comment ça marche
 
-![Capture d'écran d'une fenêtre de terminal WinGet Updater](/assets/images/osd/winget-updater/winget-updater__240-120-webp_240-120_400-200-webp_400-200_600-300-webp_600-300_820-410-webp_820-410_1280-640-webp_1280-640.jpg)
+![Capture d'écran d'une fenêtre de terminal WinGet Updater](/assets/images/osd/winget-updater/winget-updater__240-120-webp~_400-200-webp~_600-300-webp~_820-410-webp~_1280-640-webp~.jpg)
 
 WinGet Updater est une passerelle qui simplifie l'utilisation de WinGet pour les mises à jour automatiques et manuelles. Le script propose de définir quelles applications sont automatiquement ou manuellement mises à jour ou bien totalement ignorées. Il peut être configuré pour fonctionner entièrement en arrière-plan, sans déranger l'utilisateur·rice, ou lancé manuellement à partir du menu Démarrer.
 
 WinGet Updater affiche le Terminal Windows uniquement lorsqu'une application non reconnue ou non configurée peut être mise à jour. Un mode silencieux est aussi disponible pour empêcher la moindre distraction lorsque le script démarre automatiquement selon des paramètres configurables.
 
-![Capture d'écran de l'écran de configuration de WinGet Updater ](/assets/images/osd/winget-updater/config__240-182-webp_240-182_400-303-webp_400-303_600-454-webp_600-454_754-571-webp_754-571.jpg)
+![Capture d'écran de l'écran de configuration de WinGet Updater ](/assets/images/osd/winget-updater/config__240-182-webp~_400-303-webp~_600-454-webp~_754-571-webp~.jpg)
 
 ## Simplicité
 

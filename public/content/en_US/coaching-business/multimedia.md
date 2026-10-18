@@ -19,11 +19,11 @@ My goal has always been to ensure that our messaging remains clear, professional
 
 I designed most logos and established the core brand identities for DLS, as well as for our flagship product CinQ, and various projects that we have established with partners.
 
-![Screenshot of the CinQ workshops catalog](/assets/images/websites/CinQ/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the CinQ workshops catalog](/assets/images/websites/CinQ/programs__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 As both projects and online marketing evolved, I maintained and updated the brand designs, visual identities, and media content production for DLS and CinQ. Throughout this evolution, the principal challenge has been to maintain a delicate balance between establishing a brand identity that carried the professional weight required for the corporate boardroom while also utilizing aesthetic choices that evoke the cutting-edge gaming technology powering our solutions.
 
-![A screenshot from the CinQ web page listing articles and podcast episodes](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![A screenshot from the CinQ web page listing articles and podcast episodes](/assets/images/websites/CinQ/content__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Video Production & Podcasting
 
@@ -37,7 +37,7 @@ These were recorded entirely remotely using a flexible mix of Google Meet, Disco
 
 #### Short-Form Content
 
-![A screenshot of the CinQ YouTube Shorts feed](/assets/images/coaching-business/multimedia/shorts__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![A screenshot of the CinQ YouTube Shorts feed](/assets/images/coaching-business/multimedia/shorts__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 I have edited dozens of vertical shorts/reels tailored for social media engagement and quick-burst concept delivery. For a majority of these, I was in charge of assigning "questions" for team members, partners, and clients to answer as a means of creating interest in CinQ and of increasing brand recognition.
 
@@ -51,7 +51,7 @@ I was also in charge of conducting, recording, and editing both online and offli
 
 Over the years, I have proofread, edited, formatted, and published over 330 articles across Medium, Substack, LinkedIn, and the DLS company blog.
 
-![A screenshot of the DLS Obsidian vault with an article and its relationships to others](/assets/images/coaching-business/multimedia/obsidian__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![A screenshot of the DLS Obsidian vault with an article and its relationships to others](/assets/images/coaching-business/multimedia/obsidian__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 This required establishing and managing a full content pipeline, including:
 

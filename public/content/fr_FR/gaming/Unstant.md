@@ -9,7 +9,7 @@
 >
 > - 🎮 [Télécharger Unstant](https://drive.google.com/file/d/0B7AmgjkhtydVRE5WREJLdUJCZTA/view?resourcekey=0-lW3gwxkJgPlf_Q5aSntzpA) (dernière version développement en date).
 
-![Vue artistique d'un désert jaune avec une bouée rouge](/assets/images/gaming/unstant/header__240-135-webp_240-135_400-225-webp_400-225_600-337-webp_600-337_820-461-webp_820-461_1400-787-webp_1400-787_1875-1054-webp_1875-1054.jpg)
+![Vue artistique d'un désert jaune avec une bouée rouge](/assets/images/gaming/unstant/header__240-135-webp~_400-225-webp~_600-337-webp~_820-461-webp~_1400-787-webp~_1875-1054-webp~.jpg)
 
 Aujourd'hui encore, je suis convaincu que les aspects créatifs de la conception de jeux vidéo (_game design_) et de l'architecture ont bien plus en commun qu'on ne l'admet généralement. Les deux nécessitent de composer avec un ensemble de règles et de contraintes relativement rigides, dans le but de créer des espaces et des environnements destinés à être expérimentés, explorés et habités.
 
@@ -28,7 +28,7 @@ Nous avons donc créé un _walking simulator_ à la première personne qui explo
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![Capture d'écran du niveau du désert](/assets/images/gaming/unstant/desert__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran du niveau de la chambre](/assets/images/gaming/unstant/room__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran du niveau du salon](/assets/images/gaming/unstant/livingroom__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran du niveau de la cave](/assets/images/gaming/unstant/basement__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran du niveau du cimetière](/assets/images/gaming/unstant/cemetary__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran du niveau du désert](/assets/images/gaming/unstant/desert__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran du niveau de la chambre](/assets/images/gaming/unstant/room__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran du niveau du salon](/assets/images/gaming/unstant/livingroom__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran du niveau de la cave](/assets/images/gaming/unstant/basement__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran du niveau du cimetière](/assets/images/gaming/unstant/cemetary__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -44,7 +44,7 @@ Créer un jeu vidéo complet en partant de zéro, avec très peu d'expérience p
 
 Étant le développeur du duo, je me suis chargé de construire Unstant dans Unreal Engine 4, en utilisant le système de programmation visuelle Blueprint pour coder:
 
-![Capture d'écran d'une section du blueprint de code des shaders  ](/assets/images/gaming/unstant/code__240-123-webp_240-123_400-205-webp_400-205.jpg)
+![Capture d'écran d'une section du blueprint de code des shaders  ](/assets/images/gaming/unstant/code__240-123-webp~_400-205-webp~.jpg)
 
 - les mouvements du joueur et les interactions avec l'environnement
 - l'interface utilisateur·rice (UI), y compris des sous-titres synchronisés avec l'audio
@@ -55,13 +55,13 @@ Créer un jeu vidéo complet en partant de zéro, avec très peu d'expérience p
 
 À partir de relevés architecturaux et de mesures physiques précises, j'ai modélisé et optimisé les maillages 3D pour les environnements et les objets (_props_) du jeu.
 
-![Aperçu de plusieurs étapes du processus de modélisation 3D pour le jeu](/assets/images/gaming/unstant/3Dprocess__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Aperçu de plusieurs étapes du processus de modélisation 3D pour le jeu](/assets/images/gaming/unstant/3Dprocess__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Textures et shaders
 
 Inspirés par l'esthétique des diagrammes et des croquis d'architecture, nous avons décidé d'utiliser un mélange de textures peintes à la main (aquarelles et dessins au stylo numérisés) associées à diverses astuces de shaders (filtre de Sobel, détection des contours basée sur la profondeur, et fondu entre les canaux r/v/b/a des textures en fonction de la profondeur et de la luminosité) pour créer le style graphique si particulier du jeu.
 
-![Exemples du travail sur les matériaux et les shaders, incluant des textures peintes à la main, des cartes de textures hachurées et des effets d'éclairage hachurés](/assets/images/gaming/unstant/materials__240-73-webp_240-73_400-121-webp_400-121_600-181-webp_600-181_820-248-webp_820-248_1400-423-webp_1400-423_1920-580-webp_1920-580.jpg)
+![Exemples du travail sur les matériaux et les shaders, incluant des textures peintes à la main, des cartes de textures hachurées et des effets d'éclairage hachurés](/assets/images/gaming/unstant/materials__240-73-webp~_400-121-webp~_600-181-webp~_820-248-webp~_1400-423-webp~_1920-580-webp~.jpg)
 
 Nous avons accordé un soin tout particulier au mélange de l'ombrage "croquis" en espace écran (_screen-space_) et des matériaux de croquis appliqués aux objets, afin de recréer un rendu visuel 2D au sein d'un espace 3D entièrement explorable.
 
@@ -76,7 +76,7 @@ S'agissant d'un projet de fin d'études (PFE) en architecture, une part importan
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |  |
 | -- | -- | -- | -- | -- | -- |
-| ![Présentation architecturale du niveau d'introduction du désert](/assets/images/gaming/unstant/intro___240-339-webp_240-339_400-565-webp_400-565_600-848-webp_600-848_820-1159-webp_820-1159_1400-1978-webp_1400-1978_1600-2261-webp_1600-2261.jpg) | ![Présentation architecturale du niveau de la chambre](/assets/images/gaming/unstant/bedroom___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) | ![Présentation architecturale du niveau du salon](/assets/images/gaming/unstant/livingroom___240-339-webp_240-339_400-566-webp_400-566_600-849-webp_600-849_820-1160-webp_820-1160_1400-1980-webp_1400-1980_1600-2263-webp_1600-2263.jpg) | ![Présentation architecturale du niveau de la cave](/assets/images/gaming/unstant/basement___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) | ![Présentation architecturale du niveau du cimetière](/assets/images/gaming/unstant/cemetary___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) | ![Présentation architecturale du niveau de la gare](/assets/images/gaming/unstant/station___240-339-webp_240-339_400-566-webp_400-566_600-848-webp_600-848_820-1159-webp_820-1159_1400-1979-webp_1400-1979_1600-2262-webp_1600-2262.jpg) |
+| ![Présentation architecturale du niveau d'introduction du désert](/assets/images/gaming/unstant/intro___240-339-webp~_400-565-webp~_600-848-webp~_820-1159-webp~_1400-1978-webp~_1600-2261-webp~.jpg) | ![Présentation architecturale du niveau de la chambre](/assets/images/gaming/unstant/bedroom___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) | ![Présentation architecturale du niveau du salon](/assets/images/gaming/unstant/livingroom___240-339-webp~_400-566-webp~_600-849-webp~_820-1160-webp~_1400-1980-webp~_1600-2263-webp~.jpg) | ![Présentation architecturale du niveau de la cave](/assets/images/gaming/unstant/basement___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) | ![Présentation architecturale du niveau du cimetière](/assets/images/gaming/unstant/cemetary___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) | ![Présentation architecturale du niveau de la gare](/assets/images/gaming/unstant/station___240-339-webp~_400-566-webp~_600-848-webp~_820-1159-webp~_1400-1979-webp~_1600-2262-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -85,6 +85,6 @@ Ces documents ont exigé un effort particulier pour adapter le langage tradition
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![Vue de dessus des plans architecturaux d'Unstant, imprimés sur des feuilles transparentes pour rendre compte du chevauchement des espaces](/assets/images/gaming/unstant/plans1__240-239-webp_240-239_400-398-webp_400-398_600-596-webp_600-596_820-815-webp_820-815_1023-1017-webp_1023-1017.jpg) | ![Photographie détaillée du chevauchement des plans transparents pour Unstant](/assets/images/gaming/unstant/plans2__240-238-webp_240-238_400-397-webp_400-397_600-595-webp_600-595_820-814-webp_820-814_1032-1024-webp_1032-1024.jpg) | ![Photo de la section cylindrique des niveaux d'Unstant, rendant compte de l'espace en boucle](/assets/images/gaming/unstant/section__240-136-webp_240-136_400-226-webp_400-226_600-339-webp_600-339_820-464-webp_820-464_1400-792-webp_1400-792_1582-895-webp_1582-895.jpg) | ![Photo de la maquette d'Unstant](/assets/images/gaming/unstant/model1__240-107-webp_240-107_400-179-webp_400-179_600-268-webp_600-268_820-366-webp_820-366_1400-626-webp_1400-626_1600-715-webp_1600-715.jpg) | ![Détail de la maquette d'Unstant, avec des tubes transparents représentant la téléportation du joueur](/assets/images/gaming/unstant/model2__240-241-webp_240-241_400-402-webp_400-402_600-604-webp_600-604_682-686-webp_682-686.jpg) |
+| ![Vue de dessus des plans architecturaux d'Unstant, imprimés sur des feuilles transparentes pour rendre compte du chevauchement des espaces](/assets/images/gaming/unstant/plans1__240-239-webp~_400-398-webp~_600-596-webp~_820-815-webp~_1023-1017-webp~.jpg) | ![Photographie détaillée du chevauchement des plans transparents pour Unstant](/assets/images/gaming/unstant/plans2__240-238-webp~_400-397-webp~_600-595-webp~_820-814-webp~_1032-1024-webp~.jpg) | ![Photo de la section cylindrique des niveaux d'Unstant, rendant compte de l'espace en boucle](/assets/images/gaming/unstant/section__240-136-webp~_400-226-webp~_600-339-webp~_820-464-webp~_1400-792-webp~_1582-895-webp~.jpg) | ![Photo de la maquette d'Unstant](/assets/images/gaming/unstant/model1__240-107-webp~_400-179-webp~_600-268-webp~_820-366-webp~_1400-626-webp~_1600-715-webp~.jpg) | ![Détail de la maquette d'Unstant, avec des tubes transparents représentant la téléportation du joueur](/assets/images/gaming/unstant/model2__240-241-webp~_400-402-webp~_600-604-webp~_682-686-webp~.jpg) |
 
 <!-- prettier-ignore end -->

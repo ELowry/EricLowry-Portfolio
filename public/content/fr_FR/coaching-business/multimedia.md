@@ -19,11 +19,11 @@ Mon but a toujours été de produire un message clair, professionnel et engagean
 
 J'ai conçu la quasi-totalité des logos et construit la stratégie visuelle et marketing pour l'ensemble des projets de DLS, dont CinQ, mais également divers projets communs avec des partenaires.
 
-![Capture d'écran du catalogue de formations CinQ](/assets/images/websites/CinQ/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Capture d'écran du catalogue de formations CinQ](/assets/images/websites/CinQ/programs__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 La société DLS et le projet CinQ ont évolué sur plusieurs années durant lesquelles j'étais en charge de faire constamment évoluer le design, l'identité visuelle et la production de contenus multimédias liés aux produits. Le défi avec cette évolution permanente a été de trouver le juste équilibre entre asseoir une marque reconnaissable dans le monde de l'entreprise, tout en utilisant des codes esthétiques empruntés aux technologies du jeu vidéo qui forment la base de nos produits.
 
-![Capture d'écran de la page web listant les articles et podcasts CinQ](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Capture d'écran de la page web listant les articles et podcasts CinQ](/assets/images/websites/CinQ/content__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Production vidéo et podcast
 
@@ -37,7 +37,7 @@ Ces émissions ont été enregistrées entièrement en distanciel à l'aide d'ou
 
 #### Contenus courts (_shorts_)
 
-![A screenshot of the CinQ YouTube Shorts feed](/assets/images/coaching-business/multimedia/shorts__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![A screenshot of the CinQ YouTube Shorts feed](/assets/images/coaching-business/multimedia/shorts__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 J'ai monté des dizaines de vidéos verticales (shorts/reels) à destination des réseaux sociaux. Mon rôle était de définir les sujets pour chaque vidéo, d'accompagner les membres de l'équipe, les partenaires et les clients dans leur enregistrement, puis de peaufiner la vidéo avant de la poster. L'objectif de ces vidéos était généralement de susciter l'intérêt pour CinQ et d'accroître la notoriété de la marque.
 
@@ -51,7 +51,7 @@ J'étais également chargé de diriger, d'enregistrer et de monter les interview
 
 Au fil des années, j'ai relu, corrigé, formaté et publié plus de 330 articles sur Medium, Substack, LinkedIn et le blog de l'entreprise.
 
-![A screenshot of the DLS Obsidian vault with an article and its relationships to others](/assets/images/coaching-business/multimedia/obsidian__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![A screenshot of the DLS Obsidian vault with an article and its relationships to others](/assets/images/coaching-business/multimedia/obsidian__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 Cela a nécessité de mettre en place et de gérer un processus de gestion de contenu complexe, incluant les points suivants:
 

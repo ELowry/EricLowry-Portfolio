@@ -12,7 +12,7 @@
 >
 > 🌐 [luzech.co.uk](https://luzech.co.uk/)
 
-![Capture d'écran de la page d'accueil de LUZECH](/assets/images/websites/luzech/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Capture d'écran de la page d'accueil de LUZECH](/assets/images/websites/luzech/intro__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Contexte
 
@@ -22,7 +22,7 @@ L'objectif principal du site est de présenter ses compétences tout en offrant 
 
 ### UX et design
 
-![Guide de style pour la marque LUZECH  ](/assets/images/websites/luzech/style__240-284-webp_240-284_330-390-webp_330-390.jpg)
+![Guide de style pour la marque LUZECH  ](/assets/images/websites/luzech/style__240-284-webp~_330-390-webp~.jpg)
 
 Après plusieurs itérations sur le design du logo, nous avons ancré l'identité visuelle de la marque autour d'une palette de couleurs vives et percutantes. Il souhaitait que le style reflète la façon dont son travail fait constamment le pont entre le monde numérique et l'humain.
 
@@ -38,7 +38,7 @@ Pour marquer le passage d'un domaine d'expertise à un autre, chaque section du 
 <!-- prettier-ignore -->
 | Galerie |  |  |
 | -- | -- | -- |
-| ![Capture d'écran de la section "Leadership et Future of Work" du site](/assets/images/websites/luzech/future__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran de la section "Immersive simulation" du site](/assets/images/websites/luzech/immersive__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran de la section "Data et Tech" du site](/assets/images/websites/luzech/data__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran de la section "Leadership et Future of Work" du site](/assets/images/websites/luzech/future__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran de la section "Immersive simulation" du site](/assets/images/websites/luzech/immersive__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran de la section "Data et Tech" du site](/assets/images/websites/luzech/data__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

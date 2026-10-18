@@ -19,7 +19,7 @@ This archive is a collection of legacy projects, early freelance work, and sites
 >
 > 🌐 [maia-archi.com](http://www.maia-archi.com/)
 
-![Screenshot of the Maia Architectes homepage](/assets/images/websites/archive/maia__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the Maia Architectes homepage](/assets/images/websites/archive/maia__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 I was tasked with taking this architecture firm's physical paper portfolio and translating it into a fully functional digital presence. Working from their existing brand identity and a raw list of project descriptions and images, I built the site using a heavily modified WordPress theme.
 
@@ -39,7 +39,7 @@ While I no longer maintain the site (resulting in some out-of-date APIs and lack
 >
 > 🌐 [View on the Internet Archive](https://web.archive.org/web/20180103153941/http://pennsardinpdx.com/)
 
-![Screenshot of the Penn Sardin website](/assets/images/websites/archive/pennsardin__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the Penn Sardin website](/assets/images/websites/archive/pennsardin__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 Penn Sardin was a long-running conceptual American pop-up restaurant and wine bar focused on the historical and culinary fusion of the US West Coast and Brittany, France. I collaborated closely with their graphic designer to build a simple, elegant website that put the focus entirely on their visual identity and messaging.
 
@@ -58,7 +58,7 @@ Using a barebones WordPress theme, I applied minimal styling to match their bran
 >
 > 🌐 [oobpdx.com](https://oobpdx.com/)
 
-![Screenshot of the Olympia Oyster Bar homepage](/assets/images/websites/archive/oob__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the Olympia Oyster Bar homepage](/assets/images/websites/archive/oob__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 A streamlined, rapid-deployment project for a Portland-based oyster bar in Oregon.  
 This was a purely functional exercise in getting a local business online quickly and cleanly. I handled the WordPress installation, applied a simple theme, and executed minimal customization work to establish their digital footprint.  

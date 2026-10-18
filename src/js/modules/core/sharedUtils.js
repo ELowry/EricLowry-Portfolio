@@ -22,15 +22,36 @@ export function parseImageVariant(imageStr) {
 			const variantSizes = parts.slice(1).join('__');
 			const tokens = variantSizes.split('_');
 
-			const parsedTokens = tokens.map((token) => {
+			const parsedTokens = tokens.flatMap((token, index) => {
 				const tokenParts = token.split('-');
-				return {
-					token: token,
-					w: parseInt(tokenParts[0], 10),
-					h: parseInt(tokenParts[1], 10),
-					isWebp: token.includes('-webp'),
-					isAvif: token.includes('-avif'),
-				};
+				const width = parseInt(tokenParts[0], 10);
+				const height = parseInt(tokenParts[1], 10);
+
+				let extensions = [originalExt];
+
+				for (let i = 2; i < tokenParts.length; i++) {
+					if (!/^\d+(?:\.\d+)?x$/i.test(tokenParts[i])) {
+						if (tokenParts[i].includes('~')) {
+							extensions = tokenParts[i].split('~').map((ext) => {
+								return ext === '' ? originalExt : `.${ext}`;
+							});
+						} else {
+							extensions = [`.${tokenParts[i]}`];
+						}
+					}
+				}
+
+				const isLastToken = index === tokens.length - 1;
+
+				return extensions.map((ext) => ({
+					token: `${width}-${height}`,
+					w: width,
+					h: height,
+					isWebp: ext === '.webp',
+					isAvif: ext === '.avif',
+					ext: ext,
+					isOriginal: isLastToken && ext === originalExt,
+				}));
 			});
 
 			parsedTokens.sort((a, b) => {
@@ -54,18 +75,12 @@ export function parseImageVariant(imageStr) {
 					return !t.isWebp && !t.isAvif;
 				}) || validTokens[0];
 
-			if (!bestToken.isWebp && !bestToken.isAvif && bestToken.w === maxAvailableW) {
-				// The largest fallback image always uses the full tokenized filename
+			if (bestToken.isOriginal) {
+				// The original fallback image always uses the full tokenized filename
 				finalImageUrl = `/assets/images/${imageStr}`;
 			} else {
 				// All other variants use the short token name
-				let sExt = originalExt;
-				if (bestToken.isAvif) {
-					sExt = '.avif';
-				} else if (bestToken.isWebp) {
-					sExt = '.webp';
-				}
-				finalImageUrl = `/assets/images/${base}__${bestToken.token}${sExt}`;
+				finalImageUrl = `/assets/images/${base}__${bestToken.token}${bestToken.ext}`;
 			}
 
 			imgWidth = bestToken.w.toString();

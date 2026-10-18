@@ -108,7 +108,7 @@ async function generateStaticPage(node, routePath) {
 	const safeTitle = escapeHtml(pageTitle);
 	const safeDesc = escapeHtml(pageDesc);
 
-	let ogImage = `${BASE_URL}/assets/images/eric_lowry_portrait__240-240-webp_240-240.jpg`;
+	let ogImage = `${BASE_URL}/assets/images/eric_lowry_portrait__240-240-webp~.jpg`;
 	let ogWidth = '1200';
 	let ogHeight = '630';
 

@@ -11,7 +11,7 @@ Ces rendus font partie d'un projet d'aménagement paysager sur lequel j'ai trava
 <!-- prettier-ignore -->
 | Galerie: |  |  |
 | -- | -- | -- |
-| ![Vue 3D d'un projet de parc public](/assets/images/architecture/3Dgallery/park-3D1__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Vue 3D d'un projet de parc public](/assets/images/architecture/3Dgallery/park-3D2__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Vue 3D d'un projet de parc public](/assets/images/architecture/3Dgallery/park-3D3__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Vue 3D d'un projet de parc public](/assets/images/architecture/3Dgallery/park-3D1__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Vue 3D d'un projet de parc public](/assets/images/architecture/3Dgallery/park-3D2__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Vue 3D d'un projet de parc public](/assets/images/architecture/3Dgallery/park-3D3__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -22,14 +22,14 @@ Ces images proviennent d'un projet en fin de licence d'architecture. L'objectif 
 <!-- prettier-ignore -->
 | Galerie: |  |  |
 | -- | -- | -- |
-| ![Vue de dessus en rendu 3D d'un projet de skatepark, de logements et d'infrastructures publiques](/assets/images/architecture/3Dgallery/skate-3D1__240-240-webp_240-240_400-400-webp_400-400_600-600-webp_600-600_820-820-webp_820-820_1400-1400-webp_1400-1400.jpg) | ![Vue de dessus en rendu 3D d'un projet de skatepark, de logements et d'infrastructures publiques avec le plan 2D superposé](/assets/images/architecture/3Dgallery/skate-3D2__240-240-webp_240-240_400-400-webp_400-400_600-600-webp_600-600_820-820-webp_820-820_1400-1400-webp_1400-1400_1920-1920-webp_1920-1920.jpg) | ![Vue en rendu 3D du skatepark du projet](/assets/images/architecture/3Dgallery/skate-3D3__240-192-webp_240-192_400-320-webp_400-320_600-480-webp_600-480_820-656-webp_820-656_1000-800-webp_1000-800.jpg) |
+| ![Vue de dessus en rendu 3D d'un projet de skatepark, de logements et d'infrastructures publiques](/assets/images/architecture/3Dgallery/skate-3D1__240-240-webp~_400-400-webp~_600-600-webp~_820-820-webp~_1400-1400-webp~.jpg) | ![Vue de dessus en rendu 3D d'un projet de skatepark, de logements et d'infrastructures publiques avec le plan 2D superposé](/assets/images/architecture/3Dgallery/skate-3D2__240-240-webp~_400-400-webp~_600-600-webp~_820-820-webp~_1400-1400-webp~_1920-1920-webp~.jpg) | ![Vue en rendu 3D du skatepark du projet](/assets/images/architecture/3Dgallery/skate-3D3__240-192-webp~_400-320-webp~_600-480-webp~_820-656-webp~_1000-800-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
 <!-- prettier-ignore -->
 | Galerie |
 | -- |
-|![Élévation 2D de la façade de la partie logements sociaux du projet](/assets/images/architecture/3Dgallery/skate-3D4__240-48-webp_240-48_400-80-webp_400-80_600-120-webp_600-120_820-164-webp_820-164_1400-280-webp_1400-280_1920-384-webp_1920-384.jpg) |
+|![Élévation 2D de la façade de la partie logements sociaux du projet](/assets/images/architecture/3Dgallery/skate-3D4__240-48-webp~_400-80-webp~_600-120-webp~_820-164-webp~_1400-280-webp~_1920-384-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -40,7 +40,7 @@ Ces images proviennent d'un projet expérimental de courte durée organisé sur 
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |
 | -- | -- | -- | -- |
-| ![Concept de croquis 3D pour un projet](/assets/images/architecture/3Dgallery/ribbon-3D1__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Coupe conceptuelle 3D pour un projet](/assets/images/architecture/3Dgallery/ribbon-3D2__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Rendu 3D d'un projet de bâtiment](/assets/images/architecture/3Dgallery/ribbon-3D4__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Rendu 3D d'un projet de tour](/assets/images/architecture/3Dgallery/ribbon-3D3__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Concept de croquis 3D pour un projet](/assets/images/architecture/3Dgallery/ribbon-3D1__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Coupe conceptuelle 3D pour un projet](/assets/images/architecture/3Dgallery/ribbon-3D2__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Rendu 3D d'un projet de bâtiment](/assets/images/architecture/3Dgallery/ribbon-3D4__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Rendu 3D d'un projet de tour](/assets/images/architecture/3Dgallery/ribbon-3D3__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -51,7 +51,7 @@ Le jeu vidéo de formation [CinQ](/content/fr_FR/gaming/CinQ.md) a initialement 
 <!-- prettier-ignore -->
 | Galerie |  |
 | -- | -- |
-| ![Montage montrant comment les cartes du système d'égouts et de ventilation sont générées à partir d'un petit fichier png avec des nœuds codés par couleur et des assets uniques](/assets/images/gaming/cinq/sewers__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran de l'intérieur du système de ventilation de CinQ avec un personnage éclairant des lasers rouges avec une lampe torche](/assets/images/architecture/3Dgallery/CinQ-vent__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Montage montrant comment les cartes du système d'égouts et de ventilation sont générées à partir d'un petit fichier png avec des nœuds codés par couleur et des assets uniques](/assets/images/gaming/cinq/sewers__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran de l'intérieur du système de ventilation de CinQ avec un personnage éclairant des lasers rouges avec une lampe torche](/assets/images/architecture/3Dgallery/CinQ-vent__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -62,6 +62,6 @@ J'ai pris part à la création d'un costume inspiré d'une créature du jeu vid�
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![Le premier modèle 3D brut à côté d'une image du personnage original du jeu](/assets/images/architecture/3Dgallery/mask-0__240-146-webp_240-146_400-244-webp_400-244_600-365-webp_600-365_820-499-webp_820-499_1210-737-webp_1210-737.jpg) | ![Le premier modèle propre du masque](/assets/images/architecture/3Dgallery/mask-1__240-293-webp_240-293_400-489-webp_400-489_600-734-webp_600-734_669-818-webp_669-818.jpg) | ![Capture d'écran d'un scan 3D du visage du porteur avec des supports permettant au masque de reposer confortablement sur son visage](/assets/images/architecture/3Dgallery/mask-2__240-275-webp_240-275_400-459-webp_400-459_600-689-webp_600-689_806-925-webp_806-925.jpg) | ![Le modèle 3D final du masque](/assets/images/architecture/3Dgallery/mask-3__240-243-webp_240-243_400-405-webp_400-405_600-608-webp_600-608_820-831-webp_820-831_893-905-webp_893-905.jpg) | ![Le masque, imprimé en 3D et peint, porté dans le cadre d'un costume complet](/assets/images/architecture/3Dgallery/mask-4__240-320-webp_240-320_400-533-webp_400-533_600-800-webp_600-800_820-1093-webp_820-1093_1400-1867-webp_1400-1867_1440-1920-webp_1440-1920.jpg) |
+| ![Le premier modèle 3D brut à côté d'une image du personnage original du jeu](/assets/images/architecture/3Dgallery/mask-0__240-146-webp~_400-244-webp~_600-365-webp~_820-499-webp~_1210-737-webp~.jpg) | ![Le premier modèle propre du masque](/assets/images/architecture/3Dgallery/mask-1__240-293-webp~_400-489-webp~_600-734-webp~_669-818-webp~.jpg) | ![Capture d'écran d'un scan 3D du visage du porteur avec des supports permettant au masque de reposer confortablement sur son visage](/assets/images/architecture/3Dgallery/mask-2__240-275-webp~_400-459-webp~_600-689-webp~_806-925-webp~.jpg) | ![Le modèle 3D final du masque](/assets/images/architecture/3Dgallery/mask-3__240-243-webp~_400-405-webp~_600-608-webp~_820-831-webp~_893-905-webp~.jpg) | ![Le masque, imprimé en 3D et peint, porté dans le cadre d'un costume complet](/assets/images/architecture/3Dgallery/mask-4__240-320-webp~_400-533-webp~_600-800-webp~_820-1093-webp~_1400-1867-webp~_1440-1920-webp~.jpg) |
 
 <!-- prettier-ignore end -->

@@ -23,14 +23,14 @@ What started as a single PowerShell script evolved into a fun side project, and 
 
 ## How it Works
 
-![A screenshot of a WinGet Updater terminal window ](/assets/images/osd/winget-updater/winget-updater__240-120-webp_240-120_400-200-webp_400-200_600-300-webp_600-300_820-410-webp_820-410_1280-640-webp_1280-640.jpg)
+![A screenshot of a WinGet Updater terminal window ](/assets/images/osd/winget-updater/winget-updater__240-120-webp~_400-200-webp~_600-300-webp~_820-410-webp~_1280-640-webp~.jpg)
 
 WinGet Updater is built as a tool that lets you automatically or manually use WinGet to update apps, including an option to define which apps get updated automatically and which get ignored. It can optionally be configured as a "set-and-forget" task that runs daily on startup and/or logon.
 
 When WinGet Updater runs, it only shows a Terminal window if it encounters an application update that has not yet been assigned an update preference. A silent mode is also available to prevent it from displaying a UI when running automatically.
 A simple interactive menu allows the user to decide whether apps should update automatically in the future, require manual approval, or be blocked entirely (editable also after the fact through a sub-menu).
 
-![A screenshot of the WinGet Updater configuration screen ](/assets/images/osd/winget-updater/config__240-182-webp_240-182_400-303-webp_400-303_600-454-webp_600-454_754-571-webp_754-571.jpg)
+![A screenshot of the WinGet Updater configuration screen ](/assets/images/osd/winget-updater/config__240-182-webp~_400-303-webp~_600-454-webp~_754-571-webp~.jpg)
 
 ## Keeping Things Simple
 

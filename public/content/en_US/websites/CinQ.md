@@ -37,7 +37,7 @@ The primary design challenge around CinQ has always been creating a visual ident
 <!-- prettier-ignore -->
 | Gallery |  |
 | -- | -- |
-| ![Screenshot of the CinQ website home page](/assets/images/websites/CinQ/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the main user account dashboard](/assets/images/websites/CinQ/account-home__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of the CinQ website home page](/assets/images/websites/CinQ/home-page__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of the main user account dashboard](/assets/images/websites/CinQ/account-home__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -51,7 +51,7 @@ Transitioning to Statamic (powered by [Laravel](https://laravel.com/)) allowed m
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |
 | -- | -- | -- | -- |
-| ![Screenshot of the CinQ workshops catalog](/assets/images/websites/CinQ/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of a CinQ workshop listing](/assets/images/websites/CinQ/workshop__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of a CinQ workshop sign-up calendar](/assets/images/websites/CinQ/sign-up__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the CinQ articles and podcast listing](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of the CinQ workshops catalog](/assets/images/websites/CinQ/programs__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of a CinQ workshop listing](/assets/images/websites/CinQ/workshop__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of a CinQ workshop sign-up calendar](/assets/images/websites/CinQ/sign-up__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of the CinQ articles and podcast listing](/assets/images/websites/CinQ/content__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -69,7 +69,7 @@ To manage a fully bilingual site (English/French) without relying on paid multi-
 
 Specifically, I have split the site into a shared "core" repository (framework, config, theme) and dedicated content repositories for each language. This is then automated and managed by a custom suite of automated tools that I developed from scratch:
 
-![Screenshot of the CinQ website local development tool ](/assets/images/websites/CinQ/script__240-186-webp_240-186_400-311-webp_400-311_600-466-webp_600-466_637-495-webp_637-495.jpg)
+![Screenshot of the CinQ website local development tool ](/assets/images/websites/CinQ/script__240-186-webp~_400-311-webp~_600-466-webp~_637-495-webp~.jpg)
 
 - **Local CLI Management:**  
   A custom Windows interactive CLI script manages local Vite dev servers, syncs language contexts, and pipes package updates through an AI generator to draft automated commit summaries.
@@ -86,7 +86,7 @@ I built [account.playcinq.com](https://account.playcinq.com) as a fully custom P
 <!-- prettier-ignore -->
 | Gallery |  |
 | -- | -- |
-| ![Screenshot of the CinQ scorecard system](/assets/images/websites/CinQ/scorecard__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of a CinQ account page](/assets/images/websites/CinQ/account__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of the CinQ scorecard system](/assets/images/websites/CinQ/scorecard__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of a CinQ account page](/assets/images/websites/CinQ/account__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

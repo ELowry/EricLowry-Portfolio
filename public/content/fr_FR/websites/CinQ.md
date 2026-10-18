@@ -38,7 +38,7 @@ Le principal défi de conception autour de CinQ a toujours été de créer une i
 <!-- prettier-ignore -->
 | Galerie |  |
 | -- | -- |
-| ![Capture d'écran de la page d'accueil du site web de CinQ](/assets/images/websites/CinQ/home-page__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran du tableau de bord principal du compte utilisateur](/assets/images/websites/CinQ/account-home__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran de la page d'accueil du site web de CinQ](/assets/images/websites/CinQ/home-page__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran du tableau de bord principal du compte utilisateur](/assets/images/websites/CinQ/account-home__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -52,7 +52,7 @@ En passant sur Statamic (qui utilise la technologie [Laravel](https://laravel.co
 <!-- prettier-ignore -->
 | Galerie: |  |  |  |
 | -- | -- | -- | -- |
-| ![Capture d'écran du catalogue d'ateliers de CinQ](/assets/images/websites/CinQ/programs__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran d'une fiche d'atelier CinQ](/assets/images/websites/CinQ/workshop__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran d'un calendrier d'inscription aux ateliers CinQ](/assets/images/websites/CinQ/sign-up__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran de la liste des articles et podcasts de CinQ](/assets/images/websites/CinQ/content__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran du catalogue d'ateliers de CinQ](/assets/images/websites/CinQ/programs__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran d'une fiche d'atelier CinQ](/assets/images/websites/CinQ/workshop__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran d'un calendrier d'inscription aux ateliers CinQ](/assets/images/websites/CinQ/sign-up__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran de la liste des articles et podcasts de CinQ](/assets/images/websites/CinQ/content__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -70,7 +70,7 @@ Pour publier un site entièrement bilingue (anglais/français) sans dépendre de
 
 J'ai divisé le site en un dépôt "_core_" commun (framework, configuration, thème) et des dépôts de contenu dédiés pour chaque langue. J'ai ensuite automatisé le tout avec une série de scripts Bash et PowerShell codés pour l'occasion:
 
-![Capture d'écran de l'outil de développement local du site web de CinQ ](/assets/images/websites/CinQ/script__240-186-webp_240-186_400-311-webp_400-311_600-466-webp_600-466_637-495-webp_637-495.jpg)
+![Capture d'écran de l'outil de développement local du site web de CinQ ](/assets/images/websites/CinQ/script__240-186-webp~_400-311-webp~_600-466-webp~_637-495-webp~.jpg)
 
 - **Gestion de CLI en local:**  
   Un script interactif personnalisé PowerShell et Command Prompt Windows permet de gérer un environnement de test local utilisant Vite, de synchroniser les branches traduites et de passer les mises à jour de packages par un LLM en charge de rédiger les messages de commit.
@@ -87,7 +87,7 @@ J'ai codé le site [account.playcinq.com](https://account.playcinq.com) entière
 <!-- prettier-ignore -->
 | Galerie |  |
 | -- | -- |
-| ![Capture d'écran du système d'évaluation CinQ](/assets/images/websites/CinQ/scorecard__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran d'une page de compte CinQ](/assets/images/websites/CinQ/account__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran du système d'évaluation CinQ](/assets/images/websites/CinQ/scorecard__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran d'une page de compte CinQ](/assets/images/websites/CinQ/account__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

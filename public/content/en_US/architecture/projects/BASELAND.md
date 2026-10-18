@@ -14,7 +14,7 @@
 
 During my internship at the BASE landscape design and architecture firm, the leadership took an interest in my background bridging 3D visualization and video game design. They tasked me with overhauling the visual identity and workflow of "BASELAND 2050", a massive, collaborative digital landscape project:
 
-![The initial state of the BASELAND project](/assets/images/architecture/BASELAND/initial__240-104-webp_240-104_400-173-webp_400-173_600-260-webp_600-260_820-355-webp_820-355_1400-607-webp_1400-607_1920-832-webp_1920-832.png)
+![The initial state of the BASELAND project](/assets/images/architecture/BASELAND/initial__240-104-webp~_400-173-webp~_600-260-webp~_820-355-webp~_1400-607-webp~_1920-832-webp~.png)
 
 BASELAND functioned as a centralized, shared SketchUp file where all team members were encouraged to contribute ideas and drop in elements from their individual projects.  
 My primary objective was to transform this chaotic, crowdsourced model into a unified environment that strictly aligned with the firm's established design templates and presentation standards.
@@ -27,7 +27,7 @@ After running initial tests, however, I quickly realized this was the wrong path
 <!-- prettier-ignore -->
 | Gallery: |  |
 | -- | -- |
-| ![Rough render using Vue xStream](/assets/images/architecture/BASELAND/vue1__240-135-webp_240-135_400-226-webp_400-226_600-339-webp_600-339_785-443-webp_785-443.jpg) | ![Renderging tests using Vue xStream](/assets/images/architecture/BASELAND/vue2__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1600-900-webp_1600-900.jpg) |
+| ![Rough render using Vue xStream](/assets/images/architecture/BASELAND/vue1__240-135-webp~_400-226-webp~_600-339-webp~_785-443-webp~.jpg) | ![Renderging tests using Vue xStream](/assets/images/architecture/BASELAND/vue2__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1600-900-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
@@ -40,19 +40,19 @@ Once the new art direction was approved, I executed a complete overhaul of the p
 - **Asset Creation:**  
   I designed a bespoke texture pack and modeled custom, optimized 3D assets for trees, rocks, and various types of vegetation.
 
-![A portion of the texture pack I built ](/assets/images/architecture/BASELAND/textures__240-148-webp_240-148_400-246-webp_400-246_600-369-webp_600-369.jpg)
+![A portion of the texture pack I built ](/assets/images/architecture/BASELAND/textures__240-148-webp~_400-246-webp~_600-369-webp~.jpg)
 
 <!-- prettier-ignore -->
 | Gallery |
 | -- |
-| ![A set of 3D tree assets based on the studio's 2D tree models](/assets/images/architecture/BASELAND/trees__240-48-webp_240-48_400-80-webp_400-80_600-120-webp_600-120_820-164-webp_820-164_1400-280-webp_1400-280_1920-384-webp_1920-384.jpg) |
+| ![A set of 3D tree assets based on the studio's 2D tree models](/assets/images/architecture/BASELAND/trees__240-48-webp~_400-80-webp~_600-120-webp~_820-164-webp~_1400-280-webp~_1920-384-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
 - **Model Overhaul:**  
   I upgraded the entire existing BASELAND model to reflect the new stylized aesthetic.
 
-![A 3D view of the upgraded landscape](/assets/images/architecture/BASELAND/model__240-81-webp_240-81_400-135-webp_400-135_600-202-webp_600-202_820-276-webp_820-276_1002-337-webp_1002-337.png)
+![A 3D view of the upgraded landscape](/assets/images/architecture/BASELAND/model__240-81-webp~_400-135-webp~_600-202-webp~_820-276-webp~_1002-337-webp~.png)
 
 - **Workflow:**  
   To ensure that the project would not degrade back to using flat colors and sticks for trees, I engineered an automated import system. Whenever a team member imported a new contribution, the system would automatically apply the correct stylized materials and assets.
@@ -62,6 +62,6 @@ Once the new art direction was approved, I executed a complete overhaul of the p
 <!-- prettier-ignore -->
 | Gallery: |  |  |  |  |
 | -- | -- | -- | -- | -- |
-| ![A n axonometric view of a large 3D environment](/assets/images/architecture/BASELAND/lake__240-180-webp_240-180_400-300-webp_400-300_600-450-webp_600-450_800-600-webp_800-600.jpg) | ![A 3D render of a plaza with trees growing out of a large pool](/assets/images/architecture/BASELAND/plaza__240-180-webp_240-180_400-300-webp_400-300_600-450-webp_600-450_800-600-webp_800-600.jpg) | ![A view of the entire BASLEAND project](/assets/images/architecture/BASELAND/cube__240-180-webp_240-180_400-300-webp_400-300_600-450-webp_600-450_800-600-webp_800-600.jpg) | ![A 3D render using my 3D tree models in an open park](/assets/images/architecture/BASELAND/trees__240-180-webp_240-180_400-300-webp_400-300_600-450-webp_600-450_800-600-webp_800-600.jpg) | ![An axonometric view of a 3D environment with a rock formation and trees](/assets/images/architecture/BASELAND/hill__240-180-webp_240-180_400-300-webp_400-300_600-450-webp_600-450_800-600-webp_800-600.jpg) |
+| ![A n axonometric view of a large 3D environment](/assets/images/architecture/BASELAND/lake__240-180-webp~_400-300-webp~_600-450-webp~_800-600-webp~.jpg) | ![A 3D render of a plaza with trees growing out of a large pool](/assets/images/architecture/BASELAND/plaza__240-180-webp~_400-300-webp~_600-450-webp~_800-600-webp~.jpg) | ![A view of the entire BASLEAND project](/assets/images/architecture/BASELAND/cube__240-180-webp~_400-300-webp~_600-450-webp~_800-600-webp~.jpg) | ![A 3D render using my 3D tree models in an open park](/assets/images/architecture/BASELAND/trees__240-180-webp~_400-300-webp~_600-450-webp~_800-600-webp~.jpg) | ![An axonometric view of a 3D environment with a rock formation and trees](/assets/images/architecture/BASELAND/hill__240-180-webp~_400-300-webp~_600-450-webp~_800-600-webp~.jpg) |
 
 <!-- prettier-ignore end -->

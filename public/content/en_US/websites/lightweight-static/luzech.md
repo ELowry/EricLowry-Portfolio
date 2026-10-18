@@ -12,7 +12,7 @@
 >
 > 🌐 [luzech.co.uk](https://luzech.co.uk/)
 
-![Screenshot of the LUZECH homepage](/assets/images/websites/luzech/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the LUZECH homepage](/assets/images/websites/luzech/intro__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Context
 
@@ -22,7 +22,7 @@ The site's primary goal is to outline his skillsets, while also providing a stre
 
 ### UX & Visual Design
 
-![Style guide for the LUZECH brand  ](/assets/images/websites/luzech/style__240-284-webp_240-284_330-390-webp_330-390.jpg)
+![Style guide for the LUZECH brand  ](/assets/images/websites/luzech/style__240-284-webp~_330-390-webp~.jpg)
 
 After iterating on a logo design, we anchored the brand's visual identity around a palette of striking, bold colors. He requested that the visual identity reflect how his work constantly bridges the gap between the digital realm and human culture.
 
@@ -38,7 +38,7 @@ To delineate the content clearly, each major section dynamically shifts the enti
 <!-- prettier-ignore -->
 | Gallery |  |  |
 | -- | -- | -- |
-| ![Screenshot of the "Leadership & Future of Work" section of the site](/assets/images/websites/luzech/future__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the "Immmersive simulation" section of the site](/assets/images/websites/luzech/immersive__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the "Data & Tech" section of the site](/assets/images/websites/luzech/data__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of the "Leadership & Future of Work" section of the site](/assets/images/websites/luzech/future__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of the "Immmersive simulation" section of the site](/assets/images/websites/luzech/immersive__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of the "Data & Tech" section of the site](/assets/images/websites/luzech/data__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

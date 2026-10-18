@@ -25,7 +25,7 @@ So for some projects on which I was working, I decided to try to fix my biggest 
 
 InputLayers is a layer-based filtering system built atop Unity's Input System, which eliminates the need to enable or disable input handling manually every time a new menu or mechanic gets enabled/added.
 
-![A graphic design representing how InputLayers filters inputs so only the systems and UIs you want react to incoming inputs](/assets/images/osd/inputlayers/concept__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
+![A graphic design representing how InputLayers filters inputs so only the systems and UIs you want react to incoming inputs](/assets/images/osd/inputlayers/concept__240-160-webp~_400-267-webp~_600-400-webp~_820-546-webp~_1400-933-webp~_1920-1279-webp~_1951-1300-webp~.png)
 
 It achieves this by replacing default `InputActions` with custom `LayeredActions`. These actions still map to standard Unity inputs, but act as a filtered pass-through: they will only register an input if their specifically assigned Layer is currently active.
 
@@ -43,11 +43,11 @@ To handle complex games, layers are organized into Priorities. This ensures that
 
 In order to publish this for others to use, I felt it was important to ensure that it had a good user experience. I worked to built a frictionless implementation experience on top of a robust underlying system.
 
-![A screenshot of a Unity editor window with the InputLayers configuration menu open](/assets/images/osd/inputlayers/menu__240-130-webp_240-130_400-216-webp_400-216_600-324-webp_600-324_820-443-webp_820-443_1400-756-webp_1400-756_1920-1037-webp_1920-1037.jpg)
+![A screenshot of a Unity editor window with the InputLayers configuration menu open](/assets/images/osd/inputlayers/menu__240-130-webp~_400-216-webp~_600-324-webp~_820-443-webp~_1400-756-webp~_1920-1037-webp~.jpg)
 
 Using a `SignletonScriptableObject` pattern as the backbone for all the state management, hierarchy validation, and event broadcasting makes it easy for the asset to be easily used simultaneously with the following two workflows:
 
-![A graphic design indicating that InputLayers is fully functional using both the Unity Editor, or through code](/assets/images/osd/inputlayers/usability__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
+![A graphic design indicating that InputLayers is fully functional using both the Unity Editor, or through code](/assets/images/osd/inputlayers/usability__240-160-webp~_400-267-webp~_600-400-webp~_820-546-webp~_1400-933-webp~_1920-1279-webp~_1951-1300-webp~.png)
 
 ### The Inspector Workflow
 

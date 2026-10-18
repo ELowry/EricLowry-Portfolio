@@ -25,7 +25,7 @@ Dans le cadre de plusieurs projets Unity3D sur lesquels je travaillais, j'ai dé
 
 InputLayers est un système de filtrage par calques qui s'ajoute à l'_Input System_ d'Unity. Il évite de devoir activer ou désactiver manuellement la prise en compte des inputs par divers modules à chaque fois qu'un nouveau menu ou une nouvelle mécanique est activée ou ajoutée.
 
-![Conception graphique représentant comment InputLayers filtre les inputs pour que seuls les systèmes et les interfaces que vous voulez réagissent aux commandes entrantes](/assets/images/osd/inputlayers/concept__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
+![Conception graphique représentant comment InputLayers filtre les inputs pour que seuls les systèmes et les interfaces que vous voulez réagissent aux commandes entrantes](/assets/images/osd/inputlayers/concept__240-160-webp~_400-267-webp~_600-400-webp~_820-546-webp~_1400-933-webp~_1920-1279-webp~_1951-1300-webp~.png)
 
 Pour ce faire, je remplace les `InputActions` par défaut par des `LayeredActions`. Ces actions font toujours appel au système d'inputs standards d'Unity, mais filtrent chaque appel: elles n'enregistrent un input que si le calque qui lui est spécifiquement assigné est actuellement actif. Le système repose sur une hiérarchie en pile (stack):
 
@@ -41,11 +41,11 @@ Afin d’être utile dans le cas de jeux plus complexes, les calques sont organi
 
 Pour qu'InputLayers soit utilisable par autrui, j'ai voulu soigner l'expérience utilisateur·rice dans Unity. Ainsi, l'asset offre une expérience sans friction construite par-dessus un système sous-jacent robuste.
 
-![Capture d'écran d'une fenêtre de l'éditeur Unity avec le menu de configuration d'InputLayers ouvert](/assets/images/osd/inputlayers/menu__240-130-webp_240-130_400-216-webp_400-216_600-324-webp_600-324_820-443-webp_820-443_1400-756-webp_1400-756_1920-1037-webp_1920-1037.jpg)
+![Capture d'écran d'une fenêtre de l'éditeur Unity avec le menu de configuration d'InputLayers ouvert](/assets/images/osd/inputlayers/menu__240-130-webp~_400-216-webp~_600-324-webp~_820-443-webp~_1400-756-webp~_1920-1037-webp~.jpg)
 
 L'utilisation d'un modèle `SingletonScriptableObject` comme colonne vertébrale pour toute la gestion d'états, la validation de la hiérarchie et la diffusion des événements permet d'utiliser l'asset facilement et simultanément avec deux méthodes:
 
-![Conception graphique indiquant qu'InputLayers est entièrement fonctionnel via l'éditeur Unity ou via le code](/assets/images/osd/inputlayers/usability__240-160-webp_240-160_400-267-webp_400-267_600-400-webp_600-400_820-546-webp_820-546_1400-933-webp_1400-933_1920-1279-webp_1920-1279_1951-1300-webp_1951-1300.png)
+![Conception graphique indiquant qu'InputLayers est entièrement fonctionnel via l'éditeur Unity ou via le code](/assets/images/osd/inputlayers/usability__240-160-webp~_400-267-webp~_600-400-webp~_820-546-webp~_1400-933-webp~_1920-1279-webp~_1951-1300-webp~.png)
 
 ### Via l'_inspecteur_
 

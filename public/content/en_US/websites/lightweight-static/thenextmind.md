@@ -12,7 +12,7 @@
 >
 > 🌐 [stephane-next-mind.web.app](https://stephane-next-mind.web.app/) _(Archived version of thenextmind.ai)_
 
-![Screenshot of the greeting message on the homepage](/assets/images/websites/thenextmind/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Screenshot of the greeting message on the homepage](/assets/images/websites/thenextmind/intro__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Context
 
@@ -22,7 +22,7 @@ Because the company's offerings are designed to be immersive, disruptive experie
 
 ### UX & Visual Design
 
-![A collage of inspiration images  ](/assets/images/websites/thenextmind/inspiration__240-270-webp_240-270_400-450-webp_400-450_480-540-webp_480-540.jpg)
+![A collage of inspiration images  ](/assets/images/websites/thenextmind/inspiration__240-270-webp~_400-450-webp~_480-540-webp~.jpg)
 
 To capture the consultancy's brand identity, I designed the interface using a subtle blend of terminal-like graphics and sleek and colorful modern UI, drawing heavy inspiration from Sci-Fi and retrofuturist media.
 
@@ -33,7 +33,7 @@ To add visual flair without overwhelming the content, I implemented a semi-trans
 <!-- prettier-ignore -->
 | Gallery |  |
 | -- | -- |
-| ![Screenshot of a workshop page with the animated ASCII decoration in view](/assets/images/websites/thenextmind/design__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Screenshot of the contact page, with Google Forms integrated and a dynamically dithered portrait of Stéphane Amarsy](/assets/images/websites/thenextmind/info__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Screenshot of a workshop page with the animated ASCII decoration in view](/assets/images/websites/thenextmind/design__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Screenshot of the contact page, with Google Forms integrated and a dynamically dithered portrait of Stéphane Amarsy](/assets/images/websites/thenextmind/info__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

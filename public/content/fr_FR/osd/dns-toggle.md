@@ -20,14 +20,14 @@
 Depuis Android 9, il est possible d'utiliser le paramètre de _DNS privé_ des appareils pour configurer un serveur DNS personnalisé; associé à des services comme [NextDNS](https://nextdns.io/), c'est l'un des moyens les plus simples d'activer une protection contre le pistage et un blocage des malwares/contenus à l'échelle du système.  
 Ce système de sécurité indispensable peut malheureusement interférer avec certains réseaux (points d'accès publics ou Wi-Fi d'hôtels). La fonction devient alors peu pratique à utiliser au quotidien puisqu'elle est enfouie dans les paramètres du système.
 
-![Logo de lapplication DNS Toggle](/assets/images/osd/dns-toggle/logo__240-117-webp_240-117_400-196-webp_400-196_600-294-webp_600-294_820-401-webp_820-401_1024-501-webp_1024-501.png)
+![Logo de lapplication DNS Toggle](/assets/images/osd/dns-toggle/logo__240-117-webp~_400-196-webp~_600-294-webp~_820-401-webp~_1024-501-webp~.png)
 
 Même si ce n'est pas la première tentative pour rendre cette option plus accessible, mon but était de créer mon propre raccourci facile d'accès pour activer et désactiver le _DNS privé_ directement dans le menu des paramètres rapides d'Android. Mais avant tout, c'était un prétexte pour apprendre les bases du développement d'applications Android.
 
 <!-- prettier-ignore -->
 | Galerie |  |  |  |
 | -- | -- | -- | -- |
-| ![Capture d'écran de la pop-up de choix d'addresse et de mode DNS privé](/assets/images/osd/dns-toggle/screen1__240-539-webp_240-539_400-898-webp_400-898_600-1347-webp_600-1347_820-1840-webp_820-1840_855-1919-webp_855-1919.jpg) | ![Capture d'écran de la tuide DNS Toggle dans les paramètres rapides et des notifications de fonctionnalités optionnelles](/assets/images/osd/dns-toggle/screen2__240-539-webp_240-539_400-898-webp_400-898_600-1347-webp_600-1347_820-1840-webp_820-1840_855-1919-webp_855-1919.jpg) | ![Capture d'écran du menu de configuration de DNS Toggle](/assets/images/osd/dns-toggle/screen3__240-539-webp_240-539_400-898-webp_400-898_600-1347-webp_600-1347_820-1840-webp_820-1840_855-1919-webp_855-1919.jpg) | ![Capture d'écran de la moitié inférieure du menu de configuration de DNS Toggle](/assets/images/osd/dns-toggle/screen4__240-539-webp_240-539_400-898-webp_400-898_600-1347-webp_600-1347_820-1840-webp_820-1840_855-1919-webp_855-1919.jpg) |
+| ![Capture d'écran de la pop-up de choix d'addresse et de mode DNS privé](/assets/images/osd/dns-toggle/screen1__240-539-webp~_400-898-webp~_600-1347-webp~_820-1840-webp~_855-1919-webp~.jpg) | ![Capture d'écran de la tuide DNS Toggle dans les paramètres rapides et des notifications de fonctionnalités optionnelles](/assets/images/osd/dns-toggle/screen2__240-539-webp~_400-898-webp~_600-1347-webp~_820-1840-webp~_855-1919-webp~.jpg) | ![Capture d'écran du menu de configuration de DNS Toggle](/assets/images/osd/dns-toggle/screen3__240-539-webp~_400-898-webp~_600-1347-webp~_820-1840-webp~_855-1919-webp~.jpg) | ![Capture d'écran de la moitié inférieure du menu de configuration de DNS Toggle](/assets/images/osd/dns-toggle/screen4__240-539-webp~_400-898-webp~_600-1347-webp~_820-1840-webp~_855-1919-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 

@@ -12,7 +12,7 @@
 >
 > 🌐 [stephane-next-mind.web.app](https://stephane-next-mind.web.app/) _(Version archivée de thenextmind.ai)_
 
-![Capture d'écran du message de bienvenue sur la page d'accueil](/assets/images/websites/thenextmind/intro__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg)
+![Capture d'écran du message de bienvenue sur la page d'accueil](/assets/images/websites/thenextmind/intro__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg)
 
 ### Contexte
 
@@ -22,7 +22,7 @@ Vu que les offres de l'entreprise sont conçues comme des expériences immersive
 
 ### UX et design
 
-![Un collage d'images d'inspiration  ](/assets/images/websites/thenextmind/inspiration__240-270-webp_240-270_400-450-webp_400-450_480-540-webp_480-540.jpg)
+![Un collage d'images d'inspiration  ](/assets/images/websites/thenextmind/inspiration__240-270-webp~_400-450-webp~_480-540-webp~.jpg)
 
 Pour capter l'identité de marque du cabinet, j'ai conçu l'interface par un subtil mélange de graphismes inspirés du terminal informatique et de design d'interfaces moderne, épuré et coloré. Pour ce faire, je me suis fortement inspiré d'œuvres de science-fiction et des esthétiques rétrofuturistes qu'on y retrouve.
 
@@ -33,7 +33,7 @@ Pour ajouter une touche visuelle sans surcharger le contenu, j'ai mis en place u
 <!-- prettier-ignore -->
 | Galerie |  |
 | -- | -- |
-| ![Capture d'écran d'une page d'atelier avec la décoration ASCII animée visible](/assets/images/websites/thenextmind/design__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) | ![Capture d'écran de la page de contact, avec Google Forms intégré et un portrait de Stéphane Amarsy dynamiquement traité en dither (tramage)](/assets/images/websites/thenextmind/info__240-135-webp_240-135_400-225-webp_400-225_600-338-webp_600-338_820-461-webp_820-461_1400-788-webp_1400-788_1920-1080-webp_1920-1080.jpg) |
+| ![Capture d'écran d'une page d'atelier avec la décoration ASCII animée visible](/assets/images/websites/thenextmind/design__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) | ![Capture d'écran de la page de contact, avec Google Forms intégré et un portrait de Stéphane Amarsy dynamiquement traité en dither (tramage)](/assets/images/websites/thenextmind/info__240-135-webp~_400-225-webp~_600-338-webp~_820-461-webp~_1400-788-webp~_1920-1080-webp~.jpg) |
 
 <!-- prettier-ignore end -->
 
