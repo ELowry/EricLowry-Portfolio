@@ -32,9 +32,11 @@ describe('sharedUtils', () => {
 			expect(result.height).toBe('700');
 		});
 
-		it('should prefer standard formats over WebP if available at the target size', () => {
-			const result = parseImageVariant('hero__1400-700-webp_1400-700.png');
-			expect(result.url).toBe('/assets/images/hero__1400-700-webp_1400-700.png');
+		it('should prefer standard formats over AVIF/WebP if available at the target size', () => {
+			const result = parseImageVariant('hero__1400-700-avif_1400-700-webp_1400-700.png');
+			expect(result.url).toBe(
+				'/assets/images/hero__1400-700-avif_1400-700-webp_1400-700.png'
+			);
 		});
 
 		it('should fallback to the largest available variant if none meet the threshold', () => {

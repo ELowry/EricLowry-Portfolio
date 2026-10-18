@@ -1,6 +1,6 @@
 /**
- * Parses an image string to find the optimal variant for Open Graph tags.
- * Seeks the smallest image that is at least 1200x630, preferring standard formats over WebP.
+ * Parses an image string to find the optimal variant for Open Graph tags.  
+ * Seeks the smallest image that is at least 1200x630, preferring standard formats over modern variants (WebP/AVIF).
  * @param {string} imageStr - The raw image filename string.
  * @returns {Object} an object containing the formatted url, width, and height.
  */
@@ -29,6 +29,7 @@ export function parseImageVariant(imageStr) {
 					w: parseInt(tokenParts[0], 10),
 					h: parseInt(tokenParts[1], 10),
 					isWebp: token.includes('-webp'),
+					isAvif: token.includes('-avif'),
 				};
 			});
 
@@ -50,16 +51,18 @@ export function parseImageVariant(imageStr) {
 
 			const bestToken =
 				validTokens.find((t) => {
-					return !t.isWebp;
+					return !t.isWebp && !t.isAvif;
 				}) || validTokens[0];
 
-			if (!bestToken.isWebp && bestToken.w === maxAvailableW) {
+			if (!bestToken.isWebp && !bestToken.isAvif && bestToken.w === maxAvailableW) {
 				// The largest fallback image always uses the full tokenized filename
 				finalImageUrl = `/assets/images/${imageStr}`;
 			} else {
-				// All other variants (and all WebPs) use the short token name
+				// All other variants use the short token name
 				let sExt = originalExt;
-				if (bestToken.isWebp) {
+				if (bestToken.isAvif) {
+					sExt = '.avif';
+				} else if (bestToken.isWebp) {
 					sExt = '.webp';
 				}
 				finalImageUrl = `/assets/images/${base}__${bestToken.token}${sExt}`;

@@ -400,6 +400,9 @@ class MetaController {
 						case 'webp':
 							mimeType = 'image/webp';
 							break;
+						case 'avif':
+							mimeType = 'image/avif';
+							break;
 						case 'svg':
 							mimeType = 'image/svg+xml';
 							break;

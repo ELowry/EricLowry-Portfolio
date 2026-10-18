@@ -133,7 +133,7 @@ class InteractionController {
 		for (const obj of this.activeObjects) {
 			const targetPos = obj.interactPos || obj.pos;
 			const dx = playerPos.x - targetPos.x;
-			
+
 			// Ignore the Y axis entirely since this is a "flat" side-scroller
 			const distSq = dx * dx;
 
@@ -243,7 +243,7 @@ class InteractionController {
 					doorConfig.size || Engine.LJS.vec2(resolution.x / 10, resolution.y / 10);
 
 				const anchor = doorConfig.anchor || { x: 0.5, y: 0 };
-				
+
 				const adjustedX = obj.pos.x + (0.5 - anchor.x) * propSize.x;
 				const adjustedY = obj.pos.y + (0.5 - anchor.y) * propSize.y;
 

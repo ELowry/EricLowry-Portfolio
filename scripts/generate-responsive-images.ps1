@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Generates responsive image variants (WebP + JPG/PNG) for use with the MarkedResponsiveImages extension.
+Generates responsive image variants (AVIF + WebP + JPG/PNG) for use with the MarkedResponsiveImages extension.
 
 .DESCRIPTION
 This script uses ImageMagick (magick) to take an input image and generate a hardcoded set of width variants. 
@@ -42,6 +42,7 @@ param (
 $targetWidths = @(240, 400, 600, 820, 1400, 1920)
 
 # Target quality for each type
+$qualityAVIF = 65
 $qualityWebP = 85
 $qualityJPG = 88
 $qualityPNG = 95
@@ -109,7 +110,7 @@ else {
 
 # GET FILE DIMENSIONS
 
-$dimsStr = & magick identify -format '%w %h' $InputFile
+$dimsStr = & magick identify -format '%w %h'$InputFile
 $dims = $dimsStr -split ' '
 $origW = $dims[0] -as [int]
 $origH = $dims[1] -as [int]
@@ -128,7 +129,7 @@ if ($ForceTransparency) {
 else {
 	# %[opaque] returns 'true' if the image has NO transparent pixels. 
 	# If it returns 'false', transparency exists.
-	$isOpaque = & magick identify -format '%[opaque]' $InputFile
+	$isOpaque = & magick identify -format '%[opaque]'$InputFile
 	if ($isOpaque -match 'false') {
 		$fallbackExt = 'png'
 	}
@@ -158,6 +159,7 @@ $validWidths = $validWidths | Sort-Object
 # BUILD IMAGES
 
 $tokens = @()
+$generatedAvifs = @()
 $generatedWebPs = @()
 $generatedFallbacks = @()
 
@@ -169,7 +171,7 @@ foreach ($w in $validWidths) {
 	& magick $InputFile -resize "${w}x" -quality $qualityWebP $tempWebp
     
 	# Read output sizes to avoid rounding errors
-	$dimsOut = (& magick identify -format '%w %h' $tempWebp) -split ' '
+	$dimsOut = (& magick identify -format '%w %h'$tempWebp) -split ' '
 	$actualW = [int]$dimsOut[0]
 	$actualH = [int]$dimsOut[1]
 
@@ -181,7 +183,19 @@ foreach ($w in $validWidths) {
 		FinalPath = $webpPath
 	}
 
-	# Add format token
+	# Generate AVIF
+	$tempAvif = Join-Path $DestinationFolder "temp_$w.avif"
+	& magick $InputFile -resize "${w}x" -quality $qualityAVIF -define heic:chroma=444 $tempAvif
+
+	$avifName = "${baseName}__${actualW}-${actualH}.avif"
+	$avifPath = Join-Path $DestinationFolder $avifName
+	$generatedAvifs += [PSCustomObject]@{
+		TempPath  = $tempAvif
+		FinalPath = $avifPath
+	}
+
+	# Add format tokens
+	$tokens += "${actualW}-${actualH}-avif"
 	$tokens += "${actualW}-${actualH}-webp"
 
 	# Generate Fallback Images
@@ -210,6 +224,10 @@ $mainFileName = "${baseName}__${tokenString}.$fallbackExt"
 
 # Check for Conflicts
 $allTargetPaths = @()
+foreach ($file in $generatedAvifs) {
+	$allTargetPaths += $file.FinalPath
+}
+
 foreach ($file in $generatedWebPs) {
 	$allTargetPaths += $file.FinalPath
 }
@@ -237,6 +255,10 @@ if ($existing.Count -gt 0) {
 }
 
 # MOVE FILES
+
+foreach ($file in $generatedAvifs) {
+	Move-Item -Path $file.TempPath -Destination $file.FinalPath -Force
+}
 
 foreach ($file in $generatedWebPs) {
 	Move-Item -Path $file.TempPath -Destination $file.FinalPath -Force
