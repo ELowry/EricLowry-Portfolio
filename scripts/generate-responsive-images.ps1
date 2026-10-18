@@ -52,7 +52,7 @@ $qualityPNG = 95
 # Save the original string for the Markdown output later
 $markdownDestFolder = $DestinationFolder
 
-# CHECK FOR IMAGEMAGICK (v7+)
+# CHECK FOR IMAGEMAGICK (v7+) AND AVIF SUPPORT
 
 try {
 	# Attempt to run magick and grab the first line of the output
@@ -70,9 +70,18 @@ try {
 			exit
 		}
 	}
- else {
+	else {
 		# Force a throw if the command runs but the output format is completely unexpected
 		throw 'Unrecognized ImageMagick version format.'
+	}
+
+	# Verify that the AVIF delegate is installed and writable
+	$avifSupport = & magick -list format | Select-String "^\s*AVIF\b\S*\s+\S+\s+r?w"
+	if (-not $avifSupport) {
+		Write-Host "Warning: Your ImageMagick installation does not support writing AVIF files." -ForegroundColor Yellow
+		Write-Host "Ensure you are on ImageMagick 7.0.10-29+ with libheif/libavif delegate support." -ForegroundColor Yellow
+		pause
+		exit
 	}
 }
 catch {
@@ -195,15 +204,14 @@ foreach ($w in $validWidths) {
 	}
 
 	# Add format tokens
-	$tokens += "${actualW}-${actualH}-avif"
-	$tokens += "${actualW}-${actualH}-webp"
+	$tokens += "${actualW}-${actualH}-avif~webp~"
 
 	# Generate Fallback Images
 	$tempFallback = Join-Path $DestinationFolder "temp_$w.$fallbackExt"
 	if ($fallbackExt -eq 'jpg') {
 		& magick $InputFile -resize "${w}x" -quality $qualityJPG $tempFallback
 	}
- else {
+	else {
 		& magick $InputFile -resize "${w}x" -quality $qualityPNG $tempFallback
 	}
 
@@ -213,14 +221,21 @@ foreach ($w in $validWidths) {
 		TempPath = $tempFallback
 		IsLast   = ($w -eq $validWidths[-1])
 	}
-
-	$tokens += "${actualW}-${actualH}"
 }
 
 # PROCESS FILENAMES
 
 $tokenString = $tokens -join '_'
 $mainFileName = "${baseName}__${tokenString}.$fallbackExt"
+
+# Check for File Name Length Limit (255 chars)
+if ($mainFileName.Length -gt 250) {
+	Write-Host "`nError: The generated filename is too long ($($mainFileName.Length) characters)." -ForegroundColor Red
+	Write-Host "File systems strictly limit file names to 255 characters." -ForegroundColor Red
+	Write-Host "Filename: $mainFileName" -ForegroundColor Gray
+	Write-Host "`nPlease use a shorter input file name or reduce the number of target widths/formats." -ForegroundColor Yellow
+	exit
+}
 
 # Check for Conflicts
 $allTargetPaths = @()
@@ -236,7 +251,7 @@ foreach ($file in $generatedFallbacks) {
 	if ($file.IsLast) {
 		$allTargetPaths += (Join-Path $DestinationFolder $mainFileName)
 	}
- else {
+	else {
 		$allTargetPaths += (Join-Path $DestinationFolder "${baseName}__$($file.Width)-$($file.Height).$fallbackExt")
 	}
 }
@@ -268,7 +283,7 @@ foreach ($file in $generatedFallbacks) {
 	if ($file.IsLast) {
 		$finalPath = Join-Path $DestinationFolder $mainFileName
 	}
- else {
+	else {
 		$finalName = "${baseName}__$($file.Width)-$($file.Height).$fallbackExt"
 		$finalPath = Join-Path $DestinationFolder $finalName
 	}

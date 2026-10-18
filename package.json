@@ -33,7 +33,7 @@
 		"marked-alert": "^2.1.2",
 		"marked-gfm-heading-id": "^4.1.4",
 		"marked-highlight": "^2.2.4",
-		"marked-responsive-images": "^2.4.1",
+		"marked-responsive-images": "^3.0.0",
 		"protobufjs": "^8.8.1"
 	},
 	"devDependencies": {
@@ -46,7 +46,7 @@
 		"concurrently": "^10.0.6",
 		"eslint": "^10.13.0",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-jsdoc": "^65.3.8",
+		"eslint-plugin-jsdoc": "^65.3.12",
 		"globals": "^17.13.0",
 		"jsdom": "^30.1.3",
 		"lightningcss": "^1.33.0",
