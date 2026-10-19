@@ -187,12 +187,12 @@ function gameRenderPost() {
 		if (GameBridge.debugGroups) {
 			for (const group of GameBridge.debugGroups) {
 				const pos = Engine.LJS.vec2(group.pos.x, group.pos.y);
-				Engine.LJS.debugPoint(pos, new Engine.LJS.Color(1, 0, 0, 1));
+				Engine.LJS.debugPoint(pos, new Engine.LJS.Color(0, 0, 1, 1));
 				Engine.LJS.debugText(
-					'GROUP',
+					group.name ?? 'GROUP',
 					Engine.LJS.vec2(pos.x, pos.y + 0.8),
 					0.5,
-					new Engine.LJS.Color(1, 0, 0, 1)
+					new Engine.LJS.Color(0, 0, 1, 1)
 				);
 			}
 		}

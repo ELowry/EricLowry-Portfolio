@@ -1,6 +1,7 @@
 import { Engine } from '../js/modules/core/engineContext.js';
 
 /**
+ * Root sprite definitions.
  * @type {import('../js/modules/game/propManager.js').SpriteConfig}
  */
 export default {
@@ -11,7 +12,7 @@ export default {
 			cols: 5,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
-			yOffset: 1,
+			yOffset: -0.25,
 			shadowBaselineOffset: 0.3,
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
@@ -27,7 +28,7 @@ export default {
 			cols: 4,
 			animDelayOpen: 20,
 			animSpeedOpen: 10,
-			yOffset: 0.4,
+			yOffset: -0.4,
 			shadowBaselineOffset: 0.3,
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
@@ -37,10 +38,20 @@ export default {
 				renderOffset: Engine.LJS.vec2(-0.2, -0.2),
 			},
 		},
+		templeDoor: {
+			isAnimated: false,
+			resolution: Engine.LJS.vec2(0.1, 0.1),
+			offset: Engine.LJS.vec2(0, 0),
+			shadowType: 'none',
+			highlightConfig: {
+				resolution: Engine.LJS.vec2(53, 65),
+				offset: Engine.LJS.vec2(252, 181),
+				renderOffset: Engine.LJS.vec2(0, 4.44),
+			},
+		},
 		sign: {
 			resolution: Engine.LJS.vec2(20, 19),
 			offset: Engine.LJS.vec2(230, 52),
-			yOffset: 0.2,
 			shadowType: 'floor',
 			highlightConfig: {
 				resolution: Engine.LJS.vec2(22, 11),
@@ -90,6 +101,7 @@ export default {
 		promptFrame: {
 			shadowType: 'wall',
 			isAnimated: false,
+			anchor: { x: 0.5, y: 0.5 },
 			get resolution() {
 				return Engine.LJS.vec2(30, 14);
 			},
@@ -100,6 +112,7 @@ export default {
 		promptHorizontalLeft: {
 			entityType: 'inputPrompt',
 			logicalKey: 'A',
+			anchor: { x: 0.5, y: 0.5 },
 			get resolution() {
 				return Engine.LJS.vec2(9, 9);
 			},
@@ -126,6 +139,7 @@ export default {
 		promptHorizontalRight: {
 			entityType: 'inputPrompt',
 			logicalKey: 'D',
+			anchor: { x: 0.5, y: 0.5 },
 			get resolution() {
 				return Engine.LJS.vec2(9, 9);
 			},
@@ -159,6 +173,15 @@ export default {
 				return Engine.LJS.vec2(0, 73);
 			},
 		},
+		architecture: {
+			isAnimated: false,
+			get resolution() {
+				return Engine.LJS.vec2(121, 110);
+			},
+			get offset() {
+				return Engine.LJS.vec2(129, 181);
+			},
+		},
 		// Doors
 		slidingDouble: {
 			resolution: Engine.LJS.vec2(49, 55),
@@ -167,7 +190,7 @@ export default {
 			cols: 4,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
-			yOffset: 1.74,
+			yOffset: -0.56,
 			shadowType: 'none',
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],

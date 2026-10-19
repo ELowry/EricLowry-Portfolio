@@ -1,6 +1,7 @@
 import { Engine } from '../js/modules/core/engineContext.js';
 
 /**
+ * Gaming sprite definitions.
  * @type {import('../js/modules/game/propManager.js').SpriteConfig}
  */
 export default {
@@ -12,7 +13,6 @@ export default {
 			cols: 4,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
-			yOffset: 1.74,
 			shadowType: 'none',
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
