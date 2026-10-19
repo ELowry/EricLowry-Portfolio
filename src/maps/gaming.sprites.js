@@ -8,8 +8,12 @@ export default {
 	local: {
 		// Doors
 		slidingDoubleBack: {
-			resolution: Engine.LJS.vec2(49, 49),
-			offset: Engine.LJS.vec2(129, 130),
+			get resolution() {
+				return Engine.LJS.vec2(49, 49);
+			},
+			get offset() {
+				return Engine.LJS.vec2(129, 130);
+			},
 			cols: 4,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
@@ -17,9 +21,15 @@ export default {
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(55, 49),
-				offset: Engine.LJS.vec2(333, 130),
-				renderOffset: Engine.LJS.vec2(0, 0),
+				get resolution() {
+					return Engine.LJS.vec2(55, 49);
+				},
+				get offset() {
+					return Engine.LJS.vec2(333, 130);
+				},
+				get renderOffset() {
+					return Engine.LJS.vec2(0, 0);
+				},
 			},
 		},
 	},

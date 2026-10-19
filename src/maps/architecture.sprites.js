@@ -8,20 +8,33 @@ export default {
 	local: {
 		templeOpeningLight: {
 			isAnimated: false,
-			resolution: Engine.LJS.vec2(31, 38),
-			offset: Engine.LJS.vec2(363, 181),
-			shadowType: 'none',
+			get resolution() {
+				return Engine.LJS.vec2(31, 38);
+			},
+			get offset() {
+				return Engine.LJS.vec2(363, 181);
+			},
 		},
 		// Doors
 		templeDoorBack: {
 			isAnimated: false,
-			resolution: Engine.LJS.vec2(31, 38),
-			offset: Engine.LJS.vec2(307, 181),
+			get resolution() {
+				return Engine.LJS.vec2(31, 38);
+			},
+			get offset() {
+				return Engine.LJS.vec2(307, 181);
+			},
 			shadowType: 'none',
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(21, 38),
-				offset: Engine.LJS.vec2(340, 181),
-				renderOffset: Engine.LJS.vec2(0, 0),
+				get resolution() {
+					return Engine.LJS.vec2(21, 38);
+				},
+				get offset() {
+					return Engine.LJS.vec2(340, 181);
+				},
+				get renderOffset() {
+					return Engine.LJS.vec2(0, 0);
+				},
 			},
 		},
 	},

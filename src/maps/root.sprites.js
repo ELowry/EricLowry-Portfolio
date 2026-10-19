@@ -7,8 +7,12 @@ import { Engine } from '../js/modules/core/engineContext.js';
 export default {
 	shared: {
 		doorFront: {
-			resolution: Engine.LJS.vec2(16, 35),
-			offset: Engine.LJS.vec2(0, 36),
+			get resolution() {
+				return Engine.LJS.vec2(16, 35);
+			},
+			get offset() {
+				return Engine.LJS.vec2(0, 36);
+			},
 			cols: 5,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
@@ -17,14 +21,24 @@ export default {
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(20, 35),
-				offset: Engine.LJS.vec2(72, 36),
-				renderOffset: Engine.LJS.vec2(0, 0.1),
+				get resolution() {
+					return Engine.LJS.vec2(20, 35);
+				},
+				get offset() {
+					return Engine.LJS.vec2(72, 36);
+				},
+				get renderOffset() {
+					return Engine.LJS.vec2(0, 0.1);
+				},
 			},
 		},
 		doorBehind: {
-			resolution: Engine.LJS.vec2(21, 35),
-			offset: Engine.LJS.vec2(94, 36),
+			get resolution() {
+				return Engine.LJS.vec2(21, 35);
+			},
+			get offset() {
+				return Engine.LJS.vec2(94, 36);
+			},
 			cols: 4,
 			animDelayOpen: 20,
 			animSpeedOpen: 10,
@@ -33,30 +47,56 @@ export default {
 			framesOpening: [1, 2, 3],
 			framesOpen: [3],
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(20, 35),
-				offset: Engine.LJS.vec2(186, 36),
-				renderOffset: Engine.LJS.vec2(-0.2, -0.2),
+				get resolution() {
+					return Engine.LJS.vec2(20, 35);
+				},
+				get offset() {
+					return Engine.LJS.vec2(186, 36);
+				},
+				get renderOffset() {
+					return { x: -0.2, y: -0.2 };
+				},
 			},
 		},
 		templeDoor: {
 			isAnimated: false,
-			resolution: Engine.LJS.vec2(0.1, 0.1),
-			offset: Engine.LJS.vec2(0, 0),
+			get resolution() {
+				return Engine.LJS.vec2(0.1, 0.1);
+			},
+			get offset() {
+				return Engine.LJS.vec2(0, 0);
+			},
 			shadowType: 'none',
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(53, 65),
-				offset: Engine.LJS.vec2(252, 181),
-				renderOffset: Engine.LJS.vec2(0, 4.44),
+				get resolution() {
+					return Engine.LJS.vec2(53, 65);
+				},
+				get offset() {
+					return Engine.LJS.vec2(252, 181);
+				},
+				get renderOffset() {
+					return Engine.LJS.vec2(0, 4.44);
+				},
 			},
 		},
 		sign: {
-			resolution: Engine.LJS.vec2(20, 19),
-			offset: Engine.LJS.vec2(230, 52),
+			get resolution() {
+				return Engine.LJS.vec2(20, 19);
+			},
+			get offset() {
+				return Engine.LJS.vec2(230, 52);
+			},
 			shadowType: 'floor',
 			highlightConfig: {
-				resolution: Engine.LJS.vec2(22, 11),
-				offset: Engine.LJS.vec2(252, 52),
-				renderOffset: Engine.LJS.vec2(0, 0.5),
+				get resolution() {
+					return Engine.LJS.vec2(22, 11);
+				},
+				get offset() {
+					return Engine.LJS.vec2(252, 52);
+				},
+				get renderOffset() {
+					return Engine.LJS.vec2(0, 0.5);
+				},
 			},
 		},
 	},
@@ -184,9 +224,13 @@ export default {
 		},
 		// Doors
 		slidingDouble: {
-			resolution: Engine.LJS.vec2(49, 55),
+			get resolution() {
+				return Engine.LJS.vec2(49, 55);
+			},
 			radius: 2.8,
-			offset: Engine.LJS.vec2(129, 73),
+			get offset() {
+				return Engine.LJS.vec2(129, 73);
+			},
 			cols: 4,
 			animDelayOpen: 24,
 			animSpeedOpen: 12,
@@ -196,9 +240,15 @@ export default {
 			framesOpen: [3],
 			highlightConfig: {
 				// Currently set for the Game arcade sign design, may need to create a generic version if reused and overwritten in the map's .config.js
-				resolution: Engine.LJS.vec2(50, 19),
-				offset: Engine.LJS.vec2(276, 52),
-				renderOffset: Engine.LJS.vec2(0.05, 3.56),
+				get resolution() {
+					return Engine.LJS.vec2(50, 19);
+				},
+				get offset() {
+					return Engine.LJS.vec2(276, 52);
+				},
+				get renderOffset() {
+					return Engine.LJS.vec2(0.05, 3.56);
+				},
 			},
 		},
 	},

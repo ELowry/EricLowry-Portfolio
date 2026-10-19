@@ -64,6 +64,8 @@ function firebaseRewritesPlugin() {
 			server.middlewares.use((request, _response, next) => {
 				if (request.url === '/rss' || request.url === '/feed') {
 					request.url = '/feed-en_US.xml';
+				} else if (request.url === '/llms.md') {
+					request.url = '/llms.txt';
 				} else if (request.url.startsWith('/content/') && !request.url.includes('.')) {
 					request.url = '/content/404.json';
 				} else if (request.url.startsWith('/lang/') && !request.url.includes('.')) {
