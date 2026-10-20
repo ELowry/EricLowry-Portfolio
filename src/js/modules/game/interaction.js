@@ -96,6 +96,7 @@ class InteractionController {
 			Input.spawnTapRipple();
 			this.setBlock();
 			this.#triggerInteraction(this.highlightedObject);
+			Input.clearEvents();
 		}
 	}
 

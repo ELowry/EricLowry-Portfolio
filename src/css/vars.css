@@ -92,8 +92,8 @@
 	}
 
 	@media (prefers-reduced-data: reduce) {
-		--font-sans: inherit;
-		--font-mono: monospace;
+		--font-sans: inherit, var(--font-symbols);
+		--font-mono: monospace, var(--font-symbols);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

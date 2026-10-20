@@ -1,4 +1,5 @@
 import { Engine } from './modules/core/engineContext.js';
+import { getCacheBuster } from './modules/core/sharedUtils.js';
 import { Camera } from './modules/game/camera.js';
 import { Dialog } from './modules/game/dialog.js';
 import { GameBridge } from './modules/game/gameBridge.js';
@@ -221,7 +222,7 @@ function initLittleJS() {
 		gameRender,
 		gameRenderPost,
 		// Assets that can be referenced by ID within LittleJS.
-		['/assets/sprites/main.png'],
+		[`/assets/sprites/main.png?v=${getCacheBuster()}`],
 		gameLayer
 	);
 }

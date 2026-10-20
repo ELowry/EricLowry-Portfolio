@@ -66,6 +66,7 @@ vi.mock('../input/input.js', () => ({
 	Input: {
 		interact: false,
 		spawnTapRipple: vi.fn(),
+		clearEvents: vi.fn(),
 	},
 }));
 
