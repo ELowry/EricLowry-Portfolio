@@ -12,7 +12,7 @@ Behind the scenes, the site is mainly coded in JavaScript and uses Markdown file
 ### Game Mode
 
 > [!WARNING]  
-> Game mode is currently disabled wile I finish transliting the actual contents and begin work on the art assets. Feel free to look through the code if you are interested in the basic implementation that is currently in place.
+> Game mode is currently a work in progress. I am slowly drawing 2D sprites to populate each area, but all the relevant content is already available.
 
 I built the portfolio's game mode as a small side-scroller in which each "_section_" of the site is represented by its own "_room_" (or _area_) you can explore. Interacting with various objects and elements within these rooms will open a modal that displays the markdown pages I have written about my various projects and work experience.
 
