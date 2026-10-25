@@ -12,10 +12,10 @@ const buildHash = crypto
 	.digest('hex');
 
 /**
- * A simple Vite plugin to exclude specific folders from the final build output.
- * Since Vite's publicDir copy is all-or-nothing, this cleans up unwanted meta-folders.
- * @param {string[]} folders - Array of folder names to exclude from dist.
- * @returns {import('vite').Plugin} the vite plugin instance.
+ * A Vite plugin to exclude specific folders or clean non-markdown assets from folders in the final build output.
+ * Since Vite's publicDir copy is all-or-nothing, this cleans up unwanted meta-folders and filters print assets.
+ * @param {string[]} folders - Array of folder names to exclude completely from dist.
+ * @returns {import('vite').Plugin} The Vite plugin instance.
  */
 function excludePublicFolders(folders) {
 	return {
@@ -28,6 +28,43 @@ function excludePublicFolders(folders) {
 					fs.rmSync(fullPath, { recursive: true, force: true });
 				}
 			});
+
+			const distPrintDir = path.resolve('dist', 'print');
+			if (fs.existsSync(distPrintDir)) {
+				/**
+				 * Recursively cleans any non-markdown files and empty directories in the print folder.
+				 * @param {string} dir - The directory path to inspect and clean.
+				 * @returns {boolean} True if the directory has markdown contents or subdirectories remaining.
+				 */
+				function cleanNonMarkdown(dir) {
+					const entries = fs.readdirSync(dir, { withFileTypes: true });
+					let hasValidChildren = false;
+
+					for (const entry of entries) {
+						const entryPath = path.join(dir, entry.name);
+						if (entry.isDirectory()) {
+							const hasChildren = cleanNonMarkdown(entryPath);
+							if (hasChildren) {
+								hasValidChildren = true;
+							}
+						} else if (entry.isFile()) {
+							if (entry.name.endsWith('.md')) {
+								hasValidChildren = true;
+							} else {
+								fs.rmSync(entryPath, { force: true });
+							}
+						}
+					}
+
+					if (!hasValidChildren) {
+						fs.rmSync(dir, { recursive: true, force: true });
+					}
+
+					return hasValidChildren;
+				}
+
+				cleanNonMarkdown(distPrintDir);
+			}
 		},
 	};
 }
@@ -40,7 +77,7 @@ function watchPublicMarkdown() {
 	return {
 		name: 'watch-public-markdown',
 		configureServer(server) {
-			server.watcher.add(path.resolve('public/content'));
+			server.watcher.add([path.resolve('public/content'), path.resolve('public/print')]);
 			server.watcher.on('change', (file) => {
 				if (file.endsWith('.md')) {
 					server.hot.send({
@@ -66,7 +103,10 @@ function firebaseRewritesPlugin() {
 					request.url = '/feed-en_US.xml';
 				} else if (request.url === '/llms.md') {
 					request.url = '/llms.txt';
-				} else if (request.url.startsWith('/content/') && !request.url.includes('.')) {
+				} else if (
+					(request.url.startsWith('/content/') || request.url.startsWith('/print/'))
+					&& !request.url.includes('.')
+				) {
 					request.url = '/content/404.json';
 				} else if (request.url.startsWith('/lang/') && !request.url.includes('.')) {
 					request.url = '/lang/langs.json';
@@ -244,7 +284,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		plugins: [
-			excludePublicFolders(['obsidian', '.obsidian', 'LOCAL', 'print']),
+			excludePublicFolders(['obsidian', '.obsidian', 'LOCAL']),
 			watchPublicMarkdown(),
 			firebaseRewritesPlugin(),
 			staticHtmlPlugin(),
@@ -264,8 +304,9 @@ export default defineConfig(({ mode }) => {
 					'*.{crt,pem}',
 					'**/obsidian/**',
 					'**/.obsidian/**',
-					'**/print/**',
 					'**/LOCAL/**',
+					'**/print/*.html',
+					'**/print/*.webp',
 					'.vault-nickname',
 				],
 			},
