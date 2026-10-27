@@ -144,7 +144,7 @@ Systems-driven designer and entrepreneur with 10+ years experience bridging spat
 - **Research**:  
   Extensive study on spatial logic in virtual worlds and its feedback loop into physical architectural design.
 
-### Trnslation & Editing
+### Translation & Editing
 
 - **Book Editor**:
   _Change Has an Interest in You: It's not the who or the what, it's the who that determines your future_ by Toby Coop, published by Disruptive Learning Solutions in 2026.
