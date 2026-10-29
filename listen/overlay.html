@@ -344,19 +344,34 @@
 					}
 				}
 
-				.qr-container {
-					flex-shrink: 0;
+				.qr-wrapper {
+					display: flex;
 
-					svg {
-						display: block;
-						shape-rendering: crispEdges;
-						background-color: var(--color-text);
-						padding: 0.4rem;
-						width: 120px;
-						height: 120px;
+					.qr-info {
+						vertical-align: baseline;
+						transform: rotate(-180deg);
+						margin: 0;
+						padding: 0.1rem 0;
+						font-size: 0.9rem;
+						writing-mode: tb-rl;
+						text-align: center;
+						text-transform: uppercase;
+					}
 
-						path {
-							fill: var(--color-background);
+					.qr-container {
+						flex-shrink: 0;
+
+						svg {
+							display: block;
+							shape-rendering: crispEdges;
+							background-color: var(--color-text);
+							padding: 0.4rem;
+							width: 120px;
+							height: 120px;
+
+							path {
+								fill: var(--color-background);
+							}
 						}
 					}
 				}
@@ -403,7 +418,10 @@
 					<div id="progress-fill" class="progress-fill"></div>
 				</div>
 			</div>
-			<div id="qr-container" class="qr-container"></div>
+			<div class="qr-wrapper">
+				<p class="qr-info">Listen with me, no voice</p>
+				<div id="qr-container" class="qr-container"> </div>
+			</div>
 		</div>
 
 		<script type="importmap">
